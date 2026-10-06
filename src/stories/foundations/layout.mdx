@@ -31,14 +31,15 @@ Raised surfaces use a subtle border and a small shadow. Floating chrome uses a l
 
 ## Radius
 
-Surface corners range from 8–12px; controls retain their compact 6–8px scale. Control radii follow control height within the 6–8px range. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes keep a 4px radius.
+Surface corners range from 8–12px. Buttons and icon buttons use 4/5/6px corners at small/medium/large sizes; inputs and selects retain 6/7/8px. Checkboxes keep a 4px radius. Use button tokens for button geometry and control tokens for fields.
 
-| Control size | Height          | Radius | Token                 |
-| ------------ | --------------- | ------ | --------------------- |
-| Small        | 28px            | 6px    | `--control-radius-sm` |
-| Medium       | 34px            | 7px    | `--control-radius-md` |
-| Large        | 40px            | 8px    | `--control-radius-lg` |
-| Checkbox     | Compact control | 4px    | `--control-radius-xs` |
+| Size   | Height | Button radius              | Input/select radius         |
+| ------ | ------ | -------------------------- | --------------------------- |
+| Small  | 28px   | 4px (`--button-radius-sm`) | 6px (`--control-radius-sm`) |
+| Medium | 34px   | 5px (`--button-radius-md`) | 7px (`--control-radius-md`) |
+| Large  | 40px   | 6px (`--button-radius-lg`) | 8px (`--control-radius-lg`) |
+
+Checkboxes use `--control-radius-xs` (4px).
 
 <ControlRadiusExamples />
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ShieldCheck, Clock3 } from 'lucide-react';
+import { ShieldCheck, Clock3 } from '@/components/icon';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './card';
 
 const meta = {

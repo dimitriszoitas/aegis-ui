@@ -6,7 +6,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { Check, CircleAlert } from 'lucide-react';
+import { Check, CircleAlert } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './stepper.css';
 

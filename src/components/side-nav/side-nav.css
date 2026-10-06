@@ -81,7 +81,7 @@
   align-items: center;
   gap: var(--space-2);
   border: 1px solid var(--color-border-subtle);
-  padding: var(--space-2);
+  padding: 6px var(--space-2);
   border-radius: var(--radius-lg);
   width: calc(var(--sidebar-expanded) - 2 * var(--space-3) - 2px);
   white-space: nowrap;
@@ -100,16 +100,18 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 0;
   font-size: var(--text-xs);
 }
 .nav-workspace strong {
   font-size: var(--text-sm);
+  line-height: 16px;
   font-weight: 500;
 }
 .nav-workspace span:not(.workspace-avatar):not(.workspace-status) {
   color: var(--color-text-secondary);
   font-size: 11px;
+  line-height: 12px;
 }
 .workspace-status {
   width: 6px;

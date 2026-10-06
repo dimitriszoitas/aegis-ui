@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { alerts } from '@/sample-data';
 import type { AiContextItem } from '@/lib/ai';
 import { PromptInput } from './prompt-input';
@@ -64,8 +64,13 @@ export const KeyboardComposer: Story = {
     const page = within(canvasElement.ownerDocument.body);
     await userEvent.type(page.getByRole('combobox', { name: 'Prompt commands' }), 'summarize');
     await userEvent.keyboard('{Enter}');
-    await expect(input).toHaveValue('Summarize the attached alerts for an analyst handoff.');
-    await userEvent.keyboard('{Shift>}{Enter}{/Shift}Include record identifiers.');
+    await waitFor(() => {
+      expect(input).toHaveValue('Summarize the attached alerts for an analyst handoff.');
+      expect(input).toHaveFocus();
+    });
+    await userEvent.keyboard('{Shift>}{Enter}{/Shift}');
+    await expect(input).toHaveValue('Summarize the attached alerts for an analyst handoff.\n');
+    await userEvent.keyboard('Include record identifiers.');
     await expect(input).toHaveValue(
       'Summarize the attached alerts for an analyst handoff.\nInclude record identifiers.',
     );

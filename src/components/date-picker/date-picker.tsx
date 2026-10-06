@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays } from '@/components/icon';
 import { Popover } from '@/components/popover';
 import { Button } from '@/components/button';
 import { useFieldControl, type FieldControlProps } from '@/components/field';
@@ -36,7 +36,7 @@ export function DatePicker(allProps: DatePickerProps) {
         <Button
           {...control}
           disabled={control.disabled}
-          emphasis="soft"
+          emphasis="secondary"
           leadingIcon={<CalendarDays size={16} />}
           aria-label={`${label}${selected ? `: ${selected.toLocaleDateString('en-GB', { timeZone: 'UTC' })}` : ''}`}
         >

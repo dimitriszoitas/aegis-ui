@@ -12,7 +12,7 @@ import {
   LoaderCircle,
   RefreshCw,
   ShieldAlert,
-} from 'lucide-react';
+} from '@/components/icon';
 import { AiFeedback, AiLabel } from '@/components/ai-card';
 import { Banner } from '@/components/banner';
 import { Button } from '@/components/button';

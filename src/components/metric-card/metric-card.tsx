@@ -1,4 +1,4 @@
-import { ArrowDownRight, ArrowUpRight, Minus } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Minus } from '@/components/icon';
 import { Card, type CardProps } from '@/components/card';
 import { Skeleton } from '@/components/skeleton';
 import { Sparkline, type SparklineProps } from '@/components/sparkline';

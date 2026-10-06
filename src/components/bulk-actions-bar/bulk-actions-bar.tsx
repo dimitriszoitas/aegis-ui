@@ -1,5 +1,12 @@
 import { useRef, useState, type ComponentProps } from 'react';
-import { CheckCheck, ChevronDown, Sparkles, UserRoundCheck, UserRoundMinus, X } from 'lucide-react';
+import {
+  CheckCheck,
+  ChevronDown,
+  Sparkles,
+  UserRoundCheck,
+  UserRoundMinus,
+  X,
+} from '@/components/icon';
 import { Avatar } from '@/components/avatar';
 import { Button } from '@/components/button';
 import { DropdownMenu } from '@/components/dropdown-menu';
@@ -151,7 +158,7 @@ export function BulkActionsBar({
         />
         <Button
           size="sm"
-          emphasis="soft"
+          emphasis="secondary"
           intent="ai"
           leadingIcon={<Sparkles size={15} />}
           disabled={busy}

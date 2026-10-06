@@ -31,12 +31,6 @@ export interface AlertFilterState {
   assignees: string[];
   rules: FilterRule[];
   timeRange: TimeRange;
-  savedViewId?: string;
-}
-export interface SavedAlertView {
-  id: string;
-  label: string;
-  filters: AlertFilterState;
 }
 export type FilterFacet = 'severities' | 'statuses' | 'sources' | 'assignees';
 export type FilterDensity = 'compact' | 'default' | 'comfortable';
@@ -56,44 +50,24 @@ export function createDefaultFilters(): AlertFilterState {
     assignees: [],
     rules: [],
     timeRange: { mode: 'relative', preset: '24h' },
-    savedViewId: 'all-alerts',
   };
 }
 
-export const defaultSavedViews: readonly SavedAlertView[] = [
-  { id: 'all-alerts', label: 'All alerts', filters: createDefaultFilters() },
-  {
-    id: 'high-priority',
-    label: 'High priority',
-    filters: {
-      ...createDefaultFilters(),
-      severities: ['critical', 'high'],
-      statuses: ['new', 'triaged', 'in-progress'],
-    },
-  },
-  {
-    id: 'unassigned',
-    label: 'Unassigned queue',
-    filters: { ...createDefaultFilters(), statuses: ['new', 'triaged'], assignees: [UNASSIGNED] },
-  },
-];
-
 export type AlertFilterAction =
-  | { type: 'patch'; patch: Partial<Omit<AlertFilterState, 'savedViewId'>> }
+  | { type: 'patch'; patch: Partial<AlertFilterState> }
   | { type: 'toggle-facet'; facet: 'severities'; value: Severity }
   | { type: 'toggle-facet'; facet: 'statuses'; value: AlertStatus }
   | { type: 'toggle-facet'; facet: 'sources'; value: AlertSource }
   | { type: 'toggle-facet'; facet: 'assignees'; value: string }
   | { type: 'add-rule'; rule: FilterRule }
   | { type: 'remove-rule'; id: string }
-  | { type: 'reset' }
-  | { type: 'apply-view'; view: SavedAlertView };
+  | { type: 'reset' };
 
 function toggle<T>(values: readonly T[], value: T): T[] {
   return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
 }
 
-/** Shared by the horizontal bar and panel; each user edit clears saved-view identity. */
+/** Shared transitions keep the horizontal bar and panel synchronized. */
 export function alertFilterReducer(
   state: AlertFilterState,
   action: AlertFilterAction,
@@ -101,19 +75,8 @@ export function alertFilterReducer(
   switch (action.type) {
     case 'reset':
       return createDefaultFilters();
-    case 'apply-view':
-      return {
-        ...action.view.filters,
-        severities: [...action.view.filters.severities],
-        statuses: [...action.view.filters.statuses],
-        sources: [...action.view.filters.sources],
-        assignees: [...action.view.filters.assignees],
-        rules: action.view.filters.rules.map((rule) => ({ ...rule })),
-        timeRange: { ...action.view.filters.timeRange },
-        savedViewId: action.view.id,
-      };
     case 'patch':
-      return { ...state, ...action.patch, savedViewId: undefined };
+      return { ...state, ...action.patch };
     case 'add-rule':
       return {
         ...state,
@@ -121,13 +84,11 @@ export function alertFilterReducer(
           ...state.rules.filter((rule) => rule.id !== action.rule.id),
           { ...action.rule, value: action.rule.value.trim() },
         ],
-        savedViewId: undefined,
       };
     case 'remove-rule':
       return {
         ...state,
         rules: state.rules.filter((rule) => rule.id !== action.id),
-        savedViewId: undefined,
       };
     case 'toggle-facet': {
       switch (action.facet) {
@@ -135,21 +96,18 @@ export function alertFilterReducer(
           return {
             ...state,
             severities: toggle(state.severities, action.value),
-            savedViewId: undefined,
           };
         case 'statuses':
           return {
             ...state,
             statuses: toggle(state.statuses, action.value),
-            savedViewId: undefined,
           };
         case 'sources':
-          return { ...state, sources: toggle(state.sources, action.value), savedViewId: undefined };
+          return { ...state, sources: toggle(state.sources, action.value) };
         case 'assignees':
           return {
             ...state,
             assignees: toggle(state.assignees, action.value),
-            savedViewId: undefined,
           };
       }
     }

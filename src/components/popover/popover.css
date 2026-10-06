@@ -1,14 +1,21 @@
 .aegis-popover {
+  --popover-padding: var(--space-4);
+  --popover-gap: var(--space-3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
   z-index: var(--z-popover);
   width: 320px;
   max-width: calc(100vw - var(--space-6));
-  max-height: var(--radix-popover-content-available-height);
-  overflow: auto;
-  padding: var(--space-4);
+  max-height: min(
+    calc(100dvh - var(--space-6)),
+    var(--radix-popover-content-available-height, 100dvh)
+  );
+  overflow: hidden;
   background: var(--color-bg-surface-raised);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--surface-radius-floating);
   box-shadow: var(--shadow-overlay);
   font-family: var(--font-ui);
   font-size: var(--text-base);
@@ -16,27 +23,71 @@
   transform-origin: var(--radix-popover-content-transform-origin);
   animation: aegis-popover-enter var(--motion-base) var(--ease-out);
 }
+.aegis-popover[data-density='tight'] {
+  --popover-padding: var(--space-3);
+  --popover-gap: var(--space-2);
+}
+.aegis-popover-header {
+  flex: none;
+  padding: var(--popover-padding) var(--popover-padding) 0;
+}
 .aegis-popover-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-2);
+  gap: var(--popover-gap);
+}
+.aegis-popover-heading-copy {
+  min-width: 0;
+  flex: 1;
 }
 .aegis-popover-heading h3 {
   margin: 0;
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: var(--title-weight);
+  line-height: 28px;
+  overflow-wrap: anywhere;
 }
 .aegis-popover-description {
-  margin: 0 0 var(--space-4);
+  margin: var(--space-1) 0 0;
   color: var(--color-text-secondary);
   font-size: var(--text-sm);
   line-height: 1.5;
 }
+.aegis-popover-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--popover-padding);
+}
+.aegis-popover[data-header='true'] .aegis-popover-body {
+  padding-top: var(--popover-gap);
+}
+.aegis-popover-body:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: -3px;
+}
+.aegis-popover-body > p:first-child {
+  margin-top: 0;
+}
+.aegis-popover-body > p:last-child {
+  margin-bottom: 0;
+}
+.aegis-popover-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--popover-padding) var(--popover-padding);
+}
 .aegis-popover-close {
   display: grid;
   place-items: center;
+  flex-shrink: 0;
   width: 28px;
   height: 28px;
   margin-left: auto;
@@ -45,6 +96,15 @@
   background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
+}
+.aegis-popover-close-floating {
+  position: absolute;
+  top: var(--popover-padding);
+  right: var(--popover-padding);
+  z-index: 1;
+}
+.aegis-popover[data-header='false'][data-close='true'] .aegis-popover-body {
+  padding-top: calc(var(--popover-padding) + 28px + var(--popover-gap));
 }
 .aegis-popover-close:hover {
   background: var(--color-bg-hover);

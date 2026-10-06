@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../button';
 import { SeverityBadge } from '../severity-badge';
@@ -34,7 +35,15 @@ const meta = {
   title: 'Components/Overlays/SideSheet',
   component: SideSheet,
   subcomponents: { SideSheetSection, SideSheetField },
-  parameters: { docs: { story: { inline: false, height: 600 } } },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'The title and close control share the first header row. Optional `headerActions` appear below alongside result navigation; `actions` remains a compatible alias. Optional `footer` actions remain visible outside the scrollable body. Floating and Fixed layouts share the same content and interactions.',
+      },
+      story: { inline: false, height: 600 },
+    },
+  },
   tags: ['autodocs'],
   args: {
     title: 'Encoded PowerShell command on WS-ATH-114',
@@ -55,7 +64,7 @@ export const Default: Story = {};
 export const OpenSheet: Story = { args: { defaultOpen: true } };
 export const SizeMatrix: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <SideSheet
           {...args}
@@ -120,4 +129,87 @@ function DockedExample() {
 export const DockedPushLayout: Story = {
   render: () => <DockedExample />,
   parameters: { layout: 'fullscreen' },
+};
+
+export const HeaderActions: Story = {
+  args: {
+    defaultOpen: true,
+    headerActions: (
+      <Button emphasis="secondary" size="sm">
+        Assign analyst
+      </Button>
+    ),
+    footer: undefined,
+  },
+};
+export const FooterActions: Story = { args: { defaultOpen: true } };
+export const HeaderAndFooterActions: Story = {
+  args: {
+    defaultOpen: true,
+    headerActions: (
+      <>
+        <Button emphasis="tertiary" size="sm">
+          Assign analyst
+        </Button>
+        <Button emphasis="secondary" size="sm">
+          Open investigation
+        </Button>
+      </>
+    ),
+  },
+};
+export const LongTitle: Story = {
+  args: {
+    defaultOpen: true,
+    title:
+      'Encoded PowerShell command with an unusual parent process on the production payments endpoint WS-ATH-114',
+    headerActions: (
+      <Button emphasis="secondary" size="sm">
+        Assign analyst
+      </Button>
+    ),
+  },
+};
+export const FloatingSheet: Story = {
+  globals: { layoutTheme: 'floating' },
+  args: { defaultOpen: true },
+};
+export const FixedSheet: Story = { globals: { layoutTheme: 'fixed' }, args: { defaultOpen: true } };
+export const HeaderAlignmentAndClose: Story = {
+  args: {
+    title: 'A long alert title that wraps while the close button stays beside the first line',
+    headerActions: (
+      <Button emphasis="secondary" size="sm">
+        Assign analyst
+      </Button>
+    ),
+    children: (
+      <>
+        {Array.from({ length: 5 }, (_, index) => (
+          <AlertFields key={index} />
+        ))}
+      </>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement),
+      page = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('button', { name: 'Open alert details' });
+    await userEvent.click(trigger);
+    const dialog = await page.findByRole('dialog');
+    const title = dialog.querySelector<HTMLElement>('.aegis-sheet-title')!;
+    const close = page.getByRole('button', { name: 'Close detail panel' });
+    expect(
+      Math.abs(title.getBoundingClientRect().top - close.getBoundingClientRect().top),
+    ).toBeLessThan(1);
+    const header = dialog.querySelector<HTMLElement>('.aegis-sheet-header')!;
+    const scroll = dialog.querySelector<HTMLElement>('.aegis-sheet-body')!;
+    const top = header.getBoundingClientRect().top;
+    scroll.scrollTop = scroll.scrollHeight;
+    await waitFor(() => expect(scroll.scrollTop).toBeGreaterThan(0));
+    expect(header.getBoundingClientRect().top).toBe(top);
+    close.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
 };

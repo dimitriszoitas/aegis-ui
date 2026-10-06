@@ -1,5 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './breadcrumb.css';
 export interface BreadcrumbItem {

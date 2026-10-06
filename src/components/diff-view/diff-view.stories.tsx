@@ -25,7 +25,15 @@ const meta = {
     modifiedLabel: 'Proposed rule',
     maxHeight: 440,
   },
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          'CodeMirror computes real line and inline changes. Red minus markers identify removals; green plus markers identify additions. The legend counts affected lines. Focus changes folds unchanged context, and Show all lines restores it. Split and unified layouts share the same documents and change navigation.',
+      },
+    },
+  },
 } satisfies Meta<typeof DiffView>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -38,6 +46,35 @@ export const AddedFile: Story = {
 };
 export const RemovedFile: Story = {
   args: { modified: '', defaultMode: 'unified', modifiedLabel: 'Rule removed' },
+};
+export const HighlightedChanges: Story = {
+  args: {
+    collapseUnchanged: true,
+    focusFirstChange: true,
+    modifiedIntent: 'ai',
+    modifiedLabel: 'AI proposal',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText(/^− [1-9]\d* removed$/)).toBeVisible();
+    await expect(canvas.getByText(/^\+ [1-9]\d* added$/)).toBeVisible();
+    await waitFor(() =>
+      expect(canvasElement.querySelectorAll('.cm-changedText').length).toBeGreaterThan(0),
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Show all lines' }));
+    await expect(canvas.getByRole('button', { name: 'Focus changes' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    await waitFor(() => expect(canvasElement.querySelector('.cm-collapsedLines')).toBeNull());
+    await userEvent.click(canvas.getByRole('button', { name: 'Unified view' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Focus changes' }));
+    await waitFor(() =>
+      expect(canvasElement.querySelectorAll('.cm-changedText').length).toBeGreaterThan(0),
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Next change' }));
+    await expect(canvas.getByRole('textbox', { name: /unified comparison/ })).toHaveFocus();
+  },
 };
 export const CollapsedContext: Story = {
   args: {

@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check } from '@/components/icon';
 import { Button } from '@/components/button';
 import { Banner } from '@/components/banner';
 import { ConfirmDialog } from '@/components/modal';

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Sparkles, SlidersHorizontal, Trash2 } from 'lucide-react';
+import { Sparkles, SlidersHorizontal, Trash2 } from '@/components/icon';
 import { IconButton } from './icon-button';
 export default { title: 'Components/Actions/IconButton', component: IconButton } satisfies Meta<
   typeof IconButton
@@ -9,7 +9,7 @@ export const Matrix: StoryObj<typeof IconButton> = {
     <div className="stack">
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div className="row" key={size}>
-          {(['filled', 'soft', 'ghost'] as const).flatMap((emphasis) =>
+          {(['primary', 'secondary', 'tertiary', 'ghost'] as const).flatMap((emphasis) =>
             (['default', 'function', 'destroy', 'ai'] as const).map((intent) => (
               <IconButton
                 key={emphasis + intent}

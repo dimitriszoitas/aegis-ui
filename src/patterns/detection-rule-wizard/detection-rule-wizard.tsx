@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CheckCircle2, Play, Sparkles } from 'lucide-react';
+import { CheckCircle2, Play, Sparkles } from '@/components/icon';
 import { Wizard, type WizardStep } from '@/patterns/wizard';
 import { AiDiffReview } from '@/patterns/ai-diff-review';
 import { AiInlineSuggestion } from '@/components/ai-inline-suggestion';
@@ -211,7 +211,7 @@ export function DetectionRuleWizard({
             <Button
               size="sm"
               intent="ai"
-              emphasis="soft"
+              emphasis="secondary"
               leadingIcon={<Sparkles size={15} />}
               disabled={!!validation.errors.length}
               onClick={() => {

@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   PanelsTopLeft,
   PanelLeft,
+  Rows2,
   Plus,
   Settings,
   ShieldAlert,
@@ -23,8 +24,10 @@ import {
   Sparkles,
   Sun,
   Moon,
-} from 'lucide-react';
+} from '@/components/icon';
 import { Avatar } from '@/components/avatar';
+import { BottomSheet } from '@/components/bottom-sheet';
+import { SeverityBadge } from '@/components/severity-badge';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { Button } from '@/components/button';
 import { CommandPalette, type CommandAction } from '@/components/command-palette';
@@ -74,6 +77,7 @@ export interface SiemConsoleProps {
   initialPage?: ConsolePage;
   defaultNavCollapsed?: boolean;
   defaultAiOpen?: boolean;
+  defaultBottomOpen?: boolean;
   defaultFilterPanelOpen?: boolean;
   theme?: Theme;
   onThemeChange?: (theme: Theme) => void;
@@ -193,6 +197,7 @@ export function SiemConsole({
   initialPage = 'alerts',
   defaultNavCollapsed = false,
   defaultAiOpen = false,
+  defaultBottomOpen = false,
   defaultFilterPanelOpen = false,
   theme = 'light',
   onThemeChange,
@@ -211,6 +216,7 @@ export function SiemConsole({
   const [detailIds, setDetailIds] = useState<string[]>([]);
   const [detailOpen, setDetailOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(defaultAiOpen);
+  const [bottomOpen, setBottomOpen] = useState(defaultBottomOpen);
   const [request, setRequest] = useState<AiRequest | undefined>(() =>
     defaultAiOpen
       ? {
@@ -456,6 +462,7 @@ export function SiemConsole({
   const paletteShortcut = !detailOpen && !(aiOpen && !dockAssistant) && !creatingRule;
   const alertWorkspace = (
     <AlertsExplorer
+      filterMode="panel"
       alerts={alerts}
       analysts={analysts}
       onAlertsChange={setAlerts}
@@ -489,287 +496,327 @@ export function SiemConsole({
         onNavigate={navigate}
         onSearch={() => setCommandOpen(true)}
       />
-      <main
-        id={mainId}
-        ref={contentRef}
-        tabIndex={-1}
-        className="aegis-console-main"
-        onScroll={updatePinnedHeader}
-      >
-        <header ref={headerRef} className="aegis-console-header" data-pinned="false">
-          <div ref={headerContentRef} className="aegis-console-header-content">
-            <div className="aegis-console-breadcrumb-row">
-              <Breadcrumb
-                items={[
-                  { label: 'Northstar', onClick: () => navigate('overview') },
-                  { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
-                ]}
-              />
-              <span className="aegis-console-environment">
-                <span />
-                Demo workspace
-              </span>
-            </div>
-            <div className="aegis-console-title-row">
-              <div className="aegis-console-title-copy">
-                <h1 ref={headingRef} tabIndex={-1}>
-                  {creatingRule ? 'Create detection rule' : pageLabels[page]}
-                </h1>
-                <p>
-                  {creatingRule
-                    ? 'Define, test, and review before enabling.'
-                    : pageDescriptions[page]}
-                </p>
+      <div className="aegis-console-workspace aegis-bottom-sheet-workspace">
+        <main
+          id={mainId}
+          ref={contentRef}
+          tabIndex={-1}
+          className="aegis-console-main"
+          onScroll={updatePinnedHeader}
+        >
+          <header ref={headerRef} className="aegis-console-header" data-pinned="false">
+            <div ref={headerContentRef} className="aegis-console-header-content">
+              <div className="aegis-console-breadcrumb-row">
+                <Breadcrumb
+                  items={[
+                    { label: 'Northstar', onClick: () => navigate('overview') },
+                    { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
+                  ]}
+                />
+                <span className="aegis-console-environment">
+                  <span />
+                  Demo workspace
+                </span>
               </div>
-              <div className="aegis-console-header-actions">
-                {!creatingRule && page !== 'settings' && (
-                  <div className="aegis-console-header-time-range" title={scopeLabel}>
-                    <TimeRangePicker
-                      value={filters.timeRange}
-                      onValueChange={(timeRange) =>
-                        updateFilters({ ...filters, timeRange, savedViewId: undefined })
+              <div className="aegis-console-title-row">
+                <div className="aegis-console-title-copy">
+                  <h1 ref={headingRef} tabIndex={-1}>
+                    {creatingRule ? 'Create detection rule' : pageLabels[page]}
+                  </h1>
+                  <p>
+                    {creatingRule
+                      ? 'Define, test, and review before enabling.'
+                      : pageDescriptions[page]}
+                  </p>
+                </div>
+                <div className="aegis-console-header-actions">
+                  {!creatingRule && page !== 'settings' && (
+                    <div className="aegis-console-header-time-range" title={scopeLabel}>
+                      <TimeRangePicker
+                        value={filters.timeRange}
+                        onValueChange={(timeRange) => updateFilters({ ...filters, timeRange })}
+                        now={referenceTime}
+                      />
+                    </div>
+                  )}
+                  <IconButton
+                    aria-label={bottomOpen ? 'Close bottom panel' : 'Open bottom panel'}
+                    aria-pressed={bottomOpen}
+                    emphasis={bottomOpen ? 'secondary' : 'ghost'}
+                    intent={bottomOpen ? 'function' : 'default'}
+                    onClick={() => setBottomOpen(!bottomOpen)}
+                  >
+                    <Rows2 size={17} />
+                  </IconButton>
+                  {onLayoutThemeChange && (
+                    <DropdownMenu
+                      label="Layout theme"
+                      trigger={
+                        <IconButton
+                          aria-label={`Layout theme: ${layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}`}
+                          title="Layout theme"
+                          emphasis="ghost"
+                        >
+                          {layoutTheme === 'fixed' ? (
+                            <PanelLeft size={17} />
+                          ) : (
+                            <PanelsTopLeft size={17} />
+                          )}
+                        </IconButton>
                       }
-                      now={referenceTime}
+                      items={[
+                        {
+                          type: 'radio-group',
+                          id: 'layout-theme',
+                          label: 'Layout theme',
+                          value: layoutTheme,
+                          onValueChange: (value) => onLayoutThemeChange(value as LayoutTheme),
+                          options: [
+                            { value: 'floating', label: 'Floating' },
+                            { value: 'fixed', label: 'Fixed' },
+                          ],
+                        },
+                      ]}
                     />
-                  </div>
-                )}
-                {onLayoutThemeChange && (
-                  <DropdownMenu
-                    label="Layout theme"
-                    trigger={
-                      <IconButton
-                        aria-label={`Layout theme: ${layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}`}
-                        title="Layout theme"
-                        emphasis="ghost"
-                      >
-                        {layoutTheme === 'fixed' ? (
-                          <PanelLeft size={17} />
-                        ) : (
-                          <PanelsTopLeft size={17} />
-                        )}
-                      </IconButton>
+                  )}
+                  {onThemeChange && (
+                    <IconButton
+                      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+                      emphasis="ghost"
+                      onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
+                    >
+                      {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                    </IconButton>
+                  )}
+                  <IconButton
+                    intent="ai"
+                    emphasis={aiOpen ? 'primary' : 'secondary'}
+                    aria-label={aiOpen ? 'Close AI panel' : 'Open AI panel'}
+                    aria-pressed={aiOpen}
+                    onClick={() => {
+                      if (!aiOpen && selectedRecords.length)
+                        setAiContext(selectedRecords.map(alertContext));
+                      setAiOpen(!aiOpen);
+                    }}
+                  >
+                    <Sparkles size={18} />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
+          </header>
+          {creatingRule ? (
+            <section className="aegis-console-wizard">
+              <div className="aegis-console-wizard-toolbar">
+                <span className="muted">Human review required</span>
+                <div className="row">
+                  <Button
+                    size="sm"
+                    emphasis="ghost"
+                    aria-pressed={wizardOrientation === 'vertical'}
+                    onClick={() => setWizardOrientation('vertical')}
+                  >
+                    Vertical
+                  </Button>
+                  <Button
+                    size="sm"
+                    emphasis="ghost"
+                    aria-pressed={wizardOrientation === 'horizontal'}
+                    onClick={() => setWizardOrientation('horizontal')}
+                  >
+                    Horizontal
+                  </Button>
+                </div>
+              </div>
+              <DetectionRuleWizard
+                orientation={wizardOrientation}
+                onCreate={saveRule}
+                onDirtyChange={setWizardDirty}
+                onCancel={() => performNavigation('rules')}
+              />
+            </section>
+          ) : (
+            <>
+              {(page === 'alerts' || page === 'overview') && (
+                <div className={page === 'alerts' ? 'aegis-console-summary' : undefined}>
+                  <section
+                    className="aegis-console-metrics"
+                    aria-label="Security activity in selected time range"
+                  >
+                    <MetricCard
+                      label="Open alerts"
+                      value={openAlerts.length}
+                      sparkline={metricTrend(
+                        (alert) => !['resolved', 'false-positive'].includes(alert.status),
+                      )}
+                      sparklineLabel="Open alerts by last seen in the selected time range"
+                    />
+                    <MetricCard
+                      label="Critical alerts"
+                      value={scopedAlerts.filter((alert) => alert.severity === 'critical').length}
+                      sparkline={metricTrend((alert) => alert.severity === 'critical')}
+                      sparklineLabel="Critical alerts by last seen in the selected time range"
+                    />
+                    <MetricCard
+                      label="Resolved alerts"
+                      value={scopedAlerts.filter((alert) => alert.status === 'resolved').length}
+                      sparkline={metricTrend((alert) => alert.status === 'resolved')}
+                      sparklineLabel="Resolved alerts by last seen in the selected time range"
+                    />
+                    <MetricCard
+                      label="Evidence events"
+                      value={scopedAlerts.reduce((sum, alert) => sum + alert.eventCount, 0)}
+                      sparklineVariant="bar"
+                      sparkline={metricTrend(() => true, true)}
+                      sparklineLabel="Evidence events by alert last seen in the selected time range"
+                    />
+                  </section>
+                  {page === 'alerts' && (
+                    <EventHistogram
+                      data={timeSeries}
+                      value={filters.timeRange}
+                      now={referenceTime}
+                      onValueChange={(timeRange) => updateFilters({ ...filters, timeRange })}
+                      brush
+                      height={112}
+                      title="Alert activity"
+                      description={
+                        <div className="aegis-console-activity-meta">
+                          <span>{filteredAlerts.length} matching alerts</span>
+                          <Separator variant="dot" emphasis="light" />
+                          <span>4 sources · UTC</span>
+                        </div>
+                      }
+                      action={
+                        <Button
+                          size="sm"
+                          emphasis="secondary"
+                          leadingIcon={<Plus size={15} />}
+                          onClick={startRule}
+                        >
+                          Create rule
+                        </Button>
+                      }
+                      className="aegis-console-histogram"
+                    />
+                  )}
+                </div>
+              )}
+              {page === 'alerts' && (
+                <section
+                  className="aegis-console-alert-card"
+                  aria-label="Alert investigation workspace"
+                >
+                  <Tabs
+                    label="Alert queues"
+                    value={tab}
+                    onValueChange={(next) =>
+                      updateFilters({
+                        ...filters,
+                        statuses: next === 'review' ? ['new'] : [],
+                        assignees: next === 'mine' ? [analysts[0].id] : [],
+                      })
                     }
+                    listClassName="aegis-console-queue-tabs"
+                    sharedContent={alertWorkspace}
                     items={[
                       {
-                        type: 'radio-group',
-                        id: 'layout-theme',
-                        label: 'Layout theme',
-                        value: layoutTheme,
-                        onValueChange: (value) => onLayoutThemeChange(value as LayoutTheme),
-                        options: [
-                          { value: 'floating', label: 'Floating' },
-                          { value: 'fixed', label: 'Fixed' },
-                        ],
+                        value: 'all',
+                        label: 'All alerts',
+                        count: tabScope.length,
+                        content: null,
+                      },
+                      {
+                        value: 'review',
+                        label: 'Needs review',
+                        count: tabScope.filter((alert) => alert.status === 'new').length,
+                        content: null,
+                      },
+                      {
+                        value: 'mine',
+                        label: 'Assigned to me',
+                        count: tabScope.filter((alert) => alert.assignee?.id === analysts[0].id)
+                          .length,
+                        content: null,
                       },
                     ]}
                   />
-                )}
-                {onThemeChange && (
-                  <IconButton
-                    aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-                    emphasis="ghost"
-                    onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
-                  >
-                    {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-                  </IconButton>
-                )}
-                <IconButton
-                  intent="ai"
-                  emphasis={aiOpen ? 'filled' : 'soft'}
-                  aria-label={aiOpen ? 'Close AI panel' : 'Open AI panel'}
-                  aria-pressed={aiOpen}
-                  onClick={() => {
-                    if (!aiOpen && selectedRecords.length)
-                      setAiContext(selectedRecords.map(alertContext));
-                    setAiOpen(!aiOpen);
-                  }}
-                >
-                  <Sparkles size={18} />
-                </IconButton>
-              </div>
-            </div>
-          </div>
-        </header>
-        {creatingRule ? (
-          <section className="aegis-console-wizard">
-            <div className="aegis-console-wizard-toolbar">
-              <span className="muted">Human review required</span>
-              <div className="row">
-                <Button
-                  size="sm"
-                  emphasis="ghost"
-                  aria-pressed={wizardOrientation === 'vertical'}
-                  onClick={() => setWizardOrientation('vertical')}
-                >
-                  Vertical
-                </Button>
-                <Button
-                  size="sm"
-                  emphasis="ghost"
-                  aria-pressed={wizardOrientation === 'horizontal'}
-                  onClick={() => setWizardOrientation('horizontal')}
-                >
-                  Horizontal
-                </Button>
-              </div>
-            </div>
-            <DetectionRuleWizard
-              orientation={wizardOrientation}
-              onCreate={saveRule}
-              onDirtyChange={setWizardDirty}
-              onCancel={() => performNavigation('rules')}
-            />
-          </section>
-        ) : (
-          <>
-            {(page === 'alerts' || page === 'overview') && (
-              <section
-                className="aegis-console-metrics"
-                aria-label="Security activity in selected time range"
-              >
-                <MetricCard
-                  label="Open alerts"
-                  value={openAlerts.length}
-                  sparkline={metricTrend(
-                    (alert) => !['resolved', 'false-positive'].includes(alert.status),
-                  )}
-                  sparklineLabel="Open alerts by last seen in the selected time range"
-                />
-                <MetricCard
-                  label="Critical alerts"
-                  value={scopedAlerts.filter((alert) => alert.severity === 'critical').length}
-                  sparkline={metricTrend((alert) => alert.severity === 'critical')}
-                  sparklineLabel="Critical alerts by last seen in the selected time range"
-                />
-                <MetricCard
-                  label="Resolved alerts"
-                  value={scopedAlerts.filter((alert) => alert.status === 'resolved').length}
-                  sparkline={metricTrend((alert) => alert.status === 'resolved')}
-                  sparklineLabel="Resolved alerts by last seen in the selected time range"
-                />
-                <MetricCard
-                  label="Evidence events"
-                  value={scopedAlerts.reduce((sum, alert) => sum + alert.eventCount, 0)}
-                  sparklineVariant="bar"
-                  sparkline={metricTrend(() => true, true)}
-                  sparklineLabel="Evidence events by alert last seen in the selected time range"
-                />
-              </section>
-            )}
-            {page === 'alerts' && (
-              <section
-                className="aegis-console-alert-card"
-                aria-label="Alert investigation workspace"
-              >
-                <div className="aegis-console-section-heading">
-                  <div>
-                    <h2>Alert activity</h2>
-                    <div className="aegis-console-activity-meta">
-                      <span>{filteredAlerts.length} matching alerts</span>
-                      <Separator variant="dot" emphasis="light" />
-                      <span>4 connected sources</span>
-                    </div>
-                  </div>
-                  <Button
-                    size="sm"
-                    emphasis="soft"
-                    leadingIcon={<Plus size={15} />}
-                    onClick={startRule}
-                  >
-                    Create rule
-                  </Button>
-                </div>
-                <EventHistogram
-                  data={timeSeries}
-                  value={filters.timeRange}
+                </section>
+              )}
+              {page === 'overview' && (
+                <ConsoleOverview
+                  alerts={scopedAlerts}
                   now={referenceTime}
-                  onValueChange={(timeRange) =>
-                    updateFilters({ ...filters, timeRange, savedViewId: undefined })
-                  }
-                  brush
-                  height={112}
-                  title="Event volume · UTC"
-                  description=""
-                  className="aegis-console-histogram"
+                  onOpenAlert={openAlert}
+                  onShowAlerts={() => navigate('alerts')}
                 />
-                <Tabs
-                  label="Alert queues"
-                  value={tab}
-                  onValueChange={(next) =>
-                    updateFilters({
-                      ...filters,
-                      statuses: next === 'review' ? ['new'] : [],
-                      assignees: next === 'mine' ? [analysts[0].id] : [],
-                      savedViewId: undefined,
-                    })
-                  }
-                  listClassName="aegis-console-queue-tabs"
-                  sharedContent={alertWorkspace}
-                  items={[
-                    {
-                      value: 'all',
-                      label: 'All alerts',
-                      count: tabScope.length,
-                      content: null,
-                    },
-                    {
-                      value: 'review',
-                      label: 'Needs review',
-                      count: tabScope.filter((alert) => alert.status === 'new').length,
-                      content: null,
-                    },
-                    {
-                      value: 'mine',
-                      label: 'Assigned to me',
-                      count: tabScope.filter((alert) => alert.assignee?.id === analysts[0].id)
-                        .length,
-                      content: null,
-                    },
-                  ]}
+              )}
+              {page === 'incidents' && (
+                <ConsoleIncidents
+                  alerts={scopedAlerts}
+                  now={referenceTime}
+                  onOpenAlert={openAlert}
                 />
-              </section>
-            )}
-            {page === 'overview' && (
-              <ConsoleOverview
-                alerts={scopedAlerts}
-                now={referenceTime}
-                onOpenAlert={openAlert}
-                onShowAlerts={() => navigate('alerts')}
-              />
-            )}
-            {page === 'incidents' && (
-              <ConsoleIncidents alerts={scopedAlerts} now={referenceTime} onOpenAlert={openAlert} />
-            )}
-            {page === 'hunting' && (
-              <ConsoleHunting
-                key={huntQuery}
-                alerts={scopedAlerts}
-                initialQuery={huntQuery}
-                now={referenceTime}
-                onOpenAlert={openAlert}
-              />
-            )}
-            {page === 'rules' && <ConsoleRules rules={rules} onCreateRule={startRule} />}
-            {page === 'reports' && <ConsoleReports alerts={scopedAlerts} scopeLabel={scopeLabel} />}
-            {page === 'settings' && (
-              <ConsoleSettings
-                theme={theme}
-                onThemeChange={onThemeChange}
-                layoutTheme={layoutTheme}
-                onLayoutThemeChange={onLayoutThemeChange}
-                density={density}
-                onDensityChange={setDensity}
-              />
-            )}
-          </>
-        )}
-        <footer className="aegis-console-footnote">
-          <ShieldCheck size={13} />
-          <span>Local demo · 6 Oct 2026, 08:30 UTC</span>
-          <Separator variant="dot" emphasis="light" />
-          <span>Changes last for this session</span>
-        </footer>
-      </main>
+              )}
+              {page === 'hunting' && (
+                <ConsoleHunting
+                  key={huntQuery}
+                  alerts={scopedAlerts}
+                  initialQuery={huntQuery}
+                  now={referenceTime}
+                  onOpenAlert={openAlert}
+                />
+              )}
+              {page === 'rules' && <ConsoleRules rules={rules} onCreateRule={startRule} />}
+              {page === 'reports' && (
+                <ConsoleReports alerts={scopedAlerts} scopeLabel={scopeLabel} />
+              )}
+              {page === 'settings' && (
+                <ConsoleSettings
+                  theme={theme}
+                  onThemeChange={onThemeChange}
+                  layoutTheme={layoutTheme}
+                  onLayoutThemeChange={onLayoutThemeChange}
+                  density={density}
+                  onDensityChange={setDensity}
+                />
+              )}
+            </>
+          )}
+          <footer className="aegis-console-footnote">
+            <ShieldCheck size={13} />
+            <span>Local demo · 6 Oct 2026, 08:30 UTC</span>
+            <Separator variant="dot" emphasis="light" />
+            <span>Changes last for this session</span>
+          </footer>
+        </main>
+        <BottomSheet
+          title="Investigation queue"
+          description={
+            selectedRecords.length
+              ? `${selectedRecords.length} selected alerts`
+              : 'Alerts in the current time range'
+          }
+          open={bottomOpen}
+          onOpenChange={setBottomOpen}
+        >
+          <div className="aegis-console-bottom-list">
+            {(selectedRecords.length ? selectedRecords : scopedAlerts.slice(0, 6)).map((alert) => (
+              <button key={alert.id} type="button" onClick={() => openAlert(alert)}>
+                <SeverityBadge severity={alert.severity} />
+                <span>
+                  <strong>{alert.title}</strong>
+                  <small>
+                    {alert.id} · {alert.eventCount} evidence events
+                  </small>
+                </span>
+                <span>View details</span>
+              </button>
+            ))}
+            {!scopedAlerts.length && <p className="muted">No alerts in this time range.</p>}
+          </div>
+        </BottomSheet>
+      </div>
       <AiPanel
         open={aiOpen}
         onOpenChange={setAiOpen}

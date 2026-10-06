@@ -37,7 +37,8 @@ export type ChartColor =
   | 'chart-2'
   | 'chart-3'
   | 'chart-4'
-  | 'chart-5';
+  | 'chart-5'
+  | 'chart-6';
 export interface ChartSeries {
   key: string;
   label: string;
@@ -49,11 +50,12 @@ export const chartPalette: readonly ChartColor[] = [
   'chart-3',
   'chart-4',
   'chart-5',
+  'chart-6',
 ];
 export function chartColor(color: ChartColor = 'chart-1'): string {
   if (['critical', 'high', 'medium', 'low', 'info'].includes(color))
-    return `var(--color-severity-${color}-fg)`;
-  return color.startsWith('chart-') ? `var(--color-${color})` : `var(--color-${color}-bg)`;
+    return `var(--color-chart-severity-${color})`;
+  return color.startsWith('chart-') ? `var(--color-${color})` : `var(--color-chart-${color})`;
 }
 export interface ChartContainerProps extends Omit<ComponentProps<'figure'>, 'title'> {
   title: string;

@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Dialog as Primitive } from 'radix-ui';
-import { X } from 'lucide-react';
+import { X } from '@/components/icon';
 import { Button, type Intent } from '../button';
 import { TextInput } from '../text-input';
 import { cn } from '../../lib/utils';
@@ -24,7 +24,10 @@ export interface ModalProps extends Omit<
   children?: ReactNode;
   trigger?: ReactElement;
   footer?: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  /** Width presets: 400px, 560px, and 800px, each clamped to the viewport. */
+  size?: 'small' | 'regular' | 'large';
+  /** Hide the visible header while retaining title and description for assistive technology. */
+  showHeader?: boolean;
   className?: string;
   showClose?: boolean;
   closeLabel?: string;
@@ -37,7 +40,8 @@ function ModalContent({
   description,
   children,
   footer,
-  size = 'md',
+  size = 'regular',
+  showHeader = true,
   className,
   showClose = true,
   closeLabel = 'Close dialog',
@@ -55,6 +59,8 @@ function ModalContent({
       role={role}
       className={cn('aegis-modal', `aegis-modal-${size}`, className)}
       aria-describedby={description ? descriptionId : undefined}
+      data-header={showHeader}
+      data-close={showClose}
       onOpenAutoFocus={() => {
         previousFocus.current =
           document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -82,22 +88,45 @@ function ModalContent({
         if (!closeOnOutsideClick) event.preventDefault();
       }}
     >
-      <header className="aegis-modal-header">
-        <div className="aegis-modal-heading">
-          <Primitive.Title className="aegis-modal-title">{title}</Primitive.Title>
+      {showHeader ? (
+        <header className="aegis-modal-header">
+          <div className="aegis-modal-heading">
+            <Primitive.Title className="aegis-modal-title">{title}</Primitive.Title>
+            {description && (
+              <Primitive.Description id={descriptionId} className="aegis-modal-description">
+                {description}
+              </Primitive.Description>
+            )}
+          </div>
+          {showClose && (
+            <Primitive.Close className="aegis-modal-close" aria-label={closeLabel}>
+              <X size={18} />
+            </Primitive.Close>
+          )}
+        </header>
+      ) : (
+        <>
+          <Primitive.Title className="sr-only">{title}</Primitive.Title>
           {description && (
-            <Primitive.Description id={descriptionId} className="aegis-modal-description">
+            <Primitive.Description id={descriptionId} className="sr-only">
               {description}
             </Primitive.Description>
           )}
+          {showClose && (
+            <Primitive.Close
+              className="aegis-modal-close aegis-modal-close-floating"
+              aria-label={closeLabel}
+            >
+              <X size={18} />
+            </Primitive.Close>
+          )}
+        </>
+      )}
+      {children !== undefined && children !== null && (
+        <div className="aegis-modal-body" tabIndex={0} role="region" aria-label="Dialog content">
+          {children}
         </div>
-        {showClose && (
-          <Primitive.Close className="aegis-modal-close" aria-label={closeLabel}>
-            <X size={18} />
-          </Primitive.Close>
-        )}
-      </header>
-      {children && <div className="aegis-modal-body">{children}</div>}
+      )}
       {footer && <footer className="aegis-modal-footer">{footer}</footer>}
     </Primitive.Content>
   );
@@ -191,7 +220,7 @@ export function ConfirmDialog({
       trigger={trigger}
       open={isOpen}
       onOpenChange={changeOpen}
-      size="sm"
+      size="small"
       role="alertdialog"
       closeOnOutsideClick={false}
       showClose={!busy}

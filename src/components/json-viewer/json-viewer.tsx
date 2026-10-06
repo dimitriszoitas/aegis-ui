@@ -8,7 +8,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { Braces, Check, ChevronRight, Copy, ListCollapse, LocateFixed } from 'lucide-react';
+import { Braces, Check, ChevronRight, Copy, ListCollapse, LocateFixed } from '@/components/icon';
 import { Button } from '../button';
 import { cn } from '../../lib/utils';
 import './json-viewer.css';

@@ -11,6 +11,8 @@
   height: calc(var(--console-height, 100dvh) - 2 * var(--chrome-inset));
 }
 .aegis-console-main {
+  container-type: inline-size;
+  container-name: console-workspace;
   --console-main-top: var(--layout-page-padding);
   --console-main-start: max(var(--space-2), calc(var(--layout-page-padding) - var(--chrome-gap)));
   --console-main-end: max(
@@ -70,8 +72,7 @@
   pointer-events: none;
 }
 .aegis-console-breadcrumb-row,
-.aegis-console-title-row,
-.aegis-console-section-heading {
+.aegis-console-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -131,6 +132,41 @@
 .aegis-console-header-time-range .button-icon {
   flex-shrink: 0;
 }
+.aegis-console-summary {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.95fr) minmax(360px, 1.25fr);
+  gap: var(--space-3);
+  margin-bottom: var(--layout-section-gap);
+}
+.aegis-console-summary .aegis-console-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0;
+}
+.aegis-console-summary .aegis-metric-card {
+  container-type: inline-size;
+  container-name: console-metric;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.aegis-console-summary .aegis-metric-main {
+  flex-wrap: nowrap;
+}
+@container console-metric (max-width: 164px) {
+  .aegis-metric-main > .aegis-sparkline {
+    display: none;
+  }
+}
+@container console-workspace (max-width: 780px) {
+  .aegis-console-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@container console-workspace (max-width: 320px) {
+  .aegis-console-summary .aegis-console-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .aegis-console-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -153,13 +189,6 @@
   box-shadow: var(--shadow-raised);
   overflow: clip;
 }
-.aegis-console-section-heading {
-  padding: var(--layout-panel-padding) var(--layout-panel-padding) 0;
-}
-.aegis-console-section-heading h2 {
-  margin: 0 0 var(--space-1);
-  font-size: var(--title-section-size);
-}
 .aegis-console-activity-meta {
   display: flex;
   align-items: center;
@@ -169,15 +198,23 @@
   margin: 0;
 }
 .aegis-console-histogram {
-  margin: var(--space-3) var(--layout-panel-padding) var(--space-2);
-  width: auto;
-  border: 0;
+  min-width: 0;
+  margin: 0;
+  padding: var(--layout-card-padding);
+  background: var(--color-bg-surface);
   box-shadow: none;
-  padding: 0;
-  background: transparent;
 }
-.aegis-console-histogram .aegis-chart-title {
-  font-size: var(--text-sm);
+.aegis-console-histogram .aegis-chart-header {
+  margin-bottom: var(--space-2);
+}
+.aegis-console-histogram .aegis-chart-header h3 {
+  font-size: var(--title-section-size);
+}
+.aegis-console-histogram .aegis-chart-legend-wrap {
+  margin-top: var(--space-2);
+}
+.aegis-console-histogram .aegis-chart-legend {
+  gap: var(--space-1) var(--space-2);
 }
 .aegis-console-queue-tabs {
   padding-inline: var(--layout-panel-padding);
@@ -268,14 +305,6 @@
 .aegis-console-skip:focus {
   top: var(--space-5);
 }
-@media (max-width: 1500px) {
-  .aegis-console[data-ai-open='true'] .aegis-console-metrics .aegis-sparkline {
-    display: none;
-  }
-  .aegis-console[data-ai-open='true'] .aegis-metric-value {
-    font-size: var(--text-2xl);
-  }
-}
 @media (max-width: 1100px) {
   .aegis-console-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -288,7 +317,7 @@
     left: 0;
     top: 0;
   }
-  .aegis-console .side-nav + .aegis-console-main {
+  .aegis-console .side-nav + .aegis-console-workspace {
     margin-left: calc(var(--sidebar-collapsed) + 2 * var(--chrome-inset));
   }
 }
@@ -318,14 +347,6 @@
   .aegis-console-title-row h1 {
     font-size: var(--text-2xl);
   }
-  .aegis-console-section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: var(--space-4);
-  }
-  .aegis-console-histogram {
-    margin-inline: var(--space-3);
-  }
   .aegis-console-queue-tabs {
     padding-inline: var(--space-3);
   }
@@ -348,6 +369,56 @@
   }
 }
 
-.aegis-console-histogram .aegis-chart-header {
-  margin-bottom: var(--space-2);
+.aegis-console-main {
+  min-height: 0;
+}
+.aegis-console-bottom-list {
+  display: grid;
+  gap: var(--space-1);
+}
+.aegis-console-bottom-list > button {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+}
+.aegis-console-bottom-list > button > :first-child {
+  justify-self: start;
+}
+.aegis-console-bottom-list > button:hover {
+  background: var(--color-bg-hover);
+}
+.aegis-console-bottom-list > button > span:nth-child(2) {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.aegis-console-bottom-list strong {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-console-bottom-list small,
+.aegis-console-bottom-list > button > span:last-child {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+@media (max-width: 700px) {
+  .aegis-console-bottom-list > button {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .aegis-console-bottom-list > button > span:last-child {
+    display: none;
+  }
 }

@@ -14,6 +14,7 @@ export interface TooltipProps {
   onOpenChange?: (open: boolean) => void;
   className?: string;
   disabled?: boolean;
+  variant?: 'default' | 'inverted';
 }
 
 export function Tooltip({
@@ -27,6 +28,7 @@ export function Tooltip({
   onOpenChange,
   className,
   disabled = false,
+  variant = 'default',
 }: TooltipProps) {
   if (disabled || content === undefined || content === null) return children;
   return (
@@ -36,13 +38,24 @@ export function Tooltip({
         <Primitive.Portal>
           <Primitive.Content
             className={cn('aegis-tooltip', className)}
+            data-variant={variant}
             side={side}
             align={align}
             sideOffset={7}
             collisionPadding={12}
           >
             {content}
-            <Primitive.Arrow className="aegis-tooltip-arrow" width={10} height={5} />
+            <Primitive.Arrow asChild width={12} height={6}>
+              <svg
+                className="aegis-tooltip-arrow"
+                viewBox="0 0 12 6"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path d="M0 0H12L6 6Z" />
+                <path className="aegis-tooltip-arrow-outline" d="M0 0L6 6L12 0" />
+              </svg>
+            </Primitive.Arrow>
           </Primitive.Content>
         </Primitive.Portal>
       </Primitive.Root>

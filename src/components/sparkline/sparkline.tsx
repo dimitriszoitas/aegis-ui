@@ -73,13 +73,14 @@ export function Sparkline({
       height={h}
       viewBox={`0 0 ${w} ${h}`}
       className={cn('aegis-sparkline', className)}
-      style={{ color: `var(--color-${intent}-fg)`, ...style }}
+      style={{ color: `var(--color-chart-${intent})`, ...style }}
     >
       {intent === 'ai' && (
         <defs>
           <linearGradient id={`${id}-sparkline-ai`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="var(--color-ai-fg)" />
-            <stop offset="100%" stopColor="var(--color-function-fg)" />
+            <stop offset="0%" stopColor="var(--color-ai-bg)" />
+            <stop offset="50%" stopColor="var(--color-ai-pink-bg)" />
+            <stop offset="100%" stopColor="var(--color-ai-blue-bg)" />
           </linearGradient>
         </defs>
       )}

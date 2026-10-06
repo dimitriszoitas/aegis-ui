@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type CSSProperties, type HTMLAttributes } from 'react';
-import { ArrowDown, ArrowUp, Columns2, List } from 'lucide-react';
-import { ChangeSet } from '@codemirror/state';
+import { ArrowDown, ArrowUp, Columns2, List } from '@/components/icon';
+import { ChangeSet, type Text } from '@codemirror/state';
 import { EditorView, ViewPlugin } from '@codemirror/view';
 import {
   MergeView,
@@ -10,6 +10,7 @@ import {
   goToPreviousChunk,
   originalDocChangeEffect,
   unifiedMergeView,
+  type Chunk,
 } from '@codemirror/merge';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
@@ -36,12 +37,56 @@ export interface DiffViewProps extends Omit<HTMLAttributes<HTMLElement>, 'childr
   readOnly?: boolean;
   onModifiedChange?: (value: string) => void;
   collapseUnchanged?: boolean;
+  /** Scroll the editor to the first change without moving keyboard focus. */
+  focusFirstChange?: boolean;
+  /** Marks provenance separately from green additions and red removals. */
+  modifiedIntent?: 'default' | 'ai';
   wrapLines?: boolean;
   minHeight?: number | string;
   maxHeight?: number | string;
   showModeToggle?: boolean;
 }
 type MountedDiff = { mode: 'split'; merge: MergeView } | { mode: 'unified'; view: EditorView };
+interface ChangeSummary {
+  sections: number;
+  added: number;
+  removed: number;
+}
+function summarizeChanges(current: MountedDiff): ChangeSummary {
+  const chunks: readonly Chunk[] =
+    current.mode === 'split' ? current.merge.chunks : (getChunks(current.view.state)?.chunks ?? []);
+  const original =
+    current.mode === 'split' ? current.merge.a.state.doc : getOriginalDoc(current.view.state);
+  const modified = current.mode === 'split' ? current.merge.b.state.doc : current.view.state.doc;
+  const lines = (doc: Text, from: number, to: number) => {
+    const value = doc.sliceString(from, Math.min(to, doc.length));
+    return value ? value.split('\n').length - Number(value.endsWith('\n')) : 0;
+  };
+  return {
+    sections: chunks.length,
+    added: chunks.reduce((sum, chunk) => sum + lines(modified, chunk.fromB, chunk.toB), 0),
+    removed: chunks.reduce((sum, chunk) => sum + lines(original, chunk.fromA, chunk.toA), 0),
+  };
+}
+function revealFirstChange(current: MountedDiff) {
+  const view = current.mode === 'split' ? current.merge.b : current.view;
+  const first = getChunks(view.state)?.chunks[0];
+  if (!first) return;
+  const position = Math.min(first.fromB, view.state.doc.length);
+  const scroller = current.mode === 'split' ? current.merge.dom : view.dom;
+  view.dispatch({ selection: { anchor: position } });
+  view.requestMeasure({
+    read: () =>
+      view.documentTop -
+      scroller.getBoundingClientRect().top +
+      scroller.scrollTop +
+      view.lineBlockAt(position).top -
+      48,
+    write: (top) => {
+      scroller.scrollTop = Math.max(0, top);
+    },
+  });
+}
 
 // CodeMirror's collapsed-context widgets are clickable divs; give them keyboard parity.
 const accessibleCollapsedContext = ViewPlugin.fromClass(
@@ -94,6 +139,8 @@ export function DiffView({
   readOnly = true,
   onModifiedChange,
   collapseUnchanged = false,
+  focusFirstChange = false,
+  modifiedIntent = 'default',
   wrapLines = false,
   minHeight = 160,
   maxHeight = 560,
@@ -104,7 +151,9 @@ export function DiffView({
 }: DiffViewProps) {
   const [internalMode, setInternalMode] = useState(defaultMode);
   const activeMode = mode ?? internalMode;
-  const [changeCount, setChangeCount] = useState(0);
+  const [summary, setSummary] = useState<ChangeSummary>({ sections: 0, added: 0, removed: 0 });
+  const changeCount = summary.sections;
+  const [contextCollapsed, setContextCollapsed] = useState(collapseUnchanged);
   const host = useRef<HTMLDivElement>(null);
   const mounted = useRef<MountedDiff | null>(null);
   const externalUpdate = useRef(false);
@@ -114,16 +163,12 @@ export function DiffView({
   useEffect(() => {
     snapshot.current = { original, modified, onModifiedChange };
   }, [original, modified, onModifiedChange]);
+  useEffect(() => setContextCollapsed(collapseUnchanged), [collapseUnchanged]);
   useEffect(() => {
     if (!host.current) return;
     const countChanges = () => {
       const current = mounted.current;
-      if (current)
-        setChangeCount(
-          current.mode === 'split'
-            ? current.merge.chunks.length
-            : (getChunks(current.view.state)?.chunks.length ?? 0),
-        );
+      if (current) setSummary(summarizeChanges(current));
     };
     const extension = (name: string, locked: boolean) => [
       ...createCodeExtensions({
@@ -142,7 +187,7 @@ export function DiffView({
         queueMicrotask(countChanges);
       }
     });
-    const collapsed = collapseUnchanged ? { margin: 3, minSize: 6 } : undefined;
+    const collapsed = contextCollapsed ? { margin: 3, minSize: 6 } : undefined;
     if (activeMode === 'split') {
       const merge = new MergeView({
         parent: host.current,
@@ -181,6 +226,7 @@ export function DiffView({
       mounted.current = { mode: 'unified', view };
     }
     countChanges();
+    if (focusFirstChange && mounted.current) revealFirstChange(mounted.current);
     return () => {
       const current = mounted.current;
       mounted.current = null;
@@ -195,7 +241,8 @@ export function DiffView({
     modifiedLabel,
     readOnly,
     wrapLines,
-    collapseUnchanged,
+    contextCollapsed,
+    focusFirstChange,
     helpId,
   ]);
   useEffect(() => {
@@ -210,7 +257,6 @@ export function DiffView({
       if (current.mode === 'split') {
         replace(current.merge.a, original);
         replace(current.merge.b, modified);
-        setChangeCount(current.merge.chunks.length);
       } else {
         const previous = getOriginalDoc(current.view.state);
         if (previous.toString() !== original)
@@ -221,12 +267,13 @@ export function DiffView({
             ),
           });
         replace(current.view, modified);
-        setChangeCount(getChunks(current.view.state)?.chunks.length ?? 0);
       }
     } finally {
       externalUpdate.current = false;
     }
-  }, [original, modified, activeMode]);
+    setSummary(summarizeChanges(current));
+    if (focusFirstChange) revealFirstChange(current);
+  }, [original, modified, activeMode, focusFirstChange]);
   const navigate = (direction: 'previous' | 'next') => {
     const current = mounted.current;
     const view = current?.mode === 'split' ? current.merge.b : current?.view;
@@ -259,6 +306,14 @@ export function DiffView({
           </span>
         </div>
         <div className="aegis-diff-tools">
+          <Button
+            size="sm"
+            emphasis="ghost"
+            aria-pressed={contextCollapsed}
+            onClick={() => setContextCollapsed((value) => !value)}
+          >
+            {contextCollapsed ? 'Show all lines' : 'Focus changes'}
+          </Button>
           <ButtonGroup aria-label="Change navigation">
             <IconButton
               aria-label="Previous change"
@@ -290,7 +345,7 @@ export function DiffView({
                 <Button
                   key={value}
                   size="sm"
-                  emphasis={activeMode === value ? 'soft' : 'ghost'}
+                  emphasis={activeMode === value ? 'secondary' : 'ghost'}
                   intent={activeMode === value ? 'function' : 'default'}
                   aria-pressed={activeMode === value}
                   leadingIcon={<Icon size={14} />}
@@ -307,20 +362,25 @@ export function DiffView({
         </div>
       </div>
       <p className="sr-only" id={helpId}>
-        Comparison of {originalLabel} and {modifiedLabel}. Removed lines are marked with a minus and
-        additions with a plus in the legend. Tab moves out of the code. Use the previous and next
-        change buttons to navigate.
+        Comparison of {originalLabel} and {modifiedLabel}. {summary.removed} removed lines and{' '}
+        {summary.added} added lines. Red minus markers identify removed lines; green plus markers
+        identify added lines. Stronger inline highlights mark the changed text within each line. Tab
+        moves out of the code. Use the previous and next change buttons to navigate.
       </p>
       <div className="aegis-diff-legend">
-        <span>
-          <b className="aegis-diff-removed">−</b>
-          {originalLabel}
-        </span>
-        <span>
-          <b className="aegis-diff-added">+</b>
-          {modifiedLabel}
-          {!readOnly && ' · Editable'}
-        </span>
+        <div>
+          <span>{originalLabel}</span>
+          <span className="aegis-diff-change-count aegis-diff-removed">
+            − {summary.removed} removed
+          </span>
+        </div>
+        <div>
+          <span className={cn(modifiedIntent === 'ai' && 'aegis-diff-ai-label')}>
+            {modifiedLabel}
+            {!readOnly && ' · Editable'}
+          </span>
+          <span className="aegis-diff-change-count aegis-diff-added">+ {summary.added} added</span>
+        </div>
       </div>
       <div ref={host} className="aegis-diff-host" />
     </section>

@@ -8,7 +8,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { X } from 'lucide-react';
+import { X } from '@/components/icon';
 import { AiLabel } from '@/components/ai-card';
 import { Button } from '@/components/button';
 import { IconButton } from '@/components/icon-button';

@@ -7,7 +7,6 @@ import {
   getAlertFacetCounts,
   getAlertHistogram,
   getAppliedFilterCount,
-  type SavedAlertView,
 } from './filters';
 
 const now = Date.parse('2026-10-06T12:00:00.000Z');
@@ -95,18 +94,16 @@ describe('shared alert filters', () => {
     ).toEqual(['middle']);
   });
 
-  it('keeps panel toggles, bar chips, saved views, builder rules and clear-all synchronized without mutating presets', () => {
-    const view: SavedAlertView = {
-      id: 'response',
-      label: 'Response',
-      filters: { ...createDefaultFilters(), severities: ['critical'], sources: ['EDR'] },
-    };
-    let state = alertFilterReducer(createDefaultFilters(), { type: 'apply-view', view });
-    expect(state.savedViewId).toBe('response');
-    expect(state.severities).not.toBe(view.filters.severities);
+  it('keeps panel toggles, bar chips, rules and clear-all synchronized without mutating prior state', () => {
+    const initial = createDefaultFilters();
+    let state = alertFilterReducer(initial, {
+      type: 'patch',
+      patch: { severities: ['critical'], sources: ['EDR'] },
+    });
+    const priorSeverities = state.severities;
     state = alertFilterReducer(state, { type: 'toggle-facet', facet: 'severities', value: 'high' });
     expect(state.severities).toEqual(['critical', 'high']);
-    expect(state.savedViewId).toBeUndefined();
+    expect(priorSeverities).toEqual(['critical']);
     // Removing a chip uses the identical transition as unchecking its panel facet.
     state = alertFilterReducer(state, {
       type: 'toggle-facet',
@@ -127,7 +124,7 @@ describe('shared alert filters', () => {
     });
     expect(getAppliedFilterCount(state)).toBe(4);
     expect(alertFilterReducer(state, { type: 'reset' })).toEqual(createDefaultFilters());
-    expect(view.filters.severities).toEqual(['critical']);
+    expect(initial).toEqual(createDefaultFilters());
   });
 
   it('counts alternate values within one facet while honoring the remaining groups and unassigned ownership', () => {

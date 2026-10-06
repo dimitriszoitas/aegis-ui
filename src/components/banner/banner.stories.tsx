@@ -46,7 +46,7 @@ function DismissibleDemo() {
           title={retried ? 'Connection restored' : 'CrowdStrike connector needs attention'}
           action={
             !retried && (
-              <Button size="sm" emphasis="soft" onClick={() => setRetried(true)}>
+              <Button size="sm" emphasis="secondary" onClick={() => setRetried(true)}>
                 Retry connection
               </Button>
             )

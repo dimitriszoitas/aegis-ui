@@ -7,7 +7,7 @@ import {
   Sparkles,
   TriangleAlert,
   X,
-} from 'lucide-react';
+} from '@/components/icon';
 import {
   Toaster as SonnerToaster,
   toast as sonnerToast,

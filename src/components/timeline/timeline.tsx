@@ -6,7 +6,7 @@ import {
   Sparkles,
   UserRoundCheck,
   Activity,
-} from 'lucide-react';
+} from '@/components/icon';
 import { RelativeTime } from '@/components/relative-time';
 import { EmptyState } from '@/components/empty-state';
 import { cn } from '@/lib/utils';

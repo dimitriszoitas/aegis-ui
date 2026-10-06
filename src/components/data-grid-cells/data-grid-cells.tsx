@@ -1,5 +1,12 @@
 import type { ComponentProps, ReactNode } from 'react';
-import { ChevronDown, ChevronRight, Globe2, MoreHorizontal, Server, Sparkles } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronRight,
+  Globe2,
+  MoreHorizontal,
+  Server,
+  Sparkles,
+} from '@/components/icon';
 import { Avatar } from '@/components/avatar';
 import { Sparkline } from '@/components/sparkline';
 import { RelativeTime } from '@/components/relative-time';

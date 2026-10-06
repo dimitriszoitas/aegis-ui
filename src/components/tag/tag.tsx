@@ -1,5 +1,5 @@
 import type { ReactNode, CSSProperties } from 'react';
-import { X } from 'lucide-react';
+import { X } from '@/components/icon';
 import type { Intent } from '@/components/button';
 import { cn } from '@/lib/utils';
 import './tag.css';

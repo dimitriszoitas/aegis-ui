@@ -110,7 +110,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the toolbar for density and column visibility. The first header click sorts ascending, the next descending; Shift-click keeps multiple sorts. Hover or focus a header for its three-dot menu to pin left/right, unpin, sort, hide, or move a column with the keyboard. Drag a column header or its title to reorder within a pinned or unpinned group. Selection, expansion, and the first data column start pinned left; a final Actions column starts pinned right. The last visible column fills spare viewport space. Invisible hit areas just inside each right edge support dragging, double-click autosize, and keyboard resizing. Hover or focus an edge to show its guide through the visible table body. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
+          'The full presentation offers either toolbar filters or a push FilterPanel. Search, relative or absolute time ranges, active filters, and facet counts all filter the same records. Switching Filter layout preserves active criteria; applied chips appear in toolbar mode or while the sidebar is closed. Use the toolbar for density and column visibility. The first header click sorts ascending, the next descending; Shift-click keeps multiple sorts. Hover or focus a header for its three-dot menu to pin left/right, unpin, sort, hide, or move a column with the keyboard. Drag a column header or its title to reorder within a pinned or unpinned group. Selection, expansion, and the first data column start pinned left; a final Actions column starts pinned right. The last visible data column fills spare viewport space; a trailing Actions column retains its compact configured width at the right edge. Invisible hit areas just inside each right edge support dragging, double-click autosize, and keyboard resizing. Hover or focus an edge to show its guide through the visible table body. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
       },
     },
   },
@@ -135,10 +135,36 @@ export const FullPresentation: Story = {
       const critical = within(panel).getByRole('checkbox', { name: /Critical/ });
       await user.click(critical);
       await expect(
+        canvas.queryByRole('button', { name: 'Remove Critical severity filter' }),
+      ).not.toBeInTheDocument();
+      await user.click(canvas.getByRole('button', { name: 'Hide filter panel' }));
+      await waitFor(() => {
+        const actionsHeader = canvasElement.querySelector<HTMLElement>(
+          'th[data-column-id="actions"]',
+        );
+        const actionsCell = canvasElement.querySelector<HTMLElement>(
+          'td[data-column-id="actions"]',
+        );
+        const scroll = canvasElement.querySelector<HTMLElement>('.aegis-grid-scroll');
+        if (!actionsHeader || !actionsCell || !scroll)
+          throw new Error('Expected compact pinned Actions column');
+        expect(actionsHeader.getBoundingClientRect().width).toBeCloseTo(116, 0);
+        expect(actionsCell.getBoundingClientRect().width).toBeCloseTo(116, 0);
+        expect(actionsHeader.getBoundingClientRect().right).toBeCloseTo(
+          scroll.getBoundingClientRect().left + scroll.clientWidth,
+          0,
+        );
+      });
+      await expect(
         canvas.getByRole('button', { name: 'Remove Critical severity filter' }),
       ).toBeVisible();
       await user.click(canvas.getByRole('button', { name: 'Remove Critical severity filter' }));
-      await expect(critical).not.toBeChecked();
+      await user.click(canvas.getByRole('button', { name: 'Show filter panel' }));
+      await expect(
+        within(canvas.getByRole('complementary', { name: /Filters/ })).getByRole('checkbox', {
+          name: /Critical/,
+        }),
+      ).not.toBeChecked();
       await user.type(canvas.getByRole('searchbox', { name: 'Search alerts' }), 'powershell');
       await expect(canvas.getByRole('grid', { name: 'Alerts' })).toBeVisible();
       await user.clear(canvas.getByRole('searchbox', { name: 'Search alerts' }));
@@ -208,6 +234,45 @@ export const FullPresentation: Story = {
     canvasElement.ownerDocument.defaultView?.scrollTo({ top: 0 });
   },
 };
+export const FilterLayoutSwitching: Story = {
+  render: () => <DataGridPresentation />,
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+    docs: { story: { inline: false, height: 1080 } },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const layout = canvas.getByRole('combobox', { name: 'Filter layout' });
+    await userEvent.click(
+      within(canvas.getByRole('complementary', { name: /Filters/ })).getByRole('checkbox', {
+        name: /^Critical/,
+      }),
+    );
+    await expect(
+      canvas.queryByRole('button', { name: 'Remove Critical severity filter' }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(layout);
+    await userEvent.click(await page.findByRole('option', { name: 'Toolbar filters' }));
+    await waitFor(() => expect(layout).toHaveFocus());
+    await expect(canvas.queryByRole('complementary', { name: /Filters/ })).not.toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Add filter' })).toBeVisible();
+    await expect(
+      canvas.getByRole('button', { name: 'Remove Critical severity filter' }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove Critical severity filter' }));
+    await userEvent.click(layout);
+    await userEvent.click(await page.findByRole('option', { name: 'Sidebar filters' }));
+    await waitFor(() => expect(layout).toHaveFocus());
+    await expect(canvas.queryByRole('button', { name: 'Add filter' })).not.toBeInTheDocument();
+    await expect(
+      within(canvas.getByRole('complementary', { name: /Filters/ })).getByRole('checkbox', {
+        name: /^Critical/,
+      }),
+    ).not.toBeChecked();
+  },
+};
 export const FullVirtualizedPresentation: Story = {
   name: 'Full presentation · 1,000 rows',
   render: () => <DataGridPresentation initialCount={1000} initialMode="virtual" />,
@@ -230,7 +295,7 @@ export const HeaderControls: Story = {
     docs: {
       description: {
         story:
-          'Hover or focus a header to reveal sorting and its column menu. Pin columns to either edge, hide optional fields, or use Move left/right as the keyboard alternative to dragging the header or its title. Selection and expansion remain anchored. The last visible column takes spare width; hover or focus just inside a column’s right edge to reveal the full-height resize guide. Both dotted handles are absent; header clicks still sort, and the menu remains independent of dragging.',
+          'Hover or focus a header to reveal sorting and its column menu. Pin columns to either edge, hide optional fields, or use Move left/right as the keyboard alternative to dragging the header or its title. Selection and expansion remain anchored. The last visible data column takes spare width while a trailing Actions column stays compact; hover or focus just inside a column’s right edge to reveal the full-height resize guide. Both dotted handles are absent; header clicks still sort, and the menu remains independent of dragging.',
       },
     },
   },

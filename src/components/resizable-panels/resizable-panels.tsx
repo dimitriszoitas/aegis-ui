@@ -7,7 +7,7 @@ import {
   type PanelProps,
   type SeparatorProps,
 } from 'react-resizable-panels';
-import { GripVertical } from 'lucide-react';
+import { GripVertical } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './resizable-panels.css';
 export type ResizablePanelsProps = GroupProps;

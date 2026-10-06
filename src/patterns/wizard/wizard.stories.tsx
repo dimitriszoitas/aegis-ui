@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Play, ShieldCheck } from 'lucide-react';
+import { Play, ShieldCheck } from '@/components/icon';
 import { Wizard, type WizardStep } from './wizard';
 import { Banner } from '@/components/banner';
 import { Button } from '@/components/button';
@@ -146,7 +146,7 @@ function DetectionSetup({
           <div>
             <Button
               intent="function"
-              emphasis="soft"
+              emphasis="secondary"
               leadingIcon={<Play size={15} />}
               loading={testing}
               onClick={testRule}

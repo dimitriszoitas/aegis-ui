@@ -28,6 +28,21 @@ export const Sources: StoryObj<typeof meta> = {
     })),
   },
 };
+export const CategoricalPalette: StoryObj<typeof meta> = {
+  args: {
+    title: 'Events by source',
+    description: 'Six categorical colors with readable labels and matching legend markers',
+    totalLabel: 'Total events',
+    data: [
+      { name: 'Endpoint', value: 320 },
+      { name: 'Identity', value: 250 },
+      { name: 'Network', value: 190 },
+      { name: 'Cloud', value: 160 },
+      { name: 'Email', value: 120 },
+      { name: 'Application', value: 90 },
+    ],
+  },
+};
 export const States: StoryObj<typeof meta> = {
   render: (args) => (
     <div className="story-grid">

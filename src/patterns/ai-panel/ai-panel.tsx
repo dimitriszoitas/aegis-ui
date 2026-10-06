@@ -8,7 +8,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from '@/components/icon';
 import { SideSheet } from '@/components/side-sheet';
 import { AiMessage } from '@/components/ai-message';
 import { Button } from '@/components/button';
@@ -325,7 +325,7 @@ export function AiPanel({
             <p>Ask for an explanation, a handoff summary, or checks to guide your investigation.</p>
             <Button
               intent="ai"
-              emphasis="soft"
+              emphasis="secondary"
               size="sm"
               onClick={() => {
                 generate(

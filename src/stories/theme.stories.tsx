@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from '@/components/icon';
 import { Button, type Intent } from '@/components/button';
 import { Tag } from '@/components/tag';
 import { SeverityBadge, type Severity } from '@/components/severity-badge';
@@ -39,7 +39,7 @@ function ThemeSpecimen() {
       </div>
       <section className="surface stack">
         <h2>Actions and intent</h2>
-        {(['filled', 'soft', 'ghost'] as const).map((emphasis) => (
+        {(['primary', 'secondary', 'tertiary', 'ghost'] as const).map((emphasis) => (
           <div className="row" key={emphasis} aria-label={`${emphasis} actions`}>
             {actions.map(({ intent, label }) => (
               <Button
@@ -77,7 +77,7 @@ function ThemeSpecimen() {
             <Button
               key={size}
               size={size}
-              emphasis="soft"
+              emphasis="secondary"
               onClick={() =>
                 setSelection(
                   `${size === 'sm' ? 'Small' : size === 'md' ? 'Medium' : 'Large'} control selected.`,

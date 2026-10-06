@@ -1,5 +1,5 @@
 import { useRef, useState, type HTMLAttributes } from 'react';
-import { Columns3, Funnel, Plus, Rows2, Rows3, Rows4 } from 'lucide-react';
+import { Columns3, Funnel, Rows2, Rows3, Rows4 } from '@/components/icon';
 import type { Analyst } from '@/sample-data';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils';
 import { formatTimeRange } from '@/lib/time-range';
 import {
   alertFilterReducer,
-  defaultSavedViews,
   filterSeverities,
   filterStatuses,
   filterSources,
@@ -30,32 +29,31 @@ import {
   type FilterDensity,
   type FilterField,
   type FilterOperator,
-  type SavedAlertView,
 } from '@/lib/filters';
 import './filter-bar.css';
 
-export type { FilterColumn, FilterDensity, SavedAlertView } from '@/lib/filters';
+export type { FilterColumn, FilterDensity } from '@/lib/filters';
+export type FilterMode = 'bar' | 'panel';
 export interface FilterBarProps extends Omit<
   HTMLAttributes<HTMLDivElement>,
   'onChange' | 'defaultValue'
 > {
+  /** Bar mode edits filters inline; panel mode delegates editing to the sidebar. */
+  filterMode?: FilterMode;
   value: AlertFilterState;
   onValueChange: (value: AlertFilterState) => void;
   analysts?: readonly Analyst[];
-  savedViews?: readonly SavedAlertView[];
   now?: Date | number;
   density?: FilterDensity;
   onDensityChange?: (density: FilterDensity) => void;
   columns?: readonly FilterColumn[];
   onColumnVisibilityChange?: (id: string, visible: boolean) => void;
   onTogglePanel?: () => void;
+  /** Applied chips appear only when the filter sidebar is closed. */
   filterPanelOpen?: boolean;
   panelId?: string;
   disabled?: boolean;
-  /** Useful for documenting the builder without a simulated click. */
-  defaultBuilderOpen?: boolean;
 }
-
 const fieldLabels: Record<FilterField, string> = {
   title: 'Alert title',
   severity: 'Severity',
@@ -72,35 +70,143 @@ const operatorLabels: Record<FilterOperator, string> = {
   contains: 'contains',
   'not-contains': 'does not contain',
 };
-const fieldOptions: SelectOption[] = (Object.entries(fieldLabels) as [FilterField, string][]).map(
-  ([value, label]) => ({ value, label }),
-);
-const operatorOptions: SelectOption[] = (
-  Object.entries(operatorLabels) as [FilterOperator, string][]
-).map(([value, label]) => ({ value, label }));
 
+interface FilterPickerProps {
+  value: AlertFilterState;
+  dispatch: (action: AlertFilterAction) => void;
+  analysts: readonly Analyst[];
+  disabled: boolean;
+}
+function FilterPicker({ value, dispatch, analysts, disabled }: FilterPickerProps) {
+  const [open, setOpen] = useState(false);
+  const [field, setField] = useState<FilterField>('severity');
+  const [operator, setOperator] = useState<FilterOperator>('is');
+  const [input, setInput] = useState('');
+  const choices: SelectOption[] | undefined =
+    field === 'severity'
+      ? filterSeverities.map((item) => ({ value: item, label: severityLabels[item] }))
+      : field === 'status'
+        ? filterStatuses.map((item) => ({ value: item, label: statusLabels[item] }))
+        : field === 'source'
+          ? filterSources.map((item) => ({ value: item, label: item }))
+          : field === 'assignee'
+            ? [
+                { value: UNASSIGNED, label: 'Unassigned' },
+                ...analysts.map((item) => ({ value: item.id, label: item.name })),
+              ]
+            : undefined;
+  const selectValue = choices && (operator === 'is' || operator === 'is-not');
+  function apply() {
+    const selected = input.trim();
+    if (!selected || disabled) return;
+    const severity = filterSeverities.find((item) => item === selected);
+    const status = filterStatuses.find((item) => item === selected);
+    const source = filterSources.find((item) => item === selected);
+    if (operator === 'is' && field === 'severity' && severity)
+      dispatch({
+        type: 'patch',
+        patch: { severities: [...new Set([...value.severities, severity])] },
+      });
+    else if (operator === 'is' && field === 'status' && status)
+      dispatch({ type: 'patch', patch: { statuses: [...new Set([...value.statuses, status])] } });
+    else if (operator === 'is' && field === 'source' && source)
+      dispatch({ type: 'patch', patch: { sources: [...new Set([...value.sources, source])] } });
+    else if (operator === 'is' && field === 'assignee')
+      dispatch({
+        type: 'patch',
+        patch: { assignees: [...new Set([...value.assignees, selected])] },
+      });
+    else
+      dispatch({
+        type: 'add-rule',
+        rule: { id: crypto.randomUUID(), field, operator, value: selected },
+      });
+    setInput('');
+    setOpen(false);
+  }
+  return (
+    <Popover
+      title="Add filter"
+      open={open}
+      onOpenChange={setOpen}
+      width={320}
+      trigger={
+        <IconButton aria-label="Add filter" data-filter-add emphasis="ghost" disabled={disabled}>
+          <Funnel size={16} />
+        </IconButton>
+      }
+    >
+      <form
+        className="aegis-filter-picker"
+        onSubmit={(event) => {
+          event.preventDefault();
+          apply();
+        }}
+      >
+        <Select
+          label="Field"
+          disabled={disabled}
+          options={Object.entries(fieldLabels).map(([value, label]) => ({ value, label }))}
+          value={field}
+          onValueChange={(next) => {
+            setField(next as FilterField);
+            setInput('');
+          }}
+        />
+        <Select
+          label="Operator"
+          disabled={disabled}
+          options={Object.entries(operatorLabels).map(([value, label]) => ({ value, label }))}
+          value={operator}
+          onValueChange={(next) => {
+            setOperator(next as FilterOperator);
+            setInput('');
+          }}
+        />
+        {selectValue ? (
+          <Select
+            label="Value"
+            disabled={disabled}
+            placeholder="Choose a value"
+            options={choices}
+            value={input}
+            onValueChange={setInput}
+          />
+        ) : (
+          <TextInput
+            label="Value"
+            disabled={disabled}
+            placeholder={field === 'mitre' ? 'For example, T1059.001' : 'Enter a filter value'}
+            value={input}
+            onValueChange={setInput}
+          />
+        )}
+        <Button type="submit" intent="function" disabled={!input.trim() || disabled}>
+          Apply filter
+        </Button>
+      </form>
+    </Popover>
+  );
+}
+
+/** Search and view controls, plus a removable summary while the facet sidebar is closed. */
 export function FilterBar({
+  filterMode = 'bar',
   value,
   onValueChange,
   analysts = [],
-  savedViews = defaultSavedViews,
   now,
   density,
   onDensityChange,
   columns = [],
   onColumnVisibilityChange,
   onTogglePanel,
-  filterPanelOpen,
+  filterPanelOpen = false,
   panelId,
   disabled = false,
-  defaultBuilderOpen = false,
   className,
   ...props
 }: FilterBarProps) {
-  const [builderOpen, setBuilderOpen] = useState(defaultBuilderOpen);
-  const [field, setField] = useState<FilterField>('source');
-  const [operator, setOperator] = useState<FilterOperator>('is');
-  const [ruleValue, setRuleValue] = useState('');
   const [internalDensity, setInternalDensity] = useState<FilterDensity>('default');
   const barRef = useRef<HTMLDivElement>(null);
   const activeDensity = density ?? internalDensity;
@@ -115,7 +221,7 @@ export function FilterBar({
       (
         buttons[index + 1] ??
         buttons[index - 1] ??
-        barRef.current?.querySelector<HTMLButtonElement>('[data-filter-add]')
+        barRef.current?.querySelector<HTMLInputElement>('input[type="search"]')
       )?.focus();
     }
     dispatch(action);
@@ -123,47 +229,33 @@ export function FilterBar({
   const count = getAppliedFilterCount(value);
   const assigneeLabel = (id: string) =>
     id === UNASSIGNED ? 'Unassigned' : (analysts.find((analyst) => analyst.id === id)?.name ?? id);
-  const choices: SelectOption[] | undefined =
-    field === 'severity'
-      ? filterSeverities.map((severity) => ({ value: severity, label: severityLabels[severity] }))
-      : field === 'status'
-        ? filterStatuses.map((status) => ({ value: status, label: statusLabels[status] }))
-        : field === 'source'
-          ? filterSources.map((source) => ({ value: source, label: source }))
-          : field === 'assignee'
-            ? [
-                { value: UNASSIGNED, label: 'Unassigned' },
-                ...analysts.map((analyst) => ({ value: analyst.id, label: analyst.name })),
-              ]
-            : undefined;
-  const useChoices = choices && (operator === 'is' || operator === 'is-not');
-  const ruleDisplay = (ruleField: FilterField, selected: string): string => {
-    if (ruleField === 'assignee') return assigneeLabel(selected);
+  const ruleDisplay = (field: FilterField, selected: string): string => {
+    if (field === 'assignee') return assigneeLabel(selected);
     const severity =
-      ruleField === 'severity' ? filterSeverities.find((item) => item === selected) : undefined;
+      field === 'severity' ? filterSeverities.find((item) => item === selected) : undefined;
     const status =
-      ruleField === 'status' ? filterStatuses.find((item) => item === selected) : undefined;
+      field === 'status' ? filterStatuses.find((item) => item === selected) : undefined;
     return severity ? severityLabels[severity] : status ? statusLabels[status] : selected;
   };
-  const highPriority =
-    value.severities.length === 2 &&
-    value.severities.includes('critical') &&
-    value.severities.includes('high');
   return (
     <div
       {...props}
       ref={barRef}
       role="region"
       className={cn('aegis-filter-bar', className)}
+      data-filter-mode={filterMode}
       aria-label={props['aria-label'] ?? 'Alert filters'}
     >
       <div className="aegis-filter-bar-main">
-        {onTogglePanel && (
+        {filterMode === 'bar' && (
+          <FilterPicker value={value} dispatch={dispatch} analysts={analysts} disabled={disabled} />
+        )}
+        {filterMode === 'panel' && onTogglePanel && (
           <IconButton
             aria-label={filterPanelOpen ? 'Hide filter panel' : 'Show filter panel'}
             aria-expanded={filterPanelOpen}
             aria-controls={panelId}
-            emphasis={filterPanelOpen ? 'soft' : 'ghost'}
+            emphasis={filterPanelOpen ? 'secondary' : 'ghost'}
             intent={filterPanelOpen ? 'function' : 'default'}
             onClick={onTogglePanel}
             disabled={disabled}
@@ -171,19 +263,6 @@ export function FilterBar({
             <Funnel size={16} />
           </IconButton>
         )}
-        <div className="aegis-filter-view">
-          <Select
-            aria-label="Saved view"
-            options={savedViews.map((view) => ({ value: view.id, label: view.label }))}
-            value={value.savedViewId ?? ''}
-            placeholder="Custom view"
-            disabled={disabled}
-            onValueChange={(id) => {
-              const view = savedViews.find((item) => item.id === id);
-              if (view) dispatch({ type: 'apply-view', view });
-            }}
-          />
-        </div>
         <SearchInput
           aria-label="Search alerts"
           placeholder="Search alerts, entities, techniques…"
@@ -211,7 +290,7 @@ export function FilterBar({
                 key={next}
                 aria-label={label}
                 aria-pressed={activeDensity === next}
-                emphasis={activeDensity === next ? 'soft' : 'ghost'}
+                emphasis={activeDensity === next ? 'secondary' : 'ghost'}
                 intent={activeDensity === next ? 'function' : 'default'}
                 size="sm"
                 disabled={disabled}
@@ -251,114 +330,7 @@ export function FilterBar({
           )}
         </div>
       </div>
-      <div className="aegis-filter-bar-quick" role="group" aria-label="Quick filters">
-        <Tag
-          variant="interactive"
-          selected={highPriority}
-          disabled={disabled}
-          onSelectedChange={(selected) =>
-            dispatch({ type: 'patch', patch: { severities: selected ? ['critical', 'high'] : [] } })
-          }
-        >
-          High priority
-        </Tag>
-        <Tag
-          variant="interactive"
-          selected={value.statuses.length === 1 && value.statuses[0] === 'new'}
-          disabled={disabled}
-          onSelectedChange={(selected) =>
-            dispatch({ type: 'patch', patch: { statuses: selected ? ['new'] : [] } })
-          }
-        >
-          Needs review
-        </Tag>
-        <Tag
-          variant="interactive"
-          selected={value.assignees.includes(UNASSIGNED)}
-          disabled={disabled}
-          onSelectedChange={() =>
-            dispatch({ type: 'toggle-facet', facet: 'assignees', value: UNASSIGNED })
-          }
-        >
-          Unassigned
-        </Tag>
-        <Popover
-          open={builderOpen}
-          onOpenChange={setBuilderOpen}
-          title="Add filter"
-          width={320}
-          trigger={
-            <Button
-              data-filter-add
-              size="sm"
-              emphasis="ghost"
-              leadingIcon={<Plus size={14} />}
-              disabled={disabled}
-            >
-              Add filter
-            </Button>
-          }
-        >
-          <form
-            className="aegis-filter-builder"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (!ruleValue.trim() || disabled) return;
-              dispatch({
-                type: 'add-rule',
-                rule: { id: crypto.randomUUID(), field, operator, value: ruleValue },
-              });
-              setRuleValue('');
-              setBuilderOpen(false);
-            }}
-          >
-            <Select
-              label="Field"
-              options={fieldOptions}
-              value={field}
-              onValueChange={(next) => {
-                setField(next as FilterField);
-                setRuleValue('');
-              }}
-            />
-            <Select
-              label="Operator"
-              options={operatorOptions}
-              value={operator}
-              onValueChange={(next) => {
-                setOperator(next as FilterOperator);
-                setRuleValue('');
-              }}
-            />
-            {useChoices ? (
-              <Select
-                label="Value"
-                placeholder="Choose a value"
-                options={choices}
-                value={ruleValue}
-                onValueChange={setRuleValue}
-              />
-            ) : (
-              <TextInput
-                label="Value"
-                placeholder={
-                  field === 'mitre'
-                    ? 'For example, T1059.001'
-                    : field === 'entity'
-                      ? 'For example, workstation-042'
-                      : 'Enter a filter value'
-                }
-                value={ruleValue}
-                onValueChange={setRuleValue}
-              />
-            )}
-            <Button intent="function" type="submit" disabled={!ruleValue.trim() || disabled}>
-              Apply filter
-            </Button>
-          </form>
-        </Popover>
-      </div>
-      {count > 0 && (
+      {(filterMode === 'bar' || !filterPanelOpen) && count > 0 && (
         <div className="aegis-filter-bar-applied" role="group" aria-label="Applied filters">
           <span className="aegis-filter-applied-count">{count} applied</span>
           {value.query.trim() && (
@@ -452,7 +424,7 @@ export function FilterBar({
             size="sm"
             emphasis="ghost"
             onClick={() => {
-              barRef.current?.querySelector<HTMLButtonElement>('[data-filter-add]')?.focus();
+              barRef.current?.querySelector<HTMLInputElement>('input[type="search"]')?.focus();
               dispatch({ type: 'reset' });
             }}
             disabled={disabled}

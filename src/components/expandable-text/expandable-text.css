@@ -1,0 +1,37 @@
+.aegis-expandable-text {
+  position: relative;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+.aegis-expandable-text-copy {
+  position: relative;
+}
+.aegis-expandable-text-content,
+.aegis-expandable-text-measure {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.aegis-expandable-text-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.aegis-expandable-text-measure {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.aegis-expandable-text-toggle {
+  margin-top: var(--space-1);
+  margin-inline-start: calc(-1 * var(--space-2));
+}
+.aegis-expandable-text-content:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}

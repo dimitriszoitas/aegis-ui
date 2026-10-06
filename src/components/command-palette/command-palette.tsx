@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { Command } from 'cmdk';
 import { Dialog } from 'radix-ui';
-import { Search, Sparkles, X } from 'lucide-react';
+import { Search, Sparkles, X } from '@/components/icon';
 import { IconButton } from '@/components/icon-button';
 import { Kbd } from '@/components/kbd';
 import { useModalIsolation } from '@/components/modal/use-modal-isolation';

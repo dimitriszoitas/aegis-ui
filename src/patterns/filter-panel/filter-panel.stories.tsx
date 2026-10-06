@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { alerts, analysts, referenceTime } from '@/sample-data';
@@ -24,6 +24,8 @@ function Demo(args: FilterPanelProps) {
 }
 function SynchronizedDemo(args: FilterPanelProps) {
   const [filters, setFilters] = useState(args.value);
+  const [panelOpen, setPanelOpen] = useState(true);
+  const panelId = useId();
   const filtered = applyAlertFilters(args.alerts, filters, referenceTime);
   const update = (next: typeof filters) => {
     setFilters(next);
@@ -31,9 +33,26 @@ function SynchronizedDemo(args: FilterPanelProps) {
   };
   return (
     <div className="surface" style={{ padding: 0, width: 'min(1100px, 100%)' }}>
-      <FilterBar value={filters} onValueChange={update} analysts={analysts} now={referenceTime} />
+      <FilterBar
+        value={filters}
+        onValueChange={update}
+        analysts={analysts}
+        now={referenceTime}
+        filterMode="panel"
+        filterPanelOpen={panelOpen}
+        panelId={panelId}
+        onTogglePanel={() => setPanelOpen((open) => !open)}
+      />
       <div className="aegis-filter-sync-preview">
-        <FilterPanel {...args} style={{ height: 700 }} value={filters} onValueChange={update} />
+        {panelOpen && (
+          <FilterPanel
+            {...args}
+            id={panelId}
+            style={{ height: 700 }}
+            value={filters}
+            onValueChange={update}
+          />
+        )}
         <section className="aegis-filter-sync-results" aria-label="Matching alert preview">
           <h3>{filtered.length} matching alerts</h3>
           {filtered.length ? (
@@ -81,7 +100,6 @@ export const Applied: Story = {
       severities: ['critical', 'high'],
       sources: ['EDR'],
       statuses: ['new'],
-      savedViewId: undefined,
     },
   },
 };
@@ -95,20 +113,27 @@ export const Synchronized: Story = {
   render: (args) => <SynchronizedDemo {...args} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const panel = within(canvas.getByRole('complementary', { name: /Filters/ }));
-    await userEvent.click(panel.getByRole('checkbox', { name: /^Critical/ }));
+    const panel = () => within(canvas.getByRole('complementary', { name: /Filters/ }));
+    await userEvent.click(panel().getByRole('checkbox', { name: /^Critical/ }));
+    await expect(
+      canvas.queryByRole('button', { name: 'Remove Critical severity filter' }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide filter panel' }));
     await expect(
       canvas.getByRole('button', { name: 'Remove Critical severity filter' }),
     ).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Remove Critical severity filter' }));
-    await expect(panel.getByRole('checkbox', { name: /^Critical/ })).not.toBeChecked();
-    await userEvent.click(canvas.getByRole('button', { name: 'Unassigned' }));
-    await expect(panel.getByRole('checkbox', { name: /^Unassigned/ })).toBeChecked();
-    await userEvent.click(panel.getByRole('button', { name: 'Clear all' }));
-    await expect(canvas.getByRole('button', { name: 'Unassigned' })).toHaveAttribute(
-      'aria-pressed',
-      'false',
-    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Show filter panel' }));
+    await expect(panel().getByRole('checkbox', { name: /^Critical/ })).not.toBeChecked();
+    await userEvent.click(panel().getByRole('checkbox', { name: /^Unassigned/ }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide filter panel' }));
+    await expect(
+      canvas.getByRole('button', { name: 'Remove Unassigned assignee filter' }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Show filter panel' }));
+    await expect(panel().getByRole('checkbox', { name: /^Unassigned/ })).toBeChecked();
+    await userEvent.click(panel().getByRole('button', { name: 'Clear all' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide filter panel' }));
     await expect(
       canvas.queryByRole('button', { name: 'Remove Unassigned assignee filter' }),
     ).not.toBeInTheDocument();

@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Dialog as Primitive } from 'radix-ui';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from '@/components/icon';
 import { cn } from '../../lib/utils';
 import { useModalIsolation } from '../modal/use-modal-isolation';
 import './side-sheet.css';
@@ -22,6 +22,9 @@ export interface SideSheetProps extends Omit<
   trigger?: ReactElement;
   children?: ReactNode;
   footer?: ReactNode;
+  /** Optional calls to action below the title row, alongside result navigation. */
+  headerActions?: ReactNode;
+  /** Backward-compatible alias for headerActions. */
   actions?: ReactNode;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
@@ -86,33 +89,28 @@ function SheetHeader({
 > & { onClose: () => void; titleId: string; descriptionId: string }) {
   return (
     <header className="aegis-sheet-header">
-      <div className="aegis-sheet-toolbar">
-        {position !== undefined && total !== undefined && (
-          <div className="aegis-sheet-navigation" aria-label="Alert navigation">
-            <button
-              type="button"
-              className="aegis-sheet-icon-button"
-              onClick={onPrevious}
-              disabled={!onPrevious || position <= 1}
-              aria-label="Previous alert"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span aria-live="polite">
-              {position} of {total}
-            </span>
-            <button
-              type="button"
-              className="aegis-sheet-icon-button"
-              onClick={onNext}
-              disabled={!onNext || position >= total}
-              aria-label="Next alert"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        )}
-        <div className="aegis-sheet-actions">{actions}</div>
+      <div className="aegis-sheet-heading-row">
+        <div className="aegis-sheet-heading">
+          {docked ? (
+            <h2 id={titleId} className="aegis-sheet-title">
+              {title}
+            </h2>
+          ) : (
+            <Primitive.Title id={titleId} className="aegis-sheet-title">
+              {title}
+            </Primitive.Title>
+          )}
+          {description &&
+            (docked ? (
+              <p id={descriptionId} className="aegis-sheet-description">
+                {description}
+              </p>
+            ) : (
+              <Primitive.Description id={descriptionId} className="aegis-sheet-description">
+                {description}
+              </Primitive.Description>
+            ))}
+        </div>
         <button
           type="button"
           onClick={onClose}
@@ -122,25 +120,36 @@ function SheetHeader({
           <X size={18} />
         </button>
       </div>
-      {docked ? (
-        <h2 id={titleId} className="aegis-sheet-title">
-          {title}
-        </h2>
-      ) : (
-        <Primitive.Title id={titleId} className="aegis-sheet-title">
-          {title}
-        </Primitive.Title>
+      {((position !== undefined && total !== undefined) || actions) && (
+        <div className="aegis-sheet-toolbar">
+          {position !== undefined && total !== undefined && (
+            <div className="aegis-sheet-navigation" aria-label="Alert navigation">
+              <button
+                type="button"
+                className="aegis-sheet-icon-button"
+                onClick={onPrevious}
+                disabled={!onPrevious || position <= 1}
+                aria-label="Previous alert"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span aria-live="polite">
+                {position} of {total}
+              </span>
+              <button
+                type="button"
+                className="aegis-sheet-icon-button"
+                onClick={onNext}
+                disabled={!onNext || position >= total}
+                aria-label="Next alert"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+          {actions && <div className="aegis-sheet-actions">{actions}</div>}
+        </div>
       )}
-      {description &&
-        (docked ? (
-          <p id={descriptionId} className="aegis-sheet-description">
-            {description}
-          </p>
-        ) : (
-          <Primitive.Description id={descriptionId} className="aegis-sheet-description">
-            {description}
-          </Primitive.Description>
-        ))}
     </header>
   );
 }
@@ -247,6 +256,7 @@ export function SideSheet({
   description,
   children,
   footer,
+  headerActions,
   actions,
   size = 'md',
   className,
@@ -270,7 +280,7 @@ export function SideSheet({
       <SheetHeader
         title={title}
         description={description}
-        actions={actions}
+        actions={headerActions ?? actions}
         position={position}
         total={total}
         onPrevious={onPrevious}

@@ -16,12 +16,13 @@ Start with **Foundations → Principles**, then open **Console → SIEM console 
 
 - Collapsible navigation in Floating or Fixed layout, with working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
 - An alerts grid with sorting and multi-sort, constrained column resizing, visibility settings, three densities, selection, bulk actions, nested evidence, and a virtualized large-data example.
-- A filter bar and left push panel backed by the same filter state, plus time ranges and severity histograms.
+- Choose toolbar filters or a left filter panel backed by the same filter state, with time ranges, severity histograms, and removable applied chips while the panel is closed.
+- A vertically resizable bottom sheet that spans the workspace between navigation and the assistant.
 - Alert detail sheets with filtered-list navigation, evidence JSON, detection-rule YAML, activity timelines, and editable status, assignee, and analyst notes.
 - A docked assistant with attached context, streaming, stop, retry, regenerate, feedback, and evidence navigation.
 - A detection-rule wizard with horizontal and vertical layouts, inline suggestions, YAML review, sample replay, explicit approval, and an approval audit line.
 
-For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, saved views, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states.
+For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between toolbar/sidebar filters, 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states. A trailing Actions column stays compact and pinned to the right by default; the last visible data column before it fills any spare width.
 
 All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers color and layout preferences.
 
@@ -50,13 +51,13 @@ Use the local URL printed by Vite. No environment variables, credentials, or ext
 
 Selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. The same treatment applies in the compact rail and nested navigation.
 
-**Corners stay compact.** Small, medium, and large controls are 28/34/40px high with 6/7/8px corners. Surfaces use 10px standard corners, 12px large/floating corners, and 8px nested corners. The nested token subtracts the shared 4px step from the 12px parent radius. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
+**Corners stay compact.** Small, medium, and large controls are 28/34/40px high. Buttons and icon buttons use 4/5/6px corners; inputs and selects keep 6/7/8px corners. Surfaces use 10px standard corners, 12px large/floating corners, and 8px nested corners. The nested token subtracts the shared 4px step from the 12px parent radius. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
 
-**Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars, with stronger thumb colors on hover and drag. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
+**Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars. Thumbs appear while scrolling or using keyboard focus and hide again after activity stops, without changing the gutter. Hover and drag make them more prominent. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
 
 **Hierarchy stays clear.** Accordion bodies, navigation children, tree levels, JSON branches, and expanded table content use a shared 12px inset.
 
-**Color has a purpose.** Function blue identifies primary actions; the AI intent carries a violet-to-blue gradient through filled, soft, and foreground treatments. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
+**Color has a purpose.** Function blue identifies primary actions; the AI intent carries a magenta–pink–blue gradient through filled, soft, and foreground treatments. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long alert titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density never removes investigation actions.
 
@@ -72,9 +73,9 @@ The token system has three layers:
 2. Semantic tokens: surfaces, text, borders, intent, severity, syntax, charts, and focus.
 3. Component tokens: control radii, sidebar dimensions, and grid densities.
 
-[`src/styles/tokens.css`](src/styles/tokens.css) is the color source of truth. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Inter and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
+[`src/styles/tokens.css`](src/styles/tokens.css) is the color source of truth. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
 
-Control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners.
+Button radius tokens use 4/5/6px. Other control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners.
 
 The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent layout axis uses `data-layout-theme` with `floating` or `fixed`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's two toolbar controls preview every color/layout combination without persisting a standalone preference.
 
@@ -83,7 +84,7 @@ For a source-level integration, import the global stylesheet once and compose th
 ```tsx
 import '@/styles/globals.css';
 import { Button } from '@/components/button';
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from '@/components/icon';
 
 export function ExplainAction({ onExplain }: { onExplain: () => void }) {
   return (
@@ -96,6 +97,18 @@ export function ExplainAction({ onExplain }: { onExplain: () => void }) {
 
 The `@/` alias resolves to `src/` in this repository. Each folder exports its public components and prop types. Use Storybook's component docs for individual APIs. Complex patterns expose controlled state and callbacks so a host application owns persistence and navigation; for example, `AlertDetailSheet` uses the canonical alert record alongside a separate filtered navigation list, and `AiPanel` accepts a keyed request and an evidence callback.
 
+## Component refinements
+
+Buttons have four emphasis levels: `primary` (filled), `secondary` (soft), `tertiary` (outline), and `ghost` (text). Icon-side padding is optically balanced; loading keeps the same footprint. `CountBadge` and `Tooltip` accept `variant="inverted"` in either color theme. Tooltip arrows use a continuous outline without an interior seam.
+
+`Popover` supports optional headers and footers with `density="regular" | "tight"` and no internal dividers. `Modal` uses header/footer dividers and `size="small" | "regular" | "large"`. `SideSheet` aligns its title and close button, with optional `headerActions` and `footer` content. These surfaces keep header and footer actions outside the scrolling body.
+
+`BottomSheet` belongs inside a bounded flex-column workspace; `.aegis-bottom-sheet-workspace` provides that layout. It fills its parent's width, preserves space for content above, and supports controlled height, minimum/maximum bounds, header actions, and a footer. The console opens its investigation queue from the bottom-panel button in the page header. `ExpandableText` clamps long text to a configurable number of lines and exposes customizable disclosure labels only when needed.
+
+The interface uses Hugeicons through `@/components/icon`. **Foundations → Icons** includes the searchable Hugeicons catalog with sizes, stroke weights, and copyable imports. Local development additionally exposes the installed Untitled UI reference catalog. Figtree is the UI typeface; JetBrains Mono is used for code. The full icon catalogs are isolated from the console bundle.
+
+Third-party icon packs and logos retain their own licenses. Untitled UI's bundled license restricts redistribution. Production Storybook builds replace that pack with an empty module, hide its selector, and reject any build that still contains its package modules; the complete catalog remains available only in local development. See the [Untitled UI license](https://www.untitledui.com/license). Hugeicons' free pack is MIT licensed. AWS assets remain AWS-owned marks with source attribution in the logo catalog. **Components → Brand → AWS logos** includes 810 symbols from the official July 2026 package: 305 service marks, 26 categories, 466 resources, and 13 architecture-group marks. The 859 local SVGs include 49 official dark variants. Search the catalog, copy a typed logo name, or download its SVG; `AwsLogo` presents the original artwork in a square rounded frame.
+
 ## Keyboard behavior
 
 | Surface                  | Interaction                                                                                                            |
@@ -104,6 +117,7 @@ The `@/` alias resolves to `src/` in this repository. Each folder exports its pu
 | Trees and JSON           | Arrow keys traverse visible nodes; Left/Right collapse and expand. JSON supports copy value and path actions.          |
 | Data grid                | Up/Down move row focus; Enter opens a row; Shift-click adds a sort; focused resize handles support arrow keys.         |
 | Dialogs and sheets       | Modal focus stays inside the overlay and returns on close. Docked panels keep the workspace accessible.                |
+| Bottom sheet             | Drag the top edge, or focus it and use Up/Down, Shift for larger steps, Home/End for limits, Escape to close.          |
 | Assistant composer       | Enter sends; Shift+Enter inserts a newline; `/` opens commands; Stop preserves the current response.                   |
 | Code editor              | Tab and Shift+Tab leave the editor rather than trapping focus.                                                         |
 | Rule wizard              | Arrow navigation follows the stepper orientation; completed steps can be revisited; validation gates forward progress. |
@@ -160,4 +174,4 @@ The implementation uses React, TypeScript, Vite, Tailwind v4, Radix/shadcn found
 - Add maintained visual-regression baselines alongside the existing themed story and interaction checks.
 - Connect host-owned data and AI adapters while preserving controlled APIs, evidence provenance, cancellation, and explicit approval.
 
-Licensed under the [MIT license](LICENSE).
+Aegis code is licensed under the [MIT license](LICENSE). Third-party fonts, icons, and logos retain their respective licenses.

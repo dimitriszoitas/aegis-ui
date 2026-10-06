@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { flushSync } from 'react-dom';
 import { DropdownMenu as Primitive } from 'radix-ui';
-import { Check, ChevronRight, Circle, Minus } from 'lucide-react';
+import { Check, ChevronRight, Circle, Minus } from '@/components/icon';
 import { cn } from '../../lib/utils';
 import './dropdown-menu.css';
 

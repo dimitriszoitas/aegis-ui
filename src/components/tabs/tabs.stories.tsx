@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Bell, Eye, UserRound } from 'lucide-react';
+import { Bell, Eye, UserRound } from '@/components/icon';
 import { Tabs } from './tabs';
 
 const items = [

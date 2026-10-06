@@ -1,3 +1,10 @@
 .aegis-time-range-trigger[aria-invalid='true'] {
   box-shadow: inset 0 0 0 1px var(--color-destroy-fg);
 }
+
+@media (max-width: 360px) {
+  .time-range-custom .rdp-root {
+    --rdp-day-width: 32px;
+    --rdp-day_button-width: 30px;
+  }
+}

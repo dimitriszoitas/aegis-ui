@@ -1,5 +1,5 @@
 import { useId, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { Activity, CircleDot, RadioTower, ShieldAlert, UserRound, X } from 'lucide-react';
+import { Activity, CircleDot, RadioTower, ShieldAlert, UserRound, X } from '@/components/icon';
 import type { Alert, Analyst } from '@/sample-data';
 import { Accordion, type AccordionItem } from '@/components/accordion';
 import { Button } from '@/components/button';
@@ -105,6 +105,7 @@ export function FilterPanel({
         <div className="aegis-filter-facets">
           {severities.map((severity) => (
             <Checkbox
+              size="sm"
               key={severity}
               checked={value.severities.includes(severity)}
               disabled={disabled}
@@ -130,6 +131,7 @@ export function FilterPanel({
         <div className="aegis-filter-facets">
           {statuses.map((status) => (
             <Checkbox
+              size="sm"
               key={status}
               checked={value.statuses.includes(status)}
               disabled={disabled}
@@ -152,6 +154,7 @@ export function FilterPanel({
         <div className="aegis-filter-facets">
           {sources.map((source) => (
             <Checkbox
+              size="sm"
               key={source}
               checked={value.sources.includes(source)}
               disabled={disabled}
@@ -174,6 +177,7 @@ export function FilterPanel({
         <div className="aegis-filter-facets">
           {visibleAssignees.map((owner) => (
             <Checkbox
+              size="sm"
               key={owner.id}
               checked={value.assignees.includes(owner.id)}
               disabled={disabled}

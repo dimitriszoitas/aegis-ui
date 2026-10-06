@@ -1,5 +1,5 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
-import { CircleAlert, CircleCheck, Info, Sparkles, TriangleAlert, X } from 'lucide-react';
+import { CircleAlert, CircleCheck, Info, Sparkles, TriangleAlert, X } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './banner.css';
 

@@ -45,11 +45,21 @@
   padding: var(--layout-panel-padding);
   border-bottom: 1px solid var(--color-border-subtle);
 }
+.aegis-sheet-heading-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.aegis-sheet-heading {
+  min-width: 0;
+  flex: 1;
+}
 .aegis-sheet-toolbar {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
 }
 .aegis-sheet-navigation {
   display: flex;
@@ -67,7 +77,9 @@
   margin-left: auto;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-2);
+  min-width: 0;
 }
 .aegis-sheet-icon-button {
   width: 28px;
@@ -97,7 +109,8 @@
   margin: 0;
   font-size: var(--title-panel-size);
   font-weight: var(--title-weight);
-  line-height: 1.4;
+  line-height: 28px;
+  overflow-wrap: anywhere;
 }
 .aegis-sheet-description {
   margin: var(--space-2) 0 0;
@@ -144,6 +157,7 @@
 .aegis-sheet-footer {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;

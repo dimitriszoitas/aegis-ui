@@ -7,13 +7,13 @@ import {
   type ReactElement,
   type SVGProps,
 } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './button.css';
 export type Intent = 'default' | 'function' | 'destroy' | 'ai';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
-  emphasis?: 'filled' | 'soft' | 'ghost';
+  emphasis?: 'primary' | 'secondary' | 'tertiary' | 'ghost';
   intent?: Intent;
   loading?: boolean;
   leadingIcon?: ReactNode;
@@ -22,7 +22,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 /** A shadcn-style native button, restyled with Aegis intent and surface tokens. */
 export function Button({
   size = 'md',
-  emphasis = 'filled',
+  emphasis = 'primary',
   intent = 'default',
   loading = false,
   leadingIcon,
@@ -34,7 +34,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const gradientId = `aegis-ai-${useId().replaceAll(':', '')}`;
-  const gradientForeground = intent === 'ai' && emphasis !== 'filled';
+  const gradientForeground = intent === 'ai' && emphasis !== 'primary';
   function paintIcon(node: ReactNode): ReactNode {
     if (!gradientForeground || !isValidElement(node)) return node;
     const icon = node as ReactElement<SVGProps<SVGSVGElement>>;
@@ -50,13 +50,16 @@ export function Button({
       data-size={size}
       data-emphasis={emphasis}
       data-intent={intent}
+      data-leading-icon={leadingIcon ? '' : undefined}
+      data-trailing-icon={trailingIcon ? '' : undefined}
     >
       {gradientForeground && (
         <svg className="button-gradient-defs" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="var(--color-ai-fg)" />
-              <stop offset="100%" stopColor="var(--color-function-fg)" />
+              <stop offset="50%" stopColor="var(--color-ai-pink-fg)" />
+              <stop offset="100%" stopColor="var(--color-ai-blue-fg)" />
             </linearGradient>
           </defs>
         </svg>
@@ -74,7 +77,11 @@ export function Button({
       <span className={cn('button-label', loading && !leadingIcon && 'button-label-loading')}>
         {paintIcon(children)}
       </span>
-      {trailingIcon && <span className="button-icon">{paintIcon(trailingIcon)}</span>}
+      {trailingIcon && (
+        <span className={cn('button-icon', loading && !leadingIcon && 'button-label-loading')}>
+          {paintIcon(trailingIcon)}
+        </span>
+      )}
     </button>
   );
 }

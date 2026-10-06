@@ -1,6 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
-import { ArrowRight, BellRing, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, BellRing, ShieldCheck, Sparkles } from '@/components/icon';
 import { Separator } from '@/components/separator';
+import { Button } from '@/components/button';
 import { tokenNames, tokenValues, type TokenTheme } from './token-source';
 import './foundations.css';
 
@@ -181,12 +182,15 @@ export function ControlRadiusExamples() {
           <div className="foundation-stack">
             {(
               [
-                { size: 'sm', height: 28, radius: 6 },
-                { size: 'md', height: 34, radius: 7 },
-                { size: 'lg', height: 40, radius: 8 },
+                { size: 'sm', height: 28, radius: 6, buttonRadius: 4 },
+                { size: 'md', height: 34, radius: 7, buttonRadius: 5 },
+                { size: 'lg', height: 40, radius: 8, buttonRadius: 6 },
               ] as const
             ).map((control) => (
               <div className="foundation-control-radius-row" key={control.size}>
+                <Button size={control.size} emphasis="secondary">
+                  Investigate
+                </Button>
                 <span
                   className="foundation-control-specimen"
                   style={{
@@ -194,10 +198,11 @@ export function ControlRadiusExamples() {
                     borderRadius: `var(--control-radius-${control.size})`,
                   }}
                 >
-                  Investigate alert
+                  Filter value
                 </span>
                 <span>
-                  {control.height}px / {control.radius}px
+                  {control.height}px high · button {control.buttonRadius}px · field {control.radius}
+                  px
                 </span>
               </div>
             ))}

@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { RotateCcw, ShieldAlert } from 'lucide-react';
+import { RotateCcw, ShieldAlert } from '@/components/icon';
 import { Button } from '@/components/button';
 import { Kbd } from '@/components/kbd';
 import { Select } from '@/components/select';
@@ -25,6 +25,7 @@ type PresentationMode = 'pages' | 'virtual';
 export interface DataGridPresentationProps {
   initialCount?: 150 | 1000;
   initialMode?: PresentationMode;
+  initialFilterMode?: 'bar' | 'panel';
 }
 const contextFor = (alert: Alert): AiContextItem => ({
   id: alert.id,
@@ -37,10 +38,12 @@ const contextFor = (alert: Alert): AiContextItem => ({
 export function DataGridPresentation({
   initialCount = 150,
   initialMode = 'pages',
+  initialFilterMode = 'panel',
 }: DataGridPresentationProps) {
   const [count, setCount] = useState<150 | 1000>(initialCount);
   const [records, setRecords] = useState(initialCount === 1000 ? largeDataset : fixtures);
   const [mode, setMode] = useState<PresentationMode>(initialMode);
+  const [filterMode, setFilterMode] = useState(initialFilterMode);
   const [state, setState] = useState<PresentationState>('ready');
   const [density, setDensity] = useState<GridDensity>('default');
   const [filters, setFilters] = useState(createDefaultFilters);
@@ -62,6 +65,7 @@ export function DataGridPresentation({
     setCount(nextCount);
     setRecords(nextCount === 1000 ? largeDataset : fixtures);
     setMode(nextMode);
+    setFilterMode(initialFilterMode);
     setState('ready');
     setDensity('default');
     setFilters(createDefaultFilters());
@@ -126,7 +130,7 @@ export function DataGridPresentation({
           </p>
         </div>
         <Button
-          emphasis="soft"
+          emphasis="secondary"
           size="sm"
           leadingIcon={<RotateCcw size={14} />}
           onClick={() => reset()}
@@ -167,6 +171,16 @@ export function DataGridPresentation({
           onValueChange={(next) => {
             setMode(next as PresentationMode);
           }}
+        />
+        <Select
+          label="Filter layout"
+          size="sm"
+          value={filterMode}
+          options={[
+            { value: 'panel', label: 'Sidebar filters' },
+            { value: 'bar', label: 'Toolbar filters' },
+          ]}
+          onValueChange={(next) => setFilterMode(next === 'bar' ? 'bar' : 'panel')}
         />
         <Select
           label="Result state"
@@ -218,6 +232,7 @@ export function DataGridPresentation({
         onAskAi={explain}
         onSelectionChange={setSelected}
         defaultPanelOpen
+        filterMode={filterMode}
         density={density}
         onDensityChange={setDensity}
         pagination={mode === 'pages'}
@@ -261,11 +276,11 @@ export function DataGridPresentation({
             }}
           >
             <p style={{ margin: 0 }}>
-              <strong>Filter with saved views</strong>
+              <strong>Choose a filter layout</strong>
               <br />
-              Use search, time range, saved views, quick chips, or Add filter. The push panel shares
-              the same severity, status, source and assignee filters. Remove a chip to update both
-              views.
+              Use search and time range with either sidebar facets or toolbar filters. Switching
+              layouts preserves the active criteria. Applied chips appear in toolbar mode and when
+              the sidebar is closed; remove a chip to update the results.
             </p>
             <p style={{ margin: 0 }}>
               <strong>Shape the table</strong>

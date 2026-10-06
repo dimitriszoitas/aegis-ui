@@ -64,8 +64,8 @@ export const TooltipAndLegend: StoryObj<typeof meta> = {
           active
           label="08:00 UTC"
           payload={[
-            { name: 'Endpoint', value: 42, color: 'var(--color-function-bg)' },
-            { name: 'Identity', value: 28, color: 'var(--color-ai-bg)' },
+            { name: 'Endpoint', value: 42, color: 'var(--color-chart-function)' },
+            { name: 'Identity', value: 28, color: 'var(--color-chart-ai)' },
           ]}
         />
       </div>

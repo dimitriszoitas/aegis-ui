@@ -42,6 +42,26 @@ export const CustomCalendar: StoryObj<typeof TimeRangePicker> = {
     now,
     defaultValue: { mode: 'absolute', from: '2026-10-05T08:30:00Z', to: '2026-10-06T12:00:00Z' },
   },
+  play: async ({ canvasElement }) => {
+    const portal = within(canvasElement.ownerDocument.body);
+    const dialog = await portal.findByRole('dialog', { name: 'Time range' });
+    const body = dialog.querySelector<HTMLElement>('.aegis-popover-body')!;
+    const days = dialog.querySelectorAll<HTMLElement>('.rdp-weekday');
+    await waitFor(() => expect(body.scrollWidth).toBeLessThanOrEqual(body.clientWidth));
+    expect(days).toHaveLength(7);
+    expect(days[0].getBoundingClientRect().left).toBeGreaterThanOrEqual(
+      body.getBoundingClientRect().left,
+    );
+    expect(days[6].getBoundingClientRect().right).toBeLessThanOrEqual(
+      body.getBoundingClientRect().right,
+    );
+    const apply = portal.getByRole('button', { name: 'Apply range' });
+    const top = apply.getBoundingClientRect().top;
+    body.scrollTop = body.scrollHeight;
+    expect(apply.getBoundingClientRect().top).toBe(top);
+    await expect(apply).toBeVisible();
+    body.scrollTop = 0;
+  },
 };
 export const Presets: StoryObj<typeof TimeRangePicker> = { args: { defaultOpen: true, now } };
 export const FieldComposition: StoryObj<typeof TimeRangePicker> = {

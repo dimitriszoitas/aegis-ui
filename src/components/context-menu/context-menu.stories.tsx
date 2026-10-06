@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Clipboard, ExternalLink, Trash2, UserRound } from 'lucide-react';
+import { Clipboard, ExternalLink, Trash2, UserRound } from '@/components/icon';
 import { ContextMenu, type ContextMenuEntry } from './context-menu';
 
 const items: ContextMenuEntry[] = [

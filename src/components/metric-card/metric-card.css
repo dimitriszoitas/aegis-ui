@@ -1,6 +1,6 @@
 .aegis-metric-card {
   padding: var(--layout-card-padding);
-  min-width: 220px;
+  min-width: 0;
 }
 .aegis-metric-label {
   font-size: var(--text-sm);
@@ -9,18 +9,30 @@
 }
 .aegis-metric-main {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
 }
 .aegis-metric-value {
+  flex: 0 0 auto;
+  max-width: 100%;
   color: var(--color-text-primary);
   font-weight: var(--title-weight);
   letter-spacing: -0.03em;
   line-height: 1.15;
   font-size: var(--metric-value-size);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+}
+.aegis-metric-main > :is(.aegis-sparkline, .aegis-sparkline-empty) {
+  flex: 1 1 64px;
+  min-width: 0;
+  max-width: 100px;
+  margin-inline-start: auto;
+}
+.aegis-metric-main > .aegis-sparkline {
+  height: auto;
 }
 .aegis-metric-value > span {
   margin-left: var(--space-1);

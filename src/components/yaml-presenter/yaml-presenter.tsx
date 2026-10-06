@@ -1,5 +1,5 @@
 import { useId, useRef, type HTMLAttributes } from 'react';
-import { ChevronsDownUp, ChevronsUpDown, FileCode2 } from 'lucide-react';
+import { ChevronsDownUp, ChevronsUpDown, FileCode2 } from '@/components/icon';
 import {
   CodeEditor,
   type CodeEditorHandle,

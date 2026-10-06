@@ -1,5 +1,5 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
-import { Database, SearchX, ShieldAlert } from 'lucide-react';
+import { Database, SearchX, ShieldAlert } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './empty-state.css';
 

@@ -12,7 +12,7 @@ function DensityControls() {
       {['Compact', 'Default', 'Comfortable'].map((label) => (
         <Button
           key={label}
-          emphasis={density === label ? 'soft' : 'ghost'}
+          emphasis={density === label ? 'secondary' : 'ghost'}
           intent={density === label ? 'function' : 'default'}
           aria-pressed={density === label}
           onClick={() => setDensity(label)}

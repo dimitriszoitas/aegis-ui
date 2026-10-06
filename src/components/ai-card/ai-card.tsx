@@ -1,21 +1,47 @@
-import { useId, useState, type ComponentProps, type ReactNode } from 'react';
-import { RefreshCw, Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { useId, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from 'react';
+import { RefreshCw, Sparkles, ThumbsDown, ThumbsUp } from '@/components/icon';
 import { ConfidenceBadge, type ConfidenceLevel } from '@/components/confidence-badge';
 import { IconButton } from '@/components/icon-button';
 import { cn } from '@/lib/utils';
 import './ai-card.css';
 
+const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
+function subscribeReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(reducedMotionQuery);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+}
+function prefersReducedMotion() {
+  return window.matchMedia(reducedMotionQuery).matches;
+}
+
 export type AiLabelProps = ComponentProps<'span'>;
 /** The shared visible marker for AI-generated material. */
 export function AiLabel({ children = 'AI generated', className, ...props }: AiLabelProps) {
   const gradientId = `ai-marker-${useId().replaceAll(':', '')}`;
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    prefersReducedMotion,
+    () => true,
+  );
   return (
     <span {...props} className={cn('aegis-ai-label', className)}>
       <svg className="aegis-ai-gradient-defs" aria-hidden="true">
         <defs>
-          <linearGradient id={gradientId}>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="var(--color-ai-fg)" />
-            <stop offset="100%" stopColor="var(--color-function-fg)" />
+            <stop offset="50%" stopColor="var(--color-ai-pink-fg)" />
+            <stop offset="100%" stopColor="var(--color-ai-blue-fg)" />
+            {!reducedMotion && (
+              <animateTransform
+                attributeName="gradientTransform"
+                type="rotate"
+                from="0 .5 .5"
+                to="360 .5 .5"
+                dur="6s"
+                repeatCount="indefinite"
+              />
+            )}
           </linearGradient>
         </defs>
       </svg>

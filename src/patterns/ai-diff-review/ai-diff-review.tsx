@@ -7,7 +7,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from 'react';
-import { Check, CheckCheck, X } from 'lucide-react';
+import { Check, CheckCheck, X } from '@/components/icon';
 import { AiCard } from '@/components/ai-card';
 import { Banner } from '@/components/banner';
 import { Button } from '@/components/button';
@@ -167,7 +167,10 @@ export function AiDiffReview({
         label={`${ruleName} changes`}
         originalLabel="Current rule"
         modifiedLabel="AI proposal"
+        modifiedIntent="ai"
         readOnly
+        collapseUnchanged
+        focusFirstChange
         defaultMode={defaultMode}
         maxHeight={maxHeight}
       />

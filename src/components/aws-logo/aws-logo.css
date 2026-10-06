@@ -1,0 +1,183 @@
+:where(:root, .light, [data-theme='light']) {
+  --aws-logo-light-display: block;
+  --aws-logo-dark-display: none;
+}
+:where(.dark, [data-theme='dark']) {
+  --aws-logo-light-display: none;
+  --aws-logo-dark-display: block;
+}
+.aegis-aws-logo {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: var(--aws-logo-size);
+  height: var(--aws-logo-size);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  vertical-align: middle;
+}
+.aegis-aws-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.aegis-aws-logo .aegis-aws-logo-light {
+  display: var(--aws-logo-light-display);
+}
+.aegis-aws-logo .aegis-aws-logo-dark {
+  display: var(--aws-logo-dark-display);
+}
+.aegis-aws-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.aegis-aws-catalog-heading h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--title-page-size);
+  font-weight: 500;
+}
+.aegis-aws-catalog-heading p {
+  margin: var(--space-1) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-aws-catalog-toolbar {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 180px 230px;
+  gap: var(--space-3);
+}
+.aegis-aws-catalog-selection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--surface-radius);
+  background: var(--color-bg-surface);
+}
+.aegis-aws-catalog-selected-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+.aegis-aws-catalog-selected-copy strong {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.aegis-aws-catalog-selected-copy span,
+.aegis-aws-catalog-selected-copy code {
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.aegis-aws-catalog-selected-copy span {
+  color: var(--color-text-secondary);
+}
+.aegis-aws-catalog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.aegis-aws-catalog a {
+  color: var(--color-function-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: var(--text-xs);
+}
+.aegis-aws-catalog-count {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-aws-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.aegis-aws-catalog-grid li {
+  display: flex;
+  min-width: 0;
+}
+.aegis-aws-catalog-grid button {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3);
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--surface-radius);
+  cursor: pointer;
+}
+.aegis-aws-catalog-grid button:hover {
+  background: var(--color-bg-hover);
+}
+.aegis-aws-catalog-grid button[aria-pressed='true'] {
+  border-color: var(--color-function-fg);
+  background: var(--color-function-soft);
+}
+.aegis-aws-catalog-grid strong {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.aegis-aws-catalog-grid span:not(.aegis-aws-logo),
+.aegis-aws-catalog-grid small {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-aws-catalog-grid small {
+  margin-top: auto;
+}
+.aegis-aws-catalog-empty {
+  padding: var(--space-8);
+  text-align: center;
+  border: 1px dashed var(--color-border-default);
+  border-radius: var(--surface-radius);
+}
+.aegis-aws-catalog-empty h3 {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+.aegis-aws-catalog-empty p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+.aegis-aws-catalog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+.aegis-aws-catalog-pagination > span {
+  margin-right: auto;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.aegis-aws-catalog-attribution {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .aegis-aws-catalog-toolbar {
+    grid-template-columns: 1fr;
+  }
+  .aegis-aws-catalog-selection {
+    flex-wrap: wrap;
+  }
+  .aegis-aws-catalog-actions {
+    width: 100%;
+  }
+}

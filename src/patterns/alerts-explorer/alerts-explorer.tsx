@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { CheckCheck, Eye, Sparkles } from 'lucide-react';
+import { CheckCheck, Eye, Sparkles } from '@/components/icon';
 import { DataGrid, type GridDensity } from '@/components/data-grid';
 import {
   ActionsCell,
@@ -33,6 +33,8 @@ export interface AlertsExplorerProps {
   onOpenAlert?: (alert: Alert, visibleAlerts: Alert[]) => void;
   onAskAi: (alerts: Alert[]) => void;
   onSelectionChange?: (alerts: Alert[]) => void;
+  /** Choose inline filter controls or a collapsible sidebar; never show both. */
+  filterMode?: 'bar' | 'panel';
   defaultPanelOpen?: boolean;
   loading?: boolean;
   error?: ReactNode;
@@ -96,7 +98,7 @@ export function AlertEventsTable({ alert, now }: AlertEventsTableProps) {
     </div>
   );
 }
-/** The bar and in-flow facet panel share one filter state. All bulk mutations affect selected records. */
+/** One filter state supports either toolbar or sidebar controls. Bulk mutations affect selected records. */
 export function AlertsExplorer({
   alerts,
   analysts,
@@ -107,6 +109,7 @@ export function AlertsExplorer({
   onOpenAlert,
   onAskAi,
   onSelectionChange,
+  filterMode = 'panel',
   defaultPanelOpen = false,
   loading,
   error,
@@ -123,6 +126,7 @@ export function AlertsExplorer({
   const [internalFilters, setInternalFilters] = useState(createDefaultFilters);
   const filters = controlledFilters ?? internalFilters;
   const [panelOpen, setPanelOpen] = useState(defaultPanelOpen);
+  const showPanel = filterMode === 'panel' && panelOpen;
   const [selection, setSelection] = useState<string[]>([]);
   const filterKey = JSON.stringify(filters);
   const previousFilterKey = useRef(filterKey);
@@ -278,19 +282,31 @@ export function AlertsExplorer({
     },
   ];
   return (
-    <div ref={shellRef} className="aegis-alerts-explorer" data-panel-open={panelOpen}>
-      <div className="aegis-alerts-facets" id={panelId} inert={!panelOpen} aria-hidden={!panelOpen}>
-        {panelOpen && (
-          <FilterPanel
-            value={filters}
-            onValueChange={updateFilters}
-            alerts={alerts}
-            analysts={analysts}
-            now={now}
-            onClose={closePanel}
-          />
-        )}
-      </div>
+    <div
+      ref={shellRef}
+      className="aegis-alerts-explorer"
+      data-panel-open={showPanel}
+      data-filter-mode={filterMode}
+    >
+      {filterMode === 'panel' && (
+        <div
+          className="aegis-alerts-facets"
+          id={panelId}
+          inert={!showPanel}
+          aria-hidden={!showPanel}
+        >
+          {showPanel && (
+            <FilterPanel
+              value={filters}
+              onValueChange={updateFilters}
+              alerts={alerts}
+              analysts={analysts}
+              now={now}
+              onClose={closePanel}
+            />
+          )}
+        </div>
+      )}
       <div className="aegis-alerts-results">
         <DataGrid
           data={filtered}
@@ -334,9 +350,12 @@ export function AlertsExplorer({
               onDensityChange={api.setDensity}
               columns={api.columns}
               onColumnVisibilityChange={api.setColumnVisibility}
-              filterPanelOpen={panelOpen}
-              panelId={panelId}
-              onTogglePanel={() => setPanelOpen((open) => !open)}
+              filterMode={filterMode}
+              filterPanelOpen={showPanel}
+              panelId={filterMode === 'panel' ? panelId : undefined}
+              onTogglePanel={
+                filterMode === 'panel' ? () => setPanelOpen((open) => !open) : undefined
+              }
             />
           )}
           renderBulkActions={(selected, clear) => (

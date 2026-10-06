@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from '@/components/icon';
 import { Breadcrumb } from './breadcrumb';
 const meta = {
   title: 'Components/Navigation/Breadcrumb',

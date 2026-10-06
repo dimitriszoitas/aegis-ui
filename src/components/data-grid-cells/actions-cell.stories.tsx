@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CheckCheck, ExternalLink, Sparkles, UserRoundCheck } from 'lucide-react';
+import { CheckCheck, ExternalLink, Sparkles, UserRoundCheck } from '@/components/icon';
 import { ActionsCell } from './data-grid-cells';
 export default {
   title: 'Components/Data grid/Actions cell',

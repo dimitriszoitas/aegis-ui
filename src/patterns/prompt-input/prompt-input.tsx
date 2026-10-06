@@ -1,7 +1,7 @@
 import { useId, useRef, useState, type ReactNode } from 'react';
 import { Popover } from 'radix-ui';
 import { Command } from 'cmdk';
-import { ArrowUp, Check, Paperclip, Slash, Square } from 'lucide-react';
+import { ArrowUp, Check, Paperclip, Slash, Square } from '@/components/icon';
 import { IconButton } from '@/components/icon-button';
 import { Textarea } from '@/components/textarea';
 import { Tag } from '@/components/tag';
@@ -282,7 +282,7 @@ export function PromptInput({
             aria-label="Stop generation"
             tooltip={false}
             intent="ai"
-            emphasis="soft"
+            emphasis="secondary"
             size="sm"
             onClick={() => {
               onStop?.();

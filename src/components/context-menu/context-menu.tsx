@@ -1,7 +1,7 @@
 import { useRef, useState, type ComponentPropsWithoutRef, type ReactElement } from 'react';
 import { flushSync } from 'react-dom';
 import { ContextMenu as Primitive } from 'radix-ui';
-import { Check, ChevronRight, Circle, Minus } from 'lucide-react';
+import { Check, ChevronRight, Circle, Minus } from '@/components/icon';
 import type { DropdownMenuEntry } from '../dropdown-menu';
 import { cn } from '../../lib/utils';
 import './context-menu.css';

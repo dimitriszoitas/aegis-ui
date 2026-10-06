@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { RadioTower, ShieldAlert, UserRound } from 'lucide-react';
+import { RadioTower, ShieldAlert, UserRound } from '@/components/icon';
 import { Checkbox } from '@/components/checkbox';
 import { Accordion, type AccordionItem } from './accordion';
 

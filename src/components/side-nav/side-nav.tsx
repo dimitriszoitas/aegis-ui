@@ -6,7 +6,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { Shield, PanelLeftClose, PanelLeftOpen, Search, ChevronDown } from 'lucide-react';
+import { Shield, PanelLeftClose, PanelLeftOpen, Search, ChevronDown } from '@/components/icon';
 import { IconButton } from '@/components/icon-button';
 import { CountBadge } from '@/components/count-badge';
 import { DropdownMenu, type DropdownMenuEntry } from '@/components/dropdown-menu';

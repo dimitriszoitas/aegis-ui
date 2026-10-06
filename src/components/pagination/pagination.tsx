@@ -1,5 +1,5 @@
 import { useId, type ComponentProps } from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './pagination.css';
 

@@ -9,7 +9,7 @@ import {
   FileCode,
   Settings,
   FileChartColumn,
-} from 'lucide-react';
+} from '@/components/icon';
 import { SideNav } from './side-nav';
 import { Avatar } from '@/components/avatar';
 export default {

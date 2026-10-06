@@ -49,7 +49,7 @@ import {
   PinOff,
   RotateCcw,
   X,
-} from 'lucide-react';
+} from '@/components/icon';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { DropdownMenu, type DropdownMenuEntry } from '../dropdown-menu';
@@ -130,6 +130,10 @@ const columnLabel = <T,>(column: Column<T>) =>
 const selectionFromIds = (ids: readonly string[]): RowSelectionState =>
   Object.fromEntries(ids.map((id) => [id, true]));
 const isUtilityColumn = (id: string) => id === selectionColumnId || id === expansionColumnId;
+const isActionsColumn = <T,>(id: string, definition: ColumnDef<T>) =>
+  id.toLowerCase() === 'actions' ||
+  definition.header === 'Actions' ||
+  definition.meta?.label === 'Actions';
 function holdGridCursor(document: Document, cursor: 'col-resize' | 'grabbing') {
   const root = document.documentElement;
   const previous = root.getAttribute('data-aegis-grid-cursor');
@@ -166,11 +170,7 @@ function initialPinnedColumns<T>(definitions: ColumnDef<T>[]): ColumnPinningStat
   const first = ids[0];
   const last = ids.at(-1);
   const lastDefinition = leaves.at(-1);
-  const actions =
-    last &&
-    (last.toLowerCase() === 'actions' ||
-      lastDefinition?.header === 'Actions' ||
-      lastDefinition?.meta?.label === 'Actions');
+  const actions = last && lastDefinition && isActionsColumn(last, lastDefinition);
   return {
     left:
       first && leaves[0]?.enablePinning !== false && (!actions || first !== last) ? [first] : [],
@@ -355,12 +355,18 @@ export function DataGrid<T>({
     ...table.getCenterVisibleLeafColumns(),
     ...table.getRightVisibleLeafColumns(),
   ];
-  const lastColumnId = visibleColumns.at(-1)?.id;
+  // Utility and action columns retain their configured width. Spare space belongs
+  // to the final visible data column, including after hiding or reordering fields.
+  const fillColumnId = [...visibleColumns]
+    .reverse()
+    .find(
+      (column) => !isUtilityColumn(column.id) && !isActionsColumn(column.id, column.columnDef),
+    )?.id;
   const baseWidth = (column: Column<T>) =>
     clampColumnWidth(
       columnSizing[column.id] ?? column.getSize(),
       column.columnDef.minSize,
-      column.id === lastColumnId
+      column.id === fillColumnId
         ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
         : column.columnDef.maxSize,
     );
@@ -368,21 +374,21 @@ export function DataGrid<T>({
   const expandedInset =
     (enableSelection ? (table.getColumn(selectionColumnId)?.getSize() ?? 0) : 0) +
     (renderExpandedRow ? (table.getColumn(expansionColumnId)?.getSize() ?? 0) / 2 : 0);
-  const extraWidth = Math.max(0, viewportWidth - baseTotal);
+  const extraWidth = fillColumnId ? Math.max(0, viewportWidth - baseTotal) : 0;
   const renderedWidth = (column: Column<T>) =>
     column
       .getLeafColumns()
       .reduce(
-        (total, leaf) => total + baseWidth(leaf) + (leaf.id === lastColumnId ? extraWidth : 0),
+        (total, leaf) => total + baseWidth(leaf) + (leaf.id === fillColumnId ? extraWidth : 0),
         0,
       );
   const sizingBounds = (column: Column<T>) => ({
     min:
-      column.id === lastColumnId
+      column.id === fillColumnId
         ? Math.max(column.columnDef.minSize ?? 72, viewportWidth - (baseTotal - baseWidth(column)))
         : (column.columnDef.minSize ?? 72),
     max:
-      column.id === lastColumnId
+      column.id === fillColumnId
         ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
         : (column.columnDef.maxSize ?? 640),
   });

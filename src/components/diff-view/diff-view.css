@@ -25,7 +25,7 @@
 .aegis-diff-title h3 {
   margin: 0;
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: var(--title-weight);
 }
 .aegis-diff-title > span {
   font-size: var(--text-xs);
@@ -38,14 +38,27 @@
   background: var(--color-bg-canvas);
   font-size: var(--text-xs);
 }
-.aegis-diff-legend > span {
+.aegis-diff-legend > div {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  justify-content: space-between;
+  flex-wrap: wrap;
   padding: var(--space-2) var(--space-3);
 }
-.aegis-diff-legend > span + span {
+.aegis-diff-legend > div + div {
   border-left: 1px solid var(--color-border-subtle);
+}
+.aegis-diff-change-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.aegis-diff-ai-label {
+  background: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 500;
 }
 .aegis-diff-removed {
   color: var(--color-destroy-fg);
@@ -74,32 +87,62 @@
 }
 .aegis-diff-host .cm-merge-a .cm-changedLine,
 .aegis-diff-host .cm-deletedChunk {
-  background: color-mix(in srgb, var(--color-destroy-soft) 60%, var(--color-bg-surface));
+  background: color-mix(in srgb, var(--color-destroy-bg) 12%, var(--color-bg-surface));
 }
 .aegis-diff-host .cm-merge-b .cm-changedLine,
 .aegis-diff-host .cm-inlineChangedLine {
-  background: var(--color-success-soft);
+  background: color-mix(in srgb, var(--color-success-bg) 12%, var(--color-bg-surface));
 }
 .aegis-diff-host .cm-merge-a .cm-changedText,
 .aegis-diff-host .cm-deletedText {
-  background: none !important;
+  background: color-mix(in srgb, var(--color-destroy-bg) 22%, transparent) !important;
   text-decoration: underline var(--color-destroy-fg) 2px !important;
   text-underline-offset: 3px;
 }
 .aegis-diff-host .cm-merge-b .cm-changedText {
-  background: none !important;
+  background: color-mix(in srgb, var(--color-success-bg) 22%, transparent) !important;
   text-decoration: underline var(--color-success-fg) 2px !important;
   text-underline-offset: 3px;
 }
+.aegis-diff-host .cm-changedText,
+.aegis-diff-host .cm-changedText *,
+.aegis-diff-host .cm-deletedText,
+.aegis-diff-host .cm-deletedText * {
+  color: var(--color-text-primary) !important;
+}
 .aegis-diff-host .cm-merge-a .cm-changedLineGutter,
 .aegis-diff-host .cm-deletedLineGutter {
-  background: var(--color-destroy-bg) !important;
+  background: var(--color-destroy-soft) !important;
+  color: var(--color-destroy-fg);
 }
 .aegis-diff-host .cm-merge-b .cm-changedLineGutter {
-  background: var(--color-success-bg) !important;
+  background: var(--color-success-soft) !important;
+  color: var(--color-success-fg);
 }
 .aegis-diff-host .cm-inlineChangedLineGutter {
-  background: var(--color-ai-bg) !important;
+  background: var(--color-success-soft) !important;
+  color: var(--color-success-fg);
+}
+.aegis-diff-host .cm-changeGutter {
+  width: 16px;
+  padding: 0;
+}
+.aegis-diff-host .cm-changeGutter .cm-gutterElement {
+  padding: 0;
+  text-align: center;
+}
+.aegis-diff-host .cm-merge-a .cm-changedLineGutter::before,
+.aegis-diff-host .cm-deletedLineGutter::before {
+  content: '−';
+}
+.aegis-diff-host .cm-merge-b .cm-changedLineGutter::before {
+  content: '+';
+}
+.aegis-diff-host .cm-inlineChangedLineGutter::before {
+  content: '±';
+}
+.aegis-diff-host .cm-deletedChunk {
+  border-inline-start: 3px solid var(--color-destroy-fg);
 }
 .aegis-diff-host .cm-collapsedLines {
   color: var(--color-text-secondary) !important;
@@ -115,4 +158,13 @@
 .aegis-diff-view[data-mode='unified'] .aegis-diff-legend {
   display: flex;
   flex-wrap: wrap;
+}
+.aegis-diff-view[data-mode='unified'] .aegis-diff-legend > div {
+  flex: 1;
+}
+@media (forced-colors: active) {
+  .aegis-diff-ai-label {
+    background: none;
+    color: CanvasText;
+  }
 }

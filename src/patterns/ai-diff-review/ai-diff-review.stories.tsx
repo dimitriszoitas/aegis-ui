@@ -13,6 +13,14 @@ const proposed = original.replace(
 const meta = {
   title: 'Patterns/AI/AiDiffReview',
   component: AiDiffReview,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'AI proposals begin with unchanged context folded and the first change in view. Added lines are green with plus markers; removed lines are red with minus markers, with stronger highlights on the exact changed text. Blue-to-magenta identifies AI provenance only. Show all lines, split/unified layouts, and change navigation support a full review before explicit approval or rejection.',
+      },
+    },
+  },
   args: {
     original,
     proposed,
@@ -31,7 +39,28 @@ const meta = {
 } satisfies Meta<typeof AiDiffReview>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Pending: Story = {};
+export const Pending: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('− 1 removed')).toBeVisible();
+    await expect(canvas.getByText('+ 3 added')).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Show all lines' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await waitFor(() =>
+      expect(canvasElement.querySelectorAll('.cm-changedLine').length).toBeGreaterThan(0),
+    );
+    const changed = canvasElement
+      .querySelector('.cm-merge-b .cm-changedLine')
+      ?.getBoundingClientRect();
+    const viewport = canvasElement.querySelector('.cm-mergeView')?.getBoundingClientRect();
+    await expect(changed).toBeDefined();
+    await expect(viewport).toBeDefined();
+    await expect(changed!.top).toBeGreaterThanOrEqual(viewport!.top);
+    await expect(changed!.bottom).toBeLessThanOrEqual(viewport!.bottom);
+  },
+};
 export const Unified: Story = { args: { defaultMode: 'unified' } };
 export const Approved: Story = { args: { status: 'approved', reviewedAt: referenceTime } };
 export const Rejected: Story = { args: { status: 'rejected', reviewedAt: referenceTime } };

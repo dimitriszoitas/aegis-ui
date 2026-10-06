@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Popover as Primitive } from 'radix-ui';
 import { Command } from 'cmdk';
-import { Check, ChevronDown, Search } from 'lucide-react';
+import { Check, ChevronDown, Search } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import { useFieldControl, type FieldControlProps } from '@/components/field';
 import { Tag } from '@/components/tag';

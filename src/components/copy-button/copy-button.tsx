@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check } from '@/components/icon';
 import { toast } from 'sonner';
 import { IconButton, type IconButtonProps } from '@/components/icon-button';
 export interface CopyButtonProps extends Omit<

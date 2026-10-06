@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { Accordion as Primitive } from 'radix-ui';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from '@/components/icon';
 import { cn } from '../../lib/utils';
 import './accordion.css';
 

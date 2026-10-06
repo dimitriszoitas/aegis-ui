@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Info, ShieldCheck } from 'lucide-react';
+import { Info, ShieldCheck } from '@/components/icon';
 import { Tooltip, RichTooltip } from './tooltip';
 
 const meta = {
@@ -17,6 +17,42 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const OpenTooltip: Story = { args: { defaultOpen: true } };
+export const Inverted: Story = { args: { defaultOpen: true, variant: 'inverted' } };
+export const InvertedRichTooltip: Story = {
+  render: () => (
+    <RichTooltip
+      defaultOpen
+      variant="inverted"
+      title="Detection confidence"
+      description="Four independent signals support this detection."
+      shortcut="⌘I"
+    >
+      <button className="aegis-tooltip-demo-trigger">Inspect confidence</button>
+    </RichTooltip>
+  ),
+};
+export const ArrowEdges: Story = {
+  parameters: { docs: { story: { inline: false, height: 680 } } },
+  render: () => (
+    <div className="aegis-tooltip-arrow-matrix">
+      {(['default', 'inverted'] as const).map((variant) => (
+        <div className="aegis-tooltip-arrow-matrix-row" key={variant}>
+          {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
+            <Tooltip
+              key={side}
+              open
+              variant={variant}
+              side={side}
+              content={`${variant === 'default' ? 'Default' : 'Inverted'} tooltip`}
+            >
+              <button className="aegis-tooltip-demo-trigger">{side}</button>
+            </Tooltip>
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
+};
 export const OpenRichTooltip: Story = {
   render: () => (
     <RichTooltip

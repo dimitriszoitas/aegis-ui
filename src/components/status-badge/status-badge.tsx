@@ -28,7 +28,12 @@ export function StatusDot({ status, label = true }: StatusDotProps) {
       aria-label={label ? statusLabels[status] : undefined}
       aria-hidden={!label || undefined}
       style={{
-        color: intent === 'default' ? 'var(--color-text-tertiary)' : `var(--color-${intent}-fg)`,
+        color:
+          status === 'triaged'
+            ? 'var(--color-status-triaged-fg)'
+            : intent === 'default'
+              ? 'var(--color-text-tertiary)'
+              : `var(--color-${intent}-fg)`,
       }}
     />
   );
@@ -44,7 +49,11 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       style={
         {
           '--status-fg':
-            intent === 'default' ? 'var(--color-text-secondary)' : `var(--color-${intent}-fg)`,
+            status === 'triaged'
+              ? 'var(--color-status-triaged-fg)'
+              : intent === 'default'
+                ? 'var(--color-text-secondary)'
+                : `var(--color-${intent}-fg)`,
           '--status-bg':
             intent === 'default' ? 'var(--color-bg-hover)' : `var(--color-${intent}-soft)`,
         } as CSSProperties

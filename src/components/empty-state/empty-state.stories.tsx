@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ShieldCheck, Plus, RotateCcw, X } from 'lucide-react';
+import { ShieldCheck, Plus, RotateCcw, X } from '@/components/icon';
 import { EmptyState } from './empty-state';
 import { Button } from '@/components/button';
 import { Banner } from '@/components/banner';

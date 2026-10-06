@@ -8,7 +8,7 @@ import {
   MoreHorizontal,
   Trash2,
   UserRound,
-} from 'lucide-react';
+} from '@/components/icon';
 import { DropdownMenu, type DropdownMenuEntry } from './dropdown-menu';
 
 const basicItems: DropdownMenuEntry[] = [

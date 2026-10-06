@@ -10,6 +10,7 @@ import {
 import { create } from 'storybook/theming';
 import { applyTheme, type Theme } from '../src/lib/theme';
 import { applyLayoutTheme, type LayoutTheme } from '../src/lib/layout-theme';
+import { useAutoHideScrollbars } from '../src/lib/scrollbars';
 
 const docsThemeAttribute = 'data-aegis-docs-theme';
 const docsLayoutAttribute = 'data-aegis-docs-layout-theme';
@@ -33,6 +34,7 @@ function layoutTheme(value: unknown): LayoutTheme | undefined {
   return value === 'floating' || value === 'fixed' ? value : undefined;
 }
 function LayoutThemeBoundary({ layout, children }: PropsWithChildren<{ layout: LayoutTheme }>) {
+  useAutoHideScrollbars();
   // React layout effects run before play; preview-hook effects run after play.
   useLayoutEffect(() => {
     applyLayoutTheme(layout, { persist: false });
@@ -133,17 +135,18 @@ function initialTheme(context: DocsContainerProps['context']): Theme {
 const docsThemes = {
   light: create({
     base: 'light',
-    fontBase: 'Inter, sans-serif',
+    fontBase: 'Figtree, sans-serif',
     fontCode: 'JetBrains Mono, monospace',
   }),
   dark: create({
     base: 'dark',
-    fontBase: 'Inter, sans-serif',
+    fontBase: 'Figtree, sans-serif',
     fontCode: 'JetBrains Mono, monospace',
   }),
 };
 /** MDX pages need the same global theme treatment as decorated component stories. */
 export function AegisDocsContainer({ context, children }: PropsWithChildren<DocsContainerProps>) {
+  useAutoHideScrollbars();
   const [theme, setTheme] = useState(() => initialTheme(context));
   const [layout, setLayout] = useState(() => initialLayoutTheme(context));
   useEffect(() => {

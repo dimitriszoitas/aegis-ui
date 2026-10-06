@@ -7,7 +7,13 @@ import { SeverityBadge } from '@/components/severity-badge';
 import { StatusBadge } from '@/components/status-badge';
 import { Banner } from '@/components/banner';
 import { AlertsExplorer, AlertEventsTable } from './alerts-explorer';
-function ExplorerDemo({ panelOpen = false }: { panelOpen?: boolean }) {
+function ExplorerDemo({
+  panelOpen = false,
+  filterMode = 'panel',
+}: {
+  panelOpen?: boolean;
+  filterMode?: 'bar' | 'panel';
+}) {
   const [alerts, setAlerts] = useState(fixtures);
   const [selected, setSelected] = useState<Alert>();
   const [context, setContext] = useState<Alert[]>([]);
@@ -21,6 +27,7 @@ function ExplorerDemo({ panelOpen = false }: { panelOpen?: boolean }) {
         onOpenAlert={setSelected}
         onAskAi={setContext}
         defaultPanelOpen={panelOpen}
+        filterMode={filterMode}
       />
       <SideSheet
         open={!!selected}
@@ -84,14 +91,37 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const PushFilters: Story = { render: () => <ExplorerDemo panelOpen /> };
+export const BarFilters: Story = {
+  render: () => <ExplorerDemo filterMode="bar" />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('button', { name: 'Add filter' })).toBeVisible();
+    await expect(canvas.queryByRole('complementary', { name: /Filters/ })).not.toBeInTheDocument();
+    await expect(
+      canvas.queryByRole('button', { name: 'Show filter panel' }),
+    ).not.toBeInTheDocument();
+  },
+};
 export const FilterSynchronization: Story = {
   render: () => <ExplorerDemo panelOpen />,
   play: async ({ canvasElement }) => {
     const c = within(canvasElement);
     const panel = c.getByRole('complementary', { name: /Filters/ });
     await userEvent.click(within(panel).getByRole('checkbox', { name: /Critical/ }));
+    await expect(
+      c.queryByRole('button', { name: 'Remove Critical severity filter' }),
+    ).not.toBeInTheDocument();
+    await expect(
+      c.queryByRole('button', { name: 'Add filter' }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(c.getByRole('button', { name: 'Hide filter panel' }));
     await expect(c.getByRole('button', { name: 'Remove Critical severity filter' })).toBeVisible();
     await userEvent.click(c.getByRole('button', { name: 'Remove Critical severity filter' }));
-    await expect(within(panel).getByRole('checkbox', { name: /Critical/ })).not.toBeChecked();
+    await userEvent.click(c.getByRole('button', { name: 'Show filter panel' }));
+    await expect(
+      within(c.getByRole('complementary', { name: /Filters/ })).getByRole('checkbox', {
+        name: /Critical/,
+      }),
+    ).not.toBeChecked();
   },
 };

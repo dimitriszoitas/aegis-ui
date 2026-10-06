@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Bell, Check, Server, Shield, UserRound } from 'lucide-react';
+import { Bell, Check, Server, Shield, UserRound } from '@/components/icon';
 import { List, ListItem } from './list';
 import { Avatar } from '@/components/avatar';
 import { IconButton } from '@/components/icon-button';

@@ -1,0 +1,4 @@
+.count-badge[data-variant='inverted'] {
+  background: var(--color-text-primary);
+  color: var(--color-bg-surface-raised);
+}

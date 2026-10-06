@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { ArrowUpRight, Pencil, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Pencil, Sparkles } from '@/components/icon';
 import { SideSheet, SideSheetField, SideSheetSection } from '@/components/side-sheet';
 import { Modal } from '@/components/modal';
 import { Button } from '@/components/button';
@@ -112,7 +112,7 @@ function AlertEditor({
       }}
       title={`Edit ${alert.id}`}
       description="Update the triage status, assign an analyst, and record your investigation note."
-      size="sm"
+      size="small"
       showClose={!pending}
       closeOnOutsideClick={false}
       footer={
@@ -429,7 +429,7 @@ export function AlertDetailSheet({
             {onOpenInvestigation && (
               <Button
                 size="sm"
-                emphasis="soft"
+                emphasis="secondary"
                 leadingIcon={<ArrowUpRight size={14} />}
                 onClick={() => {
                   changeOpen(false);

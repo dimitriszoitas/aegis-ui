@@ -10,7 +10,7 @@ import {
   Plus,
   Search,
   ShieldAlert,
-} from 'lucide-react';
+} from '@/components/icon';
 import { Banner } from '@/components/banner';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
@@ -454,7 +454,7 @@ export function ConsoleHunting({
           description="Search a process, entity, address, or technique across the current evidence scope."
           action={
             <Button
-              emphasis="soft"
+              emphasis="secondary"
               onClick={() => {
                 setDraft('powershell');
                 setQuery('powershell');
@@ -692,7 +692,7 @@ export function ConsoleReports({ alerts, scopeLabel = 'Current time range' }: Co
             <Button
               key={value}
               size="sm"
-              emphasis={grouping === value ? 'soft' : 'ghost'}
+              emphasis={grouping === value ? 'secondary' : 'ghost'}
               intent={grouping === value ? 'function' : 'default'}
               aria-pressed={grouping === value}
               onClick={() => setGrouping(value)}

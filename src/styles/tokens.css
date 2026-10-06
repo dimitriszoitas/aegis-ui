@@ -55,28 +55,28 @@
   --red-800: oklch(0.36 0.14 25);
   --red-900: oklch(0.28 0.11 25);
   --red-950: oklch(0.2 0.08 25);
-  --green-50: oklch(0.98 0.0225 151);
-  --green-100: oklch(0.95 0.0375 151);
-  --green-200: oklch(0.9 0.06 151);
-  --green-300: oklch(0.82 0.09 151);
-  --green-400: oklch(0.72 0.12 151);
-  --green-500: oklch(0.62 0.15 151);
-  --green-600: oklch(0.53 0.15 151);
-  --green-700: oklch(0.45 0.135 151);
-  --green-800: oklch(0.36 0.105 151);
-  --green-900: oklch(0.28 0.0825 151);
-  --green-950: oklch(0.2 0.06 151);
-  --amber-50: oklch(0.98 0.0255 72);
-  --amber-100: oklch(0.95 0.0425 72);
-  --amber-200: oklch(0.9 0.068 72);
-  --amber-300: oklch(0.82 0.102 72);
-  --amber-400: oklch(0.72 0.136 72);
-  --amber-500: oklch(0.62 0.17 72);
-  --amber-600: oklch(0.53 0.17 72);
-  --amber-700: oklch(0.45 0.153 72);
-  --amber-800: oklch(0.36 0.119 72);
-  --amber-900: oklch(0.28 0.0935 72);
-  --amber-950: oklch(0.2 0.068 72);
+  --green-50: oklch(0.98 0.0225 145);
+  --green-100: oklch(0.95 0.0375 145);
+  --green-200: oklch(0.9 0.06 145);
+  --green-300: oklch(0.82 0.09 145);
+  --green-400: oklch(0.72 0.12 145);
+  --green-500: oklch(0.62 0.15 145);
+  --green-600: oklch(0.53 0.15 145);
+  --green-700: oklch(0.45 0.135 145);
+  --green-800: oklch(0.36 0.105 145);
+  --green-900: oklch(0.28 0.0825 145);
+  --green-950: oklch(0.2 0.06 145);
+  --amber-50: oklch(0.98 0.0255 85);
+  --amber-100: oklch(0.95 0.0425 85);
+  --amber-200: oklch(0.9 0.068 85);
+  --amber-300: oklch(0.82 0.102 85);
+  --amber-400: oklch(0.72 0.136 85);
+  --amber-500: oklch(0.62 0.17 85);
+  --amber-600: oklch(0.53 0.17 85);
+  --amber-700: oklch(0.45 0.153 85);
+  --amber-800: oklch(0.36 0.119 85);
+  --amber-900: oklch(0.28 0.0935 85);
+  --amber-950: oklch(0.2 0.068 85);
   --orange-50: oklch(0.98 0.0285 48);
   --orange-100: oklch(0.95 0.0475 48);
   --orange-200: oklch(0.9 0.076 48);
@@ -129,7 +129,7 @@
   --chrome-overlay-shadow: var(--shadow-overlay);
   --chrome-nav-border-width: 1px;
   --chrome-sheet-border-width: 1px;
-  --font-ui: Inter, system-ui, sans-serif;
+  --font-ui: Figtree, system-ui, sans-serif;
   --font-code: 'JetBrains Mono', monospace;
   --font-mono: var(--font-code);
   --text-xs: 12px;
@@ -163,6 +163,12 @@
   --grid-row-compact: 36px;
   --grid-row-default: 48px;
   --grid-row-comfortable: 60px;
+  --button-radius-sm: 4px;
+  --button-radius-md: 5px;
+  --button-radius-lg: 6px;
+  --badge-border-strength: 40%;
+  --badge-text-highlight: 0%;
+  --status-bg-emphasis: 5%;
   --control-radius-xs: 4px;
   --control-radius-sm: var(--radius-xs);
   --control-radius-md: var(--radius-md);
@@ -201,10 +207,17 @@
     var(--color-function-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-ai-bg: #7950d7;
-  --color-ai-fg: #7541c7;
-  --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
-  --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 28%, var(--color-border-subtle));
+  --color-ai-bg: #b32acb;
+  --color-ai-fg: #9f1fba;
+  --color-status-triaged-fg: #901aaa;
+  --color-ai-pink-bg: #c92572;
+  --color-ai-pink-fg: #b21863;
+  --color-ai-blue-bg: #315de5;
+  --color-ai-blue-fg: #214bc0;
+  --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 18%, var(--color-bg-surface));
+  --color-ai-pink-soft: color-mix(in srgb, var(--color-ai-pink-bg) 18%, var(--color-bg-surface));
+  --color-ai-blue-soft: color-mix(in srgb, var(--color-ai-blue-bg) 18%, var(--color-bg-surface));
+  --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 36%, var(--color-border-subtle));
   --color-destroy-bg: #ce343b;
   --color-destroy-fg: #be2730;
   --color-destroy-soft: color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface));
@@ -213,17 +226,17 @@
     var(--color-destroy-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-success-bg: #247c47;
-  --color-success-fg: #247c47;
+  --color-success-bg: #2b7a3a;
+  --color-success-fg: #267334;
   --color-success-soft: color-mix(in srgb, var(--color-success-bg) 10%, var(--color-bg-surface));
   --color-success-border: color-mix(
     in srgb,
     var(--color-success-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-warning-bg: #a65305;
-  --color-warning-fg: #985008;
-  --color-warning-soft: color-mix(in srgb, var(--color-warning-bg) 10%, var(--color-bg-surface));
+  --color-warning-bg: #9b6b00;
+  --color-warning-fg: #8c6100;
+  --color-warning-soft: color-mix(in srgb, var(--amber-300) 18%, var(--color-bg-surface));
   --color-warning-border: color-mix(
     in srgb,
     var(--color-warning-bg) 28%,
@@ -237,7 +250,7 @@
   );
   --color-severity-critical-border: color-mix(
     in srgb,
-    var(--color-severity-critical-fg) 22%,
+    var(--color-severity-critical-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-high-fg: #b23e08;
@@ -248,18 +261,14 @@
   );
   --color-severity-high-border: color-mix(
     in srgb,
-    var(--color-severity-high-fg) 22%,
+    var(--color-severity-high-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
-  --color-severity-medium-fg: #985008;
-  --color-severity-medium-bg: color-mix(
-    in srgb,
-    var(--color-severity-medium-fg) 9%,
-    var(--color-bg-surface)
-  );
+  --color-severity-medium-fg: var(--color-warning-fg);
+  --color-severity-medium-bg: var(--color-warning-soft);
   --color-severity-medium-border: color-mix(
     in srgb,
-    var(--color-severity-medium-fg) 22%,
+    var(--color-severity-medium-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-low-fg: #1d4ed8;
@@ -270,7 +279,7 @@
   );
   --color-severity-low-border: color-mix(
     in srgb,
-    var(--color-severity-low-fg) 22%,
+    var(--color-severity-low-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-info-fg: #475569;
@@ -281,7 +290,7 @@
   );
   --color-severity-info-border: color-mix(
     in srgb,
-    var(--color-severity-info-fg) 22%,
+    var(--color-severity-info-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --elevation-raised: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.08);
@@ -293,27 +302,64 @@
   --shadow-floating: var(--elevation-floating);
   --shadow-overlay: var(--elevation-overlay);
   --ring-focus: var(--color-function-bg);
-  --gradient-ai: linear-gradient(135deg, var(--color-ai-bg), var(--color-function-bg));
-  --gradient-ai-text: linear-gradient(110deg, var(--color-ai-fg), var(--color-function-fg));
-  --gradient-ai-soft: linear-gradient(135deg, var(--color-ai-soft), var(--color-function-soft));
+  --gradient-ai: linear-gradient(
+    135deg,
+    var(--color-ai-bg) 0%,
+    var(--color-ai-pink-bg) 50%,
+    var(--color-ai-blue-bg) 100%
+  );
+  --gradient-ai-border: linear-gradient(
+    135deg,
+    var(--color-ai-fg) 0%,
+    var(--color-ai-pink-fg) 50%,
+    var(--color-ai-blue-fg) 100%
+  );
+  --gradient-ai-text: linear-gradient(
+    110deg,
+    var(--color-ai-fg) 0%,
+    var(--color-ai-pink-fg) 50%,
+    var(--color-ai-blue-fg) 100%
+  );
+  --gradient-ai-soft: linear-gradient(
+    135deg,
+    var(--color-ai-soft) 0%,
+    var(--color-ai-pink-soft) 50%,
+    var(--color-ai-blue-soft) 100%
+  );
   --gradient-ai-surface: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface)),
-    color-mix(in srgb, var(--color-function-bg) 5%, var(--color-bg-surface))
+    color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface)) 0%,
+    color-mix(in srgb, var(--color-ai-pink-bg) 10%, var(--color-bg-surface)) 50%,
+    color-mix(in srgb, var(--color-ai-blue-bg) 10%, var(--color-bg-surface)) 100%
   );
-  --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface));
+  --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
   --color-syntax-key: var(--color-function-fg);
   --color-syntax-string: var(--color-success-fg);
   --color-syntax-number: var(--color-warning-fg);
   --color-syntax-keyword: var(--color-ai-fg);
   --color-syntax-comment: var(--color-text-tertiary);
-  --color-chart-1: var(--color-function-bg);
-  --color-chart-2: var(--color-ai-bg);
-  --color-chart-3: var(--color-success-bg);
-  --color-chart-4: var(--color-warning-bg);
-  --color-chart-5: var(--color-destroy-bg);
+  /* Plot fills are independent from the darker foregrounds required for small text. */
+  --color-chart-1: #4b7bec;
+  --color-chart-2: #12a7b9;
+  --color-chart-3: #9672e5;
+  --color-chart-4: #ec6e73;
+  --color-chart-5: #e5b447;
+  --color-chart-6: #58ad79;
+  --color-chart-severity-critical: #e95466;
+  --color-chart-severity-high: #f28b35;
+  --color-chart-severity-medium: #e9b83d;
+  --color-chart-severity-low: #4c8de8;
+  --color-chart-severity-info: #93a4bc;
+  --color-chart-function: var(--color-chart-1);
+  --color-chart-ai: var(--color-ai-bg);
+  --color-chart-success: var(--color-chart-6);
+  --color-chart-warning: var(--color-chart-5);
+  --color-chart-destroy: var(--color-chart-4);
 }
 .dark {
+  --badge-border-strength: 48%;
+  --badge-text-highlight: 10%;
+  --status-bg-emphasis: 0%;
   --color-bg-canvas: #0d0e12;
   --color-bg-surface: #17181d;
   --color-bg-surface-raised: #1c1e24;
@@ -338,10 +384,17 @@
     var(--color-function-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-ai-bg: #a78bfa;
-  --color-ai-fg: #c5b0ff;
-  --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
-  --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 28%, var(--color-border-subtle));
+  --color-ai-bg: #df7cf2;
+  --color-ai-fg: #e99df7;
+  --color-status-triaged-fg: var(--color-ai-fg);
+  --color-ai-pink-bg: #ff83b4;
+  --color-ai-pink-fg: #ffa7cb;
+  --color-ai-blue-bg: #79a2ff;
+  --color-ai-blue-fg: #a0baff;
+  --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 18%, var(--color-bg-surface));
+  --color-ai-pink-soft: color-mix(in srgb, var(--color-ai-pink-bg) 18%, var(--color-bg-surface));
+  --color-ai-blue-soft: color-mix(in srgb, var(--color-ai-blue-bg) 18%, var(--color-bg-surface));
+  --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 36%, var(--color-border-subtle));
   --color-destroy-bg: #ff6369;
   --color-destroy-fg: #ff9599;
   --color-destroy-soft: color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface));
@@ -350,16 +403,16 @@
     var(--color-destroy-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-success-bg: #56c982;
-  --color-success-fg: #89dca8;
+  --color-success-bg: #61c56d;
+  --color-success-fg: #92dc9c;
   --color-success-soft: color-mix(in srgb, var(--color-success-bg) 10%, var(--color-bg-surface));
   --color-success-border: color-mix(
     in srgb,
     var(--color-success-bg) 28%,
     var(--color-border-subtle)
   );
-  --color-warning-bg: #f2b454;
-  --color-warning-fg: #f5c573;
+  --color-warning-bg: #ffc247;
+  --color-warning-fg: #ffd16b;
   --color-warning-soft: color-mix(in srgb, var(--color-warning-bg) 10%, var(--color-bg-surface));
   --color-warning-border: color-mix(
     in srgb,
@@ -374,7 +427,7 @@
   );
   --color-severity-critical-border: color-mix(
     in srgb,
-    var(--color-severity-critical-fg) 22%,
+    var(--color-severity-critical-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-high-fg: #ffaa75;
@@ -385,18 +438,14 @@
   );
   --color-severity-high-border: color-mix(
     in srgb,
-    var(--color-severity-high-fg) 22%,
+    var(--color-severity-high-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
-  --color-severity-medium-fg: #f5c573;
-  --color-severity-medium-bg: color-mix(
-    in srgb,
-    var(--color-severity-medium-fg) 9%,
-    var(--color-bg-surface)
-  );
+  --color-severity-medium-fg: var(--color-warning-fg);
+  --color-severity-medium-bg: var(--color-warning-soft);
   --color-severity-medium-border: color-mix(
     in srgb,
-    var(--color-severity-medium-fg) 22%,
+    var(--color-severity-medium-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-low-fg: #93b4ff;
@@ -407,7 +456,7 @@
   );
   --color-severity-low-border: color-mix(
     in srgb,
-    var(--color-severity-low-fg) 22%,
+    var(--color-severity-low-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --color-severity-info-fg: #aab8cc;
@@ -418,7 +467,7 @@
   );
   --color-severity-info-border: color-mix(
     in srgb,
-    var(--color-severity-info-fg) 22%,
+    var(--color-severity-info-fg) var(--badge-border-strength),
     var(--color-bg-surface)
   );
   --elevation-raised: 0 1px 3px rgba(0, 0, 0, 0.16);
@@ -428,25 +477,58 @@
   --shadow-floating: var(--elevation-floating);
   --shadow-overlay: var(--elevation-overlay);
   --ring-focus: var(--color-function-bg);
-  --gradient-ai: linear-gradient(135deg, var(--color-ai-bg), var(--color-function-bg));
-  --gradient-ai-text: linear-gradient(110deg, var(--color-ai-fg), var(--color-function-fg));
-  --gradient-ai-soft: linear-gradient(135deg, var(--color-ai-soft), var(--color-function-soft));
+  --gradient-ai: linear-gradient(
+    135deg,
+    var(--color-ai-bg) 0%,
+    var(--color-ai-pink-bg) 50%,
+    var(--color-ai-blue-bg) 100%
+  );
+  --gradient-ai-border: linear-gradient(
+    135deg,
+    var(--color-ai-fg) 0%,
+    var(--color-ai-pink-fg) 50%,
+    var(--color-ai-blue-fg) 100%
+  );
+  --gradient-ai-text: linear-gradient(
+    110deg,
+    var(--color-ai-fg) 0%,
+    var(--color-ai-pink-fg) 50%,
+    var(--color-ai-blue-fg) 100%
+  );
+  --gradient-ai-soft: linear-gradient(
+    135deg,
+    var(--color-ai-soft) 0%,
+    var(--color-ai-pink-soft) 50%,
+    var(--color-ai-blue-soft) 100%
+  );
   --gradient-ai-surface: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface)),
-    color-mix(in srgb, var(--color-function-bg) 5%, var(--color-bg-surface))
+    color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface)) 0%,
+    color-mix(in srgb, var(--color-ai-pink-bg) 10%, var(--color-bg-surface)) 50%,
+    color-mix(in srgb, var(--color-ai-blue-bg) 10%, var(--color-bg-surface)) 100%
   );
-  --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface));
+  --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
   --color-syntax-key: var(--color-function-fg);
   --color-syntax-string: var(--color-success-fg);
   --color-syntax-number: var(--color-warning-fg);
   --color-syntax-keyword: var(--color-ai-fg);
   --color-syntax-comment: var(--color-text-tertiary);
-  --color-chart-1: var(--color-function-bg);
-  --color-chart-2: var(--color-ai-bg);
-  --color-chart-3: var(--color-success-bg);
-  --color-chart-4: var(--color-warning-bg);
-  --color-chart-5: var(--color-destroy-bg);
+  --color-chart-1: #7297ff;
+  --color-chart-2: #51c9dc;
+  --color-chart-3: #b49afb;
+  --color-chart-4: #ff9194;
+  --color-chart-5: #f1cd65;
+  --color-chart-6: #83d4a1;
+  --color-chart-severity-critical: #ff7c8b;
+  --color-chart-severity-high: #ffa657;
+  --color-chart-severity-medium: #f2cb60;
+  --color-chart-severity-low: #78aaff;
+  --color-chart-severity-info: #aabbd2;
+  --color-chart-function: var(--color-chart-1);
+  --color-chart-ai: var(--color-ai-bg);
+  --color-chart-success: var(--color-chart-6);
+  --color-chart-warning: var(--color-chart-5);
+  --color-chart-destroy: var(--color-chart-4);
 }
 @media (prefers-reduced-motion: reduce) {
   :root {

@@ -13,7 +13,7 @@ const meta = {
     docs: {
       description: {
         component:
-          '`ModalClose` closes its nearest parent modal and inherits native button props from Radix. It must be rendered inside that parent.\n\n| ModalClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
+          'Modal has three width presets: `small` (400px), `regular` (560px, default), and `large` (800px), clamped to the viewport. `showHeader={false}` hides the visual header while preserving its accessible title. Header and footer have divider lines and remain outside the scrollable body.\n\n`ModalClose` closes its nearest parent modal and inherits native button props from Radix. It must be rendered inside that parent.\n\n| ModalClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
       },
       story: { inline: false, height: 600 },
     },
@@ -47,8 +47,8 @@ export const Default: Story = {};
 export const OpenDialog: Story = { args: { defaultOpen: true } };
 export const Sizes: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+      {(['small', 'regular', 'large'] as const).map((size) => (
         <Modal
           {...args}
           key={size}
@@ -58,6 +58,28 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement),
+      page = within(canvasElement.ownerDocument.body);
+    const viewport = canvasElement.ownerDocument.defaultView!.innerWidth;
+    for (const [size, width] of [
+      ['small', 400],
+      ['regular', 560],
+      ['large', 800],
+    ] as const) {
+      const trigger = canvas.getByRole('button', { name: `${size} investigation dialog` });
+      trigger.focus();
+      await userEvent.keyboard('{Enter}');
+      const dialog = await page.findByRole('dialog');
+      await waitFor(() =>
+        expect(
+          Math.abs(dialog.getBoundingClientRect().width - Math.min(width, viewport - 24)),
+        ).toBeLessThan(1),
+      );
+      await userEvent.keyboard('{Escape}');
+      await waitFor(() => expect(trigger).toHaveFocus());
+    }
+  },
 };
 export const ScrollableWithStickyFooter: Story = {
   args: {
@@ -74,6 +96,24 @@ export const ScrollableWithStickyFooter: Story = {
       </div>
     ),
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement),
+      page = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('button', { name: 'Assign alert' });
+    await userEvent.click(trigger);
+    const dialog = await page.findByRole('dialog');
+    const header = dialog.querySelector<HTMLElement>('.aegis-modal-header')!;
+    const footer = dialog.querySelector<HTMLElement>('.aegis-modal-footer')!;
+    const body = dialog.querySelector<HTMLElement>('.aegis-modal-body')!;
+    const headerTop = header.getBoundingClientRect().top,
+      footerTop = footer.getBoundingClientRect().top;
+    body.scrollTop = body.scrollHeight;
+    await waitFor(() => expect(body.scrollTop).toBeGreaterThan(0));
+    expect(header.getBoundingClientRect().top).toBe(headerTop);
+    expect(footer.getBoundingClientRect().top).toBe(footerTop);
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
 };
 function ConfirmationExample({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const [deleted, setDeleted] = useState(false);
@@ -82,7 +122,7 @@ function ConfirmationExample({ defaultOpen = false }: { defaultOpen?: boolean })
       <ConfirmDialog
         defaultOpen={defaultOpen}
         trigger={
-          <Button intent="destroy" emphasis="soft">
+          <Button intent="destroy" emphasis="secondary">
             Delete detection rule
           </Button>
         }
@@ -161,4 +201,16 @@ export const NavigationFocus: Story = {
       expect(canvas.getByRole('heading', { name: 'Reports workspace' })).toHaveFocus(),
     );
   },
+};
+
+export const BodyOnly: Story = {
+  args: { showHeader: false, showClose: false, footer: undefined, defaultOpen: true },
+};
+export const HeaderOnly: Story = { args: { footer: undefined, defaultOpen: true } };
+export const FooterOnly: Story = {
+  args: { showHeader: false, showClose: false, defaultOpen: true },
+};
+export const HeaderAndFooter: Story = { args: { defaultOpen: true } };
+export const HeaderlessWithClose: Story = {
+  args: { showHeader: false, footer: undefined, defaultOpen: true },
 };

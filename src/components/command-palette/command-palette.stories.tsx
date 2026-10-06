@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { useState } from 'react';
-import { ShieldAlert, FileCode, Search, Clock, Plus } from 'lucide-react';
+import { ShieldAlert, FileCode, Search, Clock, Plus } from '@/components/icon';
 import { CommandPalette, type CommandAction } from './command-palette';
 import { Button } from '@/components/button';
 export default {

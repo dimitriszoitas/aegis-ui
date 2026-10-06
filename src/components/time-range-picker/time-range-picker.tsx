@@ -1,6 +1,6 @@
 import { useState, useId } from 'react';
 import { DayPicker, type DateRange } from 'react-day-picker';
-import { Clock3, Check } from 'lucide-react';
+import { Clock3, Check } from '@/components/icon';
 import { Popover } from '@/components/popover';
 import { Button } from '@/components/button';
 import { mergeDescriptionIds, useFieldControl, type FieldControlProps } from '@/components/field';
@@ -58,6 +58,23 @@ export function TimeRangePicker({
   return (
     <Popover
       label={label}
+      className="time-range-popover"
+      width={custom ? 528 : 240}
+      align="end"
+      footer={
+        custom ? (
+          <Button
+            intent="function"
+            disabled={!absolute()}
+            onClick={() => {
+              const value = absolute();
+              if (value) commit(value);
+            }}
+          >
+            Apply range
+          </Button>
+        ) : undefined
+      }
       open={open && !control.disabled}
       onOpenChange={(next) => {
         if (control.disabled) return;
@@ -116,7 +133,7 @@ export function TimeRangePicker({
               {p.label}
             </Button>
           ))}
-          <Button emphasis={custom ? 'soft' : 'ghost'} onClick={() => setCustom(true)}>
+          <Button emphasis={custom ? 'secondary' : 'ghost'} onClick={() => setCustom(true)}>
             Custom range
           </Button>
         </div>
@@ -160,16 +177,6 @@ export function TimeRangePicker({
                 Choose a start and end date, with the end after the start.
               </p>
             )}
-            <Button
-              intent="function"
-              disabled={!absolute()}
-              onClick={() => {
-                const v = absolute();
-                if (v) commit(v);
-              }}
-            >
-              Apply range
-            </Button>
           </div>
         )}
       </div>

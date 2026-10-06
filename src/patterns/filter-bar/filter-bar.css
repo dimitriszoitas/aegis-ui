@@ -10,7 +10,6 @@
 }
 .aegis-filter-bar-main,
 .aegis-filter-bar-tools,
-.aegis-filter-bar-quick,
 .aegis-filter-bar-applied {
   display: flex;
   align-items: center;
@@ -20,12 +19,9 @@
 .aegis-filter-bar-main {
   gap: var(--space-3);
 }
-.aegis-filter-view {
-  width: 164px;
-  flex: 0 0 164px;
-}
 .aegis-filter-search {
   min-width: 200px;
+  max-width: 500px;
   flex: 1 1 220px;
 }
 .aegis-filter-bar-tools {
@@ -41,14 +37,10 @@
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
 }
-.aegis-filter-builder,
+.aegis-filter-picker,
 .aegis-filter-column-options {
   display: grid;
   gap: var(--space-3);
-}
-.aegis-filter-builder > .aegis-button {
-  margin-top: var(--space-1);
-  justify-self: end;
 }
 .aegis-filter-bar-applied .tag {
   max-width: 100%;
@@ -59,10 +51,11 @@
     flex-basis: 100%;
     order: 1;
   }
-  .aegis-filter-view {
-    flex: 1 1 144px;
-  }
   .aegis-filter-bar-tools {
     margin-left: 0;
   }
+}
+
+.aegis-filter-picker > .aegis-button {
+  justify-self: end;
 }
