@@ -2,12 +2,15 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
+  type TouchEvent as ReactTouchEvent,
 } from 'react';
 import {
   flexRender,
@@ -18,6 +21,8 @@ import {
   useReactTable,
   type Column,
   type ColumnDef,
+  type ColumnOrderState,
+  type ColumnPinningState,
   type ColumnSizingState,
   type ExpandedState,
   type PaginationState,
@@ -30,13 +35,20 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   ArrowDown,
+  ArrowLeft,
+  ArrowRight,
   ArrowUp,
   ArrowUpDown,
   Check,
   ChevronDown,
   ChevronRight,
   Columns3,
+  GripHorizontal,
   GripVertical,
+  EyeOff,
+  MoreHorizontal,
+  Pin,
+  PinOff,
   RotateCcw,
   X,
 } from 'lucide-react';
@@ -119,6 +131,45 @@ const columnLabel = <T,>(column: Column<T>) =>
   (typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id);
 const selectionFromIds = (ids: readonly string[]): RowSelectionState =>
   Object.fromEntries(ids.map((id) => [id, true]));
+const isUtilityColumn = (id: string) => id === selectionColumnId || id === expansionColumnId;
+function moveColumn(ids: string[], source: string, target: string) {
+  const next = [...ids];
+  const from = next.indexOf(source);
+  const to = next.indexOf(target);
+  if (from < 0 || to < 0) return next;
+  next.splice(from, 1);
+  next.splice(to, 0, source);
+  return next;
+}
+function initialPinnedColumns<T>(definitions: ColumnDef<T>[]): ColumnPinningState {
+  const leafColumns = (columns: ColumnDef<T>[]): ColumnDef<T>[] =>
+    columns.flatMap((column) =>
+      'columns' in column && column.columns ? leafColumns(column.columns) : [column],
+    );
+  const leaves = leafColumns(definitions);
+  const ids = leaves.map(
+    (column) =>
+      column.id ??
+      ('accessorKey' in column
+        ? String(column.accessorKey).replace(/\./g, '_')
+        : typeof column.header === 'string'
+          ? column.header
+          : undefined),
+  );
+  const first = ids[0];
+  const last = ids.at(-1);
+  const lastDefinition = leaves.at(-1);
+  const actions =
+    last &&
+    (last.toLowerCase() === 'actions' ||
+      lastDefinition?.header === 'Actions' ||
+      lastDefinition?.meta?.label === 'Actions');
+  return {
+    left:
+      first && leaves[0]?.enablePinning !== false && (!actions || first !== last) ? [first] : [],
+    right: actions && lastDefinition?.enablePinning !== false ? [last] : [],
+  };
+}
 
 export function DataGrid<T>({
   data,
@@ -154,6 +205,13 @@ export function DataGrid<T>({
   const id = useId();
   const instructionsId = `${id}-instructions`;
   const scrollRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
+  const headerElements = useRef(new Map<string, HTMLTableCellElement>());
+  const headerMenus = useRef(new Map<string, HTMLButtonElement>());
+  const draggingColumnRef = useRef<string | null>(null);
+  const resizeCleanupRef = useRef<(() => void) | null>(null);
+  const resizeGuideRef = useRef<HTMLDivElement>(null);
+  const resizeHandles = useRef(new Map<string, HTMLDivElement>());
   const rowElements = useRef(new Map<string, HTMLTableRowElement>());
   const pendingFocus = useRef<string | null>(null);
   const [internalDensity, setInternalDensity] = useState<GridDensity>('default');
@@ -162,6 +220,14 @@ export function DataGrid<T>({
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialColumnVisibility);
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
+  const [focusedResizeColumn, setFocusedResizeColumn] = useState<string | null>(null);
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(() =>
+    initialPinnedColumns(columns),
+  );
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [dragTarget, setDragTarget] = useState<string | null>(null);
+  const [columnAnnouncement, setColumnAnnouncement] = useState('');
   const [internalSelection, setInternalSelection] = useState<RowSelectionState>(() =>
     selectionFromIds(defaultSelectedRowIds),
   );
@@ -225,14 +291,25 @@ export function DataGrid<T>({
       sorting,
       columnVisibility,
       columnSizing,
+      columnOrder,
+      columnPinning: {
+        left: [
+          ...(enableSelection ? [selectionColumnId] : []),
+          ...(renderExpandedRow ? [expansionColumnId] : []),
+          ...(columnPinning.left ?? []).filter((columnId) => !isUtilityColumn(columnId)),
+        ],
+        right: (columnPinning.right ?? []).filter((columnId) => !isUtilityColumn(columnId)),
+      },
       rowSelection,
       expanded,
       pagination: safePagination,
     },
-    defaultColumn: { size: 180, minSize: 72, maxSize: 640 },
+    defaultColumn: { size: 180, minSize: 72, maxSize: 640, sortDescFirst: false },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnSizingChange: setColumnSizing,
+    onColumnOrderChange: setColumnOrder,
+    onColumnPinningChange: setColumnPinning,
     onExpandedChange: setExpanded,
     onPaginationChange: (updater) =>
       setPaginationState((current) =>
@@ -261,6 +338,209 @@ export function DataGrid<T>({
     columnResizeMode: 'onChange',
     autoResetPageIndex: false,
   });
+  const visibleColumns = [
+    ...table.getLeftVisibleLeafColumns(),
+    ...table.getCenterVisibleLeafColumns(),
+    ...table.getRightVisibleLeafColumns(),
+  ];
+  const lastColumnId = visibleColumns.at(-1)?.id;
+  const baseWidth = (column: Column<T>) =>
+    clampColumnWidth(
+      columnSizing[column.id] ?? column.getSize(),
+      column.columnDef.minSize,
+      column.id === lastColumnId
+        ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
+        : column.columnDef.maxSize,
+    );
+  const baseTotal = visibleColumns.reduce((total, column) => total + baseWidth(column), 0);
+  const extraWidth = Math.max(0, viewportWidth - baseTotal);
+  const renderedWidth = (column: Column<T>) =>
+    column
+      .getLeafColumns()
+      .reduce(
+        (total, leaf) => total + baseWidth(leaf) + (leaf.id === lastColumnId ? extraWidth : 0),
+        0,
+      );
+  const sizingBounds = (column: Column<T>) => ({
+    min:
+      column.id === lastColumnId
+        ? Math.max(column.columnDef.minSize ?? 72, viewportWidth - (baseTotal - baseWidth(column)))
+        : (column.columnDef.minSize ?? 72),
+    max:
+      column.id === lastColumnId
+        ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
+        : (column.columnDef.maxSize ?? 640),
+  });
+  useLayoutEffect(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+    let measuredWidth = scroll.clientWidth;
+    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+    setViewportWidth(measuredWidth);
+    const observer = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      if (scroll.clientWidth === measuredWidth) return;
+      // Let the 120ms sidebar motion settle before rerendering every row.
+      resizeTimer = setTimeout(() => {
+        measuredWidth = scroll.clientWidth;
+        setViewportWidth(measuredWidth);
+      }, 140);
+    });
+    observer.observe(scroll);
+    return () => {
+      clearTimeout(resizeTimer);
+      observer.disconnect();
+    };
+  }, []);
+  useEffect(() => () => resizeCleanupRef.current?.(), []);
+  function beginResize(
+    event: ReactMouseEvent<HTMLDivElement> | ReactTouchEvent<HTMLDivElement>,
+    column: Column<T>,
+  ) {
+    if ('button' in event && event.button !== 0) return;
+    const startX = 'touches' in event ? event.touches[0]?.clientX : event.clientX;
+    if (startX === undefined) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.focus();
+    setFocusedResizeColumn(null);
+    resizeCleanupRef.current?.();
+    const document = event.currentTarget.ownerDocument;
+    const startWidth = renderedWidth(column);
+    const { min, max } = sizingBounds(column);
+    table.setColumnSizing((current) => ({ ...current, [column.id]: startWidth }));
+    table.setColumnSizingInfo((current) => ({
+      ...current,
+      isResizingColumn: column.id,
+      startOffset: startX,
+      startSize: startWidth,
+      deltaOffset: 0,
+      deltaPercentage: 0,
+      columnSizingStart: [[column.id, startWidth]],
+    }));
+    const move = (nativeEvent: MouseEvent | TouchEvent) => {
+      const x = 'touches' in nativeEvent ? nativeEvent.touches[0]?.clientX : nativeEvent.clientX;
+      if (x === undefined) return;
+      if (nativeEvent.cancelable) nativeEvent.preventDefault();
+      const delta = x - startX;
+      table.setColumnSizing((current) => ({
+        ...current,
+        [column.id]: clampColumnWidth(startWidth + delta, min, max),
+      }));
+      table.setColumnSizingInfo((current) => ({
+        ...current,
+        deltaOffset: delta,
+        deltaPercentage: delta / startWidth,
+      }));
+    };
+    const cleanup = () => {
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', end);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('touchend', end);
+      document.removeEventListener('touchcancel', end);
+      document.defaultView?.removeEventListener('blur', end);
+      resizeCleanupRef.current = null;
+    };
+    const end = () => {
+      cleanup();
+      table.resetHeaderSizeInfo();
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', end);
+    document.addEventListener('touchcancel', end);
+    document.defaultView?.addEventListener('blur', end);
+    resizeCleanupRef.current = cleanup;
+  }
+  const columnKeys = new Map(table.getAllLeafColumns().map((column, index) => [column.id, index]));
+  function pinnedStyle(column: Column<T>): CSSProperties {
+    const side = column.getIsPinned();
+    const leaves = column.getLeafColumns();
+    if (!side || !leaves.every((leaf) => leaf.getIsPinned() === side)) return {};
+    const edge = side === 'left' ? leaves[0] : leaves.at(-1)!;
+    return { [side]: `var(--grid-pin-${side}-${columnKeys.get(edge.id)}, 0px)` };
+  }
+  useLayoutEffect(() => {
+    const grid = tableRef.current;
+    const scroll = scrollRef.current;
+    if (!grid || !scroll) return;
+    const updateOffsets = () => {
+      const keys = new Map(table.getAllLeafColumns().map((column, index) => [column.id, index]));
+      for (const side of ['left', 'right'] as const) {
+        const pinned =
+          side === 'left'
+            ? table.getLeftVisibleLeafColumns()
+            : [...table.getRightVisibleLeafColumns()].reverse();
+        let offset = 0;
+        for (const column of pinned) {
+          grid.style.setProperty(`--grid-pin-${side}-${keys.get(column.id)}`, `${offset}px`);
+          offset +=
+            headerElements.current.get(column.id)?.getBoundingClientRect().width ??
+            column.getSize();
+        }
+      }
+    };
+    updateOffsets();
+    const observer = new ResizeObserver(updateOffsets);
+    observer.observe(grid);
+    observer.observe(scroll);
+    return () => observer.disconnect();
+  }, [
+    table,
+    columnPinning,
+    columnOrder,
+    columnSizing,
+    columnVisibility,
+    enableSelection,
+    renderExpandedRow,
+  ]);
+  const activeResizeColumn =
+    table.getState().columnSizingInfo.isResizingColumn || focusedResizeColumn;
+  useLayoutEffect(() => {
+    const scroll = scrollRef.current;
+    const guide = resizeGuideRef.current;
+    const handle = activeResizeColumn ? resizeHandles.current.get(activeResizeColumn) : undefined;
+    const header = handle?.closest('th');
+    if (!scroll || !guide || !header) {
+      if (guide) guide.hidden = true;
+      return;
+    }
+    const updateGuide = () => {
+      const viewportLeft = scroll.getBoundingClientRect().left + scroll.clientLeft;
+      const edge = header.getBoundingClientRect().right - viewportLeft;
+      const leftHeaders = [...scroll.querySelectorAll('thead [data-pinned="left"]')];
+      const rightHeaders = [...scroll.querySelectorAll('thead [data-pinned="right"]')];
+      const visibleStart = header.dataset.pinned
+        ? 0
+        : Math.max(
+            0,
+            ...leftHeaders.map((cell) => cell.getBoundingClientRect().right - viewportLeft),
+          );
+      const visibleEnd = header.dataset.pinned
+        ? scroll.clientWidth
+        : Math.min(
+            scroll.clientWidth,
+            ...rightHeaders.map((cell) => cell.getBoundingClientRect().left - viewportLeft),
+          );
+      guide.hidden = edge < visibleStart || edge > visibleEnd + 1;
+      // Read the rendered edge: tables may distribute spare width beyond column sizes.
+      guide.style.left = `${Math.max(0, Math.min(scroll.clientWidth - 2, edge - 1))}px`;
+      guide.style.height = `${scroll.clientHeight}px`;
+    };
+    updateGuide();
+    const observer = new ResizeObserver(updateGuide);
+    observer.observe(scroll);
+    observer.observe(header);
+    const grid = header.closest('table');
+    if (grid) observer.observe(grid);
+    scroll.addEventListener('scroll', updateGuide, { passive: true });
+    return () => {
+      observer.disconnect();
+      scroll.removeEventListener('scroll', updateGuide);
+    };
+  }, [activeResizeColumn, columnSizing, columnVisibility, columnPinning, columnOrder]);
   const rows = table.getRowModel().rows;
   const entries = useMemo(
     () =>
@@ -315,7 +595,6 @@ export function DataGrid<T>({
   const paddingBottom = shouldVirtualize
     ? Math.max(0, virtualizer.getTotalSize() - (virtualRows.at(-1)?.end ?? 0))
     : 0;
-  const visibleColumns = table.getVisibleLeafColumns();
   const selected = data.filter((row) => rowSelection[getRowId(row)]);
   const currentFocusedId =
     focusedRowId && rows.some((row) => row.id === focusedRowId) ? focusedRowId : rows[0]?.id;
@@ -394,6 +673,134 @@ export function DataGrid<T>({
     .getAllLeafColumns()
     .filter((column) => !column.id.startsWith('__aegis_'));
   const visibleDataColumns = dataColumns.filter((column) => column.getIsVisible());
+  function reorderColumn(sourceId: string, targetId: string) {
+    const source = table.getColumn(sourceId);
+    const target = table.getColumn(targetId);
+    if (
+      !source ||
+      !target ||
+      sourceId === targetId ||
+      isUtilityColumn(sourceId) ||
+      isUtilityColumn(targetId) ||
+      source.getIsPinned() !== target.getIsPinned()
+    )
+      return;
+    const side = source.getIsPinned();
+    if (side) {
+      setColumnPinning((current) => ({
+        ...current,
+        [side]: moveColumn(table.getState().columnPinning[side] ?? [], sourceId, targetId),
+      }));
+    } else {
+      setColumnOrder(
+        moveColumn(
+          table.getAllLeafColumns().map((column) => column.id),
+          sourceId,
+          targetId,
+        ),
+      );
+    }
+    setColumnAnnouncement(
+      `${columnLabel(source)} column moved ${source.getIndex(side || undefined) < target.getIndex(side || undefined) ? 'right' : 'left'}.`,
+    );
+  }
+  function columnMenu(column: Column<T>): DropdownMenuEntry[] {
+    const side = column.getIsPinned();
+    const peers = visibleColumns.filter(
+      (candidate) => !isUtilityColumn(candidate.id) && candidate.getIsPinned() === side,
+    );
+    const index = peers.findIndex((candidate) => candidate.id === column.id);
+    const focusMenu = () =>
+      requestAnimationFrame(() => headerMenus.current.get(column.id)?.focus());
+    return [
+      {
+        id: 'pin-left',
+        label: 'Pin left',
+        icon: <Pin size={14} />,
+        disabled: !column.getCanPin() || side === 'left',
+        onSelect: () => {
+          column.pin('left');
+          focusMenu();
+        },
+      },
+      {
+        id: 'pin-right',
+        label: 'Pin right',
+        icon: <Pin size={14} />,
+        disabled: !column.getCanPin() || side === 'right',
+        onSelect: () => {
+          column.pin('right');
+          focusMenu();
+        },
+      },
+      ...(side
+        ? [
+            {
+              id: 'unpin',
+              label: 'Unpin column',
+              icon: <PinOff size={14} />,
+              disabled: !column.getCanPin(),
+              onSelect: () => {
+                column.pin(false);
+                focusMenu();
+              },
+            },
+          ]
+        : []),
+      { id: 'sort-divider', type: 'separator' },
+      {
+        id: 'sort-asc',
+        label: 'Sort A to Z',
+        icon: <ArrowUp size={14} />,
+        disabled: !column.getCanSort(),
+        onSelect: () => column.toggleSorting(false, false),
+      },
+      {
+        id: 'sort-desc',
+        label: 'Sort Z to A',
+        icon: <ArrowDown size={14} />,
+        disabled: !column.getCanSort(),
+        onSelect: () => column.toggleSorting(true, false),
+      },
+      { id: 'move-divider', type: 'separator' },
+      {
+        id: 'move-left',
+        label: 'Move left',
+        icon: <ArrowLeft size={14} />,
+        disabled: index <= 0,
+        onSelect: () => {
+          reorderColumn(column.id, peers[index - 1].id);
+          focusMenu();
+        },
+      },
+      {
+        id: 'move-right',
+        label: 'Move right',
+        icon: <ArrowRight size={14} />,
+        disabled: index === peers.length - 1,
+        onSelect: () => {
+          reorderColumn(column.id, peers[index + 1].id);
+          focusMenu();
+        },
+      },
+      { id: 'hide-divider', type: 'separator' },
+      {
+        id: 'hide',
+        label: 'Hide column',
+        icon: <EyeOff size={14} />,
+        disabled: !column.getCanHide() || visibleDataColumns.length <= 1,
+        onSelect: () => {
+          const next = visibleDataColumns.find((candidate) => candidate.id !== column.id);
+          column.toggleVisibility(false);
+          setColumnAnnouncement(`${columnLabel(column)} column hidden.`);
+          requestAnimationFrame(() => {
+            const target = next ? headerMenus.current.get(next.id) : undefined;
+            (target ?? scrollRef.current)?.focus();
+          });
+        },
+      },
+    ];
+  }
   const toolbarApi: DataGridToolbarApi = {
     density,
     setDensity,
@@ -491,310 +898,418 @@ export function DataGrid<T>({
       <p className="aegis-grid-sr-only" id={instructionsId}>
         Use up and down arrows to move between rows. Press Enter to open a row, Space to select, and
         left or right arrows to collapse or expand details. Hold Shift while sorting to sort by
-        multiple columns. Column resize handles use left and right arrows.
+        multiple columns. Column resize handles use left and right arrows. Drag column grips to
+        reorder within their pinned or unpinned group, or use Move left and Move right in a column
+        menu.
       </p>
-      <div
-        className="aegis-grid-scroll"
-        ref={scrollRef}
-        style={{ maxHeight: height }}
-        tabIndex={0}
-        role="region"
-        aria-label={`${label} table scroll area`}
-      >
-        <table
-          id={id}
-          className="aegis-grid-table"
-          role="grid"
-          aria-label={label}
-          aria-describedby={instructionsId}
-          aria-rowcount={
-            loading ? -1 : Math.max(1, entries.length) + table.getHeaderGroups().length
-          }
-          aria-colcount={visibleColumns.length}
-          aria-multiselectable={enableSelection || undefined}
-          aria-busy={loading || undefined}
-          style={{ width: table.getTotalSize(), minWidth: '100%' }}
+      <span className="aegis-grid-sr-only" role="status">
+        {columnAnnouncement}
+      </span>
+      <div className="aegis-grid-viewport">
+        <div
+          className="aegis-grid-scroll"
+          ref={scrollRef}
+          style={{ maxHeight: height }}
+          tabIndex={0}
+          role="region"
+          aria-label={`${label} table scroll area`}
         >
-          <colgroup>
-            {visibleColumns.map((column) => (
-              <col key={column.id} style={{ width: column.getSize() }} />
-            ))}
-          </colgroup>
-          <thead>
-            {table.getHeaderGroups().map((group, groupIndex) => (
-              <tr key={group.id} role="row" aria-rowindex={groupIndex + 1}>
-                {group.headers.map((header, columnIndex) => {
-                  const column = header.column;
-                  const sorted = column.getIsSorted();
-                  const selectedColumn = column.id === selectionColumnId;
-                  return (
-                    <th
-                      key={header.id}
-                      role="columnheader"
-                      scope="col"
-                      aria-colindex={columnIndex + 1}
-                      colSpan={header.colSpan}
-                      aria-sort={
-                        sorted
-                          ? sorting.length > 1
-                            ? 'other'
-                            : sorted === 'asc'
-                              ? 'ascending'
-                              : 'descending'
-                          : undefined
-                      }
-                      className={cn(
-                        selectedColumn && 'aegis-grid-pinned',
-                        column.id === expansionColumnId && 'aegis-grid-expand-column',
-                      )}
-                      style={{
-                        width: header.getSize(),
-                        textAlign: column.columnDef.meta?.align ?? 'left',
-                      }}
-                    >
-                      {selectedColumn ? (
-                        <Checkbox
-                          aria-label="Select all rows on this page"
-                          checked={
-                            table.getIsAllPageRowsSelected()
-                              ? true
-                              : table.getIsSomePageRowsSelected()
-                                ? 'indeterminate'
-                                : false
-                          }
-                          disabled={!rows.length || loading}
-                          onCheckedChange={(checked) =>
-                            table.toggleAllPageRowsSelected(checked === true)
-                          }
-                        />
-                      ) : column.id === expansionColumnId ? (
-                        <span className="aegis-grid-sr-only">Expand details</span>
-                      ) : header.isPlaceholder ? null : column.getCanSort() ? (
-                        <button
-                          type="button"
-                          className="aegis-grid-sort-button"
-                          onClick={column.getToggleSortingHandler()}
-                          title="Shift-click to add a sort column"
-                        >
-                          {flexRender(column.columnDef.header, header.getContext())}
-                          <span className="aegis-grid-sort-icon" aria-hidden>
-                            {sorted === 'asc' ? (
-                              <ArrowUp size={13} />
-                            ) : sorted === 'desc' ? (
-                              <ArrowDown size={13} />
-                            ) : (
-                              <ArrowUpDown size={13} />
-                            )}
-                            {sorted && sorting.length > 1 && <sup>{column.getSortIndex() + 1}</sup>}
-                          </span>
-                        </button>
-                      ) : (
-                        flexRender(column.columnDef.header, header.getContext())
-                      )}
-                      {column.getCanResize() && (
-                        <div
-                          role="separator"
-                          tabIndex={0}
-                          aria-orientation="vertical"
-                          aria-label={`Resize ${columnLabel(column)} column`}
-                          aria-valuenow={Math.round(column.getSize())}
-                          aria-valuemin={column.columnDef.minSize ?? 72}
-                          aria-valuemax={column.columnDef.maxSize ?? 640}
-                          aria-valuetext={`${Math.round(column.getSize())} pixels`}
-                          aria-controls={id}
-                          className={cn(
-                            'aegis-grid-resize',
-                            column.getIsResizing() && 'is-resizing',
-                          )}
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          onDoubleClick={() => autosize(column)}
-                          onKeyDown={(event) => {
-                            if (
-                              !['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'].includes(
-                                event.key,
-                              )
-                            )
-                              return;
-                            event.preventDefault();
-                            event.stopPropagation();
-                            if (event.key === 'Enter') {
-                              autosize(column);
-                              return;
+          <table
+            ref={tableRef}
+            id={id}
+            className="aegis-grid-table"
+            role="grid"
+            aria-label={label}
+            aria-describedby={instructionsId}
+            aria-rowcount={
+              loading ? -1 : Math.max(1, entries.length) + table.getHeaderGroups().length
+            }
+            aria-colcount={visibleColumns.length}
+            aria-multiselectable={enableSelection || undefined}
+            aria-busy={loading || undefined}
+            style={{ width: baseTotal + extraWidth }}
+          >
+            <colgroup>
+              {visibleColumns.map((column) => (
+                <col key={column.id} style={{ width: renderedWidth(column) }} />
+              ))}
+            </colgroup>
+            <thead>
+              {table.getHeaderGroups().map((group, groupIndex) => (
+                <tr key={group.id} role="row" aria-rowindex={groupIndex + 1}>
+                  {group.headers.map((header, columnIndex) => {
+                    const column = header.column;
+                    const sorted = column.getIsSorted();
+                    const selectedColumn = column.id === selectionColumnId;
+                    const dataColumn =
+                      !isUtilityColumn(column.id) &&
+                      !header.isPlaceholder &&
+                      column.columns.length === 0;
+                    return (
+                      <th
+                        ref={(element) => {
+                          if (element) headerElements.current.set(column.id, element);
+                          else headerElements.current.delete(column.id);
+                        }}
+                        key={header.id}
+                        data-column-id={column.id}
+                        data-pinned={column.getIsPinned() || undefined}
+                        role="columnheader"
+                        scope="col"
+                        aria-colindex={columnIndex + 1}
+                        colSpan={header.colSpan}
+                        aria-sort={
+                          sorted
+                            ? sorting.length > 1
+                              ? 'other'
+                              : sorted === 'asc'
+                                ? 'ascending'
+                                : 'descending'
+                            : undefined
+                        }
+                        className={cn(
+                          column.getIsPinned() && 'aegis-grid-pinned',
+                          selectedColumn && 'aegis-grid-selection-column',
+                          dataColumn && 'aegis-grid-data-header',
+                          dragTarget === column.id && 'is-drag-target',
+                          column.id === expansionColumnId && 'aegis-grid-expand-column',
+                        )}
+                        style={{
+                          ...pinnedStyle(column),
+                          width: renderedWidth(column),
+                          textAlign: column.columnDef.meta?.align ?? 'left',
+                        }}
+                        onDragOver={(event) => {
+                          const sourceId = draggingColumnRef.current;
+                          if (
+                            !sourceId ||
+                            !dataColumn ||
+                            table.getColumn(sourceId)?.getIsPinned() !== column.getIsPinned()
+                          )
+                            return;
+                          event.preventDefault();
+                          event.dataTransfer.dropEffect = 'move';
+                          setDragTarget(column.id);
+                        }}
+                        onDrop={(event) => {
+                          const sourceId = draggingColumnRef.current;
+                          if (!sourceId) return;
+                          event.preventDefault();
+                          reorderColumn(sourceId, column.id);
+                          draggingColumnRef.current = null;
+                          setDragTarget(null);
+                        }}
+                      >
+                        {selectedColumn ? (
+                          <Checkbox
+                            aria-label="Select all rows on this page"
+                            checked={
+                              table.getIsAllPageRowsSelected()
+                                ? true
+                                : table.getIsSomePageRowsSelected()
+                                  ? 'indeterminate'
+                                  : false
                             }
-                            const min = column.columnDef.minSize ?? 72;
-                            const max = column.columnDef.maxSize ?? 640;
-                            const next =
-                              event.key === 'Home'
-                                ? min
-                                : event.key === 'End'
-                                  ? max
-                                  : column.getSize() +
-                                    (event.key === 'ArrowRight' ? 1 : -1) *
-                                      (event.shiftKey ? 24 : 8);
-                            table.setColumnSizing((current) => ({
-                              ...current,
-                              [column.id]: clampColumnWidth(next, min, max),
-                            }));
-                          }}
-                        >
-                          <GripVertical size={12} aria-hidden />
-                        </div>
-                      )}
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {loading ? (
-              Array.from({ length: 8 }, (_, index) => (
-                <tr role="row" key={index}>
+                            disabled={!rows.length || loading}
+                            onCheckedChange={(checked) =>
+                              table.toggleAllPageRowsSelected(checked === true)
+                            }
+                          />
+                        ) : column.id === expansionColumnId ? (
+                          <span className="aegis-grid-sr-only">Expand details</span>
+                        ) : header.isPlaceholder ? null : column.getCanSort() ? (
+                          <button
+                            type="button"
+                            className="aegis-grid-sort-button"
+                            onClick={column.getToggleSortingHandler()}
+                            title="Shift-click to add a sort column"
+                          >
+                            <span className="aegis-grid-header-label">
+                              {flexRender(column.columnDef.header, header.getContext())}
+                            </span>
+                            <span className="aegis-grid-sort-icon" aria-hidden>
+                              {sorted === 'asc' ? (
+                                <ArrowUp size={13} />
+                              ) : sorted === 'desc' ? (
+                                <ArrowDown size={13} />
+                              ) : (
+                                <ArrowUpDown size={13} />
+                              )}
+                              {sorted && sorting.length > 1 && (
+                                <sup>{column.getSortIndex() + 1}</sup>
+                              )}
+                            </span>
+                          </button>
+                        ) : (
+                          flexRender(column.columnDef.header, header.getContext())
+                        )}
+                        {dataColumn && (
+                          <>
+                            <button
+                              type="button"
+                              className="aegis-grid-drag"
+                              draggable
+                              tabIndex={-1}
+                              aria-label={`Drag ${columnLabel(column)} column to reorder`}
+                              title="Drag to reorder; use the column menu for keyboard controls"
+                              onDragStart={(event) => {
+                                event.stopPropagation();
+                                draggingColumnRef.current = column.id;
+                                event.dataTransfer.effectAllowed = 'move';
+                                event.dataTransfer.setData('text/plain', column.id);
+                              }}
+                              onDragEnd={() => {
+                                draggingColumnRef.current = null;
+                                setDragTarget(null);
+                              }}
+                            >
+                              <GripHorizontal size={12} aria-hidden />
+                            </button>
+                            <DropdownMenu
+                              label={`${columnLabel(column)} column actions`}
+                              trigger={
+                                <button
+                                  type="button"
+                                  ref={(element) => {
+                                    if (element) headerMenus.current.set(column.id, element);
+                                    else headerMenus.current.delete(column.id);
+                                  }}
+                                  className="aegis-grid-column-menu"
+                                  aria-label={`${columnLabel(column)} column actions`}
+                                >
+                                  <MoreHorizontal size={15} aria-hidden />
+                                </button>
+                              }
+                              items={columnMenu(column)}
+                            />
+                          </>
+                        )}
+                        {column.getCanResize() && column.columns.length === 0 && (
+                          <div
+                            role="separator"
+                            tabIndex={0}
+                            aria-orientation="vertical"
+                            aria-label={`Resize ${columnLabel(column)} column`}
+                            aria-valuenow={Math.round(renderedWidth(column))}
+                            aria-valuemin={Math.round(sizingBounds(column).min)}
+                            aria-valuemax={Math.round(sizingBounds(column).max)}
+                            aria-valuetext={`${Math.round(renderedWidth(column))} pixels`}
+                            aria-controls={id}
+                            className={cn(
+                              'aegis-grid-resize',
+                              column.getIsResizing() && 'is-resizing',
+                            )}
+                            ref={(element) => {
+                              if (element) resizeHandles.current.set(column.id, element);
+                              else resizeHandles.current.delete(column.id);
+                            }}
+                            onFocus={(event) => {
+                              if (event.currentTarget.matches(':focus-visible'))
+                                setFocusedResizeColumn(column.id);
+                            }}
+                            onBlur={() => setFocusedResizeColumn(null)}
+                            onMouseDown={(event) => beginResize(event, column)}
+                            onTouchStart={(event) => beginResize(event, column)}
+                            onDoubleClick={() => autosize(column)}
+                            onKeyDown={(event) => {
+                              if (
+                                !['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'].includes(
+                                  event.key,
+                                )
+                              )
+                                return;
+                              event.preventDefault();
+                              event.stopPropagation();
+                              setFocusedResizeColumn(column.id);
+                              if (event.key === 'Enter') {
+                                autosize(column);
+                                return;
+                              }
+                              const { min, max } = sizingBounds(column);
+                              const next =
+                                event.key === 'Home'
+                                  ? min
+                                  : event.key === 'End'
+                                    ? max
+                                    : renderedWidth(column) +
+                                      (event.key === 'ArrowRight' ? 1 : -1) *
+                                        (event.shiftKey ? 24 : 8);
+                              table.setColumnSizing((current) => ({
+                                ...current,
+                                [column.id]: clampColumnWidth(next, min, max),
+                              }));
+                            }}
+                          >
+                            <GripVertical size={12} aria-hidden />
+                          </div>
+                        )}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {loading ? (
+                Array.from({ length: 8 }, (_, index) => (
+                  <tr role="row" key={index}>
+                    <td role="gridcell" colSpan={visibleColumns.length}>
+                      <Skeleton
+                        variant="table-row"
+                        columns={Math.max(3, visibleColumns.length - 1)}
+                        height={rowHeights[density]}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : error ? (
+                <tr role="row">
                   <td role="gridcell" colSpan={visibleColumns.length}>
-                    <Skeleton
-                      variant="table-row"
-                      columns={Math.max(3, visibleColumns.length - 1)}
-                      height={rowHeights[density]}
+                    <EmptyState
+                      preset="error"
+                      description={error}
+                      action={onRetry && <Button onClick={onRetry}>Try again</Button>}
                     />
                   </td>
                 </tr>
-              ))
-            ) : error ? (
-              <tr role="row">
-                <td role="gridcell" colSpan={visibleColumns.length}>
-                  <EmptyState
-                    preset="error"
-                    description={error}
-                    action={onRetry && <Button onClick={onRetry}>Try again</Button>}
-                  />
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr role="row">
-                <td role="gridcell" colSpan={visibleColumns.length}>
-                  <EmptyState title={emptyTitle} description={emptyDescription} />
-                </td>
-              </tr>
-            ) : (
-              <>
-                {paddingTop > 0 && (
-                  <tr aria-hidden="true" className="aegis-grid-spacer">
-                    <td colSpan={visibleColumns.length} style={{ height: paddingTop }} />
-                  </tr>
-                )}
-                {visibleEntries.map(({ row, detail, index, virtualIndex }) =>
-                  detail ? (
-                    <tr
-                      key={`${row.id}-detail`}
-                      role="row"
-                      aria-rowindex={index + table.getHeaderGroups().length + 1}
-                      className="aegis-grid-expanded-row"
-                      data-index={virtualIndex}
-                      ref={shouldVirtualize ? virtualizer.measureElement : undefined}
-                    >
-                      <td role="gridcell" colSpan={visibleColumns.length}>
-                        <div
-                          className="aegis-grid-expanded-content"
-                          id={`${id}-expanded-${row.id}`}
-                        >
-                          {renderExpandedRow?.(row.original)}
-                        </div>
-                      </td>
+              ) : rows.length === 0 ? (
+                <tr role="row">
+                  <td role="gridcell" colSpan={visibleColumns.length}>
+                    <EmptyState title={emptyTitle} description={emptyDescription} />
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {paddingTop > 0 && (
+                    <tr aria-hidden="true" className="aegis-grid-spacer">
+                      <td colSpan={visibleColumns.length} style={{ height: paddingTop }} />
                     </tr>
-                  ) : (
-                    <tr
-                      key={row.id}
-                      role="row"
-                      aria-rowindex={index + table.getHeaderGroups().length + 1}
-                      aria-selected={enableSelection ? row.getIsSelected() : undefined}
-                      aria-label={rowLabel?.(row.original) ?? `Alert ${row.id}`}
-                      tabIndex={currentFocusedId === row.id ? 0 : -1}
-                      data-index={virtualIndex}
-                      data-grid-row={row.id}
-                      className={cn(
-                        'aegis-grid-row',
-                        onRowClick && 'aegis-grid-clickable',
-                        row.getIsSelected() && 'is-selected',
-                      )}
-                      ref={(element) => {
-                        if (element) {
-                          rowElements.current.set(row.id, element);
-                          if (shouldVirtualize) virtualizer.measureElement(element);
-                          if (pendingFocus.current === row.id) {
-                            element.focus({ preventScroll: true });
-                            pendingFocus.current = null;
-                          }
-                        } else rowElements.current.delete(row.id);
-                      }}
-                      onFocus={() => setFocusedRowId(row.id)}
-                      onKeyDown={(event) => handleRowKey(event, row)}
-                      onClick={(event) => {
-                        if (!isInteractive(event.target) && !window.getSelection()?.toString()) {
-                          setFocusedRowId(row.id);
-                          event.currentTarget.focus({ preventScroll: true });
-                          onRowClick?.(row.original);
-                        }
-                      }}
-                    >
-                      {row.getVisibleCells().map((cell, columnIndex) => (
-                        <td
-                          key={cell.id}
-                          role="gridcell"
-                          aria-colindex={columnIndex + 1}
-                          className={cn(
-                            cell.column.id === selectionColumnId && 'aegis-grid-pinned',
-                            cell.column.id === expansionColumnId && 'aegis-grid-expand-column',
-                            cell.column.columnDef.meta?.cellClassName,
-                          )}
-                          style={{ textAlign: cell.column.columnDef.meta?.align ?? 'left' }}
-                        >
-                          {cell.column.id === selectionColumnId ? (
-                            <Checkbox
-                              aria-label={`Select ${rowLabel?.(row.original) ?? row.id}`}
-                              checked={row.getIsSelected()}
-                              onCheckedChange={(checked) => row.toggleSelected(checked === true)}
-                              tabIndex={currentFocusedId === row.id ? 0 : -1}
-                            />
-                          ) : cell.column.id === expansionColumnId ? (
-                            row.getCanExpand() && (
-                              <button
-                                type="button"
-                                className="aegis-grid-expand"
-                                aria-label={`${row.getIsExpanded() ? 'Collapse' : 'Expand'} ${rowLabel?.(row.original) ?? row.id}`}
-                                aria-expanded={row.getIsExpanded()}
-                                aria-controls={
-                                  row.getIsExpanded() ? `${id}-expanded-${row.id}` : undefined
-                                }
-                                onClick={row.getToggleExpandedHandler()}
-                                tabIndex={currentFocusedId === row.id ? 0 : -1}
-                              >
-                                {row.getIsExpanded() ? (
-                                  <ChevronDown size={15} />
-                                ) : (
-                                  <ChevronRight size={15} />
-                                )}
-                              </button>
-                            )
-                          ) : (
-                            <div className="aegis-grid-cell-content">
-                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </div>
-                          )}
+                  )}
+                  {visibleEntries.map(({ row, detail, index, virtualIndex }) =>
+                    detail ? (
+                      <tr
+                        key={`${row.id}-detail`}
+                        role="row"
+                        aria-rowindex={index + table.getHeaderGroups().length + 1}
+                        className="aegis-grid-expanded-row"
+                        data-index={virtualIndex}
+                        ref={shouldVirtualize ? virtualizer.measureElement : undefined}
+                      >
+                        <td role="gridcell" colSpan={visibleColumns.length}>
+                          <div
+                            className="aegis-grid-expanded-content"
+                            id={`${id}-expanded-${row.id}`}
+                          >
+                            {renderExpandedRow?.(row.original)}
+                          </div>
                         </td>
-                      ))}
+                      </tr>
+                    ) : (
+                      <tr
+                        key={row.id}
+                        role="row"
+                        aria-rowindex={index + table.getHeaderGroups().length + 1}
+                        aria-selected={enableSelection ? row.getIsSelected() : undefined}
+                        aria-label={rowLabel?.(row.original) ?? `Alert ${row.id}`}
+                        tabIndex={currentFocusedId === row.id ? 0 : -1}
+                        data-index={virtualIndex}
+                        data-grid-row={row.id}
+                        className={cn(
+                          'aegis-grid-row',
+                          onRowClick && 'aegis-grid-clickable',
+                          row.getIsSelected() && 'is-selected',
+                        )}
+                        ref={(element) => {
+                          if (element) {
+                            rowElements.current.set(row.id, element);
+                            if (shouldVirtualize) virtualizer.measureElement(element);
+                            if (pendingFocus.current === row.id) {
+                              element.focus({ preventScroll: true });
+                              pendingFocus.current = null;
+                            }
+                          } else rowElements.current.delete(row.id);
+                        }}
+                        onFocus={() => setFocusedRowId(row.id)}
+                        onKeyDown={(event) => handleRowKey(event, row)}
+                        onClick={(event) => {
+                          if (!isInteractive(event.target) && !window.getSelection()?.toString()) {
+                            setFocusedRowId(row.id);
+                            event.currentTarget.focus({ preventScroll: true });
+                            onRowClick?.(row.original);
+                          }
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell, columnIndex) => (
+                          <td
+                            key={cell.id}
+                            data-column-id={cell.column.id}
+                            data-pinned={cell.column.getIsPinned() || undefined}
+                            role="gridcell"
+                            aria-colindex={columnIndex + 1}
+                            className={cn(
+                              cell.column.getIsPinned() && 'aegis-grid-pinned',
+                              cell.column.id === selectionColumnId && 'aegis-grid-selection-column',
+                              cell.column.id === expansionColumnId && 'aegis-grid-expand-column',
+                              cell.column.columnDef.meta?.cellClassName,
+                            )}
+                            style={{
+                              ...pinnedStyle(cell.column),
+                              textAlign: cell.column.columnDef.meta?.align ?? 'left',
+                            }}
+                          >
+                            {cell.column.id === selectionColumnId ? (
+                              <Checkbox
+                                aria-label={`Select ${rowLabel?.(row.original) ?? row.id}`}
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(checked) => row.toggleSelected(checked === true)}
+                                tabIndex={currentFocusedId === row.id ? 0 : -1}
+                              />
+                            ) : cell.column.id === expansionColumnId ? (
+                              row.getCanExpand() && (
+                                <button
+                                  type="button"
+                                  className="aegis-grid-expand"
+                                  aria-label={`${row.getIsExpanded() ? 'Collapse' : 'Expand'} ${rowLabel?.(row.original) ?? row.id}`}
+                                  aria-expanded={row.getIsExpanded()}
+                                  aria-controls={
+                                    row.getIsExpanded() ? `${id}-expanded-${row.id}` : undefined
+                                  }
+                                  onClick={row.getToggleExpandedHandler()}
+                                  tabIndex={currentFocusedId === row.id ? 0 : -1}
+                                >
+                                  {row.getIsExpanded() ? (
+                                    <ChevronDown size={15} />
+                                  ) : (
+                                    <ChevronRight size={15} />
+                                  )}
+                                </button>
+                              )
+                            ) : (
+                              <div className="aegis-grid-cell-content">
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </div>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ),
+                  )}
+                  {paddingBottom > 0 && (
+                    <tr aria-hidden="true" className="aegis-grid-spacer">
+                      <td colSpan={visibleColumns.length} style={{ height: paddingBottom }} />
                     </tr>
-                  ),
-                )}
-                {paddingBottom > 0 && (
-                  <tr aria-hidden="true" className="aegis-grid-spacer">
-                    <td colSpan={visibleColumns.length} style={{ height: paddingBottom }} />
-                  </tr>
-                )}
-              </>
-            )}
-          </tbody>
-        </table>
+                  )}
+                </>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div
+          ref={resizeGuideRef}
+          className="aegis-grid-resize-guide"
+          aria-hidden="true"
+          hidden={!activeResizeColumn}
+        />
       </div>
       <div className="aegis-grid-footer">
         {pagination ? (

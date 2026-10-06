@@ -25,7 +25,7 @@
   border: 1px solid var(--color-ai-border);
   border-radius: var(--radius-lg);
   color: var(--color-text-primary);
-  padding: var(--space-5);
+  padding: var(--layout-panel-padding);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -39,8 +39,8 @@
   gap: var(--space-2);
 }
 .aegis-ai-card-title {
-  font-size: var(--text-md);
-  font-weight: 600;
+  font-size: var(--title-section-size);
+  font-weight: var(--title-weight);
   line-height: 1.4;
   margin: 0;
 }

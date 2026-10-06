@@ -1,4 +1,11 @@
-import { forwardRef, useId, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import {
+  forwardRef,
+  useId,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { Shield, PanelLeftClose, PanelLeftOpen, Search, ChevronDown } from 'lucide-react';
 import { IconButton } from '@/components/icon-button';
 import { CountBadge } from '@/components/count-badge';
@@ -29,6 +36,28 @@ export interface SideNavProps {
   footer?: ReactNode | ((collapsed: boolean) => ReactNode);
   workspace?: string;
   className?: string;
+}
+
+function NavTooltip({
+  children,
+  content,
+  enabled,
+}: {
+  children: ReactElement;
+  content: string;
+  enabled: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Tooltip
+      content={content}
+      side="right"
+      open={enabled && open}
+      onOpenChange={(next) => setOpen(enabled && next)}
+    >
+      {children}
+    </Tooltip>
+  );
 }
 
 // Keep Radix menu handlers and its trigger ref on the actual tooltip button.
@@ -139,29 +168,23 @@ export function SideNav({
         }
       >
         {item.icon}
-        {!collapsed && (
-          <>
-            <span>{item.label}</span>
-            {item.count !== undefined && <CountBadge count={item.count} />}{' '}
-            {hasChildren && (
-              <ChevronDown
-                size={14}
-                style={{ transform: expanded.includes(item.id) ? 'rotate(180deg)' : undefined }}
-              />
-            )}
-          </>
-        )}
+        <span className="nav-item-copy" aria-hidden={collapsed}>
+          <span className="nav-item-label">{item.label}</span>
+          {item.count !== undefined && <CountBadge count={item.count} />}
+          {hasChildren && (
+            <ChevronDown
+              size={14}
+              style={{ transform: expanded.includes(item.id) ? 'rotate(180deg)' : undefined }}
+            />
+          )}
+        </span>
       </button>
     );
     return (
       <div key={item.id}>
-        {collapsed ? (
-          <Tooltip content={item.label} side="right">
-            {button}
-          </Tooltip>
-        ) : (
-          button
-        )}
+        <NavTooltip content={item.label} enabled={collapsed}>
+          {button}
+        </NavTooltip>
         {hasChildren && !collapsed && expanded.includes(item.id) && (
           <div id={groupId} className="nav-nested">
             {item.children?.map((child) => renderItem(child, true))}
@@ -177,12 +200,12 @@ export function SideNav({
       aria-label="Main navigation"
     >
       <div className="nav-brand">
-        {!collapsed && (
+        <div className="nav-brand-copy" aria-hidden={collapsed}>
           <span className="nav-mark">
             <Shield size={22} strokeWidth={1.6} />
           </span>
-        )}
-        {!collapsed && <strong>Aegis</strong>}
+          <strong>Aegis</strong>
+        </div>
         <IconButton
           key="navigation-toggle"
           aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
@@ -193,17 +216,19 @@ export function SideNav({
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </IconButton>
       </div>
-      {!collapsed && (
-        <div className="nav-workspace">
-          <span className="workspace-avatar">N</span>
-          <div>
-            <strong>{workspace}</strong>
-            <span>Security workspace</span>
+      <div className="nav-workspace-collapse" aria-hidden={collapsed}>
+        <div className="nav-workspace-clip">
+          <div className="nav-workspace">
+            <span className="workspace-avatar">N</span>
+            <div>
+              <strong>{workspace}</strong>
+              <span>Security workspace</span>
+            </div>
+            <span className="workspace-status" role="img" aria-label="All systems connected" />
           </div>
-          <span className="workspace-status" role="img" aria-label="All systems connected" />
         </div>
-      )}
-      <Tooltip content="Search workspace" side="right" disabled={!collapsed}>
+      </div>
+      <NavTooltip content="Search workspace" enabled={collapsed}>
         <button
           type="button"
           className={cn('nav-search', collapsed && 'nav-icon')}
@@ -211,18 +236,20 @@ export function SideNav({
           onClick={onSearch}
         >
           <Search size={16} />
-          {!collapsed && (
-            <>
-              <span>Search workspace</span>
-              <Kbd>⌘K</Kbd>
-            </>
-          )}
+          <span className="nav-search-copy" aria-hidden={collapsed}>
+            <span>Search workspace</span>
+            <Kbd>⌘K</Kbd>
+          </span>
         </button>
-      </Tooltip>
+      </NavTooltip>
       <div className="nav-sections">
         {sections.map((section, index) => (
           <section key={section.label ?? index}>
-            {section.label && !collapsed && <h2 className="nav-section-label">{section.label}</h2>}
+            {section.label && (
+              <h2 className="nav-section-label" aria-hidden={collapsed}>
+                {section.label}
+              </h2>
+            )}
             <div className="nav-items">{section.items.map((item) => renderItem(item))}</div>
           </section>
         ))}

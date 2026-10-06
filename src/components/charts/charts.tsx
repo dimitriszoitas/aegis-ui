@@ -23,6 +23,9 @@ import type { Severity } from '@/components/severity-badge';
 import { cn } from '@/lib/utils';
 import './charts.css';
 
+// Coalesce measurements during the sidebar's 120ms width transition.
+const chartResizeDelay = 140;
+
 export type ChartColor =
   | 'function'
   | 'ai'
@@ -342,6 +345,7 @@ function CartesianPlot({
         width="100%"
         height="100%"
         minWidth={0}
+        debounce={chartResizeDelay}
         initialDimension={{ width: 600, height }}
       >
         <Chart
@@ -531,7 +535,12 @@ export function DonutChart({
       }
     >
       <div className="aegis-donut-plot">
-        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 500, height }}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          debounce={chartResizeDelay}
+          initialDimension={{ width: 500, height }}
+        >
           <RechartsPieChart
             accessibilityLayer
             aria-label={`${title}. Use arrow keys to inspect categories.`}

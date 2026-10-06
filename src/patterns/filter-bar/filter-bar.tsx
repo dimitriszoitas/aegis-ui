@@ -1,5 +1,5 @@
 import { useRef, useState, type HTMLAttributes } from 'react';
-import { Columns3, ListFilter, PanelLeft, Plus, Rows2, Rows3, Rows4 } from 'lucide-react';
+import { Columns3, Funnel, Plus, Rows2, Rows3, Rows4 } from 'lucide-react';
 import type { Analyst } from '@/sample-data';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
@@ -168,7 +168,7 @@ export function FilterBar({
             onClick={onTogglePanel}
             disabled={disabled}
           >
-            <PanelLeft size={16} />
+            <Funnel size={16} />
           </IconButton>
         )}
         <div className="aegis-filter-view">
@@ -252,10 +252,6 @@ export function FilterBar({
         </div>
       </div>
       <div className="aegis-filter-bar-quick" role="group" aria-label="Quick filters">
-        <span className="aegis-filter-quick-label">
-          <ListFilter size={14} aria-hidden="true" />
-          Quick filters
-        </span>
         <Tag
           variant="interactive"
           selected={highPriority}

@@ -7,11 +7,11 @@
   box-shadow: var(--shadow-raised);
 }
 .aegis-wizard-header {
-  padding: var(--space-6);
+  padding: var(--layout-panel-padding);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 .aegis-wizard-header h2 {
-  font-size: var(--text-xl);
+  font-size: var(--title-panel-size);
   margin: 0;
 }
 .aegis-wizard-header p {
@@ -20,14 +20,14 @@
   font-size: var(--text-sm);
 }
 .aegis-wizard-progress {
-  padding: var(--space-6);
+  padding: var(--layout-panel-padding);
 }
 .aegis-wizard-content {
-  padding: var(--space-4) var(--space-6) var(--space-8);
+  padding: var(--layout-panel-padding) var(--layout-panel-padding) var(--space-5);
   min-width: 0;
 }
 .aegis-wizard-step-heading {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--layout-section-gap);
 }
 .aegis-wizard-step-heading p {
   margin-bottom: var(--space-1);
@@ -35,7 +35,7 @@
   font-size: var(--text-xs);
 }
 .aegis-wizard-step-heading h3 {
-  font-size: var(--text-lg);
+  font-size: var(--title-panel-size);
   margin: 0;
 }
 .aegis-wizard-step-heading h3:focus-visible {
@@ -52,7 +52,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--layout-panel-padding);
   border-top: 1px solid var(--color-border-subtle);
   background: var(--color-bg-surface);
   border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
@@ -69,7 +69,7 @@
   border-right: 1px solid var(--color-border-subtle);
 }
 .aegis-wizard[data-orientation='vertical'] .aegis-wizard-content {
-  padding-top: var(--space-6);
+  padding-top: var(--layout-panel-padding);
 }
 @media (max-width: 660px) {
   .aegis-wizard[data-orientation='vertical'] .aegis-wizard-body {

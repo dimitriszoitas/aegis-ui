@@ -17,6 +17,7 @@ export type AccordionProps = (
   | Omit<ComponentPropsWithoutRef<typeof Primitive.Root> & { type: 'multiple' }, 'children'>
 ) & { items: AccordionItem[]; variant?: 'divided' | 'contained' };
 
+/** Compact disclosure rows with consistent nesting; Radix supplies keyboard and ARIA behavior. */
 export function Accordion({ items, variant = 'divided', className, ...props }: AccordionProps) {
   return (
     <Primitive.Root

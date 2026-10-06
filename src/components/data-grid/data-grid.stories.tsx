@@ -104,7 +104,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the table toolbar for density and column visibility; click headers for sorting and Shift-click for multiple sorts. Header dividers support drag, double-click autosize, and keyboard resizing. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
+          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the toolbar for density and column visibility. The first header click sorts ascending, the next descending; Shift-click keeps multiple sorts. Hover or focus a header for its three-dot menu to pin left/right, unpin, sort, hide, or move a column with the keyboard. Drag the separate grip to reorder within a pinned or unpinned group. Selection, expansion, and the first data column start pinned left; a final Actions column starts pinned right. The last visible column fills spare viewport space. Right-edge resize handles support dragging, double-click autosize, and keyboard resizing, with a guide through the visible table body. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
       },
     },
   },
@@ -148,7 +148,7 @@ export const FullPresentation: Story = {
       await user.keyboard('{Shift>}');
       await user.click(grid.getByRole('button', { name: 'Events' }));
       await user.keyboard('{/Shift}');
-      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events descending/)).toBeVisible();
+      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events ascending/)).toBeVisible();
       const resize = grid.getByRole('separator', { name: 'Resize Alert column' });
       const previous = Number(resize.getAttribute('aria-valuenow'));
       resize.focus();
@@ -170,7 +170,7 @@ export const FullPresentation: Story = {
         '151',
       );
       await expect(grid.getAllByRole('row').length).toBeLessThan(151);
-      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events descending/)).toBeVisible();
+      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events ascending/)).toBeVisible();
       for (const label of selectedLabels)
         await expect(grid.getByRole('checkbox', { name: label })).toBeChecked();
       await user.click(canvas.getByRole('combobox', { name: 'Browsing mode' }));
@@ -218,6 +218,60 @@ export const FullVirtualizedPresentation: Story = {
   },
 };
 export const Default: Story = {};
+export const HeaderControls: Story = {
+  args: { data: alerts.slice(0, 10), pagination: false },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Hover or focus a header to reveal sorting and its column menu. Pin columns to either edge, hide optional fields, or use Move left/right as the keyboard alternative to dragging the separate reorder grip. Selection and expansion remain anchored. The last visible column takes spare width; resize only at each column’s right edge.',
+      },
+    },
+  },
+  play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const header = (id: string) =>
+      canvasElement.querySelector<HTMLTableCellElement>(`th[data-column-id="${id}"]`)!;
+    const menu = async (name: string, action: string) => {
+      await user.click(canvas.getByRole('button', { name: `${name} column actions` }));
+      await user.click(page.getByRole('menuitem', { name: action }));
+    };
+    await step('Start numeric sorting ascending and then descending', async () => {
+      await user.click(canvas.getByRole('button', { name: 'Events' }));
+      await expect(header('eventCount')).toHaveAttribute('aria-sort', 'ascending');
+      await user.click(canvas.getByRole('button', { name: 'Events' }));
+      await expect(header('eventCount')).toHaveAttribute('aria-sort', 'descending');
+      await menu('Events', 'Sort A to Z');
+      await expect(header('eventCount')).toHaveAttribute('aria-sort', 'ascending');
+      await user.click(canvas.getByRole('button', { name: 'Clear sorting' }));
+    });
+    await step('Pin and unpin a column without losing its menu', async () => {
+      await menu('Entity', 'Pin right');
+      await expect(header('entity')).toHaveAttribute('data-pinned', 'right');
+      await menu('Entity', 'Unpin column');
+      await expect(header('entity')).not.toHaveAttribute('data-pinned');
+    });
+    await step('Reorder from the keyboard and restore hidden fields', async () => {
+      const trigger = canvas.getByRole('button', { name: 'Entity column actions' });
+      trigger.focus();
+      await user.keyboard('{Enter}');
+      page.getByRole('menuitem', { name: 'Move left' }).focus();
+      await user.keyboard('{Enter}');
+      await waitFor(() =>
+        expect(header('entity').cellIndex).toBeLessThan(header('title').cellIndex),
+      );
+      await menu('Entity', 'Move right');
+      await menu('Entity', 'Hide column');
+      await expect(canvasElement.querySelector('th[data-column-id="entity"]')).toBeNull();
+      await user.click(canvas.getByRole('button', { name: 'Columns' }));
+      await user.click(page.getByRole('menuitemcheckbox', { name: 'Entity' }));
+      await user.keyboard('{Escape}');
+      await expect(header('entity')).toBeVisible();
+    });
+  },
+};
 export const DensityMatrix: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-6)' }}>
@@ -358,8 +412,30 @@ export const KeyboardResizing: Story = {
     docs: {
       description: {
         story:
-          'Focus a column resize handle and press Left or Right to adjust by 8px, Shift+Arrow for 24px, Home/End for min/max, or Enter to autosize. Pointer drag and double-click autosize use the same constraints.',
+          'Focus a column resize handle and press Left or Right to adjust by 8px, Shift+Arrow for 24px, Home/End for min/max, or Enter to autosize. A guide follows the active column edge through the visible table body. Pointer drag and double-click autosize use the same constraints.',
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const handle = canvas.getByRole('separator', { name: 'Resize Alert title column' });
+    const previous = Number(handle.getAttribute('aria-valuenow'));
+    const guide = canvasElement.querySelector<HTMLElement>('.aegis-grid-resize-guide');
+    const header = handle.closest('th');
+    if (!guide || !header) throw new Error('Expected a resize guide and its column header');
+    handle.focus();
+    await userEvent.keyboard('{Shift>}{ArrowRight}{/Shift}');
+    await expect(handle).toHaveAttribute('aria-valuenow', String(previous + 24));
+    await waitFor(() => {
+      expect(guide).toBeVisible();
+      expect(
+        Math.abs(guide.getBoundingClientRect().right - header.getBoundingClientRect().right),
+      ).toBeLessThanOrEqual(2);
+      expect(guide.getBoundingClientRect().height).toBeGreaterThan(
+        header.getBoundingClientRect().height,
+      );
+    });
+    await userEvent.tab();
+    await expect(guide).not.toBeVisible();
   },
 };

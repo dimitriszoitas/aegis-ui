@@ -44,17 +44,21 @@ Use the local URL printed by Vite. No environment variables, credentials, or ext
 
 ## Design principles
 
-**Floating surfaces.** Navigation is inset 12px from the viewport and uses 8px corners at its expanded 240px width, or 6px corners at its collapsed 48px width. Expanded navigation has 12px interior padding; collapsed navigation uses 12px vertically and 4px horizontally. The collapse/expand control stays at the top. Detail and AI sheets have 12px insets and 8px corners. Borders and layered shadows preserve the hierarchy in both themes.
+**Floating surfaces.** Navigation is inset 12px from the viewport and uses 8px corners at its expanded 240px width, or 6px corners at its collapsed 48px width. Expanded navigation has 12px interior padding; collapsed navigation uses 12px vertically and 6px horizontally. The collapse/expand control stays at the top. Detail and AI sheets have 12px insets and 8px corners. Borders and layered shadows preserve the hierarchy in both themes.
+
+Selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. The same treatment applies in the compact rail and nested navigation.
 
 **Corners stay compact.** Small, medium, and large controls are 28/34/40px high with 6/7/8px corners. Surface radii are capped at 8px. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
 
 **Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars, with stronger thumb colors on hover and drag. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
 
+**Hierarchy stays clear.** Accordion bodies, navigation children, tree levels, JSON branches, and expanded table content use a shared 12px inset.
+
 **Color has a purpose.** Function blue identifies primary actions; the AI intent carries a violet-to-blue gradient through filled, soft, and foreground treatments. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long alert titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density never removes investigation actions.
 
-Once the console page header scrolls out of view, compact breadcrumbs and the same actions stay pinned above the content.
+From the first scroll on every console page, compact breadcrumbs and the same actions stay pinned while the title continues underneath.
 
 **AI remains reviewable.** Generated output has a visible label and provenance. Each turn snapshots its supplied context; stopping preserves partial output, and regenerating uses that original snapshot. Late output from superseded requests is ignored. Proposed detection changes require explicit approval, and security actions are never performed by the mock.
 

@@ -24,7 +24,7 @@
   gap: var(--space-2);
   margin: 0;
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: var(--title-weight);
 }
 .aegis-filter-panel-result {
   color: var(--color-text-secondary);
@@ -42,13 +42,20 @@
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
-.aegis-filter-panel .aegis-accordion-content-inner {
-  padding-left: 0;
-  padding-right: 0;
-}
 .aegis-filter-facets {
+  margin-inline-start: var(--space-2);
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-1);
+}
+.aegis-filter-facets .aegis-checkbox-field {
+  min-height: 28px;
+  align-items: center;
+}
+.aegis-filter-facets .aegis-checkbox-control {
+  margin-top: 0;
+}
+.aegis-filter-facets .aegis-checkbox-label {
+  font-size: var(--text-sm);
 }
 .aegis-filter-facets .aegis-checkbox-copy {
   flex: 1;

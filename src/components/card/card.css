@@ -17,7 +17,7 @@
 .aegis-card-header,
 .aegis-card-content,
 .aegis-card-footer {
-  padding: var(--space-4);
+  padding: var(--layout-card-padding);
 }
 .aegis-card-header {
   display: flex;
@@ -29,8 +29,8 @@
 }
 .aegis-card-title {
   margin: 0;
-  font-size: var(--text-md);
-  font-weight: 600;
+  font-size: var(--title-section-size);
+  font-weight: var(--title-weight);
 }
 .aegis-card-description {
   color: var(--color-text-secondary);

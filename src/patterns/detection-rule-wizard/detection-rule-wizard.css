@@ -42,7 +42,7 @@
 }
 .aegis-rule-created {
   max-width: 1040px;
-  padding: var(--space-6);
+  padding: var(--layout-panel-padding);
 }
 .aegis-rule-created > svg {
   color: var(--color-success-fg);

@@ -18,7 +18,7 @@ The canvas gives every container breathing room. A surface holds content; a rais
 
 <SurfaceExamples />
 
-Keep navigation 12px from the top, left, and bottom of the viewport. Its radius follows its width: 8px when expanded to 240px, and 6px when collapsed to 48px. Expanded navigation uses 12px of interior padding; collapsed navigation uses 12px vertically and 4px horizontally, with 34px square icon rows. Keep the collapse or expand toggle at the top in both states. Other floating containers retain 20px of interior padding. Detail and assistant sheets float 12px from the top, right, and bottom, with an 8px radius. Cards use 16px padding; interactive rows use 8px corners.
+Keep navigation 12px from the top, left, and bottom of the viewport. Expanded navigation is 240px wide with 8px corners; collapsed navigation is 48px wide with 6px corners. Expanded navigation uses 12px of interior padding; collapsed navigation uses 12px vertically and 6px horizontally, with 34px square icon rows. Keep the collapse or expand toggle at the top in both states. Labels fade and clip during the fast toggle without wrapping. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Console pages begin with 20px top spacing, reduced to 16px on narrow screens, and related sections use 16px gaps. Detail and assistant sheets float 12px from the top, right, and bottom, with an 8px radius. Interactive rows use 8px corners.
 
 Keep every radius at or below 8px. Control corners scale with their height: 28px controls use a 6px radius, 34px controls use 7px, and 40px controls use 8px. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. These compact curves keep dense controls clear while borders and shadows establish the surface hierarchy.
 
@@ -33,6 +33,8 @@ Use a 14px interface base and a 13px dense-grid base. Keep timestamps, identifie
 <DensityExamples />
 
 Use normal separators for clear boundaries and light separators for quieter grouping. A line divides sections; a dot separates short inline metadata. Both variants inherit semantic theme tokens.
+
+Keep compact breadcrumbs and page actions available from the first scroll on every console page. The title continues underneath the pinned bar.
 
 ## Make every path accessible
 

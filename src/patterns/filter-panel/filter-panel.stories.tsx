@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { alerts, analysts, referenceTime } from '@/sample-data';
 import { FilterBar } from '@/patterns/filter-bar';
 import { SeverityBadge } from '@/components/severity-badge';
@@ -127,5 +127,24 @@ export const SearchAndExpand: Story = {
     await expect(canvas.getByRole('checkbox', { name: /^Critical/ })).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Severity' }));
     await expect(canvas.queryByRole('checkbox', { name: /^Critical/ })).not.toBeInTheDocument();
+  },
+};
+export const KeyboardFacets: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const severity = canvas.getByRole('button', { name: 'Severity' });
+    const critical = canvas.getByRole('checkbox', { name: /^Critical/ });
+    critical.focus();
+    await userEvent.keyboard(' ');
+    await expect(critical).toBeChecked();
+    severity.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(severity).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('button', { name: 'Status' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowUp}{Enter}');
+    await waitFor(() => expect(canvas.getByRole('checkbox', { name: /^Critical/ })).toBeChecked());
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear all' }));
+    await expect(canvas.getByRole('checkbox', { name: /^Critical/ })).not.toBeChecked();
   },
 };

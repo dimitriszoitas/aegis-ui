@@ -36,7 +36,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-4);
-  padding: var(--space-5);
+  padding: var(--layout-panel-padding);
   flex-shrink: 0;
 }
 .aegis-modal-heading {
@@ -44,8 +44,8 @@
   flex: 1;
 }
 .aegis-modal-title {
-  font-size: var(--text-lg);
-  font-weight: 600;
+  font-size: var(--title-panel-size);
+  font-weight: var(--title-weight);
   line-height: 1.4;
   margin: 0;
 }
@@ -76,7 +76,7 @@
   outline-offset: 2px;
 }
 .aegis-modal-body {
-  padding: 0 var(--space-5) var(--space-5);
+  padding: 0 var(--layout-panel-padding) var(--layout-panel-padding);
   overflow: auto;
   font-size: var(--text-base);
   line-height: 1.6;
@@ -89,7 +89,7 @@
   justify-content: flex-end;
   gap: var(--space-2);
   flex-shrink: 0;
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-3) var(--layout-panel-padding);
   background: var(--color-bg-surface-raised);
   border-top: 1px solid var(--color-border-subtle);
 }

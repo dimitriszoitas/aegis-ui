@@ -405,7 +405,9 @@ export function JsonViewer({
               <li
                 role="none"
                 className="aegis-json-more"
-                style={{ paddingLeft: `calc(var(--space-3) + ${(node.depth + 1) * 16}px)` }}
+                style={{
+                  paddingLeft: `calc(var(--space-3) + ${node.depth + 1} * var(--nested-inset))`,
+                }}
               >
                 <button
                   type="button"

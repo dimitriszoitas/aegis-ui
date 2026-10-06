@@ -55,7 +55,7 @@
   gap: var(--space-1);
   min-height: 30px;
   padding: 2px var(--space-3);
-  padding-left: calc(var(--space-3) + var(--json-depth) * 16px);
+  padding-left: calc(var(--space-3) + var(--json-depth) * var(--nested-inset));
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   cursor: default;

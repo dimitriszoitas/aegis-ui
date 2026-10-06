@@ -1,11 +1,11 @@
 .aegis-metric-card {
-  padding: var(--space-4);
+  padding: var(--layout-card-padding);
   min-width: 220px;
 }
 .aegis-metric-label {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 .aegis-metric-main {
   display: flex;
@@ -15,10 +15,10 @@
 }
 .aegis-metric-value {
   color: var(--color-text-primary);
-  font-weight: 600;
-  letter-spacing: -0.04em;
+  font-weight: var(--title-weight);
+  letter-spacing: -0.03em;
   line-height: 1.15;
-  font-size: var(--text-3xl);
+  font-size: var(--metric-value-size);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -35,7 +35,7 @@
   gap: var(--space-2);
   font-size: var(--text-xs);
   color: var(--color-text-secondary);
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
   flex-wrap: wrap;
 }
 .aegis-metric-delta {

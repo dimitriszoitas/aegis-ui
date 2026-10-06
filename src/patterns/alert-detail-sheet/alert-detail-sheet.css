@@ -1,5 +1,5 @@
 .aegis-alert-detail .aegis-sheet-header {
-  padding: 18px 20px;
+  padding: var(--layout-panel-padding);
 }
 .aegis-alert-detail .aegis-sheet-toolbar {
   flex-wrap: wrap;
@@ -8,7 +8,7 @@
   flex-wrap: wrap;
 }
 .aegis-alert-detail .aegis-sheet-title {
-  font-size: 18px;
+  font-size: var(--title-panel-size);
 }
 .aegis-alert-detail .aegis-sheet-body {
   padding-top: 14px;

@@ -1,4 +1,5 @@
 .aegis-console {
+  position: relative;
   display: flex;
   height: var(--console-height, 100dvh);
   min-height: 560px;
@@ -10,9 +11,9 @@
   height: calc(var(--console-height, 100dvh) - var(--space-6));
 }
 .aegis-console-main {
-  --console-main-top: var(--space-6);
+  --console-main-top: var(--layout-page-padding);
   --console-main-start: var(--space-2);
-  --console-main-end: var(--space-5);
+  --console-main-end: var(--layout-panel-padding);
   flex: 1;
   min-width: 0;
   overflow: auto;
@@ -25,13 +26,14 @@
   scroll-padding-top: 0;
 }
 .aegis-console-header {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--layout-section-gap);
 }
 .aegis-console-header[data-pinned='true'] {
   position: sticky;
   top: calc(-1 * var(--console-main-top));
   z-index: var(--z-sticky);
-  height: var(--console-header-height);
+  height: calc(var(--console-header-height) + var(--console-main-top));
+  margin-top: calc(-1 * var(--console-main-top));
   pointer-events: none;
 }
 .aegis-console-header[data-pinned='true'] .aegis-console-header-content {
@@ -40,7 +42,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   margin-inline: calc(-1 * var(--console-main-start)) calc(-1 * var(--console-main-end));
-  padding: var(--space-3) var(--console-main-end) var(--space-3) var(--console-main-start);
+  padding: var(--space-2) var(--console-main-end) var(--space-2) var(--console-main-start);
   background: var(--color-bg-canvas);
   border-bottom: 1px solid var(--color-border-subtle);
   box-shadow: var(--shadow-raised);
@@ -58,11 +60,11 @@
 }
 .aegis-console-header[data-pinned='true'] .aegis-console-title-copy {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  z-index: -1;
+  top: calc(var(--console-main-top) + var(--console-title-offset) - var(--console-scroll-top, 0px));
+  left: 0;
+  right: 0;
+  pointer-events: none;
 }
 .aegis-console-breadcrumb-row,
 .aegis-console-title-row,
@@ -73,7 +75,7 @@
   gap: var(--space-4);
 }
 .aegis-console-breadcrumb-row {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--layout-section-gap);
 }
 .aegis-console-environment {
   display: flex;
@@ -90,8 +92,9 @@
   border-radius: var(--radius-full);
 }
 .aegis-console-title-row h1 {
-  font-size: 28px;
-  margin-bottom: var(--space-2);
+  font-size: var(--title-page-size);
+  font-weight: var(--title-weight);
+  margin-bottom: var(--space-1);
 }
 .aegis-console-title-row h1:focus {
   outline: none;
@@ -129,7 +132,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--layout-section-gap);
 }
 .aegis-console-metrics .aegis-metric-card {
   min-width: 0;
@@ -148,11 +151,11 @@
   overflow: clip;
 }
 .aegis-console-section-heading {
-  padding: var(--space-5) var(--space-5) 0;
+  padding: var(--layout-panel-padding) var(--layout-panel-padding) 0;
 }
 .aegis-console-section-heading h2 {
   margin: 0 0 var(--space-1);
-  font-size: var(--text-md);
+  font-size: var(--title-section-size);
 }
 .aegis-console-activity-meta {
   display: flex;
@@ -163,7 +166,7 @@
   margin: 0;
 }
 .aegis-console-histogram {
-  margin: var(--space-3) var(--space-5) var(--space-2);
+  margin: var(--space-3) var(--layout-panel-padding) var(--space-2);
   width: auto;
   border: 0;
   box-shadow: none;
@@ -174,7 +177,7 @@
   font-size: var(--text-sm);
 }
 .aegis-console-queue-tabs {
-  padding-inline: var(--space-5);
+  padding-inline: var(--layout-panel-padding);
 }
 .aegis-console-alert-card .aegis-tabs-content {
   margin-top: 0;
@@ -191,7 +194,7 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--space-2);
-  padding: var(--space-5) 0 0;
+  padding: var(--layout-panel-padding) 0 0;
   font-size: 11px;
   color: var(--color-text-tertiary);
 }
@@ -204,6 +207,22 @@
 .aegis-console-user > div {
   display: grid;
   gap: 3px;
+}
+.aegis-console-user-copy {
+  min-width: 0;
+  max-width: 180px;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    max-width var(--motion-fast) var(--ease-out),
+    opacity var(--motion-fast) var(--ease-out);
+}
+.side-nav[data-collapsed='true'] .aegis-console-user-copy {
+  max-width: 0;
+  opacity: 0;
+}
+.side-nav[data-collapsed='true'] .aegis-console-user {
+  gap: 0;
 }
 .aegis-console-user strong {
   font-size: var(--text-xs);
@@ -260,19 +279,19 @@
   }
 }
 @media (max-width: 1000px) {
-  .aegis-console .side-nav[data-collapsed='false'] {
+  .aegis-console .side-nav {
     position: absolute;
     z-index: var(--z-dropdown);
     left: 0;
     top: 0;
   }
-  .aegis-console .side-nav[data-collapsed='false'] + .aegis-console-main {
+  .aegis-console .side-nav + .aegis-console-main {
     margin-left: calc(var(--sidebar-collapsed) + var(--space-6));
   }
 }
 @media (max-width: 700px) {
   .aegis-console-main {
-    --console-main-top: var(--space-5);
+    --console-main-top: var(--layout-panel-padding);
     --console-main-start: 0px;
     --console-main-end: var(--space-3);
     padding-block: var(--console-main-top) var(--space-3);

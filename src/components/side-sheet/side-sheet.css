@@ -41,7 +41,7 @@
 }
 .aegis-sheet-header {
   flex-shrink: 0;
-  padding: var(--space-5);
+  padding: var(--layout-panel-padding);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 .aegis-sheet-toolbar {
@@ -94,8 +94,8 @@
 }
 .aegis-sheet-title {
   margin: 0;
-  font-size: var(--text-lg);
-  font-weight: 600;
+  font-size: var(--title-panel-size);
+  font-weight: var(--title-weight);
   line-height: 1.4;
 }
 .aegis-sheet-description {
@@ -108,7 +108,7 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: var(--space-5);
+  padding: var(--layout-panel-padding);
   font-size: var(--text-base);
 }
 .aegis-sheet-body:focus-visible {
@@ -116,14 +116,14 @@
   outline-offset: -3px;
 }
 .aegis-sheet-section + .aegis-sheet-section {
-  margin-top: var(--space-6);
-  padding-top: var(--space-5);
+  margin-top: var(--layout-section-gap);
+  padding-top: var(--layout-panel-padding);
   border-top: 1px solid var(--color-border-subtle);
 }
 .aegis-sheet-section > h3 {
   margin: 0 0 var(--space-3);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: var(--title-weight);
 }
 .aegis-sheet-field {
   display: grid;
@@ -146,7 +146,7 @@
   align-items: center;
   gap: var(--space-2);
   flex-shrink: 0;
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-3) var(--layout-panel-padding);
   border-top: 1px solid var(--color-border-subtle);
   background: var(--color-bg-surface-raised);
 }

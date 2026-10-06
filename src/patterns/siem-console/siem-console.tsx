@@ -1,11 +1,13 @@
 import {
   useCallback,
   useId,
+  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
   useSyncExternalStore,
+  type Ref,
 } from 'react';
 import {
   Activity,
@@ -114,6 +116,72 @@ function alertContext(alert: Alert): AiContextItem {
   };
 }
 
+interface ConsoleNavigationHandle {
+  closeMobile: () => void;
+}
+interface ConsoleNavigationProps {
+  navigationRef: Ref<ConsoleNavigationHandle>;
+  sections: NavSection[];
+  page: ConsolePage;
+  defaultCollapsed: boolean;
+  onNavigate: (page: ConsolePage) => void;
+  onSearch: () => void;
+}
+/** Keep rail-only state here so toggles do not render the investigation workspace. */
+function ConsoleNavigation({
+  navigationRef,
+  sections,
+  page,
+  defaultCollapsed,
+  onNavigate,
+  onSearch,
+}: ConsoleNavigationProps) {
+  const compact = useMediaQuery('(max-width: 1000px)');
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const [mobileExpanded, setMobileExpanded] = useState(false);
+  useImperativeHandle(navigationRef, () => ({ closeMobile: () => setMobileExpanded(false) }), []);
+  return (
+    <SideNav
+      sections={sections}
+      activeId={page}
+      onNavigate={(id) => onNavigate(id as ConsolePage)}
+      collapsed={compact ? !mobileExpanded : collapsed}
+      onCollapsedChange={(next) => (compact ? setMobileExpanded(!next) : setCollapsed(next))}
+      onSearch={onSearch}
+      footer={(small) => (
+        <>
+          <Tooltip content="Workspace settings">
+            <button
+              type="button"
+              className={`nav-item ${small ? 'nav-icon' : ''} ${page === 'settings' ? 'is-active' : ''}`}
+              aria-label={small ? 'Workspace settings' : undefined}
+              aria-current={page === 'settings' ? 'page' : undefined}
+              onClick={() => onNavigate('settings')}
+            >
+              <Settings size={17} />
+              <span className="nav-item-copy" aria-hidden={small || undefined}>
+                <span className="nav-item-label">Settings</span>
+              </span>
+            </button>
+          </Tooltip>
+          <div className="aegis-console-user">
+            <Avatar
+              name={analysts[0].name}
+              initials={analysts[0].initials}
+              size="sm"
+              status="online"
+            />
+            <div className="aegis-console-user-copy" aria-hidden={small || undefined}>
+              <strong>{analysts[0].name}</strong>
+              <span>Security analyst</span>
+            </div>
+          </div>
+        </>
+      )}
+    />
+  );
+}
+
 /** A working local workspace. Mutations live in memory; fixture telemetry stays reproducible. */
 export function SiemConsole({
   initialPage = 'alerts',
@@ -123,11 +191,9 @@ export function SiemConsole({
   theme = 'light',
   onThemeChange,
 }: SiemConsoleProps) {
-  const compact = useMediaQuery('(max-width: 1000px)');
   const dockAssistant = useMediaQuery('(min-width: 1280px)');
   const [page, setPage] = useState<ConsolePage>(initialPage);
-  const [collapsed, setCollapsed] = useState(defaultNavCollapsed);
-  const [mobileExpanded, setMobileExpanded] = useState(false);
+  const navigationRef = useRef<ConsoleNavigationHandle>(null);
   const [alerts, setAlerts] = useState<Alert[]>(() => fixtureAlerts.map((alert) => ({ ...alert })));
   const [rules, setRules] = useState<DetectionRule[]>(fixtureRules);
   const [filters, setFilters] = useState(createDefaultFilters);
@@ -155,12 +221,10 @@ export function SiemConsole({
   const [pendingPage, setPendingPage] = useState<ConsolePage>();
   const [wizardOrientation, setWizardOrientation] = useState<'horizontal' | 'vertical'>('vertical');
   const [huntQuery, setHuntQuery] = useState('');
-  const [headerPinned, setHeaderPinned] = useState(false);
   const contentRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const headerContentRef = useRef<HTMLDivElement>(null);
   const headerPinnedRef = useRef(false);
-  const headerEndRef = useRef(Number.POSITIVE_INFINITY);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mainId = useId();
   useLayoutEffect(() => {
@@ -172,13 +236,14 @@ export function SiemConsole({
       const height = content.getBoundingClientRect().height;
       if (!headerPinnedRef.current) {
         // Keep the original slot when the same controls become a compact sticky bar.
-        // Its height and scroll threshold stay stable even at the end of a short page.
+        // The title continues scrolling in that slot beneath the pinned breadcrumb bar.
         header.style.setProperty('--console-header-height', `${height}px`);
-        headerEndRef.current =
-          header.getBoundingClientRect().top -
-          main.getBoundingClientRect().top +
-          main.scrollTop +
-          height;
+        const title = headingRef.current?.parentElement;
+        if (title)
+          header.style.setProperty(
+            '--console-title-offset',
+            `${title.getBoundingClientRect().top - header.getBoundingClientRect().top}px`,
+          );
       }
       main.style.setProperty(
         '--console-pinned-header-height',
@@ -191,10 +256,12 @@ export function SiemConsole({
     return () => observer.disconnect();
   }, []);
   function updatePinnedHeader() {
-    const next = (contentRef.current?.scrollTop ?? 0) >= headerEndRef.current;
+    const scrollTop = Math.max(0, contentRef.current?.scrollTop ?? 0);
+    const next = scrollTop > 0;
+    contentRef.current?.style.setProperty('--console-scroll-top', `${scrollTop}px`);
     if (next !== headerPinnedRef.current) {
       headerPinnedRef.current = next;
-      setHeaderPinned(next);
+      if (headerRef.current) headerRef.current.dataset.pinned = String(next);
     }
   }
   const scopeLabel = formatTimeRange(filters.timeRange);
@@ -253,14 +320,15 @@ export function SiemConsole({
     requestAnimationFrame(() => {
       contentRef.current?.scrollTo({ top: 0 });
       headerPinnedRef.current = false;
-      setHeaderPinned(false);
+      if (headerRef.current) headerRef.current.dataset.pinned = 'false';
+      contentRef.current?.style.setProperty('--console-scroll-top', '0px');
       headingRef.current?.focus();
     });
   }
   function performNavigation(next: ConsolePage) {
     setPage(next);
     setCreatingRule(false);
-    setMobileExpanded(false);
+    navigationRef.current?.closeMobile();
     setSelected([]);
     focusHeading();
   }
@@ -307,7 +375,7 @@ export function SiemConsole({
     setCreatingRule(true);
     setWizardDirty(false);
     setAiOpen(false);
-    setMobileExpanded(false);
+    navigationRef.current?.closeMobile();
     focusHeading();
   }
   function saveRule(rule: CreatedDetectionRule) {
@@ -401,43 +469,13 @@ export function SiemConsole({
       <a className="aegis-console-skip" href={`#${mainId}`}>
         Skip to workspace
       </a>
-      <SideNav
+      <ConsoleNavigation
+        navigationRef={navigationRef}
         sections={sections}
-        activeId={page}
-        onNavigate={(id) => navigate(id as ConsolePage)}
-        collapsed={compact ? !mobileExpanded : collapsed}
-        onCollapsedChange={(next) => (compact ? setMobileExpanded(!next) : setCollapsed(next))}
+        page={page}
+        defaultCollapsed={defaultNavCollapsed}
+        onNavigate={navigate}
         onSearch={() => setCommandOpen(true)}
-        footer={(small) => (
-          <>
-            <Tooltip content="Workspace settings">
-              <button
-                type="button"
-                className={`nav-item ${small ? 'nav-icon' : ''} ${page === 'settings' ? 'is-active' : ''}`}
-                aria-label={small ? 'Workspace settings' : undefined}
-                aria-current={page === 'settings' ? 'page' : undefined}
-                onClick={() => navigate('settings')}
-              >
-                <Settings size={17} />
-                {!small && <span>Settings</span>}
-              </button>
-            </Tooltip>
-            <div className="aegis-console-user">
-              <Avatar
-                name={analysts[0].name}
-                initials={analysts[0].initials}
-                size="sm"
-                status="online"
-              />
-              {!small && (
-                <div>
-                  <strong>{analysts[0].name}</strong>
-                  <span>Security analyst</span>
-                </div>
-              )}
-            </div>
-          </>
-        )}
       />
       <main
         id={mainId}
@@ -446,7 +484,7 @@ export function SiemConsole({
         className="aegis-console-main"
         onScroll={updatePinnedHeader}
       >
-        <header ref={headerRef} className="aegis-console-header" data-pinned={headerPinned}>
+        <header ref={headerRef} className="aegis-console-header" data-pinned="false">
           <div ref={headerContentRef} className="aegis-console-header-content">
             <div className="aegis-console-breadcrumb-row">
               <Breadcrumb
