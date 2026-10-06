@@ -1,4 +1,11 @@
-import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react';
+import {
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
+import { flushSync } from 'react-dom';
 import { DropdownMenu as Primitive } from 'radix-ui';
 import { Check, ChevronRight, Circle, Minus } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -182,11 +189,28 @@ export function DropdownMenu({
   className,
   label = 'Actions',
   modal = false,
+  open,
+  defaultOpen = false,
+  onOpenChange,
   ...rootProps
 }: DropdownMenuProps) {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closingWithTab = useRef(false);
+  function changeOpen(next: boolean) {
+    if (open === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  }
   return (
-    <Primitive.Root {...rootProps} modal={modal}>
-      <Primitive.Trigger asChild>{trigger}</Primitive.Trigger>
+    <Primitive.Root
+      {...rootProps}
+      modal={modal}
+      open={open ?? internalOpen}
+      onOpenChange={changeOpen}
+    >
+      <Primitive.Trigger asChild ref={triggerRef}>
+        {trigger}
+      </Primitive.Trigger>
       <Primitive.Portal>
         <Primitive.Content
           aria-label={label}
@@ -195,6 +219,21 @@ export function DropdownMenu({
           side={side}
           sideOffset={7}
           collisionPadding={12}
+          onKeyDownCapture={(event) => {
+            if (event.key === 'Tab') {
+              // Unmount before the browser chooses its next tab stop from the trigger.
+              event.stopPropagation();
+              closingWithTab.current = true;
+              flushSync(() => changeOpen(false));
+              triggerRef.current?.focus();
+            }
+          }}
+          onCloseAutoFocus={(event) => {
+            if (closingWithTab.current) {
+              event.preventDefault();
+              closingWithTab.current = false;
+            }
+          }}
         >
           <MenuEntries items={items} />
         </Primitive.Content>

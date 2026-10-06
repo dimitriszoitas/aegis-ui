@@ -1,0 +1,88 @@
+.aegis-wizard {
+  width: 100%;
+  max-width: 1040px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-raised);
+}
+.aegis-wizard-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-wizard-header h2 {
+  font-size: var(--text-xl);
+  margin: 0;
+}
+.aegis-wizard-header p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-wizard-progress {
+  padding: var(--space-6);
+}
+.aegis-wizard-content {
+  padding: var(--space-4) var(--space-6) var(--space-8);
+  min-width: 0;
+}
+.aegis-wizard-step-heading {
+  margin-bottom: var(--space-5);
+}
+.aegis-wizard-step-heading p {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-wizard-step-heading h3 {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+.aegis-wizard-step-heading h3:focus-visible {
+  outline: none;
+}
+.aegis-wizard-step-content {
+  border: 0;
+  padding: 0;
+  margin-inline: 0;
+  min-width: 0;
+  margin-top: var(--space-4);
+}
+.aegis-wizard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  gap: var(--space-4);
+}
+.aegis-wizard[data-orientation='vertical'] .aegis-wizard-body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+.aegis-wizard[data-orientation='vertical'] .aegis-wizard-progress {
+  border-right: 1px solid var(--color-border-subtle);
+}
+.aegis-wizard[data-orientation='vertical'] .aegis-wizard-content {
+  padding-top: var(--space-6);
+}
+@media (max-width: 660px) {
+  .aegis-wizard[data-orientation='vertical'] .aegis-wizard-body {
+    grid-template-columns: 1fr;
+  }
+  .aegis-wizard[data-orientation='vertical'] .aegis-wizard-progress {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  .aegis-wizard-header,
+  .aegis-wizard-progress,
+  .aegis-wizard-content,
+  .aegis-wizard-footer {
+    padding-inline: var(--space-4);
+  }
+}

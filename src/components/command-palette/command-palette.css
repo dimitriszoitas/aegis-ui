@@ -1,0 +1,84 @@
+.command-scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-scrim);
+  backdrop-filter: blur(3px);
+  z-index: var(--z-modal);
+}
+.command-dialog {
+  position: fixed;
+  left: 50%;
+  top: 14vh;
+  transform: translateX(-50%);
+  width: min(600px, calc(100vw - 32px));
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--color-bg-surface-raised);
+  box-shadow: var(--shadow-overlay);
+  z-index: var(--z-modal);
+  overflow: hidden;
+}
+.command-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+}
+.command-search input {
+  background: transparent;
+  border: 0;
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-primary);
+  height: 34px;
+  outline: none;
+}
+.command-dialog [cmdk-list] {
+  padding: var(--space-2);
+  max-height: 440px;
+  overflow: auto;
+}
+.command-dialog [cmdk-group-heading] {
+  padding: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+.command-dialog [cmdk-item] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 11px var(--space-3);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+.command-dialog [cmdk-item] svg {
+  width: 17px;
+  height: 17px;
+}
+.command-dialog [cmdk-item] > span {
+  flex: 1;
+}
+.command-dialog [cmdk-item][data-selected='true'] {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+.command-dialog [cmdk-empty] {
+  padding: var(--space-6);
+  color: var(--color-text-secondary);
+}
+.command-footer {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.command-footer > span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

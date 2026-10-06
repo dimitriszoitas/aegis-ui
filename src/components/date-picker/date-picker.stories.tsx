@@ -1,0 +1,24 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DatePicker } from './date-picker';
+import { Field } from '@/components/field';
+export default { title: 'Components/Forms/DatePicker', component: DatePicker } satisfies Meta<
+  typeof DatePicker
+>;
+export const Matrix: StoryObj<typeof DatePicker> = {
+  render: () => (
+    <div className="row">
+      <Field label="Investigation date">
+        <DatePicker defaultValue={new Date('2026-10-06T00:00:00Z')} />
+      </Field>
+      <Field label="Report date" optional>
+        <DatePicker />
+      </Field>
+      <Field label="Archived before">
+        <DatePicker disabled defaultValue={new Date('2026-09-01T00:00:00Z')} />
+      </Field>
+    </div>
+  ),
+};
+export const OpenCalendar: StoryObj<typeof DatePicker> = {
+  args: { defaultValue: new Date('2026-10-06T00:00:00Z'), defaultOpen: true },
+};

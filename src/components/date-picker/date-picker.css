@@ -1,0 +1,88 @@
+.rdp-root {
+  --rdp-accent-color: var(--color-function-fg);
+  --rdp-accent-background-color: var(--color-function-soft);
+  --rdp-today-color: var(--color-function-fg);
+  --rdp-range_start-color: var(--color-on-intent);
+  --rdp-range_start-background: var(--color-function-bg);
+  --rdp-range_middle-background-color: var(--color-function-soft);
+  --rdp-range_middle-color: var(--color-function-fg);
+  --rdp-range_end-color: var(--color-on-intent);
+  --rdp-range_end-background: var(--color-function-bg);
+  --rdp-selected-border: 1px solid var(--color-function-bg);
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-day_button-height: 34px;
+  --rdp-day_button-width: 34px;
+  --rdp-day_button-border-radius: var(--radius-sm);
+  --rdp-selected-font: 600 var(--text-base) var(--font-ui);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+.rdp-day_button:hover {
+  background: var(--color-bg-hover);
+}
+.rdp-selected .rdp-day_button {
+  background: var(--color-function-bg);
+  color: var(--color-on-intent);
+}
+.rdp-weekday {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+.time-range-content {
+  display: flex;
+  gap: var(--space-4);
+  max-width: calc(100vw - 48px);
+}
+.time-range-presets {
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  border-right: 1px solid var(--color-border-subtle);
+  padding-right: var(--space-3);
+}
+.time-range-presets button {
+  justify-content: flex-start;
+}
+.time-range-custom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 260px;
+}
+.time-range-clock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.time-range-clock input {
+  width: 100%;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  color: var(--color-text-primary);
+}
+.time-range-clock label {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  display: grid;
+  gap: var(--space-1);
+}
+@media (max-width: 600px) {
+  .time-range-content {
+    flex-direction: column;
+  }
+  .time-range-presets {
+    border: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding: 0 0 var(--space-3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .time-range-custom {
+    min-width: 0;
+  }
+}

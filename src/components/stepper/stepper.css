@@ -1,0 +1,124 @@
+.aegis-stepper ol {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: var(--space-5);
+}
+.aegis-stepper li {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.aegis-stepper-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  border: 0;
+  padding: 0;
+  color: var(--color-text-secondary);
+  background: transparent;
+  text-align: left;
+  border-radius: var(--radius-sm);
+}
+.aegis-stepper-step:disabled {
+  cursor: default;
+}
+.aegis-stepper-marker {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--space-8);
+  height: var(--space-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.aegis-stepper-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: 5px;
+  min-width: 0;
+}
+.aegis-stepper-title {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.aegis-stepper-description {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+.aegis-stepper li[data-state='current'] .aegis-stepper-marker {
+  color: var(--color-on-intent);
+  background: var(--color-function-bg);
+  border-color: var(--color-function-bg);
+  box-shadow: 0 0 0 4px var(--color-function-soft);
+}
+.aegis-stepper li[data-state='current'] .aegis-stepper-title {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+.aegis-stepper li[data-state='complete'] .aegis-stepper-marker {
+  color: var(--color-success-fg);
+  background: var(--color-success-soft);
+  border-color: var(--color-success-border);
+}
+.aegis-stepper li[data-state='error'] .aegis-stepper-marker {
+  color: var(--color-destroy-fg);
+  background: var(--color-destroy-soft);
+  border-color: var(--color-destroy-border);
+}
+.aegis-stepper li[data-state='error'] .aegis-stepper-title {
+  color: var(--color-destroy-fg);
+}
+.aegis-stepper button:not(:disabled):hover .aegis-stepper-title {
+  color: var(--color-function-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.aegis-stepper[data-orientation='horizontal'] li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: calc(var(--space-4) * -1);
+  height: 1px;
+  width: var(--space-3);
+  background: var(--color-border-default);
+}
+.aegis-stepper[data-orientation='vertical'] ol {
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.aegis-stepper[data-orientation='vertical'] li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: var(--space-9);
+  bottom: calc(var(--space-5) * -1);
+  left: 15px;
+  width: 1px;
+  background: var(--color-border-default);
+}
+@media (max-width: 580px) {
+  .aegis-stepper[data-orientation='horizontal'] ol {
+    gap: var(--space-3);
+  }
+  .aegis-stepper[data-orientation='horizontal'] .aegis-stepper-step {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .aegis-stepper[data-orientation='horizontal'] .aegis-stepper-description {
+    display: none;
+  }
+}
