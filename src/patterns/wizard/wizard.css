@@ -3,7 +3,7 @@
   max-width: 1040px;
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--surface-corner-radius, var(--surface-radius-floating));
   box-shadow: var(--shadow-raised);
 }
 .aegis-wizard-header {
@@ -55,7 +55,8 @@
   padding: var(--space-3) var(--layout-panel-padding);
   border-top: 1px solid var(--color-border-subtle);
   background: var(--color-bg-surface);
-  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  border-radius: 0 0 var(--surface-corner-radius, var(--surface-radius-floating))
+    var(--surface-corner-radius, var(--surface-radius-floating));
   position: sticky;
   bottom: 0;
   z-index: 1;

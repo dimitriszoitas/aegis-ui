@@ -23,7 +23,7 @@
 .aegis-ai-highlight {
   background: var(--gradient-ai-surface);
   border: 1px solid var(--color-ai-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--surface-corner-radius, var(--surface-radius));
   color: var(--color-text-primary);
   padding: var(--layout-panel-padding);
   display: flex;

@@ -153,6 +153,26 @@ export function RadiusExamples() {
   );
 }
 
+export function SurfaceRadiusExamples() {
+  return (
+    <div className="foundation-example foundation-wrap">
+      <div className="foundation-radius" style={{ borderRadius: 'var(--surface-radius)' }}>
+        <code>surface</code>
+        <span>{tokenValues.light['--surface-radius']}</span>
+      </div>
+      <div className="foundation-nested-radius">
+        <div>
+          <strong>Nested surfaces</strong>
+          <span>
+            Outer {tokenValues.light['--surface-radius-floating']} · inner radius subtracts the 4px
+            step
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ControlRadiusExamples() {
   return (
     <div className="foundation-theme-pair">

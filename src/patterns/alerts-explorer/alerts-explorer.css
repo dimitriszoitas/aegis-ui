@@ -3,7 +3,7 @@
   align-items: stretch;
   min-width: 0;
   isolation: isolate;
-  border-radius: var(--radius-lg);
+  border-radius: var(--surface-corner-radius, var(--surface-radius));
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-subtle);
   box-shadow: var(--shadow-raised);
@@ -91,6 +91,10 @@
 .aegis-alert-events th {
   color: var(--color-text-secondary);
   font-weight: 500;
+}
+.aegis-alert-events th:first-child,
+.aegis-alert-events td:first-child {
+  padding-left: 0;
 }
 @media (max-width: 700px) {
   .aegis-alerts-explorer {

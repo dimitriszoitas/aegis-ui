@@ -2,17 +2,19 @@
 
 [Live Storybook](https://dimitriszoitas.github.io/aegis-ui/) · [Full DataGrid presentation](https://dimitriszoitas.github.io/aegis-ui/?path=/story/components-data-datagrid--full-presentation) · [SIEM console](https://dimitriszoitas.github.io/aegis-ui/?path=/story/console-siem-console--alerts)
 
-Aegis is a token-based React design system for security operations, with light and dark themes, dense investigation tools, and AI assistance that keeps the analyst in control.
+Aegis is a token-based React design system for security operations, with independent light/dark color and Floating/Fixed layout themes, dense investigation tools, and AI assistance that keeps the analyst in control.
 
 Storybook is the component reference and consumption guide. The repository also runs a complete SIEM console in Vite. This version is source-first: it has no published npm package, library bundle, or package exports map.
 
 ![Aegis console in dark mode, with floating navigation, alert metrics, and an investigation grid](docs/images/console-dark.png)
 
+Compare layouts: [Floating · Light](docs/images/console-light.png) · [Floating · Dark](docs/images/console-dark.png) · [Fixed · Light](docs/images/console-fixed-light.png) · [Fixed · Dark](docs/images/console-fixed-dark.png).
+
 ## Explore the system
 
 Start with **Foundations → Principles**, then open **Console → SIEM console → Alerts**. The console includes:
 
-- Floating, collapsible navigation and working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
+- Collapsible navigation in Floating or Fixed layout, with working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
 - An alerts grid with sorting and multi-sort, constrained column resizing, visibility settings, three densities, selection, bulk actions, nested evidence, and a virtualized large-data example.
 - A filter bar and left push panel backed by the same filter state, plus time ranges and severity histograms.
 - Alert detail sheets with filtered-list navigation, evidence JSON, detection-rule YAML, activity timelines, and editable status, assignee, and analyst notes.
@@ -21,7 +23,7 @@ Start with **Foundations → Principles**, then open **Console → SIEM console 
 
 For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, saved views, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states.
 
-All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers the theme preference.
+All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers color and layout preferences.
 
 The wizard's replay evaluates eight labeled Windows process events using a deliberately limited Sigma-style subset. Unsupported conditions and log sources produce an explicit error. Connect a production rule engine through the host application before using it for operational validation.
 
@@ -34,7 +36,7 @@ pnpm install
 pnpm storybook
 ```
 
-Open [local Storybook](http://localhost:6006). The toolbar switches between light and dark themes. To run the standalone console instead:
+Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and Floating/Fixed layout. Floating is the default. Console examples with an open assistant show each layout in either color theme. To run the standalone console instead:
 
 ```sh
 pnpm dev
@@ -44,11 +46,11 @@ Use the local URL printed by Vite. No environment variables, credentials, or ext
 
 ## Design principles
 
-**Floating surfaces.** Navigation is inset 12px from the viewport and uses 8px corners at its expanded 240px width, or 6px corners at its collapsed 48px width. Expanded navigation has 12px interior padding; collapsed navigation uses 12px vertically and 6px horizontally. The collapse/expand control stays at the top. Detail and AI sheets have 12px insets and 8px corners. Borders and layered shadows preserve the hierarchy in both themes.
+**Two workspace layouts.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Both layouts use the same colors, typography, controls, cards, and data. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top.
 
 Selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. The same treatment applies in the compact rail and nested navigation.
 
-**Corners stay compact.** Small, medium, and large controls are 28/34/40px high with 6/7/8px corners. Surface radii are capped at 8px. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
+**Corners stay compact.** Small, medium, and large controls are 28/34/40px high with 6/7/8px corners. Surfaces use 10px standard corners, 12px large/floating corners, and 8px nested corners. The nested token subtracts the shared 4px step from the 12px parent radius. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
 
 **Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars, with stronger thumb colors on hover and drag. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
 
@@ -72,9 +74,9 @@ The token system has three layers:
 
 [`src/styles/tokens.css`](src/styles/tokens.css) is the color source of truth. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Inter and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
 
-Radius primitives use 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` token is also capped at 8px; chips use the dedicated 6px `--chip-radius` token.
+Control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners.
 
-The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. Storybook's toolbar controls its preview theme independently.
+The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent layout axis uses `data-layout-theme` with `floating` or `fixed`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's two toolbar controls preview every color/layout combination without persisting a standalone preference.
 
 For a source-level integration, import the global stylesheet once and compose the components from their folders:
 

@@ -15,7 +15,7 @@ Use 14px for the default interface and 13px for dense data grids. The primitive 
 
 ## Motion
 
-Fast motion gives immediate control feedback; base motion connects small state changes; slide motion introduces a floating sheet. Ease-out curves settle quickly. Sidebar width and padding transition over `--motion-fast` (120ms), from 240px wide with 12px interior padding to 48px wide with 12px vertical and 6px horizontal padding. Labels fade and clip without wrapping. Corners use 8px expanded and 6px collapsed, without a radius animation. The toggle stays at the top in both states, preserving a stable target. Sheets slide and fade.
+Fast motion gives immediate control feedback; base motion connects small state changes; slide motion introduces a floating sheet. Ease-out curves settle quickly. Sidebar width and padding transition over `--motion-fast` (120ms), from 240px wide with 12px interior padding to 48px wide with 12px vertical and 6px horizontal padding. Labels fade and clip without wrapping. Floating navigation uses 12px expanded and 8px collapsed corners; Fixed chrome uses square outside corners. Layout switching changes exterior geometry, not colors or typography, and radius is not animated. The toggle stays at the top in both states, preserving a stable target. Sheets slide and fade.
 
 <MotionExamples />
 

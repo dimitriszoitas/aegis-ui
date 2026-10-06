@@ -45,4 +45,4 @@ Severity measures alert urgency. Every level combines a tinted background, reada
 2. Semantic tokens express purpose, such as `--color-bg-surface` and `--color-severity-high-fg`, and adapt to the active theme.
 3. Component tokens cover exceptional layout needs, such as grid row heights and sidebar widths.
 
-Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme.
+Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme. Floating and Fixed layout choices use the separate `data-layout-theme` attribute; color values are identical across the two layouts.

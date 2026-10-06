@@ -1,3 +1,13 @@
+:root[data-aegis-grid-cursor='col-resize'],
+:root[data-aegis-grid-cursor='col-resize'] * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+:root[data-aegis-grid-cursor='grabbing'],
+:root[data-aegis-grid-cursor='grabbing'] * {
+  cursor: grabbing !important;
+  user-select: none !important;
+}
 .aegis-data-grid {
   position: relative;
   display: flex;
@@ -5,7 +15,7 @@
   min-width: 0;
   width: 100%;
   border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--surface-corner-radius, var(--surface-radius));
   background: var(--color-bg-surface-raised);
   color: var(--color-text-primary);
   box-shadow: var(--shadow-raised);
@@ -177,8 +187,14 @@
 .aegis-grid-data-header:focus-within .aegis-grid-sort-icon {
   opacity: 1;
 }
-.aegis-grid-column-menu,
-.aegis-grid-drag {
+.aegis-grid-data-header,
+.aegis-grid-data-header .aegis-grid-sort-button {
+  cursor: grab;
+}
+.aegis-grid-data-header.is-dragging {
+  cursor: grabbing;
+}
+.aegis-grid-column-menu {
   position: absolute;
   display: flex;
   align-items: center;
@@ -198,18 +214,9 @@
   height: 28px;
   cursor: pointer;
 }
-.aegis-grid-drag {
-  top: 4px;
-  bottom: 4px;
-  left: 0;
-  width: 12px;
-  cursor: grab;
-}
 .aegis-grid-data-header:hover .aegis-grid-column-menu,
 .aegis-grid-data-header:focus-within .aegis-grid-column-menu,
-.aegis-grid-column-menu[data-state='open'],
-.aegis-grid-data-header:hover .aegis-grid-drag,
-.aegis-grid-data-header:focus-within .aegis-grid-drag {
+.aegis-grid-column-menu[data-state='open'] {
   opacity: 1;
 }
 .aegis-grid-data-header:hover .aegis-grid-sort-button,
@@ -227,34 +234,19 @@
   box-shadow: inset 2px 0 var(--color-function-fg);
 }
 .aegis-grid-resize {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: absolute;
-  top: var(--space-1);
-  bottom: var(--space-1);
+  top: 0;
+  bottom: 0;
   right: 0;
-  width: 9px;
+  width: 8px;
   z-index: 3;
-  color: var(--color-border-strong);
   cursor: col-resize;
   touch-action: none;
   user-select: none;
-  border-radius: var(--radius-xs);
+  background: transparent;
 }
-.aegis-grid-resize svg {
-  opacity: 0;
-  transition: opacity var(--motion-fast) var(--ease-out);
-}
-.aegis-grid-table > thead > tr > th:hover .aegis-grid-resize svg,
-.aegis-grid-resize:focus-visible svg,
-.aegis-grid-resize.is-resizing svg {
-  opacity: 1;
-}
-.aegis-grid-resize:hover,
-.aegis-grid-resize.is-resizing {
-  background: var(--color-function-soft);
-  color: var(--color-function-fg);
+.aegis-grid-resize:focus-visible {
+  outline: none;
 }
 .aegis-grid-table > tbody > tr > td {
   height: var(--grid-row-height);
@@ -352,7 +344,8 @@
 .aegis-grid-table > thead > tr > th.aegis-grid-pinned {
   z-index: 4;
 }
-.aegis-grid-scroll .aegis-grid-expand-column {
+.aegis-grid-table > thead > tr > th.aegis-grid-expand-column,
+.aegis-grid-table > tbody > tr > td.aegis-grid-expand-column {
   padding-inline: var(--space-1);
 }
 .aegis-grid-expand {
@@ -360,6 +353,7 @@
   place-items: center;
   width: 24px;
   height: 24px;
+  margin-inline: auto;
   border: 0;
   border-radius: var(--radius-xs);
   background: transparent;
@@ -375,12 +369,16 @@
   padding: 0;
   background: var(--color-bg-surface-raised);
 }
-.aegis-grid-table > tbody > .aegis-grid-expanded-row > td {
+.aegis-grid-table > tbody > tr.aegis-grid-expanded-row > td {
   padding: 0;
   background: var(--color-bg-canvas);
 }
 .aegis-grid-expanded-content {
-  padding: var(--space-4) var(--nested-inset) var(--space-5);
+  position: sticky;
+  left: var(--grid-expanded-inset);
+  width: calc(var(--grid-viewport-width, 100%) - var(--grid-expanded-inset));
+  margin-left: var(--grid-expanded-inset);
+  padding: var(--space-3) var(--nested-inset) var(--space-4);
   border-left: 2px solid var(--color-function-border);
   overflow: auto;
   white-space: normal;
@@ -390,7 +388,8 @@
   border-top: 1px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: 0 0 var(--surface-corner-radius, var(--surface-radius))
+    var(--surface-corner-radius, var(--surface-radius));
 }
 .aegis-grid-footer > .aegis-pagination {
   border-top: 0;
@@ -430,8 +429,7 @@
 .aegis-grid-density button:focus-visible,
 .aegis-grid-sort-summary button:focus-visible,
 .aegis-grid-sort-button:focus-visible,
-.aegis-grid-expand:focus-visible,
-.aegis-grid-resize:focus-visible {
+.aegis-grid-expand:focus-visible {
   outline: 2px solid var(--ring-focus);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
@@ -449,11 +447,6 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  .aegis-grid-resize svg {
-    transition: none;
-  }
 }
 @media (max-width: 700px) {
   .aegis-grid-heading {
@@ -481,6 +474,10 @@
 .aegis-grid-event-table td {
   padding: var(--space-2);
   border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-grid-event-table th:first-child,
+.aegis-grid-event-table td:first-child {
+  padding-left: 0;
 }
 .aegis-grid-event-table code {
   font-family: var(--font-mono);

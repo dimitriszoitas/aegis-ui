@@ -11,13 +11,14 @@
   flex-direction: column;
   position: fixed;
   z-index: var(--z-sheet);
-  inset: var(--space-3) var(--space-3) var(--space-3) auto;
-  width: min(var(--sheet-width), calc(100vw - var(--space-6)));
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  inset: var(--chrome-inset) var(--chrome-inset) var(--chrome-inset) auto;
+  width: min(var(--sheet-width), calc(100vw - 2 * var(--chrome-inset)));
+  border: solid var(--color-border-subtle);
+  border-width: var(--chrome-sheet-border-width);
+  border-radius: var(--chrome-radius);
   background: var(--color-bg-surface-raised);
   color: var(--color-text-primary);
-  box-shadow: var(--shadow-overlay);
+  box-shadow: var(--chrome-overlay-shadow);
   font-family: var(--font-ui);
   outline: none;
   overflow: hidden;
@@ -33,11 +34,11 @@
   position: relative;
   z-index: auto;
   inset: auto;
-  flex: 0 0 min(var(--sheet-width), calc(100vw - var(--space-6)));
-  height: calc(100% - var(--space-6));
-  margin: var(--space-3);
+  flex: 0 0 min(var(--sheet-width), calc(100vw - 2 * var(--chrome-inset)));
+  height: calc(100% - 2 * var(--chrome-inset));
+  margin: var(--chrome-inset);
   margin-left: 0;
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--chrome-shadow);
 }
 .aegis-sheet-header {
   flex-shrink: 0;
@@ -153,7 +154,7 @@
 @keyframes aegis-sheet-enter {
   from {
     opacity: 0;
-    transform: translateX(calc(100% + var(--space-3)));
+    transform: translateX(calc(100% + var(--chrome-inset)));
   }
   to {
     opacity: 1;

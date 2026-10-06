@@ -4,6 +4,21 @@ import { AegisDocsContainer, WithDocsTheme } from './docs-container';
 import '../src/styles/globals.css';
 const preview: Preview = {
   tags: ['autodocs'],
+  initialGlobals: { layoutTheme: 'floating' },
+  globalTypes: {
+    layoutTheme: {
+      description: 'Workspace layout, independent of the light or dark color theme',
+      toolbar: {
+        title: 'Layout',
+        icon: 'sidebar',
+        dynamicTitle: true,
+        items: [
+          { value: 'floating', title: 'Floating' },
+          { value: 'fixed', title: 'Fixed' },
+        ],
+      },
+    },
+  },
   decorators: [
     withThemeByClassName({
       themes: { light: 'light', dark: 'dark' },

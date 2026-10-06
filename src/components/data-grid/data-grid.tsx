@@ -43,8 +43,6 @@ import {
   ChevronDown,
   ChevronRight,
   Columns3,
-  GripHorizontal,
-  GripVertical,
   EyeOff,
   MoreHorizontal,
   Pin,
@@ -132,6 +130,15 @@ const columnLabel = <T,>(column: Column<T>) =>
 const selectionFromIds = (ids: readonly string[]): RowSelectionState =>
   Object.fromEntries(ids.map((id) => [id, true]));
 const isUtilityColumn = (id: string) => id === selectionColumnId || id === expansionColumnId;
+function holdGridCursor(document: Document, cursor: 'col-resize' | 'grabbing') {
+  const root = document.documentElement;
+  const previous = root.getAttribute('data-aegis-grid-cursor');
+  root.setAttribute('data-aegis-grid-cursor', cursor);
+  return () => {
+    if (previous === null) root.removeAttribute('data-aegis-grid-cursor');
+    else root.setAttribute('data-aegis-grid-cursor', previous);
+  };
+}
 function moveColumn(ids: string[], source: string, target: string) {
   const next = [...ids];
   const from = next.indexOf(source);
@@ -209,6 +216,9 @@ export function DataGrid<T>({
   const headerElements = useRef(new Map<string, HTMLTableCellElement>());
   const headerMenus = useRef(new Map<string, HTMLButtonElement>());
   const draggingColumnRef = useRef<string | null>(null);
+  const headerDragBlockedRef = useRef(false);
+  const suppressHeaderClickRef = useRef(false);
+  const dragCleanupRef = useRef<(() => void) | null>(null);
   const resizeCleanupRef = useRef<(() => void) | null>(null);
   const resizeGuideRef = useRef<HTMLDivElement>(null);
   const resizeHandles = useRef(new Map<string, HTMLDivElement>());
@@ -221,6 +231,8 @@ export function DataGrid<T>({
     useState<VisibilityState>(initialColumnVisibility);
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
   const [focusedResizeColumn, setFocusedResizeColumn] = useState<string | null>(null);
+  const [hoveredResizeColumn, setHoveredResizeColumn] = useState<string | null>(null);
+  const [draggingColumn, setDraggingColumn] = useState<string | null>(null);
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(() =>
     initialPinnedColumns(columns),
@@ -353,6 +365,9 @@ export function DataGrid<T>({
         : column.columnDef.maxSize,
     );
   const baseTotal = visibleColumns.reduce((total, column) => total + baseWidth(column), 0);
+  const expandedInset =
+    (enableSelection ? (table.getColumn(selectionColumnId)?.getSize() ?? 0) : 0) +
+    (renderExpandedRow ? (table.getColumn(expansionColumnId)?.getSize() ?? 0) / 2 : 0);
   const extraWidth = Math.max(0, viewportWidth - baseTotal);
   const renderedWidth = (column: Column<T>) =>
     column
@@ -376,8 +391,12 @@ export function DataGrid<T>({
     if (!scroll) return;
     let measuredWidth = scroll.clientWidth;
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+    const updateExpandedWidth = () =>
+      tableRef.current?.style.setProperty('--grid-viewport-width', `${scroll.clientWidth}px`);
+    updateExpandedWidth();
     setViewportWidth(measuredWidth);
     const observer = new ResizeObserver(() => {
+      updateExpandedWidth();
       clearTimeout(resizeTimer);
       if (scroll.clientWidth === measuredWidth) return;
       // Let the 120ms sidebar motion settle before rerendering every row.
@@ -392,7 +411,20 @@ export function DataGrid<T>({
       observer.disconnect();
     };
   }, []);
-  useEffect(() => () => resizeCleanupRef.current?.(), []);
+  useEffect(
+    () => () => {
+      resizeCleanupRef.current?.();
+      dragCleanupRef.current?.();
+    },
+    [],
+  );
+  function endColumnDrag() {
+    draggingColumnRef.current = null;
+    dragCleanupRef.current?.();
+    dragCleanupRef.current = null;
+    setDraggingColumn(null);
+    setDragTarget(null);
+  }
   function beginResize(
     event: ReactMouseEvent<HTMLDivElement> | ReactTouchEvent<HTMLDivElement>,
     column: Column<T>,
@@ -406,6 +438,7 @@ export function DataGrid<T>({
     setFocusedResizeColumn(null);
     resizeCleanupRef.current?.();
     const document = event.currentTarget.ownerDocument;
+    const releaseCursor = holdGridCursor(document, 'col-resize');
     const startWidth = renderedWidth(column);
     const { min, max } = sizingBounds(column);
     table.setColumnSizing((current) => ({ ...current, [column.id]: startWidth }));
@@ -440,6 +473,7 @@ export function DataGrid<T>({
       document.removeEventListener('touchend', end);
       document.removeEventListener('touchcancel', end);
       document.defaultView?.removeEventListener('blur', end);
+      releaseCursor();
       resizeCleanupRef.current = null;
     };
     const end = () => {
@@ -497,7 +531,9 @@ export function DataGrid<T>({
     renderExpandedRow,
   ]);
   const activeResizeColumn =
-    table.getState().columnSizingInfo.isResizingColumn || focusedResizeColumn;
+    table.getState().columnSizingInfo.isResizingColumn ||
+    focusedResizeColumn ||
+    hoveredResizeColumn;
   useLayoutEffect(() => {
     const scroll = scrollRef.current;
     const guide = resizeGuideRef.current;
@@ -842,7 +878,12 @@ export function DataGrid<T>({
     <div
       className={cn('aegis-data-grid', className)}
       data-density={density}
-      style={{ '--grid-row-height': `var(--grid-row-${density})` } as CSSProperties}
+      style={
+        {
+          '--grid-row-height': `var(--grid-row-${density})`,
+          '--grid-expanded-inset': `${expandedInset}px`,
+        } as CSSProperties
+      }
     >
       <div className="aegis-grid-toolbar">
         {renderToolbar ? (
@@ -898,7 +939,7 @@ export function DataGrid<T>({
       <p className="aegis-grid-sr-only" id={instructionsId}>
         Use up and down arrows to move between rows. Press Enter to open a row, Space to select, and
         left or right arrows to collapse or expand details. Hold Shift while sorting to sort by
-        multiple columns. Column resize handles use left and right arrows. Drag column grips to
+        multiple columns. Column resize handles use left and right arrows. Drag column headers to
         reorder within their pinned or unpinned group, or use Move left and Move right in a column
         menu.
       </p>
@@ -954,6 +995,7 @@ export function DataGrid<T>({
                         key={header.id}
                         data-column-id={column.id}
                         data-pinned={column.getIsPinned() || undefined}
+                        draggable={dataColumn}
                         role="columnheader"
                         scope="col"
                         aria-colindex={columnIndex + 1}
@@ -972,6 +1014,7 @@ export function DataGrid<T>({
                           selectedColumn && 'aegis-grid-selection-column',
                           dataColumn && 'aegis-grid-data-header',
                           dragTarget === column.id && 'is-drag-target',
+                          draggingColumn === column.id && 'is-dragging',
                           column.id === expansionColumnId && 'aegis-grid-expand-column',
                         )}
                         style={{
@@ -979,6 +1022,41 @@ export function DataGrid<T>({
                           width: renderedWidth(column),
                           textAlign: column.columnDef.meta?.align ?? 'left',
                         }}
+                        onPointerDownCapture={(event) => {
+                          suppressHeaderClickRef.current = false;
+                          headerDragBlockedRef.current =
+                            event.target instanceof Element &&
+                            !!event.target.closest('.aegis-grid-column-menu, .aegis-grid-resize');
+                        }}
+                        onClickCapture={(event) => {
+                          if (suppressHeaderClickRef.current && event.detail > 0) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }
+                        }}
+                        onDragStart={(event) => {
+                          if (!dataColumn || headerDragBlockedRef.current) {
+                            event.preventDefault();
+                            return;
+                          }
+                          event.stopPropagation();
+                          draggingColumnRef.current = column.id;
+                          suppressHeaderClickRef.current = true;
+                          setDraggingColumn(column.id);
+                          setHoveredResizeColumn(null);
+                          setFocusedResizeColumn(null);
+                          event.dataTransfer.effectAllowed = 'move';
+                          event.dataTransfer.setData('text/plain', column.id);
+                          const document = event.currentTarget.ownerDocument;
+                          const releaseCursor = holdGridCursor(document, 'grabbing');
+                          const cancel = () => endColumnDrag();
+                          document.defaultView?.addEventListener('blur', cancel);
+                          dragCleanupRef.current = () => {
+                            releaseCursor();
+                            document.defaultView?.removeEventListener('blur', cancel);
+                          };
+                        }}
+                        onDragEnd={endColumnDrag}
                         onDragOver={(event) => {
                           const sourceId = draggingColumnRef.current;
                           if (
@@ -996,8 +1074,7 @@ export function DataGrid<T>({
                           if (!sourceId) return;
                           event.preventDefault();
                           reorderColumn(sourceId, column.id);
-                          draggingColumnRef.current = null;
-                          setDragTarget(null);
+                          endColumnDrag();
                         }}
                       >
                         {selectedColumn ? (
@@ -1044,45 +1121,23 @@ export function DataGrid<T>({
                           flexRender(column.columnDef.header, header.getContext())
                         )}
                         {dataColumn && (
-                          <>
-                            <button
-                              type="button"
-                              className="aegis-grid-drag"
-                              draggable
-                              tabIndex={-1}
-                              aria-label={`Drag ${columnLabel(column)} column to reorder`}
-                              title="Drag to reorder; use the column menu for keyboard controls"
-                              onDragStart={(event) => {
-                                event.stopPropagation();
-                                draggingColumnRef.current = column.id;
-                                event.dataTransfer.effectAllowed = 'move';
-                                event.dataTransfer.setData('text/plain', column.id);
-                              }}
-                              onDragEnd={() => {
-                                draggingColumnRef.current = null;
-                                setDragTarget(null);
-                              }}
-                            >
-                              <GripHorizontal size={12} aria-hidden />
-                            </button>
-                            <DropdownMenu
-                              label={`${columnLabel(column)} column actions`}
-                              trigger={
-                                <button
-                                  type="button"
-                                  ref={(element) => {
-                                    if (element) headerMenus.current.set(column.id, element);
-                                    else headerMenus.current.delete(column.id);
-                                  }}
-                                  className="aegis-grid-column-menu"
-                                  aria-label={`${columnLabel(column)} column actions`}
-                                >
-                                  <MoreHorizontal size={15} aria-hidden />
-                                </button>
-                              }
-                              items={columnMenu(column)}
-                            />
-                          </>
+                          <DropdownMenu
+                            label={`${columnLabel(column)} column actions`}
+                            trigger={
+                              <button
+                                type="button"
+                                ref={(element) => {
+                                  if (element) headerMenus.current.set(column.id, element);
+                                  else headerMenus.current.delete(column.id);
+                                }}
+                                className="aegis-grid-column-menu"
+                                aria-label={`${columnLabel(column)} column actions`}
+                              >
+                                <MoreHorizontal size={15} aria-hidden />
+                              </button>
+                            }
+                            items={columnMenu(column)}
+                          />
                         )}
                         {column.getCanResize() && column.columns.length === 0 && (
                           <div
@@ -1108,6 +1163,10 @@ export function DataGrid<T>({
                                 setFocusedResizeColumn(column.id);
                             }}
                             onBlur={() => setFocusedResizeColumn(null)}
+                            onPointerEnter={(event) => {
+                              if (event.pointerType !== 'touch') setHoveredResizeColumn(column.id);
+                            }}
+                            onPointerLeave={() => setHoveredResizeColumn(null)}
                             onMouseDown={(event) => beginResize(event, column)}
                             onTouchStart={(event) => beginResize(event, column)}
                             onDoubleClick={() => autosize(column)}
@@ -1139,9 +1198,7 @@ export function DataGrid<T>({
                                 [column.id]: clampColumnWidth(next, min, max),
                               }));
                             }}
-                          >
-                            <GripVertical size={12} aria-hidden />
-                          </div>
+                          />
                         )}
                       </th>
                     );

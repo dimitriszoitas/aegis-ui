@@ -2,6 +2,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 import {
   SurfaceExamples,
   RadiusExamples,
+  SurfaceRadiusExamples,
   ControlRadiusExamples,
   SeparatorExamples,
   SpacingExamples,
@@ -14,6 +15,14 @@ import {
 
 Use the same measured rhythm from a filter chip to the complete investigation workspace.
 
+## Layout themes
+
+Floating and Fixed are a layout axis independent of light and dark color. Floating is the default: navigation and sheets have 12px exterior insets, 12px corners, and a floating shadow. The compact navigation rail derives its 8px corners from the same 4px subtraction. Fixed removes those exterior gaps, corner rounding, and chrome shadows. Navigation fills the left edge with a right divider; sheets and the assistant fill the right edge with a left divider.
+
+Both layouts keep the same color tokens, typography, control sizes, card geometry, and content. Use the Storybook layout and color controls to explore all four combinations. The console's Floating layout and Fixed layout examples keep the assistant open for comparison; Alerts lets you switch interactively.
+
+`data-layout-theme` selects the layout independently from `.dark` and `data-theme`. The document attribute also supplies the layout to portaled chrome.
+
 ## Surface hierarchy and shadows
 
 Raised surfaces use a subtle border and a small shadow. Floating chrome uses a layered shadow. Overlays use the strongest shadow to establish focus. Dark mode relies more on border contrast and a lighter surface than on shadow strength.
@@ -22,7 +31,7 @@ Raised surfaces use a subtle border and a small shadow. Floating chrome uses a l
 
 ## Radius
 
-Radii are capped at 8px throughout the interface. Control radii follow control height within the 6–8px range. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes keep a 4px radius.
+Surface corners range from 8–12px; controls retain their compact 6–8px scale. Control radii follow control height within the 6–8px range. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes keep a 4px radius.
 
 | Control size | Height          | Radius | Token                 |
 | ------------ | --------------- | ------ | --------------------- |
@@ -33,15 +42,19 @@ Radii are capped at 8px throughout the interface. Control radii follow control h
 
 <ControlRadiusExamples />
 
-Cards, sheets, and modals use 8px corners. Floating navigation uses 8px while expanded and 6px while collapsed; the expand or collapse toggle stays at the top in both states. Chips and badges are rounded rectangles with 6px corners from `--chip-radius`.
+Standard cards and charts use `--surface-radius` (10px). Large or floating surfaces use `--surface-radius-floating` (12px). Nested surface components use `--surface-radius-nested`: `calc(var(--surface-radius-floating) - var(--space-1))`, so a 12px parent and a 4px inset step produce 8px child corners. Use this shared relationship rather than independent corner values. It applies to surface components, never to nested controls.
 
-The primitive scale is 6px for `xs` and `sm`, 7px for `md`, and 8px for `lg`, `xl`, and `2xl`. The legacy `--radius-full` token is also capped at 8px. Small dots can still appear circular because their dimensions constrain the rendered curve. Values below come from the shared primitive scale.
+Fixed chrome uses square outside corners while cards retain the same 10/12/8px geometry in both layouts. The navigation toggle stays at the top in both states. Chips and badges remain rounded rectangles with 6px corners from `--chip-radius`.
+
+<SurfaceRadiusExamples />
+
+The control primitive scale remains 6px for `xs` and `sm`, 7px for `md`, and 8px for `lg`, `xl`, and `2xl`. The legacy `--radius-full` token is also capped at 8px. Small dots can still appear circular because their dimensions constrain the rendered curve. Values below come from the shared primitive scale.
 
 <RadiusExamples />
 
 ## Spacing
 
-The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px inside cards, and 20px inside floating containers. Grid cell padding follows density: 3px vertically in compact rows, 8px by default, and 10px in comfortable rows.
+The spacing scale uses a 4px base. Floating chrome has a 12px exterior inset; Fixed chrome has none. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Grid cell padding follows density: 3px vertically in compact rows, 8px by default, and 10px in comfortable rows.
 
 <SpacingExamples />
 

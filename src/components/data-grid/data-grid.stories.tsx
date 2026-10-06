@@ -62,7 +62,13 @@ const rowLabel = (row: Alert) => `${row.id}: ${row.title}`;
 function ExpandedEvents({ alert }: { alert: Alert }) {
   return (
     <section aria-label={`Correlated events for ${alert.id}`}>
-      <h3 style={{ fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>
+      <h3
+        style={{
+          fontSize: 'var(--text-sm)',
+          fontWeight: 'var(--title-weight)',
+          marginBottom: 'var(--space-3)',
+        }}
+      >
         {alert.events.length} correlated events
       </h3>
       <table className="aegis-grid-event-table" aria-label={`Event evidence for ${alert.id}`}>
@@ -104,7 +110,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the toolbar for density and column visibility. The first header click sorts ascending, the next descending; Shift-click keeps multiple sorts. Hover or focus a header for its three-dot menu to pin left/right, unpin, sort, hide, or move a column with the keyboard. Drag the separate grip to reorder within a pinned or unpinned group. Selection, expansion, and the first data column start pinned left; a final Actions column starts pinned right. The last visible column fills spare viewport space. Right-edge resize handles support dragging, double-click autosize, and keyboard resizing, with a guide through the visible table body. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
+          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the toolbar for density and column visibility. The first header click sorts ascending, the next descending; Shift-click keeps multiple sorts. Hover or focus a header for its three-dot menu to pin left/right, unpin, sort, hide, or move a column with the keyboard. Drag a column header or its title to reorder within a pinned or unpinned group. Selection, expansion, and the first data column start pinned left; a final Actions column starts pinned right. The last visible column fills spare viewport space. Invisible hit areas just inside each right edge support dragging, double-click autosize, and keyboard resizing. Hover or focus an edge to show its guide through the visible table body. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
       },
     },
   },
@@ -224,7 +230,7 @@ export const HeaderControls: Story = {
     docs: {
       description: {
         story:
-          'Hover or focus a header to reveal sorting and its column menu. Pin columns to either edge, hide optional fields, or use Move left/right as the keyboard alternative to dragging the separate reorder grip. Selection and expansion remain anchored. The last visible column takes spare width; resize only at each column’s right edge.',
+          'Hover or focus a header to reveal sorting and its column menu. Pin columns to either edge, hide optional fields, or use Move left/right as the keyboard alternative to dragging the header or its title. Selection and expansion remain anchored. The last visible column takes spare width; hover or focus just inside a column’s right edge to reveal the full-height resize guide. Both dotted handles are absent; header clicks still sort, and the menu remains independent of dragging.',
       },
     },
   },
@@ -238,6 +244,20 @@ export const HeaderControls: Story = {
       await user.click(canvas.getByRole('button', { name: `${name} column actions` }));
       await user.click(page.getByRole('menuitem', { name: action }));
     };
+    await step('Reveal the resize guide from the invisible inside edge', async () => {
+      const edge = canvas.getByRole('separator', { name: 'Resize Alert title column' });
+      const guide = canvasElement.querySelector<HTMLElement>('.aegis-grid-resize-guide');
+      if (!guide) throw new Error('Expected a full-height resize guide');
+      await expect(canvasElement.querySelector('.aegis-grid-drag')).toBeNull();
+      await expect(edge.querySelector('svg')).toBeNull();
+      await user.hover(edge);
+      await expect(guide).toBeVisible();
+      expect(edge.getBoundingClientRect().right).toBeLessThanOrEqual(
+        header('title').getBoundingClientRect().right,
+      );
+      await user.unhover(edge);
+      await expect(guide).not.toBeVisible();
+    });
     await step('Start numeric sorting ascending and then descending', async () => {
       await user.click(canvas.getByRole('button', { name: 'Events' }));
       await expect(header('eventCount')).toHaveAttribute('aria-sort', 'ascending');
@@ -302,6 +322,22 @@ export const MultiSort: Story = {
 };
 export const ExpandedEvidence: Story = {
   args: { defaultExpandedRowIds: [alerts[0].id], data: alerts.slice(0, 8), pagination: false },
+};
+export const ExpandedWithoutSelection: Story = {
+  args: {
+    defaultExpandedRowIds: [alerts[0].id],
+    data: alerts.slice(0, 8),
+    enableSelection: false,
+    pagination: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The evidence connector follows the expansion chevron without reserving space for an absent selection column. Expanded evidence stays inside the visible viewport while the outer grid scrolls horizontally.',
+      },
+    },
+  },
 };
 export const HiddenColumns: Story = {
   args: { initialColumnVisibility: { entity: false, lastSeen: false } },

@@ -119,6 +119,16 @@
   --radius-xl: 8px;
   --radius-2xl: 8px;
   --radius-full: 8px;
+  --surface-radius: 10px;
+  --surface-radius-floating: 12px;
+  --surface-radius-nested: calc(var(--surface-radius-floating) - var(--space-1));
+  --chrome-inset: var(--space-3);
+  --chrome-gap: var(--space-3);
+  --chrome-radius: var(--surface-radius-floating);
+  --chrome-shadow: var(--shadow-floating);
+  --chrome-overlay-shadow: var(--shadow-overlay);
+  --chrome-nav-border-width: 1px;
+  --chrome-sheet-border-width: 1px;
   --font-ui: Inter, system-ui, sans-serif;
   --font-code: 'JetBrains Mono', monospace;
   --font-mono: var(--font-code);
@@ -164,8 +174,8 @@
   --scrollbar-thumb: var(--color-border-strong);
   --scrollbar-thumb-hover: var(--color-text-secondary);
   --scrollbar-thumb-active: var(--color-text-primary);
-  --sidebar-radius-expanded: var(--radius-xl);
-  --sidebar-radius-collapsed: var(--radius-xs);
+  --sidebar-radius-expanded: var(--chrome-radius);
+  --sidebar-radius-collapsed: max(0px, calc(var(--chrome-radius) - var(--space-1)));
   --sidebar-expanded: 240px;
   --sidebar-collapsed: 48px;
   --sidebar-item-size: 34px;

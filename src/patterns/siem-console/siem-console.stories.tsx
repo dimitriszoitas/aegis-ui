@@ -8,13 +8,20 @@ const meta = {
   title: 'Console/SIEM console',
   component: SiemConsole,
   parameters: { layout: 'fullscreen' },
-  render: function Render(args) {
-    const [globals, updateGlobals] = useGlobals();
+  render: function Render(args, context) {
+    const [, updateGlobals] = useGlobals();
+    const globals = context.globals;
     return (
       <SiemConsole
         {...args}
         theme={globals.theme === 'dark' ? 'dark' : 'light'}
         onThemeChange={(theme) => updateGlobals({ theme })}
+        layoutTheme={globals.layoutTheme === 'fixed' ? 'fixed' : 'floating'}
+        onLayoutThemeChange={
+          context.parameters.layoutThemeLocked
+            ? undefined
+            : (layoutTheme) => updateGlobals({ layoutTheme })
+        }
       />
     );
   },
@@ -23,7 +30,89 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Alerts: Story = {};
 export const CollapsedNavigation: Story = { args: { defaultNavCollapsed: true } };
-export const WithAssistant: Story = { args: { defaultNavCollapsed: true, defaultAiOpen: true } };
+export const WithAssistant: Story = {
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: { docs: { story: { inline: false, height: 920 } } },
+};
+export const FloatingLayout: Story = {
+  globals: { layoutTheme: 'floating' },
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: {
+    layoutThemeLocked: true,
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'Floating navigation and assistant with 12px breathing room. Switch the color toolbar between light and dark; use Alerts to switch layout interactively.',
+      },
+    },
+  },
+};
+export const FixedLayout: Story = {
+  globals: { layoutTheme: 'fixed' },
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: {
+    layoutThemeLocked: true,
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'Full-height navigation and assistant meet the workspace edges with dividers. Color, data, density, and card geometry match Floating. Switch the color toolbar to compare both color themes.',
+      },
+    },
+  },
+};
+export const LayoutSwitching: Story = {
+  args: { defaultNavCollapsed: true },
+  parameters: {
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'Switching layout preserves the active search and selected records. Color remains an independent choice.',
+      },
+    },
+  },
+  play: async ({ canvasElement, step, globals }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const root = canvasElement.ownerDocument.documentElement;
+    const initial = globals.layoutTheme === 'fixed' ? 'Fixed' : 'Floating';
+    const next = initial === 'Fixed' ? 'Floating' : 'Fixed';
+    await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', initial.toLowerCase()), {
+      timeout: 10000,
+    });
+    const colorSwitchLabel = canvas
+      .getByRole('button', { name: /Switch to (light|dark) theme/ })
+      .getAttribute('aria-label')!;
+    const search = canvas.getByRole('searchbox', { name: 'Search alerts' });
+    await userEvent.type(search, 'powershell');
+    const selected = canvas.getAllByRole('checkbox', { name: /^Select ALR-/ })[0];
+    const label = selected.getAttribute('aria-label')!;
+    await userEvent.click(selected);
+    await step('Switch layout while keeping the investigation state', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: `Layout theme: ${initial}` }));
+      await userEvent.click(body.getByRole('menuitemradio', { name: next }));
+      await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', next.toLowerCase()), {
+        timeout: 10000,
+      });
+      await expect(canvas.getByRole('searchbox', { name: 'Search alerts' })).toHaveValue(
+        'powershell',
+      );
+      await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
+      await expect(canvas.getByRole('button', { name: colorSwitchLabel })).toBeVisible();
+      await userEvent.click(canvas.getByRole('button', { name: `Layout theme: ${next}` }));
+      await userEvent.click(body.getByRole('menuitemradio', { name: initial }));
+      await waitFor(
+        () => expect(root).toHaveAttribute('data-layout-theme', initial.toLowerCase()),
+        { timeout: 10000 },
+      );
+      await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
+    });
+    await userEvent.click(canvas.getByRole('checkbox', { name: label }));
+    await userEvent.clear(canvas.getByRole('searchbox', { name: 'Search alerts' }));
+  },
+};
 export const WithFilters: Story = {
   args: { defaultNavCollapsed: true, defaultFilterPanelOpen: true },
 };

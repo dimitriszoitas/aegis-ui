@@ -14,6 +14,8 @@ import {
   FileChartColumn,
   FlaskConical,
   LayoutDashboard,
+  PanelsTopLeft,
+  PanelLeft,
   Plus,
   Settings,
   ShieldAlert,
@@ -28,6 +30,7 @@ import { Button } from '@/components/button';
 import { CommandPalette, type CommandAction } from '@/components/command-palette';
 import type { GridDensity } from '@/components/data-grid';
 import { EventHistogram } from '@/components/event-histogram';
+import { DropdownMenu } from '@/components/dropdown-menu';
 import { IconButton } from '@/components/icon-button';
 import { MetricCard } from '@/components/metric-card';
 import { ConfirmDialog } from '@/components/modal';
@@ -53,6 +56,7 @@ import type { AiContextItem, AiRequest } from '@/lib/ai';
 import { applyAlertFilters, createDefaultFilters, type AlertFilterState } from '@/lib/filters';
 import { formatTimeRange, resolveTimeRange } from '@/lib/time-range';
 import type { Theme } from '@/lib/theme';
+import type { LayoutTheme } from '@/lib/layout-theme';
 import {
   alerts as fixtureAlerts,
   analysts,
@@ -73,6 +77,8 @@ export interface SiemConsoleProps {
   defaultFilterPanelOpen?: boolean;
   theme?: Theme;
   onThemeChange?: (theme: Theme) => void;
+  layoutTheme?: LayoutTheme;
+  onLayoutThemeChange?: (theme: LayoutTheme) => void;
 }
 const pageLabels: Record<ConsolePage, string> = {
   overview: 'Overview',
@@ -190,6 +196,8 @@ export function SiemConsole({
   defaultFilterPanelOpen = false,
   theme = 'light',
   onThemeChange,
+  layoutTheme = 'floating',
+  onLayoutThemeChange,
 }: SiemConsoleProps) {
   const dockAssistant = useMediaQuery('(min-width: 1280px)');
   const [page, setPage] = useState<ConsolePage>(initialPage);
@@ -465,7 +473,11 @@ export function SiemConsole({
   );
 
   return (
-    <div className="aegis-console" data-ai-open={aiOpen && dockAssistant}>
+    <div
+      className="aegis-console"
+      data-ai-open={aiOpen && dockAssistant}
+      data-layout-theme={layoutTheme}
+    >
       <a className="aegis-console-skip" href={`#${mainId}`}>
         Skip to workspace
       </a>
@@ -520,6 +532,37 @@ export function SiemConsole({
                       now={referenceTime}
                     />
                   </div>
+                )}
+                {onLayoutThemeChange && (
+                  <DropdownMenu
+                    label="Layout theme"
+                    trigger={
+                      <IconButton
+                        aria-label={`Layout theme: ${layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}`}
+                        title="Layout theme"
+                        emphasis="ghost"
+                      >
+                        {layoutTheme === 'fixed' ? (
+                          <PanelLeft size={17} />
+                        ) : (
+                          <PanelsTopLeft size={17} />
+                        )}
+                      </IconButton>
+                    }
+                    items={[
+                      {
+                        type: 'radio-group',
+                        id: 'layout-theme',
+                        label: 'Layout theme',
+                        value: layoutTheme,
+                        onValueChange: (value) => onLayoutThemeChange(value as LayoutTheme),
+                        options: [
+                          { value: 'floating', label: 'Floating' },
+                          { value: 'fixed', label: 'Fixed' },
+                        ],
+                      },
+                    ]}
+                  />
                 )}
                 {onThemeChange && (
                   <IconButton
@@ -712,6 +755,8 @@ export function SiemConsole({
               <ConsoleSettings
                 theme={theme}
                 onThemeChange={onThemeChange}
+                layoutTheme={layoutTheme}
+                onLayoutThemeChange={onLayoutThemeChange}
                 density={density}
                 onDensityChange={setDensity}
               />

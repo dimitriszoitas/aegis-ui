@@ -1,0 +1,47 @@
+/* Layout changes geometry only. Surface colors and control sizing stay on their own axes. */
+[data-layout-theme='floating'] {
+  --chrome-inset: var(--space-3);
+  --chrome-gap: var(--space-3);
+  --chrome-radius: var(--surface-radius-floating);
+  --chrome-shadow: var(--shadow-floating);
+  --chrome-overlay-shadow: var(--shadow-overlay);
+  --chrome-nav-border-width: 1px;
+  --chrome-sheet-border-width: 1px;
+  --sidebar-radius-expanded: var(--chrome-radius);
+  --sidebar-radius-collapsed: max(0px, calc(var(--chrome-radius) - var(--space-1)));
+}
+[data-layout-theme='fixed'] {
+  --chrome-inset: 0px;
+  --chrome-gap: 0px;
+  --chrome-radius: 0px;
+  --chrome-shadow: none;
+  --chrome-overlay-shadow: none;
+  --chrome-nav-border-width: 0 1px 0 0;
+  --chrome-sheet-border-width: 0 0 0 1px;
+  --sidebar-radius-expanded: var(--chrome-radius);
+  --sidebar-radius-collapsed: max(0px, calc(var(--chrome-radius) - var(--space-1)));
+}
+/* Only known surface components inherit the smaller nested corner; controls keep their own radii. */
+:where(
+    .surface,
+    .aegis-card,
+    .aegis-chart-container,
+    .aegis-ai-card,
+    .aegis-ai-highlight,
+    .aegis-wizard,
+    .aegis-alerts-explorer,
+    .aegis-console-alert-card,
+    .aegis-modal
+  )
+  :is(
+    .surface,
+    .aegis-card,
+    .aegis-chart-container,
+    .aegis-ai-card,
+    .aegis-ai-highlight,
+    .aegis-wizard,
+    .aegis-alerts-explorer,
+    .aegis-data-grid
+  ) {
+  --surface-corner-radius: var(--surface-radius-nested);
+}

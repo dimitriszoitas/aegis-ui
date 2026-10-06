@@ -2,18 +2,21 @@
   position: relative;
   display: flex;
   height: var(--console-height, 100dvh);
-  min-height: 560px;
+  min-height: 0;
   overflow: hidden;
   background: var(--color-bg-canvas);
   color: var(--color-text-primary);
 }
 .aegis-console > .side-nav {
-  height: calc(var(--console-height, 100dvh) - var(--space-6));
+  height: calc(var(--console-height, 100dvh) - 2 * var(--chrome-inset));
 }
 .aegis-console-main {
   --console-main-top: var(--layout-page-padding);
-  --console-main-start: var(--space-2);
-  --console-main-end: var(--layout-panel-padding);
+  --console-main-start: max(var(--space-2), calc(var(--layout-page-padding) - var(--chrome-gap)));
+  --console-main-end: max(
+    var(--layout-panel-padding),
+    calc(var(--layout-page-padding) - var(--chrome-gap))
+  );
   flex: 1;
   min-width: 0;
   overflow: auto;
@@ -145,7 +148,7 @@
 }
 .aegis-console-alert-card {
   border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
+  border-radius: var(--surface-corner-radius, var(--surface-radius-floating));
   background: var(--color-bg-surface);
   box-shadow: var(--shadow-raised);
   overflow: clip;
@@ -233,7 +236,7 @@
   color: var(--color-text-secondary);
 }
 .aegis-console-assistant.aegis-sheet-docked {
-  height: calc(var(--console-height, 100dvh) - var(--space-6));
+  height: calc(var(--console-height, 100dvh) - 2 * var(--chrome-inset));
   flex-basis: 376px;
   width: 376px;
 }
@@ -286,13 +289,13 @@
     top: 0;
   }
   .aegis-console .side-nav + .aegis-console-main {
-    margin-left: calc(var(--sidebar-collapsed) + var(--space-6));
+    margin-left: calc(var(--sidebar-collapsed) + 2 * var(--chrome-inset));
   }
 }
 @media (max-width: 700px) {
   .aegis-console-main {
     --console-main-top: var(--layout-panel-padding);
-    --console-main-start: 0px;
+    --console-main-start: max(0px, calc(var(--space-3) - var(--chrome-gap)));
     --console-main-end: var(--space-3);
     padding-block: var(--console-main-top) var(--space-3);
   }

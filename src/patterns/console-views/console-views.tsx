@@ -23,6 +23,8 @@ import { EmptyState } from '@/components/empty-state';
 import { List, ListItem } from '@/components/list';
 import { MetricCard } from '@/components/metric-card';
 import { RadioGroup } from '@/components/radio-group';
+import { Separator } from '@/components/separator';
+import type { LayoutTheme } from '@/lib/layout-theme';
 import { formatRelativeTime } from '@/components/relative-time';
 import { SearchInput } from '@/components/search-input';
 import { Select } from '@/components/select';
@@ -761,12 +763,16 @@ export function ConsoleReports({ alerts, scopeLabel = 'Current time range' }: Co
 export interface ConsoleSettingsProps {
   theme: 'light' | 'dark';
   onThemeChange?: (theme: 'light' | 'dark') => void;
+  layoutTheme?: LayoutTheme;
+  onLayoutThemeChange?: (theme: LayoutTheme) => void;
   density: GridDensity;
   onDensityChange: (density: GridDensity) => void;
 }
 export function ConsoleSettings({
   theme,
   onThemeChange,
+  layoutTheme = 'floating',
+  onLayoutThemeChange,
   density,
   onDensityChange,
 }: ConsoleSettingsProps) {
@@ -781,7 +787,7 @@ export function ConsoleSettings({
           <CardHeader>
             <CardTitle>Appearance</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="stack">
             {onThemeChange ? (
               <RadioGroup
                 label="Workspace theme"
@@ -805,6 +811,31 @@ export function ConsoleSettings({
                 <span>Workspace theme</span>
                 <Tag>{theme === 'dark' ? 'Dark' : 'Light'}</Tag>
                 <p>Theme follows the current preview preference.</p>
+              </div>
+            )}
+            <Separator emphasis="light" />
+            {onLayoutThemeChange ? (
+              <RadioGroup
+                label="Layout theme"
+                value={layoutTheme}
+                onValueChange={(value) => onLayoutThemeChange(value as LayoutTheme)}
+                options={[
+                  {
+                    value: 'floating',
+                    label: 'Floating',
+                    description: 'Inset navigation and assistant panels with softer corners.',
+                  },
+                  {
+                    value: 'fixed',
+                    label: 'Fixed',
+                    description: 'Full-height navigation and assistant panels at the edges.',
+                  },
+                ]}
+              />
+            ) : (
+              <div className="aegis-console-readonly-setting">
+                <span>Layout theme</span>
+                <Tag>{layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}</Tag>
               </div>
             )}
           </CardContent>
