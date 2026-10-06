@@ -6,12 +6,11 @@ export interface CountBadgeProps {
 }
 export function CountBadge({ count, max = 99, label }: CountBadgeProps) {
   return (
-    <span
-      className="count-badge"
-      aria-label={label ? `${count} ${label}` : undefined}
-      title={String(count)}
-    >
-      {count > max ? `${max}+` : Math.max(0, count)}
+    <span className="count-badge" title={String(count)}>
+      <span aria-hidden={label ? true : undefined}>
+        {count > max ? `${max}+` : Math.max(0, count)}
+      </span>
+      {label && <span className="sr-only">{`${count} ${label}`}</span>}
     </span>
   );
 }
