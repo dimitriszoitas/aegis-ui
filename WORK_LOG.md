@@ -9,7 +9,8 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Phase 4 complete: deterministic alerts and valid detection rules, full TanStack grid and ten cell renderers, synchronized filter bar/push panel, functional bulk assignment/status/AI context. Fifteen logic tests pass; 116 story/theme scans plus 32 final interaction-aware retests pass. Virtualization verified with 1,000 rows and measured expanded details.
 - User refinements included: vertical wizard retained for the full demo; 6/8/10px control radii by size, sidebar 16/12px with top toggle, chevron inset, gradient AI treatments, line/dot separators with normal/light emphasis.
 - Phase 5 complete: token-themed YAML/JSON editor, read-only YAML presenter, split/unified diffs, keyboard JSON viewer with copy paths/values, Recharts kit, sparklines, metrics, brushed event histogram, timeline, relative time, and resizable panels. Verified 48 code, 46 chart, 12 JSON, 42 integration/utility/theme checks plus 22 static code retests; fixed deleted-line contrast. Existing 15 logic tests pass; typecheck/lint/build green.
-- Phases 6–9 pending: AI; console; polish; GitHub/Pages.
+- Phase 6 complete: local streaming assistant, prompt composer, AI messages/cards/feedback, inline completions, guarded YAML approval, and the full horizontal/vertical detection wizard with validated replay. AI story suites and 54 final static story/theme checks pass; 11 replay assertions and cancellation/stale-response regressions pass. Typecheck, lint, 15 logic tests, and Storybook build are green. The story verifier now accepts portal-only overlay stories.
+- Phases 7–9 pending: console; polish; GitHub/Pages.
 
 ## Verification setup
 

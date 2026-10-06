@@ -1,0 +1,57 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { AiCard, AiHighlight } from '../../components/ai-card';
+import { ConfidenceBadge } from '../../components/confidence-badge';
+import { ThinkingIndicator } from '../../components/thinking-indicator';
+
+<Meta title="Foundations/AI guidelines" />
+
+# AI assistance in Aegis
+
+AI output is visibly generated, grounded in the supplied context, and subject to analyst review. Keep the evidence and the analyst's next action close to the response.
+
+## Recognizable in every treatment
+
+Use `--gradient-ai` for prominent AI actions, `--gradient-ai-soft` for quiet controls and chips, `--gradient-ai-text` for AI labels and icons, and `--gradient-ai-surface` for generated content. The violet-to-blue gradient works in both themes. Pair it with the sparkles marker and the explicit “AI generated” label; color alone must never identify a response as generated.
+
+<AiCard
+  title="Verify the process chain"
+  confidence="high"
+  provenance="EDR process evidence · ALR-1049"
+>
+  The process payload shows an Office parent and encoded PowerShell. Review the originating document
+  and confirm whether the execution was approved before assigning a verdict.
+</AiCard>
+
+## Confidence is evidence strength
+
+High, medium, and low confidence describe the strength and completeness of the available evidence. They do not replace severity, an analyst's disposition, or permission to apply a change. Include provenance and state what remains unverified.
+
+<div className="row">
+  <ConfidenceBadge confidence="high" />
+  <ConfidenceBadge confidence="medium" />
+  <ConfidenceBadge confidence="low" />
+</div>
+
+## Keep progress inspectable
+
+Stream readable markdown while leaving the interface usable. A caret indicates incoming text, a thinking indicator explains the current stage, and a collapsible working section lists actual tool steps with pending, working, complete, or error status. Announce state transitions rather than every incoming token. Respect reduced motion by disabling caret blinking, shimmer, rotating status messages, and decorative motion.
+
+<ThinkingIndicator
+  messages={['Reviewing the selected evidence', 'Preparing analyst verification steps']}
+/>
+
+Stop generation immediately when requested and preserve partial output. Show recoverable failures inline with a retry action. Copy, feedback, evidence links, and regenerate actions remain keyboard accessible. Rendering markdown never executes raw HTML from a generated response.
+
+## Show scope and provenance
+
+The panel's context chips show which alerts, rules, events, and time scope the assistant can access. Evidence chips open the referenced record through the host application's citation callback or its supplied URL. Do not claim that labels alone prove a shared attack sequence. The local streaming mock explicitly distinguishes supplied references from queried telemetry.
+
+<AiHighlight confidence="medium" provenance="Identity sign-in evidence · ALR-1048">
+  Verify travel and approved VPN usage before escalating this sign-in alert.
+</AiHighlight>
+
+## Keep consequential decisions with the analyst
+
+AI may propose detection logic, summarise an investigation, or suggest the next verification step. Applying a proposed rule requires an explicit review with the current and proposed YAML, approve and reject actions, and an audit line. A suggestion, confidence badge, or generated summary never applies an action by itself.
+
+All examples stream deterministic local responses. They use no API keys, make no model requests, and do not execute security actions.

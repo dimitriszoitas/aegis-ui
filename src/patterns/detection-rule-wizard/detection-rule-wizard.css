@@ -1,0 +1,67 @@
+.aegis-rule-fields {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+.aegis-rule-field-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.aegis-rule-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.aegis-rule-replay-scroll {
+  overflow: auto;
+  max-height: 320px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+.aegis-rule-replay {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+}
+.aegis-rule-replay th,
+.aegis-rule-replay td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+  white-space: nowrap;
+}
+.aegis-rule-replay th {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+.aegis-rule-created {
+  max-width: 1040px;
+  padding: var(--space-6);
+}
+.aegis-rule-created > svg {
+  color: var(--color-success-fg);
+}
+.aegis-rule-created h2,
+.aegis-rule-created p {
+  margin: 0;
+}
+.aegis-wizard-step-content > .stack > .between {
+  flex-wrap: wrap;
+}
+.aegis-wizard-step-content > .stack > .between > p {
+  flex: 1;
+  min-width: 220px;
+  margin: 0;
+}
+@media (max-width: 650px) {
+  .aegis-rule-fields,
+  .aegis-rule-metrics {
+    grid-template-columns: 1fr;
+  }
+}

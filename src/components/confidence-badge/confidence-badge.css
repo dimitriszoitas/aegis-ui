@@ -1,0 +1,49 @@
+.aegis-confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-ai-border);
+  border-radius: var(--radius-full);
+  background: var(--gradient-ai-soft);
+  color: var(--color-ai-fg);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.aegis-confidence-badge > span:last-child {
+  background: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.aegis-confidence-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.aegis-confidence-bars i {
+  display: block;
+  width: 3px;
+  height: 5px;
+  border-radius: 1px;
+  background: var(--gradient-ai-text);
+  opacity: 0.22;
+}
+.aegis-confidence-bars i:nth-child(2) {
+  height: 8px;
+}
+.aegis-confidence-bars i:nth-child(3) {
+  height: 11px;
+}
+.aegis-confidence-bars i[data-active='true'] {
+  opacity: 1;
+}
+@media (forced-colors: active) {
+  .aegis-confidence-badge > span:last-child {
+    -webkit-text-fill-color: currentColor;
+  }
+  .aegis-confidence-bars i {
+    background: CanvasText;
+  }
+}

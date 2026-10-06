@@ -31,10 +31,7 @@ async function worker() {
       await page.goto(
         `${base}/iframe.html?id=${story.id}&viewMode=story&aegisTest=1&globals=theme:${theme}`,
       );
-      await page
-        .locator('#storybook-root > *')
-        .first()
-        .waitFor({ timeout: 20000, state: 'attached' });
+      // Overlay-only stories render through portals outside the story root.
       await page.waitForFunction(
         () => window.__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
         {},
