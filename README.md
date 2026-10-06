@@ -17,13 +17,15 @@ Start with **Foundations → Principles**, then open **Console → SIEM console 
 - A docked assistant with attached context, streaming, stop, retry, regenerate, feedback, and evidence navigation.
 - A detection-rule wizard with horizontal and vertical layouts, inline suggestions, YAML review, sample replay, explicit approval, and an approval audit line.
 
+For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, saved views, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states.
+
 All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers the theme preference.
 
 The wizard's replay evaluates eight labeled Windows process events using a deliberately limited Sigma-style subset. Unsupported conditions and log sources produce an explicit error. Connect a production rule engine through the host application before using it for operational validation.
 
 ## Run locally
 
-The checkout was verified on Node.js 24.1.0. Vite requires Node.js `^20.19.0 || >=22.12.0`; the package manager is pinned to `pnpm@11.19.0` in `package.json`.
+Use Node.js 24, matching the deployment workflow. The checkout was verified on Node.js 24.1.0; the complete toolchain also supports Node.js 22.13 or later in the 22.x line. The package manager is pinned to `pnpm@11.19.0` in `package.json`.
 
 ```sh
 pnpm install

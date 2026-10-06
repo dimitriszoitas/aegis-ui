@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Button } from '../button';
 import { BulkActionsBar } from '../bulk-actions-bar';
@@ -7,6 +8,7 @@ import { EntityCell, NumberCell, SeverityCell, TimeCell } from '../data-grid-cel
 import { SideSheet, SideSheetField, SideSheetSection } from '../side-sheet';
 import { alerts, analysts, generateAlerts, referenceTime, type Alert } from '../../sample-data';
 import { DataGrid, type GridDensity } from './data-grid';
+import { DataGridPresentation } from './data-grid-presentation';
 
 const severityOrder = { critical: 0, high: 1, medium: 2, low: 3, info: 4 };
 const columns: ColumnDef<Alert>[] = [
@@ -97,11 +99,124 @@ const meta = {
   title: 'Components/Data/DataGrid',
   component: DataGrid<Alert>,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          'The full presentation combines DataGrid with the shared FilterBar and push FilterPanel. Search, relative or absolute time ranges, saved views, quick filters, a field/operator/value builder, and facet counts all filter the same records. Use the table toolbar for density and column visibility; click headers for sorting and Shift-click for multiple sorts. Header dividers support drag, double-click autosize, and keyboard resizing. Row selection, cross-page bulk assignment/status updates, inline event expansion, raw JSON, editable alert details, and streaming AI investigation all work locally. Switch browsing mode to continuous virtual scrolling and choose 1,000 records to explore a large result set. Presentation options also expose reversible loading, empty and retryable error states. Focused examples below document each grid capability separately.',
+      },
+    },
+  },
   args: { data: alerts, columns, getRowId, rowLabel, label: 'Security alerts', renderExpandedRow },
 } satisfies Meta<typeof DataGrid<Alert>>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+export const FullPresentation: Story = {
+  name: 'Full presentation',
+  render: () => <DataGridPresentation />,
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+    docs: { story: { inline: false, height: 1080 } },
+  },
+  play: async ({ canvasElement, step }) => {
+    const user = userEvent.setup();
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    await step('Keep push filters and removable chips in sync', async () => {
+      const panel = canvas.getByRole('complementary', { name: /Filters/ });
+      const critical = within(panel).getByRole('checkbox', { name: /Critical/ });
+      await user.click(critical);
+      await expect(
+        canvas.getByRole('button', { name: 'Remove Critical severity filter' }),
+      ).toBeVisible();
+      await user.click(canvas.getByRole('button', { name: 'Remove Critical severity filter' }));
+      await expect(critical).not.toBeChecked();
+      await user.type(canvas.getByRole('searchbox', { name: 'Search alerts' }), 'powershell');
+      await expect(canvas.getByRole('grid', { name: 'Alerts' })).toBeVisible();
+      await user.clear(canvas.getByRole('searchbox', { name: 'Search alerts' }));
+    });
+    await step('Adjust density, sort multiple columns, and resize a column', async () => {
+      await user.click(canvas.getByRole('button', { name: 'Compact rows' }));
+      await expect(canvas.getByRole('button', { name: 'Compact rows' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      const grid = within(canvas.getByRole('grid', { name: 'Alerts' }));
+      await user.click(grid.getByRole('button', { name: 'Severity' }));
+      await user.keyboard('{Shift>}');
+      await user.click(grid.getByRole('button', { name: 'Events' }));
+      await user.keyboard('{/Shift}');
+      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events descending/)).toBeVisible();
+      const resize = grid.getByRole('separator', { name: 'Resize Alert column' });
+      const previous = Number(resize.getAttribute('aria-valuenow'));
+      resize.focus();
+      await user.keyboard('{ArrowRight}');
+      await expect(resize).toHaveAttribute('aria-valuenow', String(previous + 8));
+    });
+    await step('Select records and apply an actual bulk status change', async () => {
+      const grid = within(canvas.getByRole('grid', { name: 'Alerts' }));
+      const checkboxes = grid.getAllByRole('checkbox', { name: /^Select ALR-/ });
+      await user.click(checkboxes[0]);
+      await user.click(checkboxes[1]);
+      const selectedLabels = checkboxes
+        .slice(0, 2)
+        .map((checkbox) => checkbox.getAttribute('aria-label')!);
+      await user.click(canvas.getByRole('combobox', { name: 'Browsing mode' }));
+      await user.click(page.getByRole('option', { name: 'Continuous virtual scrolling' }));
+      await expect(canvas.getByRole('grid', { name: 'Alerts' })).toHaveAttribute(
+        'aria-rowcount',
+        '151',
+      );
+      await expect(grid.getAllByRole('row').length).toBeLessThan(151);
+      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events descending/)).toBeVisible();
+      for (const label of selectedLabels)
+        await expect(grid.getByRole('checkbox', { name: label })).toBeChecked();
+      await user.click(canvas.getByRole('combobox', { name: 'Browsing mode' }));
+      await user.click(page.getByRole('option', { name: 'Paginated results' }));
+      await expect(canvas.getByRole('grid', { name: 'Alerts' })).toHaveAttribute(
+        'aria-rowcount',
+        '26',
+      );
+      for (const label of selectedLabels)
+        await expect(grid.getByRole('checkbox', { name: label })).toBeChecked();
+      await user.click(canvas.getByRole('button', { name: 'Change status' }));
+      await user.click(page.getByRole('menuitem', { name: 'In progress' }));
+      await expect(canvas.getByText('2 alerts updated in this local demo.')).toBeVisible();
+      await user.click(canvas.getByRole('button', { name: 'Clear selected alerts' }));
+    });
+    await step('Open event evidence and full alert details', async () => {
+      const grid = within(canvas.getByRole('grid', { name: 'Alerts' }));
+      await user.click(grid.getAllByRole('button', { name: /^Expand ALR-/ })[0]);
+      await expect(canvas.getByText(/Evidence events · ALR-/)).toBeVisible();
+      const row = grid.getAllByRole('row', { name: /^ALR-/ })[0];
+      row.focus();
+      await user.keyboard('{Enter}');
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expect(page.getByRole('tab', { name: /^Events/ })).toBeVisible();
+      await user.click(page.getByRole('button', { name: 'Close detail panel' }));
+      await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument());
+    });
+    await user.click(canvas.getByRole('button', { name: 'Restore demo' }));
+    canvasElement.ownerDocument.defaultView?.scrollTo({ top: 0 });
+  },
+};
+export const FullVirtualizedPresentation: Story = {
+  name: 'Full presentation · 1,000 rows',
+  render: () => <DataGridPresentation initialCount={1000} initialMode="virtual" />,
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+    docs: {
+      story: { inline: false, height: 1080 },
+      description: {
+        story:
+          'The same working filters and investigation actions with 1,000 records, continuous virtual scrolling, sticky headers, and inline evidence rows. Filtering reduces the backing data; the viewport mounts only the visible row window.',
+      },
+    },
+  },
+};
 export const Default: Story = {};
 export const DensityMatrix: Story = {
   render: (args) => (

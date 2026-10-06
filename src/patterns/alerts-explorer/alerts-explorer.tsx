@@ -38,6 +38,10 @@ export interface AlertsExplorerProps {
   error?: ReactNode;
   onRetry?: () => void;
   height?: number | string;
+  /** Disable pagination for a continuous investigation queue. */
+  pagination?: boolean;
+  /** Override automatic virtualization for large result sets. */
+  virtualize?: boolean;
   density?: GridDensity;
   onDensityChange?: (density: GridDensity) => void;
   renderEventDetail?: (alert: Alert) => ReactNode;
@@ -108,6 +112,8 @@ export function AlertsExplorer({
   error,
   onRetry,
   height = 540,
+  pagination,
+  virtualize,
   density,
   onDensityChange,
   renderEventDetail,
@@ -293,6 +299,8 @@ export function AlertsExplorer({
           rowLabel={(row) => `${row.id}: ${row.title}`}
           label="Alerts"
           height={height}
+          pagination={pagination}
+          virtualize={virtualize}
           density={density}
           onDensityChange={onDensityChange}
           loading={loading}

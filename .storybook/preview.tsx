@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByClassName, withThemeByDataAttribute } from '@storybook/addon-themes';
-import { AegisDocsContainer } from './docs-container';
+import { AegisDocsContainer, WithDocsTheme } from './docs-container';
 import '../src/styles/globals.css';
 const preview: Preview = {
   tags: ['autodocs'],
@@ -16,6 +16,8 @@ const preview: Preview = {
       attributeName: 'data-theme',
       parentSelector: 'html',
     }),
+    // The outer decorator supplies inherited globals before the theme strategies run.
+    WithDocsTheme,
   ],
   parameters: {
     layout: 'padded',
