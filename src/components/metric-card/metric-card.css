@@ -1,0 +1,57 @@
+.aegis-metric-card {
+  padding: var(--space-4);
+  min-width: 220px;
+}
+.aegis-metric-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+}
+.aegis-metric-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.aegis-metric-value {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  font-size: var(--text-3xl);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.aegis-metric-value > span {
+  margin-left: var(--space-1);
+  font-size: var(--text-md);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-text-secondary);
+}
+.aegis-metric-comparison {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+.aegis-metric-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.aegis-metric-delta[data-trend='success'] {
+  color: var(--color-success-fg);
+}
+.aegis-metric-delta[data-trend='destroy'] {
+  color: var(--color-destroy-fg);
+}
+.aegis-metric-loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}

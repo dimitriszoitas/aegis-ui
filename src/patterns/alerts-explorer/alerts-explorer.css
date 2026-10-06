@@ -34,20 +34,34 @@
 }
 .aegis-alert-title {
   display: grid;
-  gap: var(--space-1);
+  gap: 2px;
   min-width: 0;
 }
 .aegis-alert-title strong {
   font-weight: 500;
-  white-space: normal;
-  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 15px;
 }
 .aegis-alert-title > span {
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
+  line-height: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.aegis-data-grid[data-density='compact'] .aegis-alert-title {
+  gap: 0;
+}
+.aegis-data-grid[data-density='compact'] .aegis-alert-title strong {
+  font-size: var(--text-xs);
+  line-height: 14px;
+}
+.aegis-data-grid[data-density='compact'] .aegis-alert-title > span {
+  font-size: 11px;
+  line-height: 12px;
 }
 .aegis-alert-assignee {
   display: flex;
@@ -94,4 +108,14 @@
   .aegis-alerts-facets {
     transition: none;
   }
+}
+
+.aegis-alert-event-payloads {
+  margin-top: var(--space-4);
+}
+.aegis-alert-event-payloads > summary {
+  font-size: var(--text-xs);
+  color: var(--color-function-fg);
+  cursor: pointer;
+  padding: var(--space-2) 0;
 }

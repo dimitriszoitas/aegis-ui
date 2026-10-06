@@ -118,28 +118,21 @@ export function SideNav({
       aria-label="Main navigation"
     >
       <div className="nav-brand">
-        {collapsed ? (
-          <IconButton aria-label="Expand navigation" size="sm" emphasis="ghost" onClick={toggle}>
-            <PanelLeftOpen size={16} />
-          </IconButton>
-        ) : (
+        {!collapsed && (
           <span className="nav-mark">
             <Shield size={22} strokeWidth={1.6} />
           </span>
         )}
-        {!collapsed && (
-          <>
-            <strong>Aegis</strong>
-            <IconButton
-              aria-label="Collapse navigation"
-              size="sm"
-              emphasis="ghost"
-              onClick={toggle}
-            >
-              <PanelLeftClose size={16} />
-            </IconButton>
-          </>
-        )}
+        {!collapsed && <strong>Aegis</strong>}
+        <IconButton
+          key="navigation-toggle"
+          aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+          size="sm"
+          emphasis="ghost"
+          onClick={toggle}
+        >
+          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+        </IconButton>
       </div>
       {!collapsed && (
         <div className="nav-workspace">

@@ -1,0 +1,121 @@
+.aegis-diff-view {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+.aegis-diff-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-diff-title,
+.aegis-diff-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.aegis-diff-title h3 {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.aegis-diff-title > span {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.aegis-diff-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-canvas);
+  font-size: var(--text-xs);
+}
+.aegis-diff-legend > span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+}
+.aegis-diff-legend > span + span {
+  border-left: 1px solid var(--color-border-subtle);
+}
+.aegis-diff-removed {
+  color: var(--color-destroy-fg);
+}
+.aegis-diff-added {
+  color: var(--color-success-fg);
+}
+.aegis-diff-host {
+  min-height: var(--diff-min-height);
+}
+.aegis-diff-host .cm-mergeView,
+.aegis-diff-host > .cm-editor {
+  min-height: var(--diff-min-height);
+  max-height: var(--diff-max-height);
+  overflow: auto;
+}
+.aegis-diff-host .cm-mergeViewEditor + .cm-mergeViewEditor {
+  border-left: 1px solid var(--color-border-default);
+}
+.aegis-diff-host .cm-scroller {
+  scrollbar-color: var(--color-border-strong) var(--color-bg-canvas);
+}
+.aegis-diff-host .cm-mergeView:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: -2px;
+}
+.aegis-diff-host .cm-editor:focus-within {
+  box-shadow: inset 0 0 0 2px var(--ring-focus);
+}
+.aegis-diff-host .cm-merge-a .cm-changedLine,
+.aegis-diff-host .cm-deletedChunk {
+  background: color-mix(in srgb, var(--color-destroy-soft) 60%, var(--color-bg-surface));
+}
+.aegis-diff-host .cm-merge-b .cm-changedLine,
+.aegis-diff-host .cm-inlineChangedLine {
+  background: var(--color-success-soft);
+}
+.aegis-diff-host .cm-merge-a .cm-changedText,
+.aegis-diff-host .cm-deletedText {
+  background: none !important;
+  text-decoration: underline var(--color-destroy-fg) 2px !important;
+  text-underline-offset: 3px;
+}
+.aegis-diff-host .cm-merge-b .cm-changedText {
+  background: none !important;
+  text-decoration: underline var(--color-success-fg) 2px !important;
+  text-underline-offset: 3px;
+}
+.aegis-diff-host .cm-merge-a .cm-changedLineGutter,
+.aegis-diff-host .cm-deletedLineGutter {
+  background: var(--color-destroy-bg) !important;
+}
+.aegis-diff-host .cm-merge-b .cm-changedLineGutter {
+  background: var(--color-success-bg) !important;
+}
+.aegis-diff-host .cm-inlineChangedLineGutter {
+  background: var(--color-ai-bg) !important;
+}
+.aegis-diff-host .cm-collapsedLines {
+  color: var(--color-text-secondary) !important;
+  background: var(--color-bg-hover) !important;
+  border-block: 1px solid var(--color-border-subtle);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+}
+.aegis-diff-host .cm-collapsedLines:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: -2px;
+}
+.aegis-diff-view[data-mode='unified'] .aegis-diff-legend {
+  display: flex;
+  flex-wrap: wrap;
+}

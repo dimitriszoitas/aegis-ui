@@ -1,0 +1,97 @@
+import { ArrowDownRight, ArrowUpRight, Minus } from 'lucide-react';
+import { Card, type CardProps } from '@/components/card';
+import { Skeleton } from '@/components/skeleton';
+import { Sparkline, type SparklineProps } from '@/components/sparkline';
+import { cn } from '@/lib/utils';
+import './metric-card.css';
+
+export interface MetricCardProps extends Omit<CardProps, 'children'> {
+  label: string;
+  value: number | string;
+  unit?: string;
+  delta?: number;
+  deltaLabel?: string;
+  /** Set explicitly when a decrease is desirable, such as mean time to resolution. */
+  trendIsPositive?: boolean;
+  sparkline?: readonly number[];
+  sparklineVariant?: SparklineProps['variant'];
+  loading?: boolean;
+  format?: Intl.NumberFormatOptions;
+}
+export function MetricCard({
+  label,
+  value,
+  unit,
+  delta,
+  deltaLabel = 'vs previous 24h',
+  trendIsPositive,
+  sparkline,
+  sparklineVariant = 'line',
+  loading = false,
+  format,
+  className,
+  ...props
+}: MetricCardProps) {
+  const change = delta === undefined || !Number.isFinite(delta) ? undefined : delta;
+  const positive = trendIsPositive ?? (change !== undefined && change > 0);
+  const trend = change === undefined || change === 0 ? 'neutral' : positive ? 'success' : 'destroy';
+  const Arrow = change === 0 ? Minus : (change ?? 0) < 0 ? ArrowDownRight : ArrowUpRight;
+  return (
+    <Card
+      {...props}
+      className={cn('aegis-metric-card', className)}
+      aria-label={label}
+      aria-busy={loading || undefined}
+    >
+      <div className="aegis-metric-label">{label}</div>
+      {loading ? (
+        <div
+          className="aegis-metric-loading"
+          role="status"
+          aria-label={`Loading ${label.toLowerCase()}`}
+        >
+          <Skeleton width="60%" height={30} />
+          <Skeleton width="85%" />
+        </div>
+      ) : (
+        <>
+          <div className="aegis-metric-main">
+            <div className="aegis-metric-value">
+              {typeof value === 'number'
+                ? new Intl.NumberFormat('en-GB', format).format(value)
+                : value}
+              {unit && <span>{unit}</span>}
+            </div>
+            {sparkline && (
+              <Sparkline
+                data={sparkline}
+                variant={sparklineVariant}
+                intent={trend === 'neutral' ? 'function' : trend}
+                label={`${label} over the last 24 hours`}
+              />
+            )}
+          </div>
+          {change !== undefined && (
+            <div className="aegis-metric-comparison">
+              <span className="aegis-metric-delta" data-trend={trend}>
+                <Arrow size={14} aria-hidden="true" />
+                <span>
+                  {change > 0 ? '+' : ''}
+                  {change.toLocaleString('en-GB', { maximumFractionDigits: 1 })}%
+                </span>
+                <span className="sr-only">
+                  {change === 0
+                    ? ', unchanged'
+                    : positive
+                      ? ', favorable change'
+                      : ', unfavorable change'}
+                </span>
+              </span>
+              <span>{deltaLabel}</span>
+            </div>
+          )}
+        </>
+      )}
+    </Card>
+  );
+}

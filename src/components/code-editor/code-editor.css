@@ -1,0 +1,38 @@
+.aegis-code-editor {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+}
+.aegis-code-editor:focus-within {
+  border-color: var(--ring-focus);
+  box-shadow: 0 0 0 2px var(--color-function-soft);
+}
+.aegis-code-editor .cm-scroller {
+  scrollbar-color: var(--color-border-strong) var(--color-bg-canvas);
+}
+.aegis-code-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-canvas);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-code-status-divider {
+  margin: 0 var(--space-2);
+}
+.aegis-code-editor .cm-foldGutter .cm-gutterElement {
+  cursor: pointer;
+}
+.aegis-code-editor .cm-panels button:focus-visible,
+.aegis-code-editor .cm-panels input:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}

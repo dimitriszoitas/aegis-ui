@@ -15,6 +15,8 @@ import {
 } from '@/components/data-grid-cells';
 import { BulkActionsBar } from '@/components/bulk-actions-bar';
 import { Avatar } from '@/components/avatar';
+import { JsonViewer } from '@/components/json-viewer';
+import { Tooltip } from '@/components/tooltip';
 import { FilterBar } from '@/patterns/filter-bar';
 import { FilterPanel } from '@/patterns/filter-panel';
 import { applyAlertFilters, createDefaultFilters, type AlertFilterState } from '@/lib/filters';
@@ -38,7 +40,11 @@ export interface AlertsExplorerProps {
   height?: number | string;
   renderEventDetail?: (alert: Alert) => ReactNode;
 }
-export function AlertEventsTable({ alert, now }: { alert: Alert; now?: Date | number }) {
+export interface AlertEventsTableProps {
+  alert: Alert;
+  now?: Date | number;
+}
+export function AlertEventsTable({ alert, now }: AlertEventsTableProps) {
   return (
     <div className="aegis-alert-events">
       <h3>Evidence events · {alert.id}</h3>
@@ -68,6 +74,19 @@ export function AlertEventsTable({ alert, now }: { alert: Alert; now?: Date | nu
           ))}
         </tbody>
       </table>
+      <details className="aegis-alert-event-payloads">
+        <summary>Inspect raw event payloads</summary>
+        <JsonViewer
+          value={alert.events.map((event) => ({
+            id: event.id,
+            timestamp: event.timestamp,
+            ...event.payload,
+          }))}
+          label={`Raw evidence for ${alert.id}`}
+          defaultExpandedDepth={1}
+          maxHeight={360}
+        />
+      </details>
     </div>
   );
 }
@@ -132,7 +151,9 @@ export function AlertsExplorer({
       enableHiding: false,
       cell: ({ row }) => (
         <div className="aegis-alert-title">
-          <strong>{row.original.title}</strong>
+          <Tooltip content={row.original.title}>
+            <strong>{row.original.title}</strong>
+          </Tooltip>
           <span>
             <code>{row.original.id}</code>
             <span aria-hidden="true"> · </span>

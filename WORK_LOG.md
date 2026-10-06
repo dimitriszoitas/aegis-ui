@@ -8,7 +8,8 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Phase 3 complete: composite controls, tree, dates, navigation, overlays, wizard shell. Eight logic tests pass (four tree, four time range). Browser checks cover dialog focus/inertness, typed confirmation, menu Tab/Shift+Tab and context-menu keyboard invocation. Composite stories passed both-theme accessibility checks, including static retests of Select repairs.
 - Phase 4 complete: deterministic alerts and valid detection rules, full TanStack grid and ten cell renderers, synchronized filter bar/push panel, functional bulk assignment/status/AI context. Fifteen logic tests pass; 116 story/theme scans plus 32 final interaction-aware retests pass. Virtualization verified with 1,000 rows and measured expanded details.
 - User refinements included: vertical wizard retained for the full demo; 6/8/10px control radii by size, sidebar 16/12px with top toggle, chevron inset, gradient AI treatments, line/dot separators with normal/light emphasis.
-- Phases 5–9 pending: code/viz; AI; console; polish; GitHub/Pages.
+- Phase 5 complete: token-themed YAML/JSON editor, read-only YAML presenter, split/unified diffs, keyboard JSON viewer with copy paths/values, Recharts kit, sparklines, metrics, brushed event histogram, timeline, relative time, and resizable panels. Verified 48 code, 46 chart, 12 JSON, 42 integration/utility/theme checks plus 22 static code retests; fixed deleted-line contrast. Existing 15 logic tests pass; typecheck/lint/build green.
+- Phases 6–9 pending: AI; console; polish; GitHub/Pages.
 
 ## Verification setup
 
