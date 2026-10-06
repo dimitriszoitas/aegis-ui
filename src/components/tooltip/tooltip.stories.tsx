@@ -5,8 +5,9 @@ import { Tooltip, RichTooltip } from './tooltip';
 const meta = {
   title: 'Components/Overlays/Tooltip',
   component: Tooltip,
+  subcomponents: { RichTooltip },
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'centered', docs: { story: { inline: false, height: 280 } } },
   args: {
     content: 'Open the alert investigation',
     children: <button className="aegis-tooltip-demo-trigger">Investigate alert</button>,

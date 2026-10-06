@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { TimeRangePicker, type TimeRange } from './time-range-picker';
+import { Field } from '@/components/field';
 import { resolveTimeRange, timePresets } from '@/lib/time-range';
 export default {
   title: 'Components/Forms/TimeRangePicker',
   component: TimeRangePicker,
+  parameters: { docs: { story: { inline: false, height: 600 } } },
 } satisfies Meta<typeof TimeRangePicker>;
 const now = Date.UTC(2026, 9, 6, 12);
 export const Matrix: StoryObj<typeof TimeRangePicker> = {
@@ -41,3 +44,51 @@ export const CustomCalendar: StoryObj<typeof TimeRangePicker> = {
   },
 };
 export const Presets: StoryObj<typeof TimeRangePicker> = { args: { defaultOpen: true, now } };
+export const FieldComposition: StoryObj<typeof TimeRangePicker> = {
+  render: function FieldRanges() {
+    const [value, setValue] = useState<TimeRange>({ mode: 'relative', preset: '24h' });
+    return (
+      <div className="story-grid">
+        <Field
+          label="Investigation window"
+          required
+          helpText="Limits the events included in this investigation."
+          error={
+            value.mode === 'relative' && value.preset === '24h'
+              ? 'Choose the last hour for active-alert review.'
+              : undefined
+          }
+        >
+          <TimeRangePicker value={value} onValueChange={setValue} now={now} />
+        </Field>
+        <Field
+          label="Archived reporting window"
+          disabled
+          helpText="This completed report has a fixed scope."
+        >
+          <TimeRangePicker defaultValue={{ mode: 'relative', preset: '7d' }} now={now} />
+        </Field>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const portal = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('button', { name: 'Investigation window (required)' });
+    await expect(trigger).toHaveAttribute('aria-invalid', 'true');
+    await expect(trigger).toHaveAccessibleDescription(
+      /Limits the events included in this investigation/,
+    );
+    await expect(trigger).toHaveAccessibleDescription(/Choose the last hour/);
+    await expect(canvas.getByRole('button', { name: 'Archived reporting window' })).toBeDisabled();
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.click(await portal.findByRole('button', { name: 'Last hour' }));
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await expect(trigger).toHaveTextContent('Last 1h');
+    await expect(trigger).toHaveAttribute('aria-invalid', 'false');
+    await expect(trigger).toHaveAccessibleDescription(
+      'Limits the events included in this investigation. Last 1h',
+    );
+  },
+};

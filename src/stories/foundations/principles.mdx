@@ -1,5 +1,10 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { SurfaceExamples, AiLanguageExample } from './foundation-examples';
+import {
+  SurfaceExamples,
+  AiLanguageExample,
+  DensityExamples,
+  FoundationLinks,
+} from './foundation-examples';
 
 <Meta title="Foundations/Principles" />
 
@@ -23,11 +28,19 @@ Neutral surfaces carry most of the interface. Function blue identifies the next 
 
 ## Preserve the analyst’s attention
 
-Use a 14px interface base and a 13px dense-grid base. Keep timestamps, identifiers, host addresses, and code in JetBrains Mono. Align numeric values with tabular numerals. Compact density supports scanning; comfortable density supports investigation. Density changes spacing, not the hierarchy or available actions.
+Use a 14px interface base and a 13px dense-grid base. Keep timestamps, identifiers, host addresses, and code in JetBrains Mono. Align numeric values with tabular numerals. Grid rows measure 36px in compact density, 48px by default, and 60px in comfortable density. Use compact for rapid scanning and comfortable when secondary context needs room. Long alert titles stay on one line, with the full title available through the tooltip and accessible row label. Keep secondary metadata within the chosen row height. Density preserves the hierarchy and available actions.
+
+<DensityExamples />
+
+Use normal separators for clear boundaries and light separators for quieter grouping. A line divides sections; a dot separates short inline metadata. Both variants inherit semantic theme tokens.
 
 ## Make every path accessible
 
 Every action has a visible label or accessible name. Focus uses the same 2px function-colored ring and 2px offset throughout. Keyboard users can enter and leave menus, navigate trees and grids, and complete dialogs. Restore focus after closing an overlay. Reduced-motion preferences remove decorative animation while preserving clear state changes.
+
+## Guide multi-step work
+
+The console opens rule creation with a vertical stepper so progress stays beside the active task. The reusable wizard also supports a horizontal layout. Keep completed steps revisitable, validate before advancing, and focus the new step heading. A sticky footer holds Back, Continue, and the final action; leaving a dirty workflow requires an explicit choice.
 
 ## Keep AI accountable
 
@@ -35,6 +48,12 @@ AI is an explicit intent with recognizable gradient treatments and the sparkles 
 
 <AiLanguageExample />
 
-Streaming must leave the interface usable: analysts can stop generation, inspect evidence, or continue working. Explain tool progress in plain language, such as “Queried 1,284 events across 3 sources.” Consequential changes require a human decision. Show the current and proposed rule together, provide explicit approve and reject actions, and record who approved the change.
+Streaming must leave the interface usable: analysts can stop generation, inspect evidence, or continue working. Describe only work that actually occurred. The local mock says it scoped supplied evidence and prepared verification steps; a production adapter can report query results only after a query runs. Consequential changes require a human decision. Show the current and proposed rule together, provide explicit approve and reject actions, and record who approved the change.
+
+Each assistant turn snapshots its evidence context. New selection cannot change an in-flight response, and regeneration reuses that original snapshot. Stop preserves partial output and returns focus to the composer. Late events from canceled or superseded streams are ignored.
 
 The interactive examples use local, deterministic responses. They illustrate interaction behavior and do not connect to security infrastructure.
+
+## Explore working examples
+
+<FoundationLinks />

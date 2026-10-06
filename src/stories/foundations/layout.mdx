@@ -5,6 +5,7 @@ import {
   ControlRadiusExamples,
   SeparatorExamples,
   SpacingExamples,
+  DensityExamples,
 } from './foundation-examples';
 
 <Meta title="Foundations/Space and surfaces" />
@@ -38,15 +39,25 @@ Cards use 12px corners and sheets use 16px. Floating navigation uses 16px while 
 
 ## Spacing
 
-The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px inside cards, and 20px inside floating containers. Dense grid rows use 8–10px vertical cell padding.
+The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px inside cards, and 20px inside floating containers. Grid cell padding follows density: 3px vertically in compact rows, 8px by default, and 10px in comfortable rows.
 
 <SpacingExamples />
+
+## Data density
+
+Use the component row-height tokens: `--grid-row-compact` is 36px, `--grid-row-default` is 48px, and `--grid-row-comfortable` is 60px. Expanded evidence is measured separately, so changing density does not clip nested payloads. Truncate long primary labels within the row and expose the full value through a tooltip or accessible label.
+
+<DensityExamples />
 
 ## Separators
 
 Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs.
 
 <SeparatorExamples />
+
+## Workflow layout
+
+The detection-rule wizard supports a horizontal stepper and a vertical rail. The console defaults to the vertical layout; at narrow widths the rail stacks above the active step. Use the sticky footer to keep navigation and explicit approval within reach.
 
 ## Layer order
 

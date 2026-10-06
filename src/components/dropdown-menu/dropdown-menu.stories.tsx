@@ -41,7 +41,7 @@ const meta = {
   title: 'Components/Lists/DropdownMenu',
   component: DropdownMenu,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { layout: 'centered', docs: { story: { inline: false, height: 460 } } },
   args: {
     trigger: (
       <button className="aegis-menu-demo-trigger">

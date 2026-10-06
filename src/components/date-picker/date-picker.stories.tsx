@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatePicker } from './date-picker';
 import { Field } from '@/components/field';
-export default { title: 'Components/Forms/DatePicker', component: DatePicker } satisfies Meta<
-  typeof DatePicker
->;
+export default {
+  title: 'Components/Forms/DatePicker',
+  component: DatePicker,
+  parameters: { docs: { story: { inline: false, height: 420 } } },
+} satisfies Meta<typeof DatePicker>;
 export const Matrix: StoryObj<typeof DatePicker> = {
   render: () => (
     <div className="row">

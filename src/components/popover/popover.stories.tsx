@@ -5,8 +5,18 @@ import { Popover, PopoverClose } from './popover';
 const meta = {
   title: 'Components/Overlays/Popover',
   component: Popover,
+  subcomponents: { PopoverClose },
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          '`PopoverClose` closes its nearest parent popover and inherits native button props from Radix. It must be rendered inside that parent.\n\n| PopoverClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
+      },
+      story: { inline: false, height: 360 },
+    },
+  },
   args: {
     trigger: <button className="aegis-popover-demo-trigger">Evidence details</button>,
     title: 'Identity correlation',

@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { Tag } from './tag';
-export default { title: 'Components/Tags/Tag', component: Tag } satisfies Meta<typeof Tag>;
+import { Tag, Chip } from './tag';
+export default {
+  title: 'Components/Tags/Tag',
+  component: Tag,
+  subcomponents: { Chip },
+} satisfies Meta<typeof Tag>;
 function Tags() {
   const [selected, setSelected] = useState(false);
   const [removed, setRemoved] = useState(false);

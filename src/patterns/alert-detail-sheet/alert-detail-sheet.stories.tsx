@@ -94,7 +94,7 @@ const meta = {
     onOpenChange: () => {},
     now: referenceTime,
   },
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', docs: { story: { inline: false, height: 760 } } },
   render: () => <DetailDemo />,
 } satisfies Meta<typeof AlertDetailSheet>;
 export default meta;

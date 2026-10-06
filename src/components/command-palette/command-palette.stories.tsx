@@ -7,6 +7,7 @@ import { Button } from '@/components/button';
 export default {
   title: 'Components/Navigation/CommandPalette',
   component: CommandPalette,
+  parameters: { docs: { story: { inline: false, height: 620 } } },
 } satisfies Meta<typeof CommandPalette>;
 function Commands({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen),

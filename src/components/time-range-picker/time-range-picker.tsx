@@ -3,26 +3,32 @@ import { DayPicker, type DateRange } from 'react-day-picker';
 import { Clock3, Check } from 'lucide-react';
 import { Popover } from '@/components/popover';
 import { Button } from '@/components/button';
+import { mergeDescriptionIds, useFieldControl, type FieldControlProps } from '@/components/field';
 import { timePresets, resolveTimeRange, formatTimeRange, type TimeRange } from '@/lib/time-range';
 import 'react-day-picker/style.css';
 import '@/components/date-picker/date-picker.css';
+import './time-range-picker.css';
 export type { TimeRange, TimePreset } from '@/lib/time-range';
-export interface TimeRangePickerProps {
+export interface TimeRangePickerProps extends FieldControlProps {
   value?: TimeRange;
   defaultValue?: TimeRange;
   onValueChange?: (range: TimeRange) => void;
   now?: Date | number;
-  disabled?: boolean;
   defaultOpen?: boolean;
+  /** Accessible standalone label. A surrounding Field supplies its own label. */
+  label?: string;
 }
 export function TimeRangePicker({
   value,
   defaultValue = { mode: 'relative', preset: '24h' },
   onValueChange,
   now,
-  disabled,
   defaultOpen = false,
+  label = 'Time range',
+  ...fieldProps
 }: TimeRangePickerProps) {
+  const control = useFieldControl(fieldProps);
+  const valueId = useId();
   const [internal, setInternal] = useState(defaultValue);
   const active = value ?? internal;
   const [open, setOpen] = useState(defaultOpen);
@@ -33,6 +39,7 @@ export function TimeRangePicker({
     [toTime, setToTime] = useState(initial.to.toISOString().slice(11, 16));
   const errorId = useId();
   const commit = (v: TimeRange) => {
+    if (control.disabled) return;
     setInternal(v);
     onValueChange?.(v);
     setOpen(false);
@@ -50,8 +57,10 @@ export function TimeRangePicker({
   };
   return (
     <Popover
-      open={open}
+      label={label}
+      open={open && !control.disabled}
       onOpenChange={(next) => {
+        if (control.disabled) return;
         setOpen(next);
         if (next) {
           const r = resolveTimeRange(active, now);
@@ -63,12 +72,22 @@ export function TimeRangePicker({
       }}
       trigger={
         <Button
+          id={control.id}
+          className="aegis-time-range-trigger"
           emphasis="ghost"
           leadingIcon={<Clock3 size={15} />}
-          disabled={disabled}
-          aria-label={`Time range: ${formatTimeRange(active)}`}
+          disabled={control.disabled}
+          aria-label={
+            control['aria-labelledby'] ? undefined : `${label}: ${formatTimeRange(active)}`
+          }
+          aria-labelledby={control['aria-labelledby']}
+          aria-describedby={mergeDescriptionIds(
+            control['aria-describedby'],
+            control['aria-labelledby'] ? valueId : undefined,
+          )}
+          aria-invalid={control['aria-invalid']}
         >
-          {formatTimeRange(active)}
+          <span id={valueId}>{formatTimeRange(active)}</span>
         </Button>
       }
     >

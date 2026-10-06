@@ -6,9 +6,12 @@ import { Avatar } from '@/components/avatar';
 import { IconButton } from '@/components/icon-button';
 import { SeverityBadge } from '@/components/severity-badge';
 
-const meta = { title: 'Components/Lists/List', component: List, tags: ['autodocs'] } satisfies Meta<
-  typeof List
->;
+const meta = {
+  title: 'Components/Lists/List',
+  component: List,
+  subcomponents: { ListItem },
+  tags: ['autodocs'],
+} satisfies Meta<typeof List>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 const alerts = [

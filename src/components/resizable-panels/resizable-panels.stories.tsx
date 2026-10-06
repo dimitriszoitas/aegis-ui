@@ -4,6 +4,15 @@ import { SeverityBadge } from '@/components/severity-badge';
 const meta = {
   title: 'Components/Layout/ResizablePanels',
   component: ResizablePanels,
+  subcomponents: { ResizablePanel, ResizeHandle },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "`ResizablePanel` inherits `PanelProps` from react-resizable-panels and forwards native div attributes. Size numbers are pixels; explicit strings such as `\"35%\"` keep proportional layouts.\n\n| ResizablePanel prop | Type | Default / behavior |\n| --- | --- | --- |\n| id | `string` or `number` | Generated ID; use stable IDs for saved layouts |\n| children | `ReactNode` | Content within the panel |\n| defaultSize | `number` or `string` | Shares available space when omitted |\n| minSize / maxSize | `number` or `string` | `0%` / `100%` |\n| collapsible | `boolean` | Enables collapse below the minimum size |\n| collapsedSize | `number` or `string` | `0%` |\n| collapsedThreshold | `number` or `string` | Half the gap between collapsedSize and minSize |\n| disabled | `boolean` | Prevents direct and indirect resizing |\n| groupResizeBehavior | `'preserve-relative-size'` or `'preserve-pixel-size'` | `'preserve-relative-size'` |\n| onResize | `(size, id, previousSize) => void` | Sizes contain `asPercentage` and `inPixels` |\n| panelRef / elementRef | `Ref<PanelImperativeHandle>` / `Ref<HTMLDivElement>` | Imperative panel controls / DOM access |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n\nCollapsed panels become inert and hidden from assistive technology. `ResizeHandle` has its own prop table below and supports arrow keys and Enter.\n",
+      },
+    },
+  },
   tags: ['autodocs'],
   args: { orientation: 'horizontal' },
   render: (args) => (

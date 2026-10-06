@@ -74,6 +74,7 @@ function ExplorerDemo({ panelOpen = false }: { panelOpen?: boolean }) {
 const meta = {
   title: 'Patterns/Alerts explorer',
   component: AlertsExplorer,
+  subcomponents: { AlertEventsTable },
   tags: ['autodocs'],
   args: { alerts: fixtures, analysts, onAlertsChange: () => {}, onAskAi: () => {} },
   parameters: { layout: 'fullscreen' },

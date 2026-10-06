@@ -16,7 +16,7 @@ export function ThemeFrame({ theme, children }: ThemeFrameProps) {
       style={{ ...tokenValues[theme], colorScheme: theme } as CSSProperties}
       aria-label={`${theme} theme examples`}
     >
-      <div className="foundation-eyebrow">{theme} theme</div>
+      <div className="foundation-eyebrow">{theme === 'dark' ? 'Dark theme' : 'Light theme'}</div>
       {children}
     </section>
   );
@@ -314,5 +314,63 @@ export function AiLanguageExample() {
         account suspension.
       </div>
     </div>
+  );
+}
+
+/** The same component row-height tokens used by DataGrid, read from the CSS source. */
+export function DensityExamples() {
+  return (
+    <div className="foundation-density-examples">
+      {(['compact', 'default', 'comfortable'] as const).map((density) => (
+        <section key={density} aria-label={`${density} grid density`}>
+          <div className="foundation-density-label">
+            <strong>{density[0].toUpperCase() + density.slice(1)}</strong>
+            <code>{tokenValues.light[`--grid-row-${density}`]}</code>
+          </div>
+          <div className="foundation-density-row" style={{ height: `var(--grid-row-${density})` }}>
+            <code>ALR-1049</code>
+            <span>Encoded PowerShell on WS-ATH-114</span>
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+export function FoundationLinks() {
+  const links = [
+    {
+      label: 'Explore the SIEM console',
+      id: 'console-siem-console--alerts',
+      description: 'An end-to-end investigation workspace.',
+    },
+    {
+      label: 'Compare grid densities',
+      id: 'components-data-datagrid--density-matrix',
+      description: 'Compact, default, and comfortable rows.',
+    },
+    {
+      label: 'Create a detection rule',
+      id: 'patterns-detection-rule-wizard--vertical',
+      description: 'A vertical workflow with analyst approval.',
+    },
+    {
+      label: 'Inspect AI streaming',
+      id: 'patterns-ai-aipanel--streaming',
+      description: 'Context, cancellation, and evidence navigation.',
+    },
+  ];
+  return (
+    <nav aria-label="Explore Aegis examples">
+      <ul className="foundation-links">
+        {links.map((link) => (
+          <li key={link.id}>
+            <a href={`./?path=/story/${link.id}`} target="_top">
+              {link.label}
+            </a>
+            <p>{link.description}</p>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

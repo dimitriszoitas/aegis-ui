@@ -29,6 +29,7 @@ const items: ContextMenuEntry[] = [
 const meta = {
   title: 'Components/Lists/ContextMenu',
   component: ContextMenu,
+  parameters: { docs: { story: { inline: false, height: 460 } } },
   tags: ['autodocs'],
   args: {
     children: (

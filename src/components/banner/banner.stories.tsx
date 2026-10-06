@@ -5,6 +5,7 @@ import { Button } from '@/components/button';
 const meta = {
   title: 'Components/Feedback/Banner',
   component: Banner,
+  subcomponents: { Callout },
   tags: ['autodocs'],
   args: {
     title: 'New telemetry source connected',

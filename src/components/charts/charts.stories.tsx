@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ChartContainer, ChartLegend, ChartTooltip } from './charts';
+import { ChartContainer, ChartLegend, ChartTooltip, ChartDataTable } from './charts';
 import { Button } from '@/components/button';
 const meta = {
   title: 'Components/Charts/Chart container',
   component: ChartContainer,
+  subcomponents: { ChartTooltip, ChartLegend, ChartDataTable },
   tags: ['autodocs'],
   args: {
     title: 'Authentication events',

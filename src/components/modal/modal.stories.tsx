@@ -3,11 +3,21 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '../button';
 import { TextInput } from '../text-input';
-import { Modal, ModalClose, ConfirmDialog } from './modal';
+import { Modal, Dialog, ModalClose, ConfirmDialog } from './modal';
 
 const meta = {
   title: 'Components/Overlays/Modal',
   component: Modal,
+  subcomponents: { Dialog, ConfirmDialog, ModalClose },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          '`ModalClose` closes its nearest parent modal and inherits native button props from Radix. It must be rendered inside that parent.\n\n| ModalClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
+      },
+      story: { inline: false, height: 600 },
+    },
+  },
   tags: ['autodocs'],
   args: {
     title: 'Assign alert to an analyst',

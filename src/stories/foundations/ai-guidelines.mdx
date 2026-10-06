@@ -1,6 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { AiCard, AiHighlight } from '../../components/ai-card';
 import { ConfidenceBadge } from '../../components/confidence-badge';
+import { FoundationLinks } from './foundation-examples';
 import { ThinkingIndicator } from '../../components/thinking-indicator';
 
 <Meta title="Foundations/AI guidelines" />
@@ -18,8 +19,8 @@ Use `--gradient-ai` for prominent AI actions, `--gradient-ai-soft` for quiet con
   confidence="high"
   provenance="EDR process evidence · ALR-1049"
 >
-  The process payload shows an Office parent and encoded PowerShell. Review the originating document
-  and confirm whether the execution was approved before assigning a verdict.
+  The attached alert identifies encoded PowerShell activity. Inspect the parent process and original
+  command line, then confirm whether the execution was approved before assigning a verdict.
 </AiCard>
 
 ## Confidence is evidence strength
@@ -40,7 +41,7 @@ Stream readable markdown while leaving the interface usable. A caret indicates i
   messages={['Reviewing the selected evidence', 'Preparing analyst verification steps']}
 />
 
-Stop generation immediately when requested and preserve partial output. Show recoverable failures inline with a retry action. Copy, feedback, evidence links, and regenerate actions remain keyboard accessible. Rendering markdown never executes raw HTML from a generated response.
+Stop generation immediately when requested and preserve partial output. Show recoverable failures inline with a retry action. Copy, feedback, evidence links, and regenerate actions remain keyboard accessible. A stop before the first text token still offers regeneration. Return focus to the composer when a Stop or Regenerate control is replaced. Rendering markdown never executes raw HTML from a generated response.
 
 ## Show scope and provenance
 
@@ -50,8 +51,18 @@ The panel's context chips show which alerts, rules, events, and time scope the a
   Verify travel and approved VPN usage before escalating this sign-in alert.
 </AiHighlight>
 
+## Preserve the context of each turn
+
+Snapshot the prompt and attached context when a turn starts. Changing the visible selection affects the next request, while an existing turn and its citations keep their original scope. Regeneration uses that saved scope. A new keyed request may replace an active stream; cancel the old stream and ignore any late events, even if the adapter does not honor cancellation. Closing the panel stops its active generation and keeps the transcript available when reopened.
+
+The composer sends with Enter and inserts a new line with Shift+Enter. The slash-command menu fills a draft for review; it does not send automatically. Attaching or removing context changes the visible chips. Failed sends retain the draft, and IME composition must finish before Enter can submit.
+
 ## Keep consequential decisions with the analyst
 
 AI may propose detection logic, summarise an investigation, or suggest the next verification step. Applying a proposed rule requires an explicit review with the current and proposed YAML, approve and reject actions, and an audit line. A suggestion, confidence badge, or generated summary never applies an action by itself.
 
 All examples stream deterministic local responses. They use no API keys, make no model requests, and do not execute security actions.
+
+## Explore the interaction patterns
+
+<FoundationLinks />

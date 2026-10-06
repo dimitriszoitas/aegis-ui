@@ -33,6 +33,8 @@ function AlertFields() {
 const meta = {
   title: 'Components/Overlays/SideSheet',
   component: SideSheet,
+  subcomponents: { SideSheetSection, SideSheetField },
+  parameters: { docs: { story: { inline: false, height: 600 } } },
   tags: ['autodocs'],
   args: {
     title: 'Encoded PowerShell command on WS-ATH-114',

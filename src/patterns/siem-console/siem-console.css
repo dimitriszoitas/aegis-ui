@@ -102,6 +102,7 @@
   border: 0;
   box-shadow: none;
   padding: 0;
+  background: transparent;
 }
 .aegis-console-histogram .aegis-chart-title {
   font-size: var(--text-sm);
@@ -111,6 +112,7 @@
 }
 .aegis-console-alert-card .aegis-tabs-content {
   margin-top: 0;
+  padding-block: 0;
 }
 .aegis-console-alert-card .aegis-alerts-explorer {
   border: 0;

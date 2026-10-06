@@ -46,7 +46,7 @@ const meta = {
   component: AiPanel,
   tags: ['autodocs'],
   args: { defaultOpen: true, context, availableContext: context },
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', docs: { story: { inline: false, height: 760 } } },
 } satisfies Meta<typeof AiPanel>;
 export default meta;
 type Story = StoryObj<typeof meta>;

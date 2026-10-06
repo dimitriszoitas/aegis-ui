@@ -5,6 +5,15 @@ import { Toast, Toaster, showToast, type ToastIntent } from './toast';
 const meta = {
   title: 'Components/Feedback/Toast',
   component: Toast,
+  subcomponents: { Toaster },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Mount one `Toaster` per application shell and call `showToast` to display an Aegis notification. `ToasterProps` inherits the Sonner host API; `toastOptions.unstyled` and the Aegis toast class remain enabled.\n\n| Toaster prop | Type | Aegis default / behavior |\n| --- | --- | --- |\n| position | `'top-left'`, `'top-center'`, `'top-right'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'` | `'bottom-right'` |\n| offset | `number`, `string` or side-offset object | `12` |\n| gap | `number` | `12` |\n| visibleToasts | `number` | `4` |\n| duration | `number` | Inherited Sonner timeout in milliseconds |\n| theme | `'light'`, `'dark'`, `'system'` | Optional host appearance; Aegis content uses semantic theme tokens |\n| expand / closeButton | `boolean` | Expand stacked notifications / show a close control |\n| hotkey | `string[]` | Keyboard shortcut that focuses the notification region |\n| containerAriaLabel | `string` | Accessible name for the notification region |\n| toastOptions | `ToastOptions` | Shared toast settings |\n| className / style | `string` / `CSSProperties` | Host presentation props |\n",
+      },
+    },
+  },
   tags: ['autodocs'],
   args: {
     title: 'Alert assigned to Maya Chen',

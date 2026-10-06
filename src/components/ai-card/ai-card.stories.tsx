@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { AiCard, type AiFeedbackValue } from './ai-card';
+import { AiCard, AiLabel, AiFeedback, type AiFeedbackValue } from './ai-card';
 import { StreamingSkeleton } from '@/components/streaming-skeleton';
 const meta = {
   title: 'Components/AI/AiCard',
   component: AiCard,
+  subcomponents: { AiLabel, AiFeedback },
   tags: ['autodocs'],
 } satisfies Meta<typeof AiCard>;
 export default meta;

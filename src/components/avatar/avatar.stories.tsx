@@ -11,6 +11,7 @@ const analysts = [
 const meta = {
   title: 'Components/People/Avatar',
   component: Avatar,
+  subcomponents: { AvatarGroup },
   tags: ['autodocs'],
   args: { name: 'Eleni Papadopoulos' },
 } satisfies Meta<typeof Avatar>;
