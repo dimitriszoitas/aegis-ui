@@ -22,18 +22,20 @@ Raised surfaces use a subtle border and a small shadow. Floating chrome uses a l
 
 ## Radius
 
-Control radii follow control height. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes use a 4px radius.
+Radii are capped at 8px throughout the interface. Control radii follow control height within the 6–8px range. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes keep a 4px radius.
 
 | Control size | Height          | Radius | Token                 |
 | ------------ | --------------- | ------ | --------------------- |
 | Small        | 28px            | 6px    | `--control-radius-sm` |
-| Medium       | 34px            | 8px    | `--control-radius-md` |
-| Large        | 40px            | 10px   | `--control-radius-lg` |
+| Medium       | 34px            | 7px    | `--control-radius-md` |
+| Large        | 40px            | 8px    | `--control-radius-lg` |
 | Checkbox     | Compact control | 4px    | `--control-radius-xs` |
 
 <ControlRadiusExamples />
 
-Cards use 12px corners and sheets use 16px. Floating navigation uses 16px while expanded and 12px while collapsed; the expand or collapse toggle stays at the top in both states. Modals use 20px corners and chips use the full radius. Values below come from the shared primitive scale.
+Cards, sheets, and modals use 8px corners. Floating navigation uses 8px while expanded and 6px while collapsed; the expand or collapse toggle stays at the top in both states. Chips and badges are rounded rectangles with 6px corners from `--chip-radius`.
+
+The primitive scale is 6px for `xs` and `sm`, 7px for `md`, and 8px for `lg`, `xl`, and `2xl`. The legacy `--radius-full` token is also capped at 8px. Small dots can still appear circular because their dimensions constrain the rendered curve. Values below come from the shared primitive scale.
 
 <RadiusExamples />
 
@@ -48,6 +50,12 @@ The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px insid
 Use the component row-height tokens: `--grid-row-compact` is 36px, `--grid-row-default` is 48px, and `--grid-row-comfortable` is 60px. Expanded evidence is measured separately, so changing density does not clip nested payloads. Truncate long primary labels within the row and expose the full value through a tooltip or accessible label.
 
 <DensityExamples />
+
+## Scrollbars
+
+Overflowing pages and nested regions share native scrollbar styling in both themes. Where custom scrollbar styling is supported, an 8px transparent track contains a 6px thumb with a 1px inset and 4px corners. The thumb uses the strong border color, secondary text color on hover, and primary text color while active.
+
+Browsers using the standards fallback render a thin scrollbar. Forced-colors mode retains native styling. Scrollbar visibility follows content overflow and browser or operating-system preferences; content that fits does not need one. Keyboard, wheel, touch, and native scroll behavior remain unchanged.
 
 ## Separators
 

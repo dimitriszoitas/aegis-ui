@@ -175,7 +175,7 @@
   gap: 5px;
   padding: 4px 8px;
   border: 1px solid var(--color-ai-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--chip-radius);
   background: var(--gradient-ai-soft);
   color: var(--color-ai-fg);
   font-size: var(--text-xs);

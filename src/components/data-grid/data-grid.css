@@ -89,8 +89,6 @@
 .aegis-grid-scroll {
   width: 100%;
   overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-strong) var(--color-bg-canvas);
   border-radius: 0;
 }
 .aegis-grid-scroll:focus-visible {

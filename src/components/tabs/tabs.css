@@ -7,8 +7,6 @@
   max-width: 100%;
   overflow-x: auto;
   padding: var(--space-1);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-default) transparent;
   mask-image: linear-gradient(
     to right,
     transparent,
@@ -88,7 +86,7 @@
   min-width: 20px;
   height: 18px;
   padding-inline: 5px;
-  border-radius: var(--radius-full);
+  border-radius: var(--chip-radius);
   background: var(--color-bg-selected);
   color: var(--color-text-secondary);
   font-size: 11px;

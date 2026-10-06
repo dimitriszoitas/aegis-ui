@@ -65,9 +65,6 @@
 .aegis-diff-host .cm-mergeViewEditor + .cm-mergeViewEditor {
   border-left: 1px solid var(--color-border-default);
 }
-.aegis-diff-host .cm-scroller {
-  scrollbar-color: var(--color-border-strong) var(--color-bg-canvas);
-}
 .aegis-diff-host .cm-mergeView:focus-visible {
   outline: 2px solid var(--ring-focus);
   outline-offset: -2px;

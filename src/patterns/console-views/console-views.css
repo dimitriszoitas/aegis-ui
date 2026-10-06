@@ -55,8 +55,6 @@
 .aegis-console-picker-body {
   max-height: 640px;
   overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-default) transparent;
 }
 .aegis-console-picker .aegis-list-item-main {
   align-items: flex-start;

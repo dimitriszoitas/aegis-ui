@@ -44,13 +44,17 @@ Use the local URL printed by Vite. No environment variables, credentials, or ext
 
 ## Design principles
 
-**Floating surfaces.** Navigation is inset 12px from the viewport and uses 16px corners at its expanded 264px width, or 12px corners at its collapsed 68px width. The collapse/expand control stays at the top. Detail and AI sheets have 12px insets and 16px corners. Borders and layered shadows preserve the hierarchy in both themes.
+**Floating surfaces.** Navigation is inset 12px from the viewport and uses 8px corners at its expanded 240px width, or 6px corners at its collapsed 48px width. Expanded navigation has 12px interior padding; collapsed navigation uses 12px vertically and 4px horizontally. The collapse/expand control stays at the top. Detail and AI sheets have 12px insets and 8px corners. Borders and layered shadows preserve the hierarchy in both themes.
 
-**Corners follow control size.** Small, medium, and large controls are 28/34/40px high with 6/8/10px corners. Checkboxes use 4px corners. Line and dot separators each offer normal and light emphasis.
+**Corners stay compact.** Small, medium, and large controls are 28/34/40px high with 6/7/8px corners. Surface radii are capped at 8px. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
+
+**Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars, with stronger thumb colors on hover and drag. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
 
 **Color has a purpose.** Function blue identifies primary actions; the AI intent carries a violet-to-blue gradient through filled, soft, and foreground treatments. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long alert titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density never removes investigation actions.
+
+Once the console page header scrolls out of view, compact breadcrumbs and the same actions stay pinned above the content.
 
 **AI remains reviewable.** Generated output has a visible label and provenance. Each turn snapshots its supplied context; stopping preserves partial output, and regenerating uses that original snapshot. Late output from superseded requests is ignored. Proposed detection changes require explicit approval, and security actions are never performed by the mock.
 
@@ -63,6 +67,8 @@ The token system has three layers:
 3. Component tokens: control radii, sidebar dimensions, and grid densities.
 
 [`src/styles/tokens.css`](src/styles/tokens.css) is the color source of truth. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Inter and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
+
+Radius primitives use 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` token is also capped at 8px; chips use the dedicated 6px `--chip-radius` token.
 
 The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. Storybook's toolbar controls its preview theme independently.
 

@@ -1,18 +1,4 @@
 .aegis-scroll-area {
   overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-strong) transparent;
   overscroll-behavior: contain;
-}
-.aegis-scroll-area::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.aegis-scroll-area::-webkit-scrollbar-thumb {
-  background: var(--color-border-strong);
-  border: 2px solid var(--color-bg-surface);
-  border-radius: var(--radius-full);
-}
-.aegis-scroll-area::-webkit-scrollbar-track {
-  background: transparent;
 }

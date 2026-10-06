@@ -38,8 +38,6 @@
 .aegis-json-scroll {
   overflow: auto;
   padding-block: var(--space-2);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-strong) transparent;
 }
 .aegis-json-tree,
 .aegis-json-group {

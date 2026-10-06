@@ -162,8 +162,8 @@ export function ControlRadiusExamples() {
             {(
               [
                 { size: 'sm', height: 28, radius: 6 },
-                { size: 'md', height: 34, radius: 8 },
-                { size: 'lg', height: 40, radius: 10 },
+                { size: 'md', height: 34, radius: 7 },
+                { size: 'lg', height: 40, radius: 8 },
               ] as const
             ).map((control) => (
               <div className="foundation-control-radius-row" key={control.size}>

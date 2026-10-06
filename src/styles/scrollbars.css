@@ -1,0 +1,53 @@
+/* Keep native overflow, wheel/touch scrolling, and keyboard behavior. */
+@media (forced-colors: none) {
+  :where(*) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  :where(*):hover,
+  :where(*):focus-visible {
+    scrollbar-color: var(--scrollbar-thumb-hover) transparent;
+  }
+
+  @supports selector(::-webkit-scrollbar) {
+    /* Non-auto standard properties take precedence over these pseudo-elements. */
+    :where(*),
+    :where(*):hover,
+    :where(*):focus-visible {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+
+    ::-webkit-scrollbar {
+      width: var(--scrollbar-size);
+      height: var(--scrollbar-size);
+    }
+
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      min-width: 24px;
+      min-height: 24px;
+      border: var(--scrollbar-inset) solid transparent;
+      border-radius: var(--scrollbar-radius);
+      background: var(--scrollbar-thumb);
+      background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+      background-color: var(--scrollbar-thumb-active);
+    }
+
+    ::-webkit-scrollbar-button {
+      display: none;
+    }
+  }
+}

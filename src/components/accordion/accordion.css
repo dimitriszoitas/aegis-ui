@@ -56,7 +56,7 @@
   min-width: 22px;
   height: 20px;
   padding-inline: var(--space-1);
-  border-radius: var(--radius-full);
+  border-radius: var(--chip-radius);
   background: var(--color-bg-selected);
   color: var(--color-text-secondary);
   font-size: 11px;

@@ -65,7 +65,7 @@
   padding: 0 var(--space-1);
   color: var(--color-text-secondary);
   background: var(--color-bg-hover);
-  border-radius: var(--radius-full);
+  border-radius: var(--chip-radius);
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
 }
@@ -110,7 +110,7 @@ tr:focus-within .aegis-actions-cell-primary,
   gap: var(--space-1);
   padding: 3px var(--space-2);
   border: 1px solid var(--color-ai-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--chip-radius);
   background: var(--gradient-ai-soft, var(--color-ai-soft));
   color: var(--color-ai-fg);
   font-size: var(--text-xs);

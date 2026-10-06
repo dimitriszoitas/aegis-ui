@@ -1,20 +1,68 @@
 .aegis-console {
   display: flex;
-  height: 100dvh;
+  height: var(--console-height, 100dvh);
   min-height: 560px;
   overflow: hidden;
   background: var(--color-bg-canvas);
   color: var(--color-text-primary);
 }
+.aegis-console > .side-nav {
+  height: calc(var(--console-height, 100dvh) - var(--space-6));
+}
 .aegis-console-main {
+  --console-main-top: var(--space-6);
+  --console-main-start: var(--space-2);
+  --console-main-end: var(--space-5);
   flex: 1;
   min-width: 0;
   overflow: auto;
-  padding: var(--space-6) var(--space-5) var(--space-4) var(--space-2);
+  padding: var(--console-main-top) var(--console-main-end) var(--space-4) var(--console-main-start);
+  scroll-padding-top: calc(var(--console-pinned-header-height, 0px) + var(--space-3));
   outline: none;
+}
+.aegis-console-main:has(> .aegis-console-header:focus-within) {
+  /* Pinned controls are already visible above the content's focus clearance. */
+  scroll-padding-top: 0;
 }
 .aegis-console-header {
   margin-bottom: var(--space-5);
+}
+.aegis-console-header[data-pinned='true'] {
+  position: sticky;
+  top: calc(-1 * var(--console-main-top));
+  z-index: var(--z-sticky);
+  height: var(--console-header-height);
+  pointer-events: none;
+}
+.aegis-console-header[data-pinned='true'] .aegis-console-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-inline: calc(-1 * var(--console-main-start)) calc(-1 * var(--console-main-end));
+  padding: var(--space-3) var(--console-main-end) var(--space-3) var(--console-main-start);
+  background: var(--color-bg-canvas);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-raised);
+  pointer-events: auto;
+}
+.aegis-console-header[data-pinned='true'] .aegis-console-breadcrumb-row {
+  min-width: 0;
+  margin-bottom: 0;
+}
+.aegis-console-header[data-pinned='true'] .aegis-console-environment {
+  display: none;
+}
+.aegis-console-header[data-pinned='true'] .aegis-console-title-row {
+  display: contents;
+}
+.aegis-console-header[data-pinned='true'] .aegis-console-title-copy {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .aegis-console-breadcrumb-row,
 .aegis-console-title-row,
@@ -57,6 +105,24 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
+}
+.aegis-console-header-actions > .aegis-icon-button {
+  flex-shrink: 0;
+}
+.aegis-console-header-time-range {
+  min-width: 0;
+}
+.aegis-console-header-time-range .aegis-time-range-trigger {
+  max-width: 100%;
+}
+.aegis-console-header-time-range .button-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aegis-console-header-time-range .button-icon {
   flex-shrink: 0;
 }
 .aegis-console-metrics {
@@ -148,7 +214,7 @@
   color: var(--color-text-secondary);
 }
 .aegis-console-assistant.aegis-sheet-docked {
-  height: calc(100dvh - var(--space-6));
+  height: calc(var(--console-height, 100dvh) - var(--space-6));
   flex-basis: 376px;
   width: 376px;
 }
@@ -206,7 +272,16 @@
 }
 @media (max-width: 700px) {
   .aegis-console-main {
-    padding: var(--space-5) var(--space-3) var(--space-3) 0;
+    --console-main-top: var(--space-5);
+    --console-main-start: 0px;
+    --console-main-end: var(--space-3);
+    padding-block: var(--console-main-top) var(--space-3);
+  }
+  .aegis-console-header[data-pinned='true'] .aegis-console-header-content {
+    flex-wrap: wrap;
+  }
+  .aegis-console-header[data-pinned='true'] .aegis-console-breadcrumb-row {
+    flex-basis: 100%;
   }
   .aegis-console-title-row {
     flex-direction: column;
@@ -233,7 +308,7 @@
     padding-inline: var(--space-3);
   }
   .aegis-console-header-actions {
-    flex-wrap: wrap;
+    width: max-content;
   }
   .aegis-console-footnote {
     justify-content: flex-start;

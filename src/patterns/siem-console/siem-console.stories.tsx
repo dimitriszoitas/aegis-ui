@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { CSSProperties } from 'react';
 import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { SiemConsole } from './siem-console';
@@ -25,6 +26,55 @@ export const CollapsedNavigation: Story = { args: { defaultNavCollapsed: true } 
 export const WithAssistant: Story = { args: { defaultNavCollapsed: true, defaultAiOpen: true } };
 export const WithFilters: Story = {
   args: { defaultNavCollapsed: true, defaultFilterPanelOpen: true },
+};
+export const CompactHeader: Story = {
+  args: { defaultNavCollapsed: true },
+  decorators: [
+    (Story) => (
+      <div style={{ '--console-height': '640px' } as CSSProperties}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const main = canvas.getByRole('main');
+    const header = main.querySelector<HTMLElement>('.aegis-console-header');
+    const bar = main.querySelector<HTMLElement>('.aegis-console-header-content');
+    if (!header || !bar) throw new Error('Expected the console page header');
+    const timeRange = within(header).getByRole('button', { name: /^Time range:/ });
+    const assistant = within(header).getByRole('button', { name: 'Open AI panel' });
+    const originalHeight = main.scrollHeight;
+    const scrollTop = Math.ceil(
+      header.getBoundingClientRect().bottom - main.getBoundingClientRect().top + 80,
+    );
+    await step('Keep the same focused controls in a compact pinned header', async () => {
+      assistant.focus();
+      main.scrollTo({ top: scrollTop });
+      await waitFor(() => expect(header).toHaveAttribute('data-pinned', 'true'));
+      await expect(bar.getBoundingClientRect().top).toBe(main.getBoundingClientRect().top);
+      await expect(main.scrollHeight).toBe(originalHeight);
+      await expect(main.scrollTop).toBe(scrollTop);
+      await expect(assistant).toHaveFocus();
+      await expect(within(header).getByRole('button', { name: /^Time range:/ })).toBe(timeRange);
+      await expect(within(header).getByRole('navigation', { name: 'Breadcrumb' })).toBeVisible();
+      await expect(canvas.getByRole('heading', { name: 'Alerts', level: 1 })).toBeInTheDocument();
+      await userEvent.tab({ shift: true });
+      await expect(within(header).getByRole('button', { name: /Switch to/ })).toHaveFocus();
+      await expect(main.scrollTop).toBe(scrollTop);
+      await userEvent.tab();
+      await expect(assistant).toHaveFocus();
+    });
+    await step('Restore the full title without changing the scrollable page height', async () => {
+      main.scrollTo({ top: 0 });
+      await waitFor(() => expect(header).toHaveAttribute('data-pinned', 'false'));
+      await expect(main.scrollHeight).toBe(originalHeight);
+      await expect(canvas.getByText('Investigate signals. Find what matters.')).toBeVisible();
+      await expect(assistant).toHaveFocus();
+      main.scrollTo({ top: scrollTop });
+      await waitFor(() => expect(header).toHaveAttribute('data-pinned', 'true'));
+    });
+  },
 };
 export const Overview: Story = { args: { initialPage: 'overview' } };
 export const Rules: Story = { args: { initialPage: 'rules' } };

@@ -1,4 +1,12 @@
-import { useCallback, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import {
   Activity,
   FileChartColumn,
@@ -147,9 +155,48 @@ export function SiemConsole({
   const [pendingPage, setPendingPage] = useState<ConsolePage>();
   const [wizardOrientation, setWizardOrientation] = useState<'horizontal' | 'vertical'>('vertical');
   const [huntQuery, setHuntQuery] = useState('');
+  const [headerPinned, setHeaderPinned] = useState(false);
   const contentRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const headerContentRef = useRef<HTMLDivElement>(null);
+  const headerPinnedRef = useRef(false);
+  const headerEndRef = useRef(Number.POSITIVE_INFINITY);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mainId = useId();
+  useLayoutEffect(() => {
+    const main = contentRef.current;
+    const header = headerRef.current;
+    const content = headerContentRef.current;
+    if (!main || !header || !content) return;
+    const measure = () => {
+      const height = content.getBoundingClientRect().height;
+      if (!headerPinnedRef.current) {
+        // Keep the original slot when the same controls become a compact sticky bar.
+        // Its height and scroll threshold stay stable even at the end of a short page.
+        header.style.setProperty('--console-header-height', `${height}px`);
+        headerEndRef.current =
+          header.getBoundingClientRect().top -
+          main.getBoundingClientRect().top +
+          main.scrollTop +
+          height;
+      }
+      main.style.setProperty(
+        '--console-pinned-header-height',
+        headerPinnedRef.current ? `${height}px` : '0px',
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(content);
+    return () => observer.disconnect();
+  }, []);
+  function updatePinnedHeader() {
+    const next = (contentRef.current?.scrollTop ?? 0) >= headerEndRef.current;
+    if (next !== headerPinnedRef.current) {
+      headerPinnedRef.current = next;
+      setHeaderPinned(next);
+    }
+  }
   const scopeLabel = formatTimeRange(filters.timeRange);
   const scopedAlerts = useMemo(
     () =>
@@ -205,6 +252,8 @@ export function SiemConsole({
   function focusHeading() {
     requestAnimationFrame(() => {
       contentRef.current?.scrollTo({ top: 0 });
+      headerPinnedRef.current = false;
+      setHeaderPinned(false);
       headingRef.current?.focus();
     });
   }
@@ -390,63 +439,73 @@ export function SiemConsole({
           </>
         )}
       />
-      <main id={mainId} ref={contentRef} tabIndex={-1} className="aegis-console-main">
-        <header className="aegis-console-header">
-          <div className="aegis-console-breadcrumb-row">
-            <Breadcrumb
-              items={[
-                { label: 'Northstar', onClick: () => navigate('overview') },
-                { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
-              ]}
-            />
-            <span className="aegis-console-environment">
-              <span />
-              Demo workspace
-            </span>
-          </div>
-          <div className="aegis-console-title-row">
-            <div>
-              <h1 ref={headingRef} tabIndex={-1}>
-                {creatingRule ? 'Create detection rule' : pageLabels[page]}
-              </h1>
-              <p>
-                {creatingRule
-                  ? 'Define, test, and review before enabling.'
-                  : pageDescriptions[page]}
-              </p>
+      <main
+        id={mainId}
+        ref={contentRef}
+        tabIndex={-1}
+        className="aegis-console-main"
+        onScroll={updatePinnedHeader}
+      >
+        <header ref={headerRef} className="aegis-console-header" data-pinned={headerPinned}>
+          <div ref={headerContentRef} className="aegis-console-header-content">
+            <div className="aegis-console-breadcrumb-row">
+              <Breadcrumb
+                items={[
+                  { label: 'Northstar', onClick: () => navigate('overview') },
+                  { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
+                ]}
+              />
+              <span className="aegis-console-environment">
+                <span />
+                Demo workspace
+              </span>
             </div>
-            <div className="aegis-console-header-actions">
-              {!creatingRule && page !== 'settings' && (
-                <TimeRangePicker
-                  value={filters.timeRange}
-                  onValueChange={(timeRange) =>
-                    updateFilters({ ...filters, timeRange, savedViewId: undefined })
-                  }
-                  now={referenceTime}
-                />
-              )}
-              {onThemeChange && (
+            <div className="aegis-console-title-row">
+              <div className="aegis-console-title-copy">
+                <h1 ref={headingRef} tabIndex={-1}>
+                  {creatingRule ? 'Create detection rule' : pageLabels[page]}
+                </h1>
+                <p>
+                  {creatingRule
+                    ? 'Define, test, and review before enabling.'
+                    : pageDescriptions[page]}
+                </p>
+              </div>
+              <div className="aegis-console-header-actions">
+                {!creatingRule && page !== 'settings' && (
+                  <div className="aegis-console-header-time-range" title={scopeLabel}>
+                    <TimeRangePicker
+                      value={filters.timeRange}
+                      onValueChange={(timeRange) =>
+                        updateFilters({ ...filters, timeRange, savedViewId: undefined })
+                      }
+                      now={referenceTime}
+                    />
+                  </div>
+                )}
+                {onThemeChange && (
+                  <IconButton
+                    aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+                    emphasis="ghost"
+                    onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
+                  >
+                    {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                  </IconButton>
+                )}
                 <IconButton
-                  aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-                  emphasis="ghost"
-                  onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
+                  intent="ai"
+                  emphasis={aiOpen ? 'filled' : 'soft'}
+                  aria-label={aiOpen ? 'Close AI panel' : 'Open AI panel'}
+                  aria-pressed={aiOpen}
+                  onClick={() => {
+                    if (!aiOpen && selectedRecords.length)
+                      setAiContext(selectedRecords.map(alertContext));
+                    setAiOpen(!aiOpen);
+                  }}
                 >
-                  {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                  <Sparkles size={18} />
                 </IconButton>
-              )}
-              <IconButton
-                intent="ai"
-                emphasis={aiOpen ? 'filled' : 'soft'}
-                aria-label={aiOpen ? 'Close AI panel' : 'Open AI panel'}
-                aria-pressed={aiOpen}
-                onClick={() => {
-                  if (!aiOpen && selectedRecords.length)
-                    setAiContext(selectedRecords.map(alertContext));
-                  setAiOpen(!aiOpen);
-                }}
-              >
-                <Sparkles size={18} />
-              </IconButton>
+              </div>
             </div>
           </div>
         </header>

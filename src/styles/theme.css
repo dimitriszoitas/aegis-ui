@@ -40,11 +40,13 @@
  --shadow-floating: var(--elevation-floating);
  --shadow-overlay: var(--elevation-overlay);
  --radius-xs: 6px;
- --radius-sm: 8px;
- --radius-md: 10px;
- --radius-lg: 12px;
- --radius-xl: 16px;
- --radius-2xl: 20px;
+ --radius-sm: 6px;
+ --radius-md: 7px;
+ --radius-lg: 8px;
+ --radius-xl: 8px;
+ --radius-2xl: 8px;
+ --radius-3xl: 8px;
+ --radius-4xl: 8px;
 }
 :root {
  --background: var(--color-bg-surface);
