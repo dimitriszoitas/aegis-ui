@@ -1,0 +1,22 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TypographyExamples, MotionExamples } from './foundation-examples';
+
+<Meta title="Foundations/Type and motion" />
+
+# Type and motion
+
+Inter supports fast scanning across a dense analyst workspace. JetBrains Mono distinguishes machine-readable evidence. Both font families are self-hosted, so documentation and product interfaces do not depend on a font CDN.
+
+## Typography
+
+Use 14px for the default interface and 13px for dense data grids. Titles progress through 16, 18, 20, 24, and 30px. Use 12px for supporting labels. Sentence case keeps labels readable and direct.
+
+<TypographyExamples />
+
+## Motion
+
+Fast motion gives immediate control feedback; base motion connects small state changes; slide motion introduces a floating sheet. Ease-out curves settle quickly. Sidebar collapse animates width, while sheets slide and fade.
+
+<MotionExamples />
+
+Respect `prefers-reduced-motion` in every animation and transition. State changes must remain clear when movement is removed. Loading and streaming indicators should explain progress without preventing analysts from interacting with the rest of the workspace.

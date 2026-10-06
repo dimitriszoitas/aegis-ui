@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { ColorSwatches, IntentExamples, SeverityExamples } from './foundation-examples';
+
+<Meta title="Foundations/Colors" />
+
+# Color and intent
+
+Components consume semantic CSS variables. Light and dark values below are read directly from the token source, so the documentation stays in step with the implementation.
+
+## Backgrounds
+
+Canvas establishes the workspace, surface holds content, and raised surface provides hierarchy. Hover and selected are interaction states, not extra elevation levels.
+
+<ColorSwatches prefix="--color-bg-" />
+
+## Text
+
+Primary text carries decisions and data. Secondary text carries descriptions and supporting evidence. Tertiary text is reserved for nonessential detail; always verify contrast at the actual text size and surface.
+
+<ColorSwatches prefix="--color-text-" />
+
+## Borders
+
+Subtle borders separate surfaces without visual noise. Default borders clarify controls and stronger boundaries.
+
+<ColorSwatches prefix="--color-border-" />
+
+## Action intents
+
+Each intent provides a fill, foreground, and soft surface. Use the function intent for primary analyst actions, AI for generated assistance, destroy for consequential removal, success for confirmation, and warning for caution. Neutral remains the default.
+
+<IntentExamples />
+
+## Severity
+
+Severity measures alert urgency. Every level combines a tinted background, readable foreground, and border. Keep the visible label even when the surrounding interface uses compact badges; dot-only variants need an accessible name.
+
+<SeverityExamples />
+
+## Three token tiers
+
+1. Primitives define stable ramps and scales, including blue, violet, red, green, amber, orange, cool gray, and ink.
+2. Semantic tokens express purpose, such as `--color-bg-surface` and `--color-severity-high-fg`, and adapt to the active theme.
+3. Component tokens cover exceptional layout needs, such as grid row heights and sidebar widths.
+
+Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme.

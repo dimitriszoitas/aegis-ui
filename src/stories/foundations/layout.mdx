@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { SurfaceExamples, RadiusExamples, SpacingExamples } from './foundation-examples';
+
+<Meta title="Foundations/Space and surfaces" />
+
+# Space and surfaces
+
+Use the same measured rhythm from a filter chip to the complete investigation workspace.
+
+## Surface hierarchy and shadows
+
+Raised surfaces use a subtle border and a small shadow. Floating chrome uses a layered shadow. Overlays use the strongest shadow to establish focus. Dark mode relies more on border contrast and a lighter surface than on shadow strength.
+
+<SurfaceExamples />
+
+## Radius
+
+Buttons and inputs use the medium radius. Cards use large, sheets use extra large, and floating navigation and modals use 2xl. Chips use the full radius. Values below come from the shared scale.
+
+<RadiusExamples />
+
+## Spacing
+
+The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px inside cards, and 20px inside floating containers. Dense grid rows use 8–10px vertical cell padding.
+
+<SpacingExamples />
+
+## Layer order
+
+Sticky content sits at 40, dropdowns at 50, sheets at 60, modals at 70, popovers at 80, toasts at 90, and tooltips at 100. Consume the named z-index tokens so nested interactions remain predictable.

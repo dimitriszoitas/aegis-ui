@@ -1,7 +1,12 @@
 import type { Preview } from '@storybook/react-vite';
+import { withThemeByClassName, withThemeByDataAttribute } from '@storybook/addon-themes';
 import '../src/styles/globals.css';
 const preview: Preview = {
  tags: ['autodocs'],
- parameters: { layout: 'padded', controls: { expanded: true }, a11y: { test: 'error' } },
+ decorators: [
+   withThemeByClassName({themes: {light: 'light', dark: 'dark'}, defaultTheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', parentSelector: 'html'}),
+   withThemeByDataAttribute({themes: {light: 'light', dark: 'dark'}, defaultTheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', attributeName: 'data-theme', parentSelector: 'html'}),
+ ],
+ parameters: { layout: 'padded', backgrounds: {disable: true}, controls: { expanded: true }, a11y: { test: 'error' }, options: {storySort: {order: ['Foundations', 'Components', 'Patterns', 'Console']}} },
 };
 export default preview;

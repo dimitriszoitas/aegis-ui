@@ -1,0 +1,38 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { SurfaceExamples, AiLanguageExample } from './foundation-examples';
+
+<Meta title="Foundations/Principles" />
+
+# Aegis design principles
+
+Aegis helps security analysts see what matters, understand the evidence, and act with confidence. Dense event data and AI assistance share a calm, consistent visual language.
+
+## Float the workspace
+
+The canvas gives every container breathing room. A surface holds content; a raised surface groups it; a floating surface carries persistent navigation or actions; an overlay presents a focused task. Borders and shadows work together in both themes.
+
+<SurfaceExamples />
+
+Keep navigation 12px from the top, left, and bottom of the viewport, with a 20px radius and 20px of interior padding. Detail and assistant sheets float 12px from the top, right, and bottom, with a 16px radius. Cards use 16px padding; interactive rows use 12px hover pills.
+
+## Give color a job
+
+Neutral surfaces carry most of the interface. Function blue identifies the next action. Violet identifies AI assistance. Red marks destructive actions, green confirms success, and amber calls for attention. Severity is a separate scale: critical, high, medium, low, and informational. Pair color with a label or icon so meaning never depends on color alone.
+
+## Preserve the analyst’s attention
+
+Use a 14px interface base and a 13px dense-grid base. Keep timestamps, identifiers, host addresses, and code in JetBrains Mono. Align numeric values with tabular numerals. Compact density supports scanning; comfortable density supports investigation. Density changes spacing, not the hierarchy or available actions.
+
+## Make every path accessible
+
+Every action has a visible label or accessible name. Focus uses the same 2px function-colored ring and 2px offset throughout. Keyboard users can enter and leave menus, navigate trees and grids, and complete dialogs. Restore focus after closing an overlay. Reduced-motion preferences remove decorative animation while preserving clear state changes.
+
+## Keep AI accountable
+
+AI is an explicit intent with recognizable violet treatments and the sparkles marker. Generated content always carries an “AI generated” label. Show the context an assistant can access, link its claims to evidence, and distinguish confidence from certainty.
+
+<AiLanguageExample />
+
+Streaming must leave the interface usable: analysts can stop generation, inspect evidence, or continue working. Explain tool progress in plain language, such as “Queried 1,284 events across 3 sources.” Consequential changes require a human decision. Show the current and proposed rule together, provide explicit approve and reject actions, and record who approved the change.
+
+The interactive examples use local, deterministic responses. They illustrate interaction behavior and do not connect to security infrastructure.
