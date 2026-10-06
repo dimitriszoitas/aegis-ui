@@ -1,5 +1,7 @@
 # Aegis
 
+[Live Storybook](https://dimitriszoitas.github.io/aegis-ui/) · [Full DataGrid presentation](https://dimitriszoitas.github.io/aegis-ui/?path=/story/components-data-datagrid--full-presentation) · [SIEM console](https://dimitriszoitas.github.io/aegis-ui/?path=/story/console-siem-console--alerts)
+
 Aegis is a token-based React design system for security operations, with light and dark themes, dense investigation tools, and AI assistance that keeps the analyst in control.
 
 Storybook is the component reference and consumption guide. The repository also runs a complete SIEM console in Vite. This version is source-first: it has no published npm package, library bundle, or package exports map.
