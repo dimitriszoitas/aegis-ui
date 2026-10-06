@@ -42,6 +42,7 @@ export interface Alert {
   firstSeen: string;
   lastSeen: string;
   assignee?: Analyst;
+  analystNote?: string;
   tags: string[];
   sparkline: number[];
   events: AlertEvent[];

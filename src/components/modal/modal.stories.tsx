@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '../button';
 import { TextInput } from '../text-input';
 import { Modal, ModalClose, ConfirmDialog } from './modal';
@@ -108,4 +109,46 @@ export const FailedConfirmation: Story = {
       }}
     />
   ),
+};
+
+function NavigationConfirmationExample() {
+  const [open, setOpen] = useState(false);
+  const [navigated, setNavigated] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null);
+  return (
+    <div className="stack">
+      <Button onClick={() => setOpen(true)}>Leave investigation</Button>
+      <h2 ref={heading} tabIndex={-1}>
+        {navigated ? 'Reports workspace' : 'Investigation draft'}
+      </h2>
+      <ConfirmDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Discard investigation draft?"
+        description="Discard the draft and return to reports."
+        confirmLabel="Discard and continue"
+        onConfirm={() => {
+          setNavigated(true);
+          requestAnimationFrame(() => heading.current?.focus());
+        }}
+      />
+    </div>
+  );
+}
+export const NavigationFocus: Story = {
+  render: () => <NavigationConfirmationExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const portal = within(document.body);
+    const opener = canvas.getByRole('button', { name: 'Leave investigation' });
+    await userEvent.click(opener);
+    await portal.findByRole('alertdialog');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(opener).toHaveFocus());
+    await userEvent.click(opener);
+    await userEvent.click(await portal.findByRole('button', { name: 'Discard and continue' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('heading', { name: 'Reports workspace' })).toHaveFocus(),
+    );
+  },
 };

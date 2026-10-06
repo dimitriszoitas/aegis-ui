@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { Tabs as Primitive } from 'radix-ui';
 import { cn } from '../../lib/utils';
 import './tabs.css';
@@ -20,6 +20,8 @@ export interface TabsProps extends Omit<
   label?: string;
   listClassName?: string;
   contentClassName?: string;
+  /** One persistent workspace whose data changes with the selected tab. Preserves its local state. */
+  sharedContent?: ReactNode;
 }
 export function Tabs({
   items,
@@ -29,13 +31,23 @@ export function Tabs({
   listClassName,
   contentClassName,
   defaultValue,
+  value,
+  onValueChange,
+  sharedContent,
   ...props
 }: TabsProps) {
   const firstEnabled = items.find((item) => !item.disabled)?.value;
+  const [internalValue, setInternalValue] = useState(defaultValue ?? firstEnabled);
+  const activeValue = value ?? internalValue;
   return (
     <Primitive.Root
       {...props}
       defaultValue={defaultValue ?? firstEnabled}
+      value={value}
+      onValueChange={(next) => {
+        setInternalValue(next);
+        onValueChange?.(next);
+      }}
       className={cn('aegis-tabs', `aegis-tabs-${variant}`, className)}
     >
       <div className="aegis-tabs-overflow">
@@ -62,15 +74,24 @@ export function Tabs({
           ))}
         </Primitive.List>
       </div>
-      {items.map((item) => (
+      {sharedContent !== undefined ? (
         <Primitive.Content
-          key={item.value}
-          value={item.value}
+          value={activeValue ?? ''}
           className={cn('aegis-tabs-content', contentClassName)}
         >
-          {item.content}
+          {sharedContent}
         </Primitive.Content>
-      ))}
+      ) : (
+        items.map((item) => (
+          <Primitive.Content
+            key={item.value}
+            value={item.value}
+            className={cn('aegis-tabs-content', contentClassName)}
+          >
+            {item.content}
+          </Primitive.Content>
+        ))
+      )}
     </Primitive.Root>
   );
 }

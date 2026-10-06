@@ -1,7 +1,7 @@
-import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CheckCheck, Eye, Sparkles } from 'lucide-react';
-import { DataGrid } from '@/components/data-grid';
+import { DataGrid, type GridDensity } from '@/components/data-grid';
 import {
   ActionsCell,
   AiVerdictCell,
@@ -38,6 +38,8 @@ export interface AlertsExplorerProps {
   error?: ReactNode;
   onRetry?: () => void;
   height?: number | string;
+  density?: GridDensity;
+  onDensityChange?: (density: GridDensity) => void;
   renderEventDetail?: (alert: Alert) => ReactNode;
 }
 export interface AlertEventsTableProps {
@@ -106,6 +108,8 @@ export function AlertsExplorer({
   error,
   onRetry,
   height = 540,
+  density,
+  onDensityChange,
   renderEventDetail,
 }: AlertsExplorerProps) {
   const panelId = useId();
@@ -114,6 +118,14 @@ export function AlertsExplorer({
   const filters = controlledFilters ?? internalFilters;
   const [panelOpen, setPanelOpen] = useState(defaultPanelOpen);
   const [selection, setSelection] = useState<string[]>([]);
+  const filterKey = JSON.stringify(filters);
+  const previousFilterKey = useRef(filterKey);
+  useEffect(() => {
+    if (previousFilterKey.current === filterKey) return;
+    previousFilterKey.current = filterKey;
+    setSelection([]);
+    onSelectionChange?.([]);
+  }, [filterKey, onSelectionChange]);
   const filtered = useMemo(() => applyAlertFilters(alerts, filters, now), [alerts, filters, now]);
   const visibleSelection = selection.filter((id) => filtered.some((alert) => alert.id === id));
   function updateFilters(next: AlertFilterState) {
@@ -281,6 +293,8 @@ export function AlertsExplorer({
           rowLabel={(row) => `${row.id}: ${row.title}`}
           label="Alerts"
           height={height}
+          density={density}
+          onDensityChange={onDensityChange}
           loading={loading}
           error={error}
           onRetry={onRetry}

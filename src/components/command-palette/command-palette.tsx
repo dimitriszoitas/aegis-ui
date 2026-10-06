@@ -21,7 +21,14 @@ function CommandContent({ children }: { children: ReactNode }) {
       }}
       onCloseAutoFocus={(event) => {
         event.preventDefault();
-        requestAnimationFrame(() => previous.current?.focus());
+        const opener = previous.current;
+        const content = ref.current;
+        requestAnimationFrame(() => {
+          const current = document.activeElement;
+          if (opener?.isConnected && (current === document.body || content?.contains(current))) {
+            opener.focus({ preventScroll: true });
+          }
+        });
       }}
     >
       {children}
@@ -88,7 +95,6 @@ export function CommandPalette({
             <div className="command-search">
               <Search size={18} aria-hidden />
               <Command.Input
-                autoFocus
                 placeholder="Search anything, or ask Aegis…"
                 value={query}
                 onValueChange={setQuery}

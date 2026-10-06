@@ -32,6 +32,8 @@ export interface DetectionRuleWizardProps {
   orientation?: 'horizontal' | 'vertical';
   onCreate?: (rule: CreatedDetectionRule) => void | Promise<void>;
   onCancel?: () => void;
+  /** Lets a containing workspace guard navigation away from an edited draft. */
+  onDirtyChange?: (dirty: boolean) => void;
   defaultStep?: number;
 }
 const initialName = 'Encoded PowerShell';
@@ -40,6 +42,7 @@ export function DetectionRuleWizard({
   orientation = 'horizontal',
   onCreate,
   onCancel,
+  onDirtyChange,
   defaultStep = 0,
 }: DetectionRuleWizardProps) {
   const [step, setStep] = useState(defaultStep);
@@ -50,6 +53,9 @@ export function DetectionRuleWizard({
   const [severity, setSeverity] = useState<Severity>('high');
   const [yaml, setYaml] = useState(rules[2].yaml);
   const [dirty, setDirty] = useState(false);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
   const [showErrors, setShowErrors] = useState(false);
   const [proposal, setProposal] = useState<{ original: string; proposed: string }>();
   const [proposalError, setProposalError] = useState('');

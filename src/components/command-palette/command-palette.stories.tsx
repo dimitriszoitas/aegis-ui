@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { useState } from 'react';
 import { ShieldAlert, FileCode, Search, Clock, Plus } from 'lucide-react';
 import { CommandPalette, type CommandAction } from './command-palette';
@@ -70,4 +71,23 @@ function Commands({ defaultOpen = false }: { defaultOpen?: boolean }) {
 export const Matrix: StoryObj<typeof CommandPalette> = { render: () => <Commands /> };
 export const OpenPalette: StoryObj<typeof CommandPalette> = {
   render: () => <Commands defaultOpen />,
+};
+export const KeyboardFocus: StoryObj<typeof CommandPalette> = {
+  render: () => <Commands />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const portal = within(document.body);
+    const opener = canvas.getByRole('button', { name: 'Search workspace' });
+    opener.focus();
+    await userEvent.keyboard('{Enter}');
+    const input = await portal.findByRole('combobox', { name: 'Search Aegis' });
+    await waitFor(() => expect(input).toHaveFocus());
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(opener).toHaveFocus());
+    await userEvent.keyboard('{Enter}');
+    await userEvent.type(await portal.findByRole('combobox'), 'Go to alerts');
+    await userEvent.keyboard('{Enter}');
+    await expect(canvas.getByRole('status')).toHaveTextContent('Alerts workspace selected');
+    await waitFor(() => expect(opener).toHaveFocus());
+  },
 };

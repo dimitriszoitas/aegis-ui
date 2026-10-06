@@ -60,10 +60,22 @@ function ModalContent({
           document.activeElement instanceof HTMLElement ? document.activeElement : null;
       }}
       onCloseAutoFocus={(event) => {
+        const content = contentRef.current;
+        const current = document.activeElement;
+        // A completed action may already have focused a different page or dialog.
+        if (current !== document.body && !content?.contains(current)) {
+          event.preventDefault();
+          return;
+        }
         if (!trigger && previousFocus.current) {
           event.preventDefault();
           const element = previousFocus.current;
-          requestAnimationFrame(() => element.focus());
+          requestAnimationFrame(() => {
+            const active = document.activeElement;
+            if (element.isConnected && (active === document.body || content?.contains(active))) {
+              element.focus({ preventScroll: true });
+            }
+          });
         }
       }}
       onPointerDownOutside={(event) => {

@@ -1,8 +1,8 @@
-import { useState, type ReactNode } from 'react';
+import { forwardRef, useId, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { Shield, PanelLeftClose, PanelLeftOpen, Search, ChevronDown } from 'lucide-react';
 import { IconButton } from '@/components/icon-button';
 import { CountBadge } from '@/components/count-badge';
-import { DropdownMenu } from '@/components/dropdown-menu';
+import { DropdownMenu, type DropdownMenuEntry } from '@/components/dropdown-menu';
 import { Tooltip } from '@/components/tooltip';
 import { Kbd } from '@/components/kbd';
 import { cn } from '@/lib/utils';
@@ -30,6 +30,29 @@ export interface SideNavProps {
   workspace?: string;
   className?: string;
 }
+
+// Keep Radix menu handlers and its trigger ref on the actual tooltip button.
+const CollapsedNavButton = forwardRef<
+  HTMLButtonElement,
+  ComponentPropsWithoutRef<'button'> & { tooltip: string }
+>(function CollapsedNavButton({ tooltip, ...props }, ref) {
+  return (
+    <Tooltip content={tooltip} side="right">
+      <button type="button" {...props} ref={ref} />
+    </Tooltip>
+  );
+});
+
+function activeAncestors(items: NavItem[], activeId: string): string[] {
+  return items.flatMap((item) => {
+    if (!item.children?.length) return [];
+    const nested = activeAncestors(item.children, activeId);
+    return item.children.some((child) => child.id === activeId) || nested.length
+      ? [item.id, ...nested]
+      : [];
+  });
+}
+
 export function SideNav({
   sections,
   activeId,
@@ -44,32 +67,59 @@ export function SideNav({
 }: SideNavProps) {
   const [internal, setInternal] = useState(defaultCollapsed);
   const collapsed = controlled ?? internal;
-  const [expanded, setExpanded] = useState<string[]>([]);
+  const navId = useId();
+  const activeGroups = activeAncestors(
+    sections.flatMap((section) => section.items),
+    activeId,
+  );
+  const [expanded, setExpanded] = useState<string[]>(activeGroups);
   function toggle() {
+    if (collapsed) setExpanded((previous) => [...new Set([...previous, ...activeGroups])]);
     setInternal(!collapsed);
     onCollapsedChange?.(!collapsed);
   }
+  function menuItems(items: NavItem[]): DropdownMenuEntry[] {
+    return items.map((item) =>
+      item.children?.length
+        ? {
+            type: 'submenu',
+            id: item.id,
+            label: item.label,
+            icon: item.icon,
+            items: menuItems(item.children),
+          }
+        : {
+            id: item.id,
+            label: item.label,
+            icon: item.icon,
+            onSelect: () => onNavigate(item.id),
+          },
+    );
+  }
   function renderItem(item: NavItem, nested = false) {
-    if (item.children?.length && collapsed)
+    const hasChildren = Boolean(item.children?.length);
+    const groupId = `${navId}-${item.id}`;
+    if (hasChildren && collapsed)
       return (
         <DropdownMenu
           key={item.id}
           side="right"
+          label={item.label}
           trigger={
-            <button className="nav-item nav-icon" aria-label={item.label}>
+            <CollapsedNavButton
+              tooltip={item.label}
+              className={cn('nav-item nav-icon', activeGroups.includes(item.id) && 'is-active')}
+              aria-label={item.label}
+            >
               {item.icon}
-            </button>
+            </CollapsedNavButton>
           }
-          items={item.children.map((child) => ({
-            id: child.id,
-            label: child.label,
-            icon: child.icon,
-            onSelect: () => onNavigate(child.id),
-          }))}
+          items={menuItems(item.children ?? [])}
         />
       );
     const button = (
       <button
+        type="button"
         className={cn(
           'nav-item',
           nested && 'nav-nested-item',
@@ -78,9 +128,10 @@ export function SideNav({
         )}
         aria-label={collapsed ? item.label : undefined}
         aria-current={activeId === item.id ? 'page' : undefined}
-        aria-expanded={item.children ? expanded.includes(item.id) : undefined}
+        aria-expanded={hasChildren ? expanded.includes(item.id) : undefined}
+        aria-controls={hasChildren && expanded.includes(item.id) ? groupId : undefined}
         onClick={() =>
-          item.children
+          hasChildren
             ? setExpanded((prev) =>
                 prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id],
               )
@@ -92,7 +143,7 @@ export function SideNav({
           <>
             <span>{item.label}</span>
             {item.count !== undefined && <CountBadge count={item.count} />}{' '}
-            {item.children && (
+            {hasChildren && (
               <ChevronDown
                 size={14}
                 style={{ transform: expanded.includes(item.id) ? 'rotate(180deg)' : undefined }}
@@ -104,9 +155,17 @@ export function SideNav({
     );
     return (
       <div key={item.id}>
-        {collapsed ? <Tooltip content={item.label}>{button}</Tooltip> : button}
-        {item.children && !collapsed && expanded.includes(item.id) && (
-          <div className="nav-nested">{item.children.map((child) => renderItem(child, true))}</div>
+        {collapsed ? (
+          <Tooltip content={item.label} side="right">
+            {button}
+          </Tooltip>
+        ) : (
+          button
+        )}
+        {hasChildren && !collapsed && expanded.includes(item.id) && (
+          <div id={groupId} className="nav-nested">
+            {item.children?.map((child) => renderItem(child, true))}
+          </div>
         )}
       </div>
     );
@@ -144,19 +203,22 @@ export function SideNav({
           <span className="workspace-status" role="img" aria-label="All systems connected" />
         </div>
       )}
-      <button
-        className={cn('nav-search', collapsed && 'nav-icon')}
-        aria-label="Search workspace"
-        onClick={onSearch}
-      >
-        <Search size={16} />
-        {!collapsed && (
-          <>
-            <span>Search workspace</span>
-            <Kbd>⌘K</Kbd>
-          </>
-        )}
-      </button>
+      <Tooltip content="Search workspace" side="right" disabled={!collapsed}>
+        <button
+          type="button"
+          className={cn('nav-search', collapsed && 'nav-icon')}
+          aria-label="Search workspace"
+          onClick={onSearch}
+        >
+          <Search size={16} />
+          {!collapsed && (
+            <>
+              <span>Search workspace</span>
+              <Kbd>⌘K</Kbd>
+            </>
+          )}
+        </button>
+      </Tooltip>
       <div className="nav-sections">
         {sections.map((section, index) => (
           <section key={section.label ?? index}>

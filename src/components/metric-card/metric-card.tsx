@@ -14,6 +14,7 @@ export interface MetricCardProps extends Omit<CardProps, 'children'> {
   /** Set explicitly when a decrease is desirable, such as mean time to resolution. */
   trendIsPositive?: boolean;
   sparkline?: readonly number[];
+  sparklineLabel?: string;
   sparklineVariant?: SparklineProps['variant'];
   loading?: boolean;
   format?: Intl.NumberFormatOptions;
@@ -26,6 +27,7 @@ export function MetricCard({
   deltaLabel = 'vs previous 24h',
   trendIsPositive,
   sparkline,
+  sparklineLabel,
   sparklineVariant = 'line',
   loading = false,
   format,
@@ -67,7 +69,7 @@ export function MetricCard({
                 data={sparkline}
                 variant={sparklineVariant}
                 intent={trend === 'neutral' ? 'function' : trend}
-                label={`${label} over the last 24 hours`}
+                label={sparklineLabel ?? `${label} over the last 24 hours`}
               />
             )}
           </div>
