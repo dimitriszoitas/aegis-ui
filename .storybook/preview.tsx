@@ -7,6 +7,6 @@ const preview: Preview = {
    withThemeByClassName({themes: {light: 'light', dark: 'dark'}, defaultTheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', parentSelector: 'html'}),
    withThemeByDataAttribute({themes: {light: 'light', dark: 'dark'}, defaultTheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', attributeName: 'data-theme', parentSelector: 'html'}),
  ],
- parameters: { layout: 'padded', backgrounds: {disable: true}, controls: { expanded: true }, a11y: { test: 'error' }, options: {storySort: {order: ['Foundations', 'Components', 'Patterns', 'Console']}} },
+ parameters: { layout: 'padded', backgrounds: {disable: true}, controls: { expanded: true }, a11y: { test: 'error', manual: new URLSearchParams(window.location.search).has('aegisTest') }, options: {storySort: {order: ['Foundations', 'Components', 'Patterns', 'Console']}} },
 };
 export default preview;

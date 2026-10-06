@@ -1,0 +1,98 @@
+.aegis-popover {
+  z-index: var(--z-popover);
+  width: 320px;
+  max-width: calc(100vw - var(--space-6));
+  max-height: var(--radix-popover-content-available-height);
+  overflow: auto;
+  padding: var(--space-4);
+  background: var(--color-bg-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-overlay);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  outline: none;
+  transform-origin: var(--radix-popover-content-transform-origin);
+  animation: aegis-popover-enter var(--motion-base) var(--ease-out);
+}
+.aegis-popover-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+.aegis-popover-heading h3 {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+.aegis-popover-description {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.aegis-popover-close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.aegis-popover-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+.aegis-popover-close:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+@keyframes aegis-popover-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-popover {
+    animation: none;
+  }
+}
+
+.aegis-popover-demo-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.aegis-popover-demo-trigger:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+}
+.aegis-popover-demo-trigger:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+.aegis-popover-demo-trigger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

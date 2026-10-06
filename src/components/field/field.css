@@ -1,0 +1,7 @@
+.aegis-field { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.aegis-field-label { display: inline-flex; align-items: baseline; gap: var(--space-1); width: fit-content; color: var(--color-text-primary); font-size: var(--text-base); font-weight: 500; line-height: 1.4; }
+.aegis-field-optional { margin-left: var(--space-1); color: var(--color-text-secondary); font-size: var(--text-sm); font-weight: 400; }
+.aegis-field-marker, .aegis-field-error { color: var(--color-destroy-fg); }
+.aegis-field-help, .aegis-field-error { font-size: var(--text-sm); line-height: 1.5; }
+.aegis-field-help { color: var(--color-text-secondary); }
+.aegis-field[data-disabled] > .aegis-field-label { color: var(--color-text-tertiary); }

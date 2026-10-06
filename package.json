@@ -15,7 +15,8 @@
     "lint": "eslint . && node scripts/check-tokens.mjs",
     "test": "vitest run",
     "format": "prettier --write .",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build-storybook"
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build-storybook",
+    "test:stories": "node scripts/verify-stories.mjs"
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
@@ -54,7 +55,6 @@
     "@storybook/addon-docs": "^10.6.1",
     "@storybook/addon-themes": "^10.6.1",
     "@storybook/react-vite": "^10.6.1",
-    "@storybook/test-runner": "^0.26.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",

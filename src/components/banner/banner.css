@@ -1,0 +1,92 @@
+.aegis-banner {
+  --banner-fg: var(--color-function-fg);
+  --banner-bg: var(--color-function-soft);
+  --banner-border: var(--color-function-border);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--banner-bg);
+  border: 1px solid var(--banner-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+}
+.aegis-banner[data-intent='success'] {
+  --banner-fg: var(--color-success-fg);
+  --banner-bg: var(--color-success-soft);
+  --banner-border: var(--color-success-border);
+}
+.aegis-banner[data-intent='warning'] {
+  --banner-fg: var(--color-warning-fg);
+  --banner-bg: var(--color-warning-soft);
+  --banner-border: var(--color-warning-border);
+}
+.aegis-banner[data-intent='destroy'] {
+  --banner-fg: var(--color-destroy-fg);
+  --banner-bg: var(--color-destroy-soft);
+  --banner-border: var(--color-destroy-border);
+}
+.aegis-banner[data-intent='ai'] {
+  --banner-fg: var(--color-ai-fg);
+  --banner-bg: var(--color-ai-soft);
+  --banner-border: var(--color-ai-border);
+}
+.aegis-banner-icon {
+  display: inline-flex;
+  color: var(--banner-fg);
+  margin-top: 1px;
+}
+.aegis-banner-content {
+  flex: 1;
+  min-width: 0;
+}
+.aegis-banner-title {
+  font-weight: 600;
+  line-height: 1.5;
+}
+.aegis-banner-description {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+.aegis-banner-title + .aegis-banner-description {
+  margin-top: var(--space-1);
+}
+.aegis-banner-description p:last-child {
+  margin-bottom: 0;
+}
+.aegis-banner-action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.aegis-banner-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--space-6);
+  height: var(--space-6);
+  padding: 0;
+  margin: -2px -2px 0 0;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-xs);
+  color: var(--banner-fg);
+  transition: background var(--motion-fast) var(--ease-out);
+}
+.aegis-banner-dismiss:hover {
+  background: var(--color-bg-hover);
+}
+@media (max-width: 540px) {
+  .aegis-banner {
+    flex-wrap: wrap;
+  }
+  .aegis-banner-content {
+    flex-basis: calc(100% - 76px);
+  }
+  .aegis-banner-action {
+    margin-left: 31px;
+    order: 3;
+  }
+}

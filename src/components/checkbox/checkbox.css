@@ -1,0 +1,14 @@
+.aegis-checkbox-field { display: flex; align-items: flex-start; gap: var(--space-2); }
+.aegis-checkbox-control { flex: none; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; padding: 0; border: 1px solid var(--color-border-strong); border-radius: var(--radius-xs); background: var(--color-bg-surface); color: var(--color-on-intent); transition: background var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out); }
+.aegis-checkbox-control:hover:not(:disabled) { border-color: var(--color-function-bg); }
+.aegis-checkbox-control[data-state=checked], .aegis-checkbox-control[data-state=indeterminate] { background: var(--color-function-bg); border-color: var(--color-function-bg); }
+.aegis-checkbox-control[aria-invalid=true] { border-color: var(--color-destroy-fg); }
+.aegis-checkbox-indicator { display: flex; align-items: center; justify-content: center; }
+.aegis-checkbox-mixed { display: none; }
+.aegis-checkbox-control[data-state=indeterminate] .aegis-checkbox-check { display: none; }
+.aegis-checkbox-control[data-state=indeterminate] .aegis-checkbox-mixed { display: block; }
+.aegis-checkbox-copy { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.aegis-checkbox-label { font-size: var(--text-base); line-height: 1.45; color: var(--color-text-primary); cursor: pointer; }
+.aegis-checkbox-description { color: var(--color-text-secondary); font-size: var(--text-sm); line-height: 1.5; }
+.aegis-checkbox-field[data-disabled] .aegis-checkbox-control { opacity: .55; }
+.aegis-checkbox-field[data-disabled] .aegis-checkbox-label { cursor: not-allowed; }

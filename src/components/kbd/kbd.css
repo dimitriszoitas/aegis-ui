@@ -1,0 +1,25 @@
+.aegis-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  min-width: var(--space-5);
+  height: var(--space-5);
+  padding: 0 var(--space-1);
+  border: 1px solid var(--color-border-default);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: 1;
+}
+.aegis-kbd[data-size='md'] {
+  height: var(--space-6);
+  min-width: var(--space-6);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+}

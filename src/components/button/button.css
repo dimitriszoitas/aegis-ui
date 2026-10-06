@@ -1,0 +1,27 @@
+.aegis-button { --intent-bg: var(--color-bg-selected); --intent-fg: var(--color-text-primary); --intent-soft: var(--color-bg-hover); --intent-on: var(--color-text-primary); position: relative; display:inline-flex; align-items:center; justify-content:center; gap:var(--space-2); height:34px; padding:0 var(--space-3); border:1px solid transparent; border-radius:var(--radius-md); font-size:var(--text-sm); line-height:1; font-weight:500; white-space:nowrap; transition:background var(--motion-fast),box-shadow var(--motion-fast),transform var(--motion-fast); background:var(--intent-bg); color:var(--intent-on); }
+.aegis-button[data-intent=function] { --intent-bg:var(--color-function-bg);--intent-fg:var(--color-function-fg);--intent-soft:var(--color-function-soft);--intent-on:var(--color-on-intent); }
+.aegis-button[data-intent=destroy] { --intent-bg:var(--color-destroy-bg);--intent-fg:var(--color-destroy-fg);--intent-soft:var(--color-destroy-soft);--intent-on:var(--color-on-intent); }
+.aegis-button[data-intent=ai] { --intent-bg:var(--color-ai-bg);--intent-fg:var(--color-ai-fg);--intent-soft:var(--color-ai-soft);--intent-on:var(--color-on-intent); }
+.aegis-button[data-intent=ai][data-emphasis=filled] { background:var(--gradient-ai); }
+.aegis-button[data-size=sm] { height:28px; padding:0 var(--space-2); font-size:var(--text-xs); }
+.aegis-button[data-size=lg] { height:40px; padding:0 var(--space-4); font-size:var(--text-base); }
+.aegis-button[data-emphasis=soft] { background:var(--intent-soft);color:var(--intent-fg); }
+.aegis-button[data-emphasis=ghost] { background:transparent;color:var(--intent-fg); }
+.aegis-button:hover:not(:disabled) { box-shadow:inset 0 0 0 100px color-mix(in srgb,var(--intent-fg) 8%,transparent); }
+.aegis-button:active:not(:disabled) { transform:translateY(1px);box-shadow:inset 0 0 0 100px color-mix(in srgb,var(--intent-fg) 13%,transparent); }
+.aegis-button:disabled { opacity:.45; }
+.button-icon { display:inline-flex;align-items:center;justify-content:center; }
+.button-icon svg { width:16px;height:16px; }
+.button-spinner { animation:button-spin 900ms linear infinite; }
+.button-loading { position:absolute;inset:0;display:grid;place-items:center; }
+.button-label-loading { opacity:0; }
+.aegis-icon-button { width:34px;padding:0; }
+.aegis-icon-button[data-size=sm] { width:28px;padding:0; }
+.aegis-icon-button[data-size=lg] { width:40px;padding:0; }
+.aegis-icon-button .button-label { display:flex; }
+.button-group { display:inline-flex;isolation:isolate; }
+.button-group>.aegis-button { border-radius:0;border-inline-end:1px solid var(--color-border-default); }
+.button-group>.aegis-button:first-child { border-start-start-radius:var(--radius-md);border-end-start-radius:var(--radius-md); }
+.button-group>.aegis-button:last-child { border-start-end-radius:var(--radius-md);border-end-end-radius:var(--radius-md);border-inline-end:0; }
+.button-group>.aegis-button:focus-visible { z-index:1; }
+@keyframes button-spin { to { transform:rotate(360deg); } }

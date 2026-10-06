@@ -1,0 +1,13 @@
+.aegis-separator {
+  background: var(--color-border-subtle);
+  flex-shrink: 0;
+}
+.aegis-separator[data-orientation='horizontal'] {
+  height: 1px;
+  width: 100%;
+}
+.aegis-separator[data-orientation='vertical'] {
+  width: 1px;
+  min-height: var(--space-4);
+  align-self: stretch;
+}

@@ -1,0 +1,10 @@
+.aegis-textarea { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; min-width: 0; }
+.aegis-textarea-native { display: block; width: 100%; padding: var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-bg-surface); color: var(--color-text-primary); font: inherit; line-height: 1.5; resize: vertical; transition: border-color var(--motion-fast) var(--ease-out); }
+.aegis-textarea-native::placeholder { color: var(--color-text-tertiary); opacity: 1; }
+.aegis-textarea-native:hover:not(:disabled):not([readonly]) { border-color: var(--color-text-secondary); }
+.aegis-textarea-native:focus-visible { border-color: var(--color-function-bg); }
+.aegis-textarea-native[aria-invalid=true] { border-color: var(--color-destroy-fg); }
+.aegis-textarea-native:disabled { opacity: .55; background: var(--color-bg-hover); cursor: not-allowed; }
+.aegis-textarea-native[readonly] { background: var(--color-bg-hover); }
+.aegis-textarea-native[data-autogrow] { resize: none; }
+.aegis-textarea-count { align-self: flex-end; font-size: var(--text-xs); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
