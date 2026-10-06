@@ -13,11 +13,13 @@ The canvas gives every container breathing room. A surface holds content; a rais
 
 <SurfaceExamples />
 
-Keep navigation 12px from the top, left, and bottom of the viewport, with a 20px radius and 20px of interior padding. Detail and assistant sheets float 12px from the top, right, and bottom, with a 16px radius. Cards use 16px padding; interactive rows use 12px hover pills.
+Keep navigation 12px from the top, left, and bottom of the viewport. Its radius follows its width: 16px when expanded to 264px, and 12px when collapsed to 68px. Keep the collapse or expand toggle at the top in both states. Expanded floating containers use 20px of interior padding. Detail and assistant sheets float 12px from the top, right, and bottom, with a 16px radius. Cards use 16px padding; interactive rows use 12px hover pills.
+
+Control corners scale with their height: 28px controls use a 6px radius, 34px controls use 8px, and 40px controls use 10px. Checkboxes use 4px corners. This keeps small controls crisp while preserving the softer surface hierarchy.
 
 ## Give color a job
 
-Neutral surfaces carry most of the interface. Function blue identifies the next action. Violet identifies AI assistance. Red marks destructive actions, green confirms success, and amber calls for attention. Severity is a separate scale: critical, high, medium, low, and informational. Pair color with a label or icon so meaning never depends on color alone.
+Neutral surfaces carry most of the interface. Function blue identifies the next action. A violet-to-blue gradient identifies AI assistance across filled, soft, and text treatments. Red marks destructive actions, green confirms success, and amber calls for attention. Severity is a separate scale: critical, high, medium, low, and informational. Pair color with a label or icon so meaning never depends on color alone.
 
 ## Preserve the analyst’s attention
 
@@ -29,7 +31,7 @@ Every action has a visible label or accessible name. Focus uses the same 2px fun
 
 ## Keep AI accountable
 
-AI is an explicit intent with recognizable violet treatments and the sparkles marker. Generated content always carries an “AI generated” label. Show the context an assistant can access, link its claims to evidence, and distinguish confidence from certainty.
+AI is an explicit intent with recognizable gradient treatments and the sparkles marker. Use the filled gradient for prominent AI actions, the soft gradient for quiet AI surfaces, and the foreground gradient for AI text. Generated content always carries an “AI generated” label. Show the context an assistant can access, link its claims to evidence, and distinguish confidence from certainty.
 
 <AiLanguageExample />
 

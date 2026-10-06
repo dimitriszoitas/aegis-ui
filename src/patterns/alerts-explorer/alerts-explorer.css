@@ -1,0 +1,97 @@
+.aegis-alerts-explorer {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-raised);
+  overflow: clip;
+}
+.aegis-alerts-facets {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+  transition: flex-basis var(--motion-slide) var(--ease-out);
+}
+.aegis-alerts-explorer[data-panel-open='true'] > .aegis-alerts-facets {
+  flex-basis: 300px;
+}
+.aegis-alerts-facets > .aegis-filter-panel {
+  height: 100%;
+  max-height: 760px;
+  max-width: none;
+}
+.aegis-alerts-results {
+  min-width: 0;
+  flex: 1;
+}
+.aegis-alerts-results > .aegis-data-grid {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.aegis-alert-title {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.aegis-alert-title strong {
+  font-weight: 500;
+  white-space: normal;
+  line-height: 1.35;
+}
+.aegis-alert-title > span {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-alert-assignee {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.aegis-alert-events h3 {
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-3);
+}
+.aegis-alert-events table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.aegis-alert-events th,
+.aegis-alert-events td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs);
+}
+.aegis-alert-events th {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+@media (max-width: 700px) {
+  .aegis-alerts-explorer {
+    flex-direction: column;
+  }
+  .aegis-alerts-explorer[data-panel-open='true'] > .aegis-alerts-facets {
+    flex-basis: auto;
+  }
+  .aegis-alerts-facets > .aegis-filter-panel {
+    width: 100%;
+    height: 320px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+  .aegis-alerts-explorer[data-panel-open='false'] > .aegis-alerts-facets {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-alerts-facets {
+    transition: none;
+  }
+}

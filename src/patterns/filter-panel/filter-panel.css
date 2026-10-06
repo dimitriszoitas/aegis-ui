@@ -1,0 +1,151 @@
+.aegis-filter-panel {
+  width: 300px;
+  max-width: 100%;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+  padding: var(--space-4);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border-right: 1px solid var(--color-border-subtle);
+}
+.aegis-filter-panel-heading,
+.aegis-filter-panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+}
+.aegis-filter-panel-heading h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+.aegis-filter-panel-result {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-filter-panel-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  margin-right: calc(-1 * var(--space-2));
+  padding-right: var(--space-2);
+}
+.aegis-filter-panel-scroll:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+.aegis-filter-panel .aegis-accordion-content-inner {
+  padding-left: 0;
+  padding-right: 0;
+}
+.aegis-filter-facets {
+  display: grid;
+  gap: var(--space-3);
+}
+.aegis-filter-facets .aegis-checkbox-copy {
+  flex: 1;
+  min-width: 0;
+}
+.aegis-filter-facet-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+}
+.aegis-filter-facet-count {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-filter-panel-empty {
+  margin: var(--space-4) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-filter-mini-chart {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+.aegis-filter-mini-chart figcaption {
+  display: grid;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-filter-mini-chart figcaption > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.aegis-filter-mini-chart svg {
+  width: 100%;
+  height: 84px;
+  margin-top: var(--space-2);
+}
+.aegis-filter-mini-bar {
+  fill: var(--color-chart-1);
+}
+.aegis-filter-mini-bar-empty {
+  fill: var(--color-border-strong);
+}
+.aegis-filter-mini-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-filter-sync-preview {
+  display: flex;
+  min-width: 0;
+}
+.aegis-filter-sync-results {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-4);
+}
+.aegis-filter-sync-results h3 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-base);
+}
+.aegis-filter-sync-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.aegis-filter-sync-results li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-size: var(--text-sm);
+}
+.aegis-filter-sync-results small {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+@media (max-width: 640px) {
+  .aegis-filter-sync-preview {
+    flex-wrap: wrap;
+  }
+  .aegis-filter-sync-results {
+    flex-basis: 100%;
+  }
+}

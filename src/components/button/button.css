@@ -11,7 +11,7 @@
   height: 34px;
   padding: 0 var(--space-3);
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--button-radius);
   font-size: var(--text-sm);
   line-height: 1;
   font-weight: 500;
@@ -117,12 +117,12 @@
   border-inline-end: 1px solid var(--color-border-default);
 }
 .button-group > .aegis-button:first-child {
-  border-start-start-radius: var(--radius-md);
-  border-end-start-radius: var(--radius-md);
+  border-start-start-radius: var(--button-radius);
+  border-end-start-radius: var(--button-radius);
 }
 .button-group > .aegis-button:last-child {
-  border-start-end-radius: var(--radius-md);
-  border-end-end-radius: var(--radius-md);
+  border-start-end-radius: var(--button-radius);
+  border-end-end-radius: var(--button-radius);
   border-inline-end: 0;
 }
 .button-group > .aegis-button:focus-visible {
@@ -132,4 +132,29 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.button-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.aegis-button[data-intent='ai'][data-emphasis='soft'] {
+  background: var(--gradient-ai-soft);
+}
+.aegis-button[data-intent='ai']:not([data-emphasis='filled']) .button-label {
+  background-image: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.aegis-button {
+  --button-radius: var(--control-radius-md);
+}
+.aegis-button[data-size='sm'] {
+  --button-radius: var(--control-radius-sm);
+}
+.aegis-button[data-size='lg'] {
+  --button-radius: var(--control-radius-lg);
 }

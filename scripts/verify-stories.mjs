@@ -5,7 +5,8 @@ const base = process.env.STORYBOOK_URL || 'http://127.0.0.1:6006';
 const index = await (await fetch(`${base}/index.json`)).json();
 const stories = Object.values(index.entries).filter(
   (s) =>
-    s.type === 'story' && (!process.env.STORY_FILTER || new RegExp(process.env.STORY_FILTER).test(s.id)),
+    s.type === 'story' &&
+    (!process.env.STORY_FILTER || new RegExp(process.env.STORY_FILTER).test(s.id)),
 );
 const browser = await chromium.launch();
 const failures = [];
@@ -23,6 +24,9 @@ async function worker() {
     const errors = [];
     const onError = (error) => errors.push(error.message);
     page.on('pageerror', onError);
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
     try {
       await page.goto(
         `${base}/iframe.html?id=${story.id}&viewMode=story&aegisTest=1&globals=theme:${theme}`,
@@ -31,6 +35,11 @@ async function worker() {
         .locator('#storybook-root > *')
         .first()
         .waitFor({ timeout: 20000, state: 'attached' });
+      await page.waitForFunction(
+        () => window.__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
+        {},
+        { timeout: 30000 },
+      );
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction((t) => document.documentElement.dataset.theme === t, theme);
       const result = await new AxeBuilder({ page })

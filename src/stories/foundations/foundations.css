@@ -190,7 +190,7 @@
   color: var(--color-on-intent);
   background: var(--color-function-bg);
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--control-radius-md);
   font: inherit;
   padding: var(--space-2) var(--space-3);
 }
@@ -239,8 +239,37 @@
   color: var(--color-text-secondary);
 }
 .foundation-ai-card {
-  background: var(--color-ai-surface);
+  background: var(--gradient-ai-surface);
   border-color: var(--color-ai-border);
+}
+.foundation-ai-text {
+  background: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.foundation-control-radius-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.foundation-control-specimen {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--space-3);
+  background: var(--color-function-soft);
+  color: var(--color-function-fg);
+  border: 1px solid var(--color-function-border);
+}
+.foundation-checkbox-specimen {
+  width: var(--space-4);
+  height: var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--control-radius-xs);
+  background: var(--color-bg-surface);
 }
 .foundation-ai-label {
   display: flex;

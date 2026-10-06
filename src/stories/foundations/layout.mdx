@@ -1,5 +1,11 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { SurfaceExamples, RadiusExamples, SpacingExamples } from './foundation-examples';
+import {
+  SurfaceExamples,
+  RadiusExamples,
+  ControlRadiusExamples,
+  SeparatorExamples,
+  SpacingExamples,
+} from './foundation-examples';
 
 <Meta title="Foundations/Space and surfaces" />
 
@@ -15,7 +21,18 @@ Raised surfaces use a subtle border and a small shadow. Floating chrome uses a l
 
 ## Radius
 
-Buttons and inputs use the medium radius. Cards use large, sheets use extra large, and floating navigation and modals use 2xl. Chips use the full radius. Values below come from the shared scale.
+Control radii follow control height. Use the component tokens below for buttons, icon buttons, inputs, selects, and other sized controls. Checkboxes use a 4px radius.
+
+| Control size | Height          | Radius | Token                 |
+| ------------ | --------------- | ------ | --------------------- |
+| Small        | 28px            | 6px    | `--control-radius-sm` |
+| Medium       | 34px            | 8px    | `--control-radius-md` |
+| Large        | 40px            | 10px   | `--control-radius-lg` |
+| Checkbox     | Compact control | 4px    | `--control-radius-xs` |
+
+<ControlRadiusExamples />
+
+Cards use 12px corners and sheets use 16px. Floating navigation uses 16px while expanded and 12px while collapsed; the expand or collapse toggle stays at the top in both states. Modals use 20px corners and chips use the full radius. Values below come from the shared primitive scale.
 
 <RadiusExamples />
 
@@ -24,6 +41,12 @@ Buttons and inputs use the medium radius. Cards use large, sheets use extra larg
 The spacing scale uses a 4px base. Favor 12px around floating chrome, 16px inside cards, and 20px inside floating containers. Dense grid rows use 8–10px vertical cell padding.
 
 <SpacingExamples />
+
+## Separators
+
+Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs.
+
+<SeparatorExamples />
 
 ## Layer order
 

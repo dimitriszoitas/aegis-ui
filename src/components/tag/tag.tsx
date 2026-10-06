@@ -40,6 +40,7 @@ export function Tag({
     className: cn('tag', className),
     style,
     'data-size': size,
+    'data-intent': intent,
     'data-selected': selected,
   };
   if (variant === 'interactive')

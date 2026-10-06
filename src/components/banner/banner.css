@@ -90,3 +90,13 @@
     order: 3;
   }
 }
+
+.aegis-banner[data-intent='ai'] {
+  background: var(--gradient-ai-surface);
+}
+.aegis-banner[data-intent='ai'] .aegis-banner-title {
+  background: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

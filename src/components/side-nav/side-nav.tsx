@@ -118,9 +118,15 @@ export function SideNav({
       aria-label="Main navigation"
     >
       <div className="nav-brand">
-        <span className="nav-mark">
-          <Shield size={22} strokeWidth={1.6} />
-        </span>
+        {collapsed ? (
+          <IconButton aria-label="Expand navigation" size="sm" emphasis="ghost" onClick={toggle}>
+            <PanelLeftOpen size={16} />
+          </IconButton>
+        ) : (
+          <span className="nav-mark">
+            <Shield size={22} strokeWidth={1.6} />
+          </span>
+        )}
         {!collapsed && (
           <>
             <strong>Aegis</strong>
@@ -166,14 +172,7 @@ export function SideNav({
           </section>
         ))}
       </div>
-      <div className="nav-footer">
-        {typeof footer === 'function' ? footer(collapsed) : footer}
-        {collapsed && (
-          <IconButton aria-label="Expand navigation" emphasis="ghost" onClick={toggle}>
-            <PanelLeftOpen size={17} />
-          </IconButton>
-        )}
-      </div>
+      <div className="nav-footer">{typeof footer === 'function' ? footer(collapsed) : footer}</div>
     </nav>
   );
 }

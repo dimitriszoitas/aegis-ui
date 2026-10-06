@@ -1,0 +1,76 @@
+.aegis-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-4);
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-filter-bar-main,
+.aegis-filter-bar-tools,
+.aegis-filter-bar-quick,
+.aegis-filter-bar-applied {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.aegis-filter-bar-main {
+  gap: var(--space-3);
+}
+.aegis-filter-view {
+  width: 164px;
+  flex: 0 0 164px;
+}
+.aegis-filter-search {
+  min-width: 200px;
+  flex: 1 1 220px;
+}
+.aegis-filter-bar-tools {
+  margin-left: auto;
+  flex-wrap: nowrap;
+}
+.aegis-filter-quick-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  margin-right: var(--space-1);
+}
+.aegis-filter-bar-applied {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}
+.aegis-filter-applied-count {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-filter-builder,
+.aegis-filter-column-options {
+  display: grid;
+  gap: var(--space-3);
+}
+.aegis-filter-builder > .aegis-button {
+  margin-top: var(--space-1);
+  justify-self: end;
+}
+.aegis-filter-bar-applied .tag {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .aegis-filter-bar-main > .aegis-filter-search {
+    flex-basis: 100%;
+    order: 1;
+  }
+  .aegis-filter-view {
+    flex: 1 1 144px;
+  }
+  .aegis-filter-bar-tools {
+    margin-left: 0;
+  }
+}

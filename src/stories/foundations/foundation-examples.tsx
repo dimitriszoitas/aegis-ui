@@ -1,5 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import { ArrowRight, BellRing, ShieldCheck, Sparkles } from 'lucide-react';
+import { Separator } from '@/components/separator';
 import { tokenNames, tokenValues, type TokenTheme } from './token-source';
 import './foundations.css';
 
@@ -57,7 +58,8 @@ export function IntentExamples() {
                 <span
                   className="foundation-intent-mark"
                   style={{
-                    background: `var(--color-${intent}-bg)`,
+                    background:
+                      intent === 'ai' ? 'var(--gradient-ai)' : `var(--color-${intent}-bg)`,
                     color: 'var(--color-on-intent)',
                   }}
                 >
@@ -71,11 +73,14 @@ export function IntentExamples() {
                 <span
                   className="foundation-soft-chip"
                   style={{
-                    background: `var(--color-${intent}-soft)`,
+                    background:
+                      intent === 'ai' ? 'var(--gradient-ai-soft)' : `var(--color-${intent}-soft)`,
                     color: `var(--color-${intent}-fg)`,
                   }}
                 >
-                  Soft surface
+                  <span className={intent === 'ai' ? 'foundation-ai-text' : undefined}>
+                    Soft surface
+                  </span>
                 </span>
               </div>
             ))}
@@ -143,6 +148,71 @@ export function RadiusExamples() {
           <code>{name.replace('--radius-', '')}</code>
           <span>{tokenValues.light[name]}</span>
         </div>
+      ))}
+    </div>
+  );
+}
+
+export function ControlRadiusExamples() {
+  return (
+    <div className="foundation-theme-pair">
+      {(['light', 'dark'] as const).map((theme) => (
+        <ThemeFrame theme={theme} key={theme}>
+          <div className="foundation-stack">
+            {(
+              [
+                { size: 'sm', height: 28, radius: 6 },
+                { size: 'md', height: 34, radius: 8 },
+                { size: 'lg', height: 40, radius: 10 },
+              ] as const
+            ).map((control) => (
+              <div className="foundation-control-radius-row" key={control.size}>
+                <span
+                  className="foundation-control-specimen"
+                  style={{
+                    height: control.height,
+                    borderRadius: `var(--control-radius-${control.size})`,
+                  }}
+                >
+                  Investigate alert
+                </span>
+                <span>
+                  {control.height}px / {control.radius}px
+                </span>
+              </div>
+            ))}
+            <div className="foundation-control-radius-row">
+              <span className="foundation-checkbox-specimen" aria-hidden="true" />
+              <span>Checkbox / 4px</span>
+            </div>
+          </div>
+        </ThemeFrame>
+      ))}
+    </div>
+  );
+}
+
+export function SeparatorExamples() {
+  return (
+    <div className="foundation-theme-pair">
+      {(['light', 'dark'] as const).map((theme) => (
+        <ThemeFrame theme={theme} key={theme}>
+          <div className="foundation-stack">
+            {(['normal', 'light'] as const).map((emphasis) => (
+              <div className="foundation-stack" key={emphasis}>
+                <code>{emphasis} emphasis</code>
+                <Separator emphasis={emphasis} />
+                <div className="foundation-wrap">
+                  <span>18 events</span>
+                  <Separator variant="dot" emphasis={emphasis} />
+                  <span>WS-ATH-114</span>
+                  <Separator variant="dot" emphasis={emphasis} />
+                  <span>Last 24h</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </ThemeFrame>
       ))}
     </div>
   );
@@ -227,7 +297,7 @@ export function AiLanguageExample() {
     <div className="foundation-example foundation-ai-card">
       <div className="foundation-ai-label">
         <Sparkles size={16} aria-hidden />
-        AI generated · Analyst assistant
+        <span className="foundation-ai-text">AI generated · Analyst assistant</span>
       </div>
       <strong>Review the successful sign-in after 37 failed attempts</strong>
       <p>

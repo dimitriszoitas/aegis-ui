@@ -75,3 +75,21 @@
   width: var(--space-8);
   color: var(--color-text-tertiary);
 }
+
+.aegis-pagination-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.aegis-pagination-select-wrap select {
+  appearance: none;
+  padding-inline: var(--space-3) var(--space-8);
+  min-width: 68px;
+  border-radius: var(--control-radius-md);
+}
+.aegis-pagination-select-wrap svg {
+  position: absolute;
+  right: var(--space-3);
+  pointer-events: none;
+  color: var(--color-text-secondary);
+}

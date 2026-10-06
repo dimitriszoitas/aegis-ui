@@ -177,3 +177,11 @@
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-border-subtle);
 }
+
+.side-nav {
+  border-radius: var(--sidebar-radius-expanded);
+}
+.side-nav[data-collapsed='true'] {
+  border-radius: var(--sidebar-radius-collapsed);
+  padding-top: var(--space-5);
+}

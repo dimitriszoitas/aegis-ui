@@ -120,7 +120,7 @@
   --radius-2xl: 20px;
   --radius-full: 9999px;
   --font-ui: Inter, system-ui, sans-serif;
-  --font-code: "JetBrains Mono", monospace;
+  --font-code: 'JetBrains Mono', monospace;
   --font-mono: var(--font-code);
   --text-xs: 12px;
   --text-sm: 13px;
@@ -133,7 +133,7 @@
   --motion-fast: 120ms;
   --motion-base: 180ms;
   --motion-slide: 260ms;
-  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --z-sticky: 40;
   --z-dropdown: 50;
   --z-sheet: 60;
@@ -144,64 +144,135 @@
   --grid-row-compact: 36px;
   --grid-row-default: 48px;
   --grid-row-comfortable: 60px;
+  --control-radius-xs: 4px;
+  --control-radius-sm: var(--radius-xs);
+  --control-radius-md: var(--radius-sm);
+  --control-radius-lg: var(--radius-md);
+  --sidebar-radius-expanded: var(--radius-xl);
+  --sidebar-radius-collapsed: var(--radius-lg);
   --sidebar-expanded: 264px;
   --sidebar-collapsed: 68px;
-  --color-bg-canvas: #F4F5F8;
-  --color-bg-surface: #FFFFFF;
-  --color-bg-surface-raised: #FFFFFF;
-  --color-bg-hover: #F1F3F6;
-  --color-bg-selected: #EDF0F5;
-  --color-text-primary: #171A20;
-  --color-text-secondary: #5B6271;
-  --color-text-tertiary: #626B7C;
-  --color-border-subtle: #E6E8EE;
-  --color-border-default: #D6DAE3;
-  --color-border-strong: #8590A3;
-  --color-on-intent: #FFFFFF;
-  --color-scrim: rgba(13,14,18,.48);
-  --color-function-bg: #4565ED;
-  --color-function-fg: #3250CC;
+  --color-bg-canvas: #f4f5f8;
+  --color-bg-surface: #ffffff;
+  --color-bg-surface-raised: #ffffff;
+  --color-bg-hover: #f1f3f6;
+  --color-bg-selected: #edf0f5;
+  --color-text-primary: #171a20;
+  --color-text-secondary: #5b6271;
+  --color-text-tertiary: #626b7c;
+  --color-border-subtle: #e6e8ee;
+  --color-border-default: #d6dae3;
+  --color-border-strong: #8590a3;
+  --color-on-intent: #ffffff;
+  --color-scrim: rgba(13, 14, 18, 0.48);
+  --color-function-bg: #4565ed;
+  --color-function-fg: #3250cc;
   --color-function-soft: color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface));
-  --color-function-border: color-mix(in srgb, var(--color-function-bg) 28%, var(--color-border-subtle));
-  --color-ai-bg: #7950D7;
-  --color-ai-fg: #7541C7;
+  --color-function-border: color-mix(
+    in srgb,
+    var(--color-function-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-ai-bg: #7950d7;
+  --color-ai-fg: #7541c7;
   --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
   --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 28%, var(--color-border-subtle));
-  --color-destroy-bg: #CE343B;
-  --color-destroy-fg: #BE2730;
+  --color-destroy-bg: #ce343b;
+  --color-destroy-fg: #be2730;
   --color-destroy-soft: color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface));
-  --color-destroy-border: color-mix(in srgb, var(--color-destroy-bg) 28%, var(--color-border-subtle));
-  --color-success-bg: #247C47;
-  --color-success-fg: #247C47;
+  --color-destroy-border: color-mix(
+    in srgb,
+    var(--color-destroy-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-success-bg: #247c47;
+  --color-success-fg: #247c47;
   --color-success-soft: color-mix(in srgb, var(--color-success-bg) 10%, var(--color-bg-surface));
-  --color-success-border: color-mix(in srgb, var(--color-success-bg) 28%, var(--color-border-subtle));
-  --color-warning-bg: #A65305;
+  --color-success-border: color-mix(
+    in srgb,
+    var(--color-success-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-warning-bg: #a65305;
   --color-warning-fg: #985008;
   --color-warning-soft: color-mix(in srgb, var(--color-warning-bg) 10%, var(--color-bg-surface));
-  --color-warning-border: color-mix(in srgb, var(--color-warning-bg) 28%, var(--color-border-subtle));
-  --color-severity-critical-fg: #B91C1C;
-  --color-severity-critical-bg: color-mix(in srgb, var(--color-severity-critical-fg) 9%, var(--color-bg-surface));
-  --color-severity-critical-border: color-mix(in srgb, var(--color-severity-critical-fg) 22%, var(--color-bg-surface));
-  --color-severity-high-fg: #B23E08;
-  --color-severity-high-bg: color-mix(in srgb, var(--color-severity-high-fg) 9%, var(--color-bg-surface));
-  --color-severity-high-border: color-mix(in srgb, var(--color-severity-high-fg) 22%, var(--color-bg-surface));
+  --color-warning-border: color-mix(
+    in srgb,
+    var(--color-warning-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-severity-critical-fg: #b91c1c;
+  --color-severity-critical-bg: color-mix(
+    in srgb,
+    var(--color-severity-critical-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-critical-border: color-mix(
+    in srgb,
+    var(--color-severity-critical-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-high-fg: #b23e08;
+  --color-severity-high-bg: color-mix(
+    in srgb,
+    var(--color-severity-high-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-high-border: color-mix(
+    in srgb,
+    var(--color-severity-high-fg) 22%,
+    var(--color-bg-surface)
+  );
   --color-severity-medium-fg: #985008;
-  --color-severity-medium-bg: color-mix(in srgb, var(--color-severity-medium-fg) 9%, var(--color-bg-surface));
-  --color-severity-medium-border: color-mix(in srgb, var(--color-severity-medium-fg) 22%, var(--color-bg-surface));
-  --color-severity-low-fg: #1D4ED8;
-  --color-severity-low-bg: color-mix(in srgb, var(--color-severity-low-fg) 9%, var(--color-bg-surface));
-  --color-severity-low-border: color-mix(in srgb, var(--color-severity-low-fg) 22%, var(--color-bg-surface));
+  --color-severity-medium-bg: color-mix(
+    in srgb,
+    var(--color-severity-medium-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-medium-border: color-mix(
+    in srgb,
+    var(--color-severity-medium-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-low-fg: #1d4ed8;
+  --color-severity-low-bg: color-mix(
+    in srgb,
+    var(--color-severity-low-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-low-border: color-mix(
+    in srgb,
+    var(--color-severity-low-fg) 22%,
+    var(--color-bg-surface)
+  );
   --color-severity-info-fg: #475569;
-  --color-severity-info-bg: color-mix(in srgb, var(--color-severity-info-fg) 9%, var(--color-bg-surface));
-  --color-severity-info-border: color-mix(in srgb, var(--color-severity-info-fg) 22%, var(--color-bg-surface));
-  --elevation-raised: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.08);
-  --elevation-floating: 0 2px 8px -2px rgba(16,24,40,.08), 0 12px 32px -8px rgba(16,24,40,.14);
-  --elevation-overlay: 0 8px 16px -6px rgba(16,24,40,.12), 0 28px 64px -12px rgba(16,24,40,.28);
+  --color-severity-info-bg: color-mix(
+    in srgb,
+    var(--color-severity-info-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-info-border: color-mix(
+    in srgb,
+    var(--color-severity-info-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --elevation-raised: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.08);
+  --elevation-floating:
+    0 2px 8px -2px rgba(16, 24, 40, 0.08), 0 12px 32px -8px rgba(16, 24, 40, 0.14);
+  --elevation-overlay:
+    0 8px 16px -6px rgba(16, 24, 40, 0.12), 0 28px 64px -12px rgba(16, 24, 40, 0.28);
   --shadow-raised: var(--elevation-raised);
   --shadow-floating: var(--elevation-floating);
   --shadow-overlay: var(--elevation-overlay);
   --ring-focus: var(--color-function-bg);
   --gradient-ai: linear-gradient(135deg, var(--color-ai-bg), var(--color-function-bg));
+  --gradient-ai-text: linear-gradient(110deg, var(--color-ai-fg), var(--color-function-fg));
+  --gradient-ai-soft: linear-gradient(135deg, var(--color-ai-soft), var(--color-function-soft));
+  --gradient-ai-surface: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface)),
+    color-mix(in srgb, var(--color-function-bg) 5%, var(--color-bg-surface))
+  );
   --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface));
   --color-syntax-key: var(--color-function-fg);
   --color-syntax-string: var(--color-success-fg);
@@ -215,62 +286,125 @@
   --color-chart-5: var(--color-destroy-bg);
 }
 .dark {
-  --color-bg-canvas: #0D0E12;
-  --color-bg-surface: #17181D;
-  --color-bg-surface-raised: #1C1E24;
-  --color-bg-hover: #22242B;
+  --color-bg-canvas: #0d0e12;
+  --color-bg-surface: #17181d;
+  --color-bg-surface-raised: #1c1e24;
+  --color-bg-hover: #22242b;
   --color-bg-selected: #262933;
-  --color-text-primary: #F2F3F6;
-  --color-text-secondary: #A7ACB9;
-  --color-text-tertiary: #959CAB;
-  --color-border-subtle: rgba(255,255,255,.06);
-  --color-border-default: rgba(255,255,255,.10);
-  --color-border-strong: #626B7C;
+  --color-text-primary: #f2f3f6;
+  --color-text-secondary: #a7acb9;
+  --color-text-tertiary: #959cab;
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-default: rgba(255, 255, 255, 0.1);
+  --color-border-strong: #626b7c;
   --color-on-intent: #101116;
-  --color-scrim: rgba(0,0,0,.65);
-  --color-function-bg: #6B8BFF;
-  --color-function-fg: #A6B7FF;
+  --color-scrim: rgba(0, 0, 0, 0.65);
+  --color-function-bg: #6b8bff;
+  --color-function-fg: #a6b7ff;
   --color-function-soft: color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface));
-  --color-function-border: color-mix(in srgb, var(--color-function-bg) 28%, var(--color-border-subtle));
-  --color-ai-bg: #A78BFA;
-  --color-ai-fg: #C5B0FF;
+  --color-function-border: color-mix(
+    in srgb,
+    var(--color-function-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-ai-bg: #a78bfa;
+  --color-ai-fg: #c5b0ff;
   --color-ai-soft: color-mix(in srgb, var(--color-ai-bg) 10%, var(--color-bg-surface));
   --color-ai-border: color-mix(in srgb, var(--color-ai-bg) 28%, var(--color-border-subtle));
-  --color-destroy-bg: #FF6369;
-  --color-destroy-fg: #FF9599;
+  --color-destroy-bg: #ff6369;
+  --color-destroy-fg: #ff9599;
   --color-destroy-soft: color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface));
-  --color-destroy-border: color-mix(in srgb, var(--color-destroy-bg) 28%, var(--color-border-subtle));
-  --color-success-bg: #56C982;
-  --color-success-fg: #89DCA8;
+  --color-destroy-border: color-mix(
+    in srgb,
+    var(--color-destroy-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-success-bg: #56c982;
+  --color-success-fg: #89dca8;
   --color-success-soft: color-mix(in srgb, var(--color-success-bg) 10%, var(--color-bg-surface));
-  --color-success-border: color-mix(in srgb, var(--color-success-bg) 28%, var(--color-border-subtle));
-  --color-warning-bg: #F2B454;
-  --color-warning-fg: #F5C573;
+  --color-success-border: color-mix(
+    in srgb,
+    var(--color-success-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-warning-bg: #f2b454;
+  --color-warning-fg: #f5c573;
   --color-warning-soft: color-mix(in srgb, var(--color-warning-bg) 10%, var(--color-bg-surface));
-  --color-warning-border: color-mix(in srgb, var(--color-warning-bg) 28%, var(--color-border-subtle));
-  --color-severity-critical-fg: #FF8585;
-  --color-severity-critical-bg: color-mix(in srgb, var(--color-severity-critical-fg) 9%, var(--color-bg-surface));
-  --color-severity-critical-border: color-mix(in srgb, var(--color-severity-critical-fg) 22%, var(--color-bg-surface));
-  --color-severity-high-fg: #FFAA75;
-  --color-severity-high-bg: color-mix(in srgb, var(--color-severity-high-fg) 9%, var(--color-bg-surface));
-  --color-severity-high-border: color-mix(in srgb, var(--color-severity-high-fg) 22%, var(--color-bg-surface));
-  --color-severity-medium-fg: #F5C573;
-  --color-severity-medium-bg: color-mix(in srgb, var(--color-severity-medium-fg) 9%, var(--color-bg-surface));
-  --color-severity-medium-border: color-mix(in srgb, var(--color-severity-medium-fg) 22%, var(--color-bg-surface));
-  --color-severity-low-fg: #93B4FF;
-  --color-severity-low-bg: color-mix(in srgb, var(--color-severity-low-fg) 9%, var(--color-bg-surface));
-  --color-severity-low-border: color-mix(in srgb, var(--color-severity-low-fg) 22%, var(--color-bg-surface));
-  --color-severity-info-fg: #AAB8CC;
-  --color-severity-info-bg: color-mix(in srgb, var(--color-severity-info-fg) 9%, var(--color-bg-surface));
-  --color-severity-info-border: color-mix(in srgb, var(--color-severity-info-fg) 22%, var(--color-bg-surface));
-  --elevation-raised: 0 1px 3px rgba(0,0,0,.16);
-  --elevation-floating: 0 4px 24px rgba(0,0,0,.24);
-  --elevation-overlay: 0 16px 48px rgba(0,0,0,.40);
+  --color-warning-border: color-mix(
+    in srgb,
+    var(--color-warning-bg) 28%,
+    var(--color-border-subtle)
+  );
+  --color-severity-critical-fg: #ff8585;
+  --color-severity-critical-bg: color-mix(
+    in srgb,
+    var(--color-severity-critical-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-critical-border: color-mix(
+    in srgb,
+    var(--color-severity-critical-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-high-fg: #ffaa75;
+  --color-severity-high-bg: color-mix(
+    in srgb,
+    var(--color-severity-high-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-high-border: color-mix(
+    in srgb,
+    var(--color-severity-high-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-medium-fg: #f5c573;
+  --color-severity-medium-bg: color-mix(
+    in srgb,
+    var(--color-severity-medium-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-medium-border: color-mix(
+    in srgb,
+    var(--color-severity-medium-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-low-fg: #93b4ff;
+  --color-severity-low-bg: color-mix(
+    in srgb,
+    var(--color-severity-low-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-low-border: color-mix(
+    in srgb,
+    var(--color-severity-low-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --color-severity-info-fg: #aab8cc;
+  --color-severity-info-bg: color-mix(
+    in srgb,
+    var(--color-severity-info-fg) 9%,
+    var(--color-bg-surface)
+  );
+  --color-severity-info-border: color-mix(
+    in srgb,
+    var(--color-severity-info-fg) 22%,
+    var(--color-bg-surface)
+  );
+  --elevation-raised: 0 1px 3px rgba(0, 0, 0, 0.16);
+  --elevation-floating: 0 4px 24px rgba(0, 0, 0, 0.24);
+  --elevation-overlay: 0 16px 48px rgba(0, 0, 0, 0.4);
   --shadow-raised: var(--elevation-raised);
   --shadow-floating: var(--elevation-floating);
   --shadow-overlay: var(--elevation-overlay);
   --ring-focus: var(--color-function-bg);
   --gradient-ai: linear-gradient(135deg, var(--color-ai-bg), var(--color-function-bg));
+  --gradient-ai-text: linear-gradient(110deg, var(--color-ai-fg), var(--color-function-fg));
+  --gradient-ai-soft: linear-gradient(135deg, var(--color-ai-soft), var(--color-function-soft));
+  --gradient-ai-surface: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface)),
+    color-mix(in srgb, var(--color-function-bg) 5%, var(--color-bg-surface))
+  );
   --color-ai-surface: color-mix(in srgb, var(--color-ai-bg) 5%, var(--color-bg-surface));
   --color-syntax-key: var(--color-function-fg);
   --color-syntax-string: var(--color-success-fg);
@@ -283,4 +417,10 @@
   --color-chart-4: var(--color-warning-bg);
   --color-chart-5: var(--color-destroy-bg);
 }
-@media (prefers-reduced-motion: reduce) { :root { --motion-fast: 0ms; --motion-base: 0ms; --motion-slide: 0ms; } }
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-slide: 0ms;
+  }
+}

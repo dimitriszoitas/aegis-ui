@@ -33,7 +33,7 @@
 .aegis-toast-ai {
   --toast-accent: var(--color-ai-fg);
   border-color: var(--color-ai-border);
-  background: var(--color-ai-surface);
+  background: var(--gradient-ai-surface);
 }
 .aegis-toast-loading {
   --toast-accent: var(--color-text-secondary);

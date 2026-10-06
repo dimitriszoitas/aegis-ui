@@ -36,3 +36,34 @@ export const InToolbar: Story = {
     </div>
   ),
 };
+
+export const Matrix: Story = {
+  render: () => (
+    <div className="stack" style={{ maxWidth: 580 }}>
+      {(['light', 'normal'] as const).map((emphasis) => (
+        <section key={emphasis} className="surface stack">
+          <h3>{emphasis === 'light' ? 'Light emphasis' : 'Normal emphasis'}</h3>
+          <Separator emphasis={emphasis} />
+          <div className="row">
+            <span>24 alerts</span>
+            <Separator orientation="vertical" emphasis={emphasis} />
+            <span>6 identities</span>
+            <Separator variant="dot" emphasis={emphasis} />
+            <span className="muted">Last 24 hours</span>
+          </div>
+        </section>
+      ))}
+    </div>
+  ),
+};
+export const DotSeparators: Story = {
+  render: () => (
+    <div className="row">
+      <span>Elena Vasquez</span>
+      <Separator variant="dot" />
+      <span className="muted">Senior analyst</span>
+      <Separator variant="dot" emphasis="light" />
+      <span className="muted">Athens workspace</span>
+    </div>
+  ),
+};

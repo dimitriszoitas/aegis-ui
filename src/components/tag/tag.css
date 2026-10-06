@@ -96,3 +96,7 @@ button.tag:hover {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
+.tag[data-intent='ai'] {
+  background: var(--gradient-ai-soft);
+}

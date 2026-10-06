@@ -1,0 +1,163 @@
+.aegis-entity-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.aegis-entity-cell-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+.aegis-entity-cell-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.aegis-entity-cell-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+.aegis-entity-cell-detail {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-time-cell {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  border-radius: var(--radius-xs);
+}
+.aegis-tags-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  white-space: nowrap;
+}
+.aegis-tags-cell .tag {
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aegis-tags-cell-overflow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-5);
+  height: var(--space-5);
+  padding: 0 var(--space-1);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-cell-empty {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}
+.aegis-sparkline-cell {
+  display: block;
+  color: var(--sparkline-color);
+  flex-shrink: 0;
+  overflow: visible;
+}
+.aegis-number-cell {
+  display: block;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.aegis-actions-cell,
+.aegis-actions-cell-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.aegis-actions-cell-primary {
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-out);
+}
+.aegis-actions-cell:hover .aegis-actions-cell-primary,
+.aegis-actions-cell:focus-within .aegis-actions-cell-primary,
+tr:hover .aegis-actions-cell-primary,
+tr:focus-within .aegis-actions-cell-primary,
+[role='row']:hover .aegis-actions-cell-primary,
+[role='row']:focus-within .aegis-actions-cell-primary {
+  opacity: 1;
+}
+.aegis-ai-verdict-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px var(--space-2);
+  border: 1px solid var(--color-ai-border);
+  border-radius: var(--radius-full);
+  background: var(--gradient-ai-soft, var(--color-ai-soft));
+  color: var(--color-ai-fg);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.aegis-ai-verdict-label {
+  background: var(--gradient-ai-text, var(--gradient-ai));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.aegis-ai-verdict-confidence {
+  padding-left: var(--space-1);
+  margin-left: var(--space-1);
+  border-left: 1px solid var(--color-ai-border);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+.aegis-expand-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: var(--space-6);
+  height: var(--space-7);
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--control-radius-sm, var(--radius-xs));
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.aegis-expand-cell:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+.aegis-expand-cell:disabled {
+  opacity: 0.4;
+}
+@media (hover: none) {
+  .aegis-actions-cell-primary {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-actions-cell-primary {
+    transition: none;
+  }
+}

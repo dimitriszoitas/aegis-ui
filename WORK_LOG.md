@@ -6,7 +6,9 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Phase 1 complete, `2014d39`: three-tier tokens, light/dark switching, Tailwind/shadcn bridge, source-derived Foundations MDX. Light function/tertiary values adjusted for AA contrast.
 - Phase 2 complete, `ea59eab`: core components and their stories. 146 story/theme scans plus targeted retests passed after accessibility fixes. Loading labels retain accessible names; disabled descriptions remain readable; menus default to non-modal behavior.
 - Phase 3 complete: composite controls, tree, dates, navigation, overlays, wizard shell. Eight logic tests pass (four tree, four time range). Browser checks cover dialog focus/inertness, typed confirmation, menu Tab/Shift+Tab and context-menu keyboard invocation. Composite stories passed both-theme accessibility checks, including static retests of Select repairs.
-- Phases 4–9 pending: datagrid/filters; code/viz; AI; console; polish; GitHub/Pages.
+- Phase 4 complete: deterministic alerts and valid detection rules, full TanStack grid and ten cell renderers, synchronized filter bar/push panel, functional bulk assignment/status/AI context. Fifteen logic tests pass; 116 story/theme scans plus 32 final interaction-aware retests pass. Virtualization verified with 1,000 rows and measured expanded details.
+- User refinements included: vertical wizard retained for the full demo; 6/8/10px control radii by size, sidebar 16/12px with top toggle, chevron inset, gradient AI treatments, line/dot separators with normal/light emphasis.
+- Phases 5–9 pending: code/viz; AI; console; polish; GitHub/Pages.
 
 ## Verification setup
 

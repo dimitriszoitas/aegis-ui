@@ -1,5 +1,5 @@
 import { useId, type ComponentProps } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import './pagination.css';
 
@@ -58,21 +58,24 @@ export function Pagination({
         {onPageSizeChange && (
           <div className="aegis-pagination-size">
             <label htmlFor={sizeId}>Rows per page</label>
-            <select
-              id={sizeId}
-              value={size}
-              disabled={disabled}
-              onChange={(event) => {
-                onPageSizeChange(Number(event.target.value));
-                onPageChange(1);
-              }}
-            >
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <span className="aegis-pagination-select-wrap">
+              <select
+                id={sizeId}
+                value={size}
+                disabled={disabled}
+                onChange={(event) => {
+                  onPageSizeChange(Number(event.target.value));
+                  onPageChange(1);
+                }}
+              >
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={14} aria-hidden="true" />
+            </span>
           </div>
         )}
         <div className="aegis-pagination-pages">
