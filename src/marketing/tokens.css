@@ -1,0 +1,20 @@
+:root:has(.aegis-marketing),
+.aegis-marketing {
+  --marketing-bg: #090e0b;
+  --marketing-surface: #111b15;
+  --marketing-raised: #1a2920;
+  --marketing-text: #f0f8f1;
+  --marketing-muted: #a7b9ad;
+  --marketing-subtle: #879e8f;
+  --marketing-line: #283d30;
+  --marketing-accent: #a6ff8e;
+  --marketing-accent-bright: #c3ffb5;
+  --marketing-accent-ink: #0b2311;
+  --marketing-paper: #f0f5ee;
+  --marketing-paper-text: #15221a;
+  --marketing-paper-muted: #53695b;
+  --marketing-paper-line: #d5e2d5;
+  --marketing-glow: #38a860;
+  --marketing-pink: #b4ebc3;
+  --marketing-green: #89e8a7;
+}

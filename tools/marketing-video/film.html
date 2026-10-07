@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1920" />
+    <title>Aegis — Built for technical minds</title>
+    <link rel="stylesheet" href="film.css" />
+  </head>
+  <body>
+    <main id="film">
+      <canvas id="atmosphere" width="1920" height="1080"></canvas>
+      <div class="vignette"></div>
+      <div class="topline">
+        <div class="film-brand"><img src="assets/mark.svg" alt="" /><span>Aegis</span></div>
+        <span id="chapter">DESIGN SYSTEM / 001</span>
+      </div>
+      <section class="scene intro" id="intro">
+        <div class="intro-ghost">AEGIS</div>
+        <div class="intro-copy">
+          <div class="eyebrow reveal" id="intro-label"><i></i> THE AEGIS DESIGN SYSTEM</div>
+          <div class="line-mask"><h1 id="intro-one">Built for</h1></div>
+          <div class="line-mask"><h1 class="mint" id="intro-two">technical minds.</h1></div>
+          <div class="intro-bottom" id="intro-bottom">
+            <span>React + TypeScript</span><i></i
+            ><span>SIEMs · Developer tools · Code-first platforms</span>
+          </div>
+        </div>
+        <div class="intro-coordinate">38° 00′ N<br />CLARITY / BY DESIGN</div>
+      </section>
+      <section class="scene overview" id="overview">
+        <div class="scene-copy" id="overview-copy">
+          <div class="eyebrow">01 / THE BIG PICTURE</div>
+          <h2>Complexity.<br /><span class="mint">Under control.</span></h2>
+          <p>A shared language for your entire workspace.</p>
+        </div>
+        <div class="depth-stage">
+          <div class="ui-plane hero-plane" id="hero-plane">
+            <img src="assets/hero.png" alt="" />
+          </div>
+          <div class="floating-caption" id="overview-caption">
+            <span class="live-dot"></span> SIGNALS. ONE CLEAR VIEW.
+          </div>
+        </div>
+      </section>
+      <section class="scene signals" id="signals">
+        <div class="scene-copy" id="signals-copy">
+          <div class="eyebrow">02 / INVESTIGATE WITH CONTEXT</div>
+          <h2>Every signal.<br /><span class="mint">A connected story.</span></h2>
+        </div>
+        <div class="context-chip" id="entity-chip">
+          <small>ENTITY</small><strong>DC-ATH-02</strong><span>Endpoint · Athens</span>
+        </div>
+        <div class="context-chip tactic-chip" id="tactic-chip">
+          <small>MITRE ATT&CK</small><strong>T1059.001</strong><span>PowerShell execution</span>
+        </div>
+        <div class="depth-stage">
+          <div class="ui-plane table-plane" id="table-plane">
+            <img src="assets/table.png" alt="" />
+          </div>
+          <div class="ui-plane alert-plane" id="alert-plane">
+            <img src="assets/alert-row.png" alt="" />
+            <div class="scan-line"></div>
+          </div>
+        </div>
+        <div class="signals-note" id="signals-note">
+          <i></i> From the alert to the evidence. Without losing your place.
+        </div>
+      </section>
+      <section class="scene intelligence" id="intelligence">
+        <div class="scene-copy" id="intelligence-copy">
+          <div class="eyebrow">03 / ASSISTANCE, WITH INTENT</div>
+          <h2>From evidence<br />to a <span class="mint">next step.</span></h2>
+          <p>Context travels with you.<br />Human review stays in control.</p>
+        </div>
+        <div class="ai-orbit" id="ai-orbit">
+          <span class="ai-star">✧</span>
+          <div><strong>Aegis AI</strong><span>Built into the investigation.</span></div>
+        </div>
+        <div class="depth-stage">
+          <div class="ui-plane assistant-plane" id="assistant-plane">
+            <img src="assets/assistant.png" alt="" />
+          </div>
+          <div class="ui-plane insight-plane" id="insight-plane">
+            <img src="assets/insight.png" alt="" />
+          </div>
+        </div>
+      </section>
+      <section class="scene engineering" id="engineering">
+        <div class="scene-copy" id="engineering-copy">
+          <div class="eyebrow">04 / MADE TO MAKE IT YOURS</div>
+          <h2>Real components.<br /><span class="mint">Room to build.</span></h2>
+        </div>
+        <div class="depth-stage">
+          <div class="code-plane ui-plane" id="code-plane">
+            <div class="code-top">
+              <span><i></i><i></i><i></i></span><strong>investigate.tsx</strong><span>REACT</span>
+            </div>
+            <pre><span class="code-purple">import</span> { <span class="code-mint">Button</span> } <span class="code-purple">from</span>
+  <span class="code-string">'@dimitriszoitas/aegis-ui/button'</span>;
+
+<span class="code-purple">type</span> Props = { <span class="code-attr">onInvestigate</span>: () =&gt; <span class="code-purple">void</span> };
+
+<span class="code-purple">export function</span> <span class="code-mint">Investigate</span>({ onInvestigate }: Props) {
+  <span class="code-purple">return</span> (
+    &lt;<span class="code-mint">Button</span> <span class="code-attr">intent</span>=<span class="code-string">"ai"</span>
+      <span class="code-attr">emphasis</span>=<span class="code-string">"primary"</span>
+      <span class="code-attr">onClick</span>={onInvestigate}&gt;
+      Investigate signal
+    &lt;/<span class="code-mint">Button</span>&gt;
+  );
+}</pre>
+            <div class="code-bottom">
+              <span class="live-dot"></span> Types you can trust. Patterns you can extend.
+            </div>
+          </div>
+          <div class="ui-plane playground-plane" id="playground-plane">
+            <img src="assets/playground.png" alt="" />
+          </div>
+        </div>
+        <div class="engineering-tags" id="engineering-tags">
+          <span>React + TypeScript</span><span>Light + dark</span><span>Open source</span>
+        </div>
+      </section>
+      <section class="scene closing" id="closing">
+        <div class="closing-rule" id="closing-rule"></div>
+        <div class="closing-copy" id="closing-copy">
+          <div class="eyebrow">FOR THE TOOLS PEOPLE DEPEND ON.</div>
+          <h2>Build tools<br /><span class="mint">worth working in.</span></h2>
+          <div class="closing-actions">
+            <span class="closing-cta">Explore the system <b>↗</b></span
+            ><span>github.com/dimitriszoitas/aegis-ui</span>
+          </div>
+        </div>
+        <div class="closing-watermark">AEGIS</div>
+        <div class="closing-footnote">DESIGNED WITH INTENT. BUILT IN CODE.</div>
+      </section>
+      <div class="bottomline">
+        <span>AEGIS / BUILT FOR TECHNICAL MINDS</span><span id="timecode">00:00</span>
+      </div>
+    </main>
+    <script src="timeline.js"></script>
+  </body>
+</html>

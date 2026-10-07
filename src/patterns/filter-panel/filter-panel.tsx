@@ -1,6 +1,6 @@
 import { useId, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Activity, CircleDot, RadioTower, ShieldAlert, UserRound, X } from '@/components/icon';
-import type { Alert, Analyst } from '@/sample-data';
+import type { Alert, Analyst } from '@/sample-data/types';
 import { Accordion, type AccordionItem } from '@/components/accordion';
 import { Button } from '@/components/button';
 import { Checkbox } from '@/components/checkbox';

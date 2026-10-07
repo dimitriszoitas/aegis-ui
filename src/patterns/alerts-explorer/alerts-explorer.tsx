@@ -20,7 +20,7 @@ import { Tooltip } from '@/components/tooltip';
 import { FilterBar } from '@/patterns/filter-bar';
 import { FilterPanel } from '@/patterns/filter-panel';
 import { applyAlertFilters, createDefaultFilters, type AlertFilterState } from '@/lib/filters';
-import type { Alert, Analyst } from '@/sample-data';
+import type { Alert, Analyst } from '@/sample-data/types';
 import './alerts-explorer.css';
 
 export interface AlertsExplorerProps {

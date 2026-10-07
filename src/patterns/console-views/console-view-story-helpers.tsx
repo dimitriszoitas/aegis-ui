@@ -3,7 +3,7 @@ import { SideSheet, SideSheetField, SideSheetSection } from '@/components/side-s
 import { JsonViewer } from '@/components/json-viewer';
 import { SeverityBadge } from '@/components/severity-badge';
 import { StatusBadge } from '@/components/status-badge';
-import type { Alert } from '@/sample-data';
+import type { Alert } from '@/sample-data/types';
 
 export interface ConsoleViewStoryFrameProps {
   children: (open: (alert: Alert) => void) => ReactNode;

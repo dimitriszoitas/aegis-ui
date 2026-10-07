@@ -2,9 +2,9 @@
 
 [Live Storybook](https://dimitriszoitas.github.io/aegis-ui/) · [Full DataGrid presentation](https://dimitriszoitas.github.io/aegis-ui/?path=/story/components-data-datagrid--full-presentation) · [SIEM console](https://dimitriszoitas.github.io/aegis-ui/?path=/story/console-siem-console--alerts)
 
-Aegis is a token-based React design system for security operations, with independent light/dark color and Floating/Fixed layout themes, dense investigation tools, and AI assistance that keeps the analyst in control.
+Aegis is a token-based React design system for engineers building SIEMs, developer tools, infrastructure consoles, and other code-first platforms. It includes independent light/dark color and Floating/Fixed layout themes, dense investigation tools, and reviewable AI interactions.
 
-Storybook is the component reference and consumption guide. The repository also runs a complete SIEM console in Vite. This version is source-first: it has no published npm package, library bundle, or package exports map.
+Storybook is the component reference and consumption guide. The repository also runs a marketing website and a complete SIEM console in Vite. The reusable design system is packaged as `@dimitriszoitas/aegis-ui@0.1.0`, with ESM modules, TypeScript declarations, compiled styles, and 91 public entry points. This release can be installed from a package archive; it has not been published to the npm registry.
 
 ![Aegis console in dark mode, with floating navigation, alert metrics, and an investigation grid](docs/images/console-dark.png)
 
@@ -28,6 +28,100 @@ All records are synthetic. The default fixture has 150 alerts generated with a f
 
 The wizard's replay evaluates eight labeled Windows process events using a deliberately limited Sigma-style subset. Unsupported conditions and log sources produce an explicit error. Connect a production rule engine through the host application before using it for operational validation.
 
+## Install the React package
+
+The package requires React 19 and ReactDOM 19. Install the archive produced by `npm pack`:
+
+```sh
+npm install /path/to/dimitriszoitas-aegis-ui-0.1.0.tgz react@^19 react-dom@^19
+```
+
+The archive contains the design system, not the marketing website or the standalone console. Runtime dependencies are declared in the package; React and ReactDOM are peer dependencies. It is ESM-only. No Tailwind installation or plugin is required in the consuming application.
+
+Import the compiled component stylesheet once at your application's entry point. JavaScript imports do not automatically load CSS. The reset is optional and belongs **before** the component stylesheet; fonts are also optional:
+
+```tsx
+import '@dimitriszoitas/aegis-ui/reset.css'; // Optional application-wide baseline
+import '@dimitriszoitas/aegis-ui/styles.css'; // Required component styles and tokens
+import '@dimitriszoitas/aegis-ui/fonts.css'; // Optional self-hosted Figtree and JetBrains Mono
+```
+
+Omit `reset.css` to retain your application's baseline. If you omit `fonts.css`, load your own fonts or override `--font-ui` and `--font-mono`. `tokens.css` is available separately for token-only integrations; it is already included in `styles.css`.
+
+```tsx
+'use client';
+
+import { useState } from 'react';
+import { Button, Field, TextInput } from '@dimitriszoitas/aegis-ui';
+import { Check } from '@dimitriszoitas/aegis-ui/icons';
+
+export function AnalystForm() {
+  const [name, setName] = useState('');
+  const [saved, setSaved] = useState(false);
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        setSaved(true);
+      }}
+    >
+      <Field label="Analyst name" helpText="Use your display name.">
+        <TextInput
+          value={name}
+          onValueChange={(value) => {
+            setName(value);
+            setSaved(false);
+          }}
+        />
+      </Field>
+      <Button
+        type="submit"
+        intent="function"
+        leadingIcon={<Check size={16} />}
+        disabled={!name.trim()}
+      >
+        {saved ? 'Saved locally' : 'Save name'}
+      </Button>
+    </form>
+  );
+}
+```
+
+Use a client boundary for interactive components in frameworks with React Server Components. The package does not claim universal SSR or RSC compatibility; verify the components you render on the server in your host framework. The example above keeps its state locally and does not persist an analyst record.
+
+### Public imports
+
+| Import path                           | API                                                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@dimitriszoitas/aegis-ui`            | Components, prop types, and commonly used TanStack table types.                                                                                                                |
+| `@dimitriszoitas/aegis-ui/button`     | A direct component entry; other component folders have corresponding entries such as `/data-grid` and `/modal`.                                                                |
+| `@dimitriszoitas/aegis-ui/icons`      | Semantic Hugeicons components and `IconProps`; icons are separate from the root exports.                                                                                       |
+| `@dimitriszoitas/aegis-ui/aws-logo`   | Optional AWS logo component, catalog, typed names, and bundled SVG URLs.                                                                                                       |
+| `@dimitriszoitas/aegis-ui/theme`      | `useTheme`, `useLayoutTheme`, `useAutoHideScrollbars`, and imperative theme helpers.                                                                                           |
+| `@dimitriszoitas/aegis-ui/patterns`   | Reusable assistant, filters, alerts explorer, detail sheet, AI diff review, prompt input, and wizard patterns. Direct entries such as `/patterns/ai-panel` are also available. |
+| `@dimitriszoitas/aegis-ui/types`      | Domain types including `Alert`, `Analyst`, `DetectionRule`, and `SeverityBucket`; no fixture records.                                                                          |
+| `@dimitriszoitas/aegis-ui/ai`         | AI context/message/request types, stream contracts, and the explicitly local `streamMockResponse` helper.                                                                      |
+| `@dimitriszoitas/aegis-ui/filters`    | Shared filter types, reducer, filtering, facets, and histogram helpers.                                                                                                        |
+| `@dimitriszoitas/aegis-ui/time-range` | Time-range types, presets, resolution, and formatting.                                                                                                                         |
+| `@dimitriszoitas/aegis-ui/utils`      | The `cn` class-name helper.                                                                                                                                                    |
+
+Patterns expose controlled APIs and callbacks so the host application owns data, navigation, and persistence. `AiPanel` accepts a `streamResponse` adapter and defaults to the local mock. `SiemConsole`, console views, and the fixture-backed detection-rule wizard remain repository demonstrations and are not package exports. The reusable `Wizard` is included. Website code, stories, fixture data, and the Untitled UI gallery are excluded.
+
+### Build and verify an archive
+
+After installing this repository's dependencies:
+
+```sh
+npm run build:package
+npm pack
+npm run test:package
+```
+
+`build:package` writes library modules, declarations, styles, fonts, and assets to `lib-dist/`. `npm pack` runs the `prepack` build again and creates `dimitriszoitas-aegis-ui-0.1.0.tgz`. `test:package` installs a tarball into a fresh temporary consumer and checks its types, production build, and selected browser interactions. It needs Chromium; install it with `pnpm exec playwright install chromium` if necessary. Pass an existing archive with `npm run test:package -- --tarball /absolute/path/to/dimitriszoitas-aegis-ui-0.1.0.tgz`.
+
+Registry publication is a separate release step requiring npm authentication and permission to publish under `@dimitriszoitas`. Neither building nor packing publishes the package.
+
 ## Run locally
 
 Use Node.js 24, matching the deployment workflow. The checkout was verified on Node.js 24.1.0; the complete toolchain also supports Node.js 22.13 or later in the 22.x line. The package manager is pinned to `pnpm@11.19.0` in `package.json`.
@@ -37,13 +131,13 @@ pnpm install
 pnpm storybook
 ```
 
-Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and Floating/Fixed layout. Floating is the default. Console examples with an open assistant show each layout in either color theme. To run the standalone console instead:
+Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and Floating/Fixed layout. Floating is the default. Console examples with an open assistant show each layout in either color theme. To run the marketing website and standalone console:
 
 ```sh
 pnpm dev
 ```
 
-Use the local URL printed by Vite. No environment variables, credentials, or external services are required.
+Use the local URL printed by Vite. The root opens the marketing website, with interactive investigation examples and a live token demonstration. Open `?view=components` for the complete catalogue: 84 component families with searchable previews, categories, light/dark themes, and detail panels with usage code, anatomy, and variants. Deep links support `component=button` or a category such as `category=charts`. Add `?view=console` to open the standalone console. No environment variables, credentials, or external services are required.
 
 ## Design principles
 
@@ -79,12 +173,12 @@ Button radius tokens use 4/5/6px. Other control primitives retain 6px (`xs` and 
 
 The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent layout axis uses `data-layout-theme` with `floating` or `fixed`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's two toolbar controls preview every color/layout combination without persisting a standalone preference.
 
-For a source-level integration, import the global stylesheet once and compose the components from their folders:
+In a consuming application, use package imports:
 
 ```tsx
-import '@/styles/globals.css';
-import { Button } from '@/components/button';
-import { Sparkles } from '@/components/icon';
+import '@dimitriszoitas/aegis-ui/styles.css';
+import { Button } from '@dimitriszoitas/aegis-ui';
+import { Sparkles } from '@dimitriszoitas/aegis-ui/icons';
 
 export function ExplainAction({ onExplain }: { onExplain: () => void }) {
   return (
@@ -95,7 +189,33 @@ export function ExplainAction({ onExplain }: { onExplain: () => void }) {
 }
 ```
 
-The `@/` alias resolves to `src/` in this repository. Each folder exports its public components and prop types. Use Storybook's component docs for individual APIs. Complex patterns expose controlled state and callbacks so a host application owns persistence and navigation; for example, `AlertDetailSheet` uses the canonical alert record alongside a separate filtered navigation list, and `AiPanel` accepts a keyed request and an evidence callback.
+For source-level development in this repository, the `@/` alias resolves to `src/`; it is not needed by package consumers. Each component folder exports its public components and prop types. Use Storybook's component docs for individual APIs. For example, `AlertDetailSheet` uses the canonical alert record alongside a separate filtered navigation list, and `AiPanel` accepts a keyed request and an evidence callback.
+
+Mount the theme hooks in your application shell to follow preferences and keep portaled overlays in sync:
+
+```tsx
+'use client';
+
+import { Button } from '@dimitriszoitas/aegis-ui';
+import { useTheme, useLayoutTheme, useAutoHideScrollbars } from '@dimitriszoitas/aegis-ui/theme';
+
+export function AppearanceControls() {
+  const { theme, toggleTheme } = useTheme();
+  const { layoutTheme, setLayoutTheme } = useLayoutTheme();
+  useAutoHideScrollbars();
+
+  return (
+    <>
+      <Button onClick={toggleTheme}>Color: {theme}</Button>
+      <Button onClick={() => setLayoutTheme(layoutTheme === 'floating' ? 'fixed' : 'floating')}>
+        Layout: {layoutTheme}
+      </Button>
+    </>
+  );
+}
+```
+
+Theme helpers apply `.dark`, `data-theme`, and `data-layout-theme` to `<html>` so menus, dialogs, and sheets portaled outside your app root receive the same tokens. `useAutoHideScrollbars` enables the optional activity-based scrollbar behavior for that document. Imperative `applyTheme` and `applyLayoutTheme` accept `{ persist: false }` for temporary previews.
 
 ## Component refinements
 
@@ -105,7 +225,7 @@ Buttons have four emphasis levels: `primary` (filled), `secondary` (soft), `tert
 
 `BottomSheet` belongs inside a bounded flex-column workspace; `.aegis-bottom-sheet-workspace` provides that layout. It fills its parent's width, preserves space for content above, and supports controlled height, minimum/maximum bounds, header actions, and a footer. The console opens its investigation queue from the bottom-panel button in the page header. `ExpandableText` clamps long text to a configurable number of lines and exposes customizable disclosure labels only when needed.
 
-The interface uses Hugeicons through `@/components/icon`. **Foundations → Icons** includes the searchable Hugeicons catalog with sizes, stroke weights, and copyable imports. Local development additionally exposes the installed Untitled UI reference catalog. Figtree is the UI typeface; JetBrains Mono is used for code. The full icon catalogs are isolated from the console bundle.
+The interface uses Hugeicons through the package's `/icons` entry (`@/components/icon` inside this repository). **Foundations → Icons** includes the searchable Hugeicons catalog with sizes, stroke weights, and copyable imports. Local development additionally exposes the installed Untitled UI reference catalog. Figtree is the UI typeface; JetBrains Mono is used for code. The full icon catalogs are isolated from the console bundle, and the Untitled UI gallery is excluded from the installable package. Bundled fonts and AWS artwork retain the notices in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Third-party icon packs and logos retain their own licenses. Untitled UI's bundled license restricts redistribution. Production Storybook builds replace that pack with an empty module, hide its selector, and reject any build that still contains its package modules; the complete catalog remains available only in local development. See the [Untitled UI license](https://www.untitledui.com/license). Hugeicons' free pack is MIT licensed. AWS assets remain AWS-owned marks with source attribution in the logo catalog. **Components → Brand → AWS logos** includes 810 symbols from the official July 2026 package: 305 service marks, 26 categories, 466 resources, and 13 architecture-group marks. The 859 local SVGs include 49 official dark variants. Search the catalog, copy a typed logo name, or download its SVG; `AwsLogo` presents the original artwork in a square rounded frame.
 
@@ -126,19 +246,22 @@ All interactive controls use visible token-based focus styling. Reduced-motion p
 
 ## Development and verification
 
-| Command                | Purpose                                                                                                     |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`             | Run the standalone SIEM console.                                                                            |
-| `pnpm build`           | Type-check and build the console into `dist/`.                                                              |
-| `pnpm preview`         | Preview that console build.                                                                                 |
-| `pnpm storybook`       | Run Storybook on port 6006.                                                                                 |
-| `pnpm build-storybook` | Build documentation into `storybook-static/`.                                                               |
-| `pnpm typecheck`       | Check strict TypeScript types.                                                                              |
-| `pnpm lint`            | Run ESLint and the raw-hex color guard.                                                                     |
-| `pnpm test`            | Run 15 focused Vitest tests for tree selection, filters, time ranges, and table helpers.                    |
-| `pnpm test:stories`    | Run every story and its play function in light/dark Chromium, collecting browser errors and axe violations. |
-| `pnpm check`           | Run types, lint, logic tests, and the Storybook build.                                                      |
-| `pnpm format`          | Format the repository with Prettier.                                                                        |
+| Command                 | Purpose                                                                                                     |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`              | Run the marketing website and standalone SIEM console.                                                      |
+| `pnpm build`            | Type-check and build the website and console into `dist/`.                                                  |
+| `pnpm preview`          | Preview the production website and console build.                                                           |
+| `pnpm storybook`        | Run Storybook on port 6006.                                                                                 |
+| `pnpm build-storybook`  | Build documentation into `storybook-static/`.                                                               |
+| `npm run build:package` | Build the reusable ESM package and declarations into `lib-dist/`.                                           |
+| `npm pack`              | Rebuild and create the installable package archive without publishing.                                      |
+| `npm run test:package`  | Verify a tarball in an isolated React consumer.                                                             |
+| `pnpm typecheck`        | Check strict TypeScript types.                                                                              |
+| `pnpm lint`             | Run ESLint and the raw-hex color guard.                                                                     |
+| `pnpm test`             | Run 15 focused Vitest tests for tree selection, filters, time ranges, and table helpers.                    |
+| `pnpm test:stories`     | Run every story and its play function in light/dark Chromium, collecting browser errors and axe violations. |
+| `pnpm check`            | Run types, lint, logic tests, and the Storybook build.                                                      |
+| `pnpm format`           | Format the repository with Prettier.                                                                        |
 
 Browser checks require Chromium and a running Storybook:
 
@@ -163,14 +286,15 @@ src/patterns/               Filters, wizard, assistant, detail sheet, and SIEM c
 src/sample-data/            Seeded alerts, rules, analysts, and time series
 src/stories/foundations/    Token specimens and design guidelines
 src/lib/                   State helpers, theme utilities, and local AI protocol
-scripts/                   Token guard and browser story verification
+src/package/               Library style and public API entry points
+scripts/                   Package build/consumer checks, token guard, and story verification
 ```
 
 The implementation uses React, TypeScript, Vite, Tailwind v4, Radix/shadcn foundations, TanStack Table and Virtual, CodeMirror 6, Recharts, cmdk, react-day-picker, react-resizable-panels, and Sonner. Fonts are bundled locally; no external font CDN is needed.
 
 ## Roadmap
 
-- Package a reusable library build with a typed exports map and a documented release process. npm publishing is a later milestone.
+- Publish the verified package to the npm registry after authentication and namespace access are established.
 - Add maintained visual-regression baselines alongside the existing themed story and interaction checks.
 - Connect host-owned data and AI adapters while preserving controlled APIs, evidence provenance, cancellation, and explicit approval.
 

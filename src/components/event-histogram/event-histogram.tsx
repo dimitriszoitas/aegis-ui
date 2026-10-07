@@ -5,7 +5,7 @@ import {
   type ChartSeries,
 } from '@/components/charts';
 import { formatTimeRange, resolveTimeRange, type TimeRange } from '@/lib/time-range';
-import type { SeverityBucket } from '@/sample-data';
+import type { SeverityBucket } from '@/sample-data/types';
 
 export const severityChartSeries: readonly ChartSeries[] = [
   { key: 'info', label: 'Info', color: 'info' },

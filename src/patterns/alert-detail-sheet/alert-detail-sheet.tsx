@@ -17,7 +17,7 @@ import { Textarea } from '@/components/textarea';
 import { Field } from '@/components/field';
 import { CopyButton } from '@/components/copy-button';
 import { AlertEventsTable } from '@/patterns/alerts-explorer';
-import type { Alert, Analyst, DetectionRule } from '@/sample-data';
+import type { Alert, Analyst, DetectionRule } from '@/sample-data/types';
 import { cn } from '@/lib/utils';
 import './alert-detail-sheet.css';
 

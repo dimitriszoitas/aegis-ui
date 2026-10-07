@@ -32,7 +32,7 @@ import { SeverityBadge, severityLabels, type Severity } from '@/components/sever
 import { statusLabels } from '@/components/status-badge';
 import { Tag } from '@/components/tag';
 import { YamlPresenter } from '@/components/yaml-presenter';
-import type { Alert, AlertSource, DetectionRule } from '@/sample-data';
+import type { Alert, AlertSource, DetectionRule } from '@/sample-data/types';
 import './console-views.css';
 
 const severities: readonly Severity[] = ['critical', 'high', 'medium', 'low', 'info'];

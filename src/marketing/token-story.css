@@ -1,0 +1,303 @@
+.marketing-token-story {
+  padding-block: 100px;
+  border-top: 1px solid var(--marketing-paper-line);
+}
+.marketing-token-heading {
+  margin-bottom: 36px;
+}
+.marketing-token-workbench-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: 72px;
+  align-items: start;
+}
+.marketing-token-intro {
+  margin: 0 0 30px;
+  max-width: 430px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--marketing-paper-muted);
+}
+.marketing-token-layers {
+  margin: 0;
+}
+.marketing-token-layers > div {
+  padding: 15px 0;
+  border-top: 1px solid var(--marketing-paper-line);
+  display: grid;
+  grid-template-columns: 142px 1fr;
+  gap: 16px;
+}
+.marketing-token-layers dt {
+  font-size: 13px;
+  font-weight: 600;
+}
+.marketing-token-layers dd {
+  margin: 0;
+  color: var(--marketing-paper-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.marketing-token-trace {
+  margin-top: 30px;
+  padding: 22px;
+  border-radius: 8px;
+  background: var(--marketing-accent);
+  color: var(--marketing-accent-ink);
+}
+.marketing-token-trace-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.07em;
+}
+.marketing-token-trace ol {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.marketing-token-trace li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.marketing-token-trace li > span {
+  margin-left: auto;
+  font-size: 11px;
+}
+.marketing-token-trace li:not(:first-child) {
+  padding-left: 10px;
+}
+.marketing-token-trace li svg {
+  transform: rotate(45deg);
+}
+.marketing-token-trace p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 280px;
+}
+.marketing-token-preview {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+}
+.marketing-token-preview-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.marketing-token-preview-heading p {
+  margin: 0 0 7px;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.marketing-token-preview-heading h3 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 500;
+}
+.marketing-token-theme {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 3px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 7px;
+  background: var(--color-bg-surface);
+}
+.marketing-token-theme button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 4px 9px;
+  border: 0;
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  cursor: pointer;
+}
+.marketing-token-theme button[aria-pressed='true'] {
+  color: var(--color-text-primary);
+  background: var(--color-bg-selected);
+}
+.marketing-token-theme button:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+.aegis-marketing .marketing-token-preview :focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 3px;
+}
+.marketing-token-spacing-control {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+  color: var(--color-text-primary);
+  font-size: 11px;
+}
+.marketing-token-spacing-control select {
+  min-height: 30px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 5px;
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.marketing-token-spacing-control > span {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+.marketing-token-role-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 22px 0;
+}
+.marketing-token-role-swatches > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+.marketing-token-role-swatches i {
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 3px;
+}
+.marketing-token-swatch-surface {
+  background: var(--color-bg-surface);
+}
+.marketing-token-swatch-text {
+  background: var(--color-text-primary);
+}
+.marketing-token-swatch-action {
+  background: var(--color-function-bg);
+}
+.marketing-token-components {
+  display: grid;
+  gap: var(--space-3);
+}
+.marketing-token-signal .aegis-card-title {
+  margin-top: var(--space-2);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.marketing-token-signal-meta,
+.marketing-token-signal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.marketing-token-signal-meta > span:first-child {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+.marketing-token-signal-description {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.marketing-token-context {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.marketing-token-context .aegis-card-content {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.marketing-token-context .aegis-card-content > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+.marketing-token-context strong {
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+}
+.marketing-token-context small {
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+.marketing-token-preview-note {
+  margin: auto 0 0;
+  padding-top: 22px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+
+@media (max-width: 1000px) {
+  .marketing-token-workbench-grid {
+    gap: 36px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .marketing-token-preview {
+    padding: 24px;
+  }
+  .marketing-token-layers > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+@media (max-width: 760px) {
+  .marketing-token-story {
+    padding-block: 64px;
+  }
+  .marketing-token-workbench-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .marketing-token-intro {
+    max-width: 600px;
+    font-size: 15px;
+  }
+  .marketing-token-layers > div {
+    grid-template-columns: 142px 1fr;
+  }
+  .marketing-token-trace ol {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 420px) {
+  .marketing-token-preview {
+    padding: 20px;
+  }
+  .marketing-token-layers > div {
+    grid-template-columns: 1fr;
+  }
+  .marketing-token-context strong {
+    font-size: 12px;
+  }
+}

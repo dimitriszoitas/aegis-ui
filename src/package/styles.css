@@ -1,0 +1,87 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@import 'tw-animate-css';
+@import '../styles/tokens.css';
+@import '../styles/theme.css';
+@import '../styles/layout-theme.css';
+@import '../styles/scrollbars.css';
+@source '../components';
+@source '../patterns';
+
+/* Establish component defaults without resetting the host application's document. */
+:where([class^='aegis-'], [class*=' aegis-']),
+:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--color-border-default);
+}
+:where([class^='aegis-'], [class*=' aegis-']) {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+:where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea) {
+  font: inherit;
+}
+:where(button[class^='aegis-'], [class^='aegis-'] button) {
+  cursor: pointer;
+}
+:where(button[class^='aegis-'], [class^='aegis-'] button):disabled {
+  cursor: not-allowed;
+}
+:where([class^='aegis-'], [class*=' aegis-']):focus-visible,
+:where([class^='aegis-'], [class*=' aegis-']) :focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+:where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p) {
+  margin-top: 0;
+}
+:where([class^='aegis-'], [class*=' aegis-']) :where(svg) {
+  flex-shrink: 0;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.muted {
+  color: var(--color-text-secondary);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where([class^='aegis-'], [class*=' aegis-']),
+  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,4 +1,4 @@
-import type { Alert, AlertSource } from '@/sample-data';
+import type { Alert, AlertSource } from '@/sample-data/types';
 import type { Severity } from '@/components/severity-badge';
 import type { AlertStatus } from '@/components/status-badge';
 import { resolveTimeRange, type TimeRange } from '@/lib/time-range';

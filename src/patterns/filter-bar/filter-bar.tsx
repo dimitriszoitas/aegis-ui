@@ -1,6 +1,6 @@
 import { useRef, useState, type HTMLAttributes } from 'react';
 import { Columns3, Funnel, Rows2, Rows3, Rows4 } from '@/components/icon';
-import type { Analyst } from '@/sample-data';
+import type { Analyst } from '@/sample-data/types';
 import { Button } from '@/components/button';
 import { ButtonGroup } from '@/components/button-group';
 import { IconButton } from '@/components/icon-button';
