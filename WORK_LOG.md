@@ -77,6 +77,12 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - All 336 catalogue preview combinations (84 families × compact/expanded × light/dark) render without errors or overflow. Accessibility scans of all 168 expanded combinations are clean. Focused checks also cover 36 richer preview cases and 11 interaction paths. Updated the video capture selectors and bounded its hero plane for the new layout; capture and static camera framing checks pass, while existing film exports remain unchanged.
 - Homepage interaction and accessibility checks pass at 1440px, 390px, and 320px in both preview themes, including token spacing propagation, triage, evidence disclosure, AI review, focus restoration, and mobile navigation. Catalogue search/category/deep-link, nested overlay, copy fallback, and detail flows pass on desktop and mobile. Full type checking, lint, token audit, production build, and all 15 existing tests pass. Local verification artifacts are under ignored `test-results/`.
 
+## Dark marketing theme
+
+- Changed all marketing page surfaces, navigation, component catalogue, and token explanation to a dark palette with green accents. Component previews and detail sheets now default to dark; the document also starts dark to prevent a light loading flash.
+- Kept optional light component comparisons isolated from the site with a scoped light-token boundary. Both local homepage previews and the catalogue's portal-based detail/overlay examples still support intentional theme comparisons.
+- Type checking, full lint/token audit, and production build pass. Homepage checks at 1440/390/320px and catalogue checks at 1440/390px found no overflow or runtime errors; all 17 automated accessibility scans passed. Theme isolation, nested dialog focus restoration, search, and existing demonstration interactions remain verified.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

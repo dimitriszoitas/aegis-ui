@@ -17,7 +17,7 @@ body:has(.aegis-marketing) {
   color: var(--marketing-paper-text);
   min-height: 100dvh;
   overflow: clip;
-  color-scheme: light;
+  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
 }
 .aegis-marketing a {
@@ -82,8 +82,9 @@ body:has(.aegis-marketing) {
   place-items: center;
   width: 34px;
   height: 34px;
-  background: var(--marketing-paper-text);
+  background: var(--marketing-raised);
   color: var(--marketing-accent);
+  border: 1px solid var(--marketing-line);
   border-radius: 8px;
 }
 .marketing-brand-detail {
@@ -201,11 +202,11 @@ body:has(.aegis-marketing) {
     color 150ms;
 }
 .aegis-marketing .marketing-link-primary {
-  background: var(--marketing-paper-text);
-  color: var(--marketing-paper);
+  background: var(--marketing-accent);
+  color: var(--marketing-accent-ink);
 }
 .aegis-marketing .marketing-link-primary:hover {
-  background: var(--marketing-accent);
+  background: var(--marketing-accent-bright);
   color: var(--marketing-accent-ink);
 }
 .marketing-quiet-link {
@@ -359,7 +360,7 @@ body:has(.aegis-marketing) {
 }
 .marketing-specimen:hover .marketing-specimen-art {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px color-mix(in srgb, var(--marketing-paper-text) 8%, transparent);
+  box-shadow: 0 15px 35px color-mix(in srgb, var(--marketing-bg) 60%, transparent);
 }
 .marketing-specimen-caption {
   display: grid;

@@ -338,7 +338,7 @@ export function ComponentsPage() {
       'All'
     );
   });
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [selected, setSelected] = useState<ComponentCatalogueEntry | null>(() => {
     if (typeof window === 'undefined') return null;
     const id = new URLSearchParams(window.location.search).get('component');

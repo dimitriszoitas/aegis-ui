@@ -1,7 +1,7 @@
 .aegis-marketing.marketing-catalogue-page {
   background: var(--marketing-paper);
   color: var(--marketing-paper-text);
-  color-scheme: light;
+  color-scheme: dark;
 }
 .catalogue-hero {
   display: flex;
@@ -171,9 +171,9 @@
   color: var(--marketing-paper-text);
 }
 .catalogue-categories button[aria-pressed='true'] {
-  border-color: color-mix(in srgb, var(--marketing-accent-ink) 22%, var(--marketing-paper-line));
-  background: color-mix(in srgb, var(--marketing-accent) 25%, var(--marketing-paper));
-  color: var(--marketing-accent-ink);
+  border-color: color-mix(in srgb, var(--marketing-accent) 28%, var(--marketing-paper-line));
+  background: color-mix(in srgb, var(--marketing-accent) 12%, var(--marketing-paper));
+  color: var(--marketing-accent-bright);
 }
 .catalogue-category-select {
   display: none;

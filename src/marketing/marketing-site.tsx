@@ -147,7 +147,7 @@ export function MarketingSite() {
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   useEffect(() => {
-    applyTheme('light', { persist: false });
+    applyTheme('dark', { persist: false });
     document.title = 'Aegis — A design system for technical work';
   }, []);
   async function copySource() {

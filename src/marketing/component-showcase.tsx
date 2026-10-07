@@ -486,7 +486,7 @@ export function ComponentShowcase() {
         ]}
         sharedContent={
           <div
-            className={`marketing-showcase-preview${dark ? ' dark' : ''}`}
+            className={`marketing-showcase-preview ${dark ? 'dark' : 'aegis-theme-light'}`}
             style={{ colorScheme: dark ? 'dark' : 'light' }}
           >
             <div className="marketing-showcase-preview-bar">

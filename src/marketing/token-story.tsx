@@ -64,7 +64,7 @@ export function TokenStory() {
           </div>
         </div>
         <div
-          className={`marketing-token-preview${dark ? ' dark' : ''}`}
+          className={`marketing-token-preview ${dark ? 'dark' : 'aegis-theme-light'}`}
           data-theme={dark ? 'dark' : 'light'}
           style={
             {

@@ -42,8 +42,9 @@
   margin-top: 30px;
   padding: 22px;
   border-radius: 8px;
-  background: var(--marketing-accent);
-  color: var(--marketing-accent-ink);
+  border: 1px solid var(--marketing-line);
+  background: var(--marketing-raised);
+  color: var(--marketing-accent);
 }
 .marketing-token-trace-label {
   font-family: var(--font-mono);
