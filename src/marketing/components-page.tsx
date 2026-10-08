@@ -117,7 +117,12 @@ function PreviewCard({
     return () => observer.disconnect();
   }, []);
   return (
-    <article className="catalogue-card" id={`catalogue-card-${entry.id}`} ref={card}>
+    <article
+      className="catalogue-card"
+      data-category={catalogueCategoryIds[entry.category]}
+      id={`catalogue-card-${entry.id}`}
+      ref={card}
+    >
       <div
         className="catalogue-card-preview"
         role="group"

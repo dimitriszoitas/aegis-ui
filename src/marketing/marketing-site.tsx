@@ -7,6 +7,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { Sparkline } from '@/components/sparkline';
 import { applyTheme } from '@/lib/theme';
 import { ComponentShowcase } from './component-showcase';
+import { ComponentCanvas } from './component-canvas';
 import { TokenStory } from './token-story';
 import { MarketingHeader, MarketingFooter, marketingLinks } from './marketing-chrome';
 import './marketing-site.css';
@@ -23,38 +24,47 @@ function CollectionPreview() {
       <div className="marketing-collection-heading">
         <div>
           <p className="marketing-section-label">THE COMPONENT COLLECTION</p>
-          <h2 id="collection-title">Every part has a purpose.</h2>
+          <h2 id="collection-title">
+            Small details.
+            <br />A complete system.
+          </h2>
+          <p className="marketing-heading-description">
+            From the first input to the thousandth row. Components that share a language, at every
+            scale.
+          </p>
         </div>
         <a className="marketing-underlined-link" href={marketingLinks.components}>
           Browse all components <ArrowUpRight size={17} />
         </a>
       </div>
       <div className="marketing-specimens">
-        <a className="marketing-specimen" href="?view=components&component=button">
+        <a className="marketing-specimen" data-tone="blue" href="?view=components&component=button">
           <div
             className="marketing-specimen-art marketing-specimen-controls"
             inert
             aria-hidden="true"
           >
-            <div className="marketing-specimen-field">
-              <span>Rule name</span>
-              <div>
-                <Search size={15} />
-                Suspicious process activity<Kbd>⌘ K</Kbd>
+            <div className="marketing-specimen-inner">
+              <div className="marketing-specimen-field">
+                <span>Rule name</span>
+                <div>
+                  <Search size={15} />
+                  Suspicious process activity<Kbd>⌘ K</Kbd>
+                </div>
               </div>
-            </div>
-            <div className="marketing-specimen-buttons">
-              <Button size="md" leadingIcon={<Plus size={15} />}>
-                Create rule
-              </Button>
-              <Button size="md" emphasis="tertiary">
-                Save draft
-              </Button>
-            </div>
-            <div className="marketing-specimen-inline">
-              <i />
-              <span>Changes saved</span>
-              <span>just now</span>
+              <div className="marketing-specimen-buttons">
+                <Button size="md" leadingIcon={<Plus size={15} />}>
+                  Create rule
+                </Button>
+                <Button size="md" emphasis="tertiary">
+                  Save draft
+                </Button>
+              </div>
+              <div className="marketing-specimen-inline">
+                <i />
+                <span>Changes saved</span>
+                <span>just now</span>
+              </div>
             </div>
           </div>
           <div className="marketing-specimen-caption">
@@ -63,32 +73,38 @@ function CollectionPreview() {
             <p>Buttons, fields, selection, and command menus.</p>
           </div>
         </a>
-        <a className="marketing-specimen" href="?view=components&component=severity-badge">
+        <a
+          className="marketing-specimen"
+          data-tone="coral"
+          href="?view=components&component=severity-badge"
+        >
           <div
             className="marketing-specimen-art marketing-specimen-signal"
             inert
             aria-hidden="true"
           >
-            <div className="marketing-specimen-metric">
-              <span>Signals in the last hour</span>
-              <div>
-                <strong>1,284</strong>
-                <Sparkline
-                  data={[4, 6, 5, 8, 7, 12, 9, 18, 14, 17, 15, 23]}
-                  width={140}
-                  height={44}
-                />
+            <div className="marketing-specimen-inner">
+              <div className="marketing-specimen-metric">
+                <span>Signals in the last hour</span>
+                <div>
+                  <strong>1,284</strong>
+                  <Sparkline
+                    data={[4, 6, 5, 8, 7, 12, 9, 18, 14, 17, 15, 23]}
+                    width={140}
+                    height={44}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="marketing-specimen-badges">
-              <SeverityBadge severity="critical" />
-              <SeverityBadge severity="high" />
-              <SeverityBadge severity="medium" />
-            </div>
-            <div className="marketing-specimen-status">
-              <StatusBadge status="new" />
-              <StatusBadge status="in-progress" />
-              <StatusBadge status="resolved" />
+              <div className="marketing-specimen-badges">
+                <SeverityBadge severity="critical" />
+                <SeverityBadge severity="high" />
+                <SeverityBadge severity="medium" />
+              </div>
+              <div className="marketing-specimen-status">
+                <StatusBadge status="new" />
+                <StatusBadge status="in-progress" />
+                <StatusBadge status="resolved" />
+              </div>
             </div>
           </div>
           <div className="marketing-specimen-caption">
@@ -97,33 +113,39 @@ function CollectionPreview() {
             <p>Grids, metrics, charts, and semantic status.</p>
           </div>
         </a>
-        <a className="marketing-specimen" href="?view=components&component=diff-view">
+        <a
+          className="marketing-specimen"
+          data-tone="purple"
+          href="?view=components&component=diff-view"
+        >
           <div className="marketing-specimen-art marketing-specimen-code" aria-hidden="true">
-            <div className="marketing-specimen-code-tab">
-              <span>rule.yaml</span>
-              <span>2 changes</span>
-            </div>
-            <div className="marketing-specimen-code-lines">
-              <p>
-                <i>14</i>
-                <span>selection:</span>
-              </p>
-              <p>
-                <i>15</i>
-                <span> event.category: process</span>
-              </p>
-              <p className="marketing-line-remove">
-                <i>−</i>
-                <span> threshold: 50</span>
-              </p>
-              <p className="marketing-line-add">
-                <i>+</i>
-                <span> threshold: 25</span>
-              </p>
-              <p>
-                <i>18</i>
-                <span>condition: selection</span>
-              </p>
+            <div className="marketing-specimen-inner">
+              <div className="marketing-specimen-code-tab">
+                <span>rule.yaml</span>
+                <span>2 changes</span>
+              </div>
+              <div className="marketing-specimen-code-lines">
+                <p>
+                  <i>14</i>
+                  <span>selection:</span>
+                </p>
+                <p>
+                  <i>15</i>
+                  <span> event.category: process</span>
+                </p>
+                <p className="marketing-line-remove">
+                  <i>−</i>
+                  <span> threshold: 50</span>
+                </p>
+                <p className="marketing-line-add">
+                  <i>+</i>
+                  <span> threshold: 25</span>
+                </p>
+                <p>
+                  <i>18</i>
+                  <span>condition: selection</span>
+                </p>
+              </div>
             </div>
           </div>
           <div className="marketing-specimen-caption">
@@ -167,53 +189,47 @@ export function MarketingSite() {
         <section className="marketing-hero marketing-container" aria-labelledby="hero-title">
           <div className="marketing-hero-label">
             <span>
-              <i /> AEGIS / REACT DESIGN SYSTEM
+              <i /> Aegis Design System
             </span>
-            <span>Open source · v0.1</span>
+            <span>Open source</span>
           </div>
           <div className="marketing-hero-intro">
             <h1 id="hero-title">
-              A design system
+              Clarity for the
               <br />
-              for <span>technical work.</span>
+              <span>deeply technical.</span>
             </h1>
-            <div className="marketing-hero-aside">
-              <p>
-                Data grids. Code views. Investigation panels. The interface layer for SIEMs,
-                developer platforms, and software with a lot to say.
-              </p>
+            <p className="marketing-hero-description">
+              A React design system for data-heavy products.{' '}
+              <br className="marketing-desktop-break" />
+              Give your SIEM, developer platform, or engineering tool a clearer interface.
+            </p>
+            <div className="marketing-hero-actions">
               <a
                 className="marketing-link-button marketing-link-primary"
                 href={marketingLinks.components}
               >
-                Explore the components <ArrowUpRight size={17} />
+                Explore components <ArrowRight size={18} />
               </a>
-              <a className="marketing-quiet-link" href={marketingLinks.docs}>
-                Read the documentation <ArrowRight size={14} />
+              <a
+                className="marketing-link-button marketing-link-secondary"
+                href={marketingLinks.docs}
+              >
+                Read the docs <ArrowUpRight size={18} />
               </a>
             </div>
+            <p className="marketing-hero-meta">
+              84 components <span>·</span> Semantic tokens <span>·</span> React + TypeScript
+            </p>
           </div>
-          <div className="marketing-hero-proof">
-            <div>
-              <strong>Information has an order.</strong>
-              <span>Priority first. Context close. Detail when you need it.</span>
-            </div>
-            <span>TRY THE INTERFACE ↓</span>
-          </div>
-          <ComponentShowcase />
-          <div className="marketing-hero-footnote">
-            <span>Built with Aegis components</span>
-            <span>
-              React 19 <i /> TypeScript <i /> Light & dark <i /> MIT source
-            </span>
-          </div>
+          <ComponentCanvas />
         </section>
         <div className="marketing-purpose-band">
           <div className="marketing-container">
             <p>
-              For the people building
+              Made for interfaces
               <br />
-              <strong>the tools other people work in.</strong>
+              <strong>where the details matter.</strong>
             </p>
             <ul aria-label="Platforms Aegis is designed for">
               <li>SIEM & security</li>
@@ -225,6 +241,26 @@ export function MarketingSite() {
         </div>
         <CollectionPreview />
         <TokenStory />
+        <section
+          className="marketing-workflows marketing-container"
+          aria-labelledby="workflows-title"
+        >
+          <div className="marketing-collection-heading">
+            <div>
+              <p className="marketing-section-label">BETTER TOGETHER</p>
+              <h2 id="workflows-title">
+                The parts are good.
+                <br />
+                The whole is the point.
+              </h2>
+            </div>
+            <p className="marketing-heading-description">
+              Move from a signal to its evidence, then review an AI suggestion. This is Aegis in
+              use. Try it.
+            </p>
+          </div>
+          <ComponentShowcase />
+        </section>
         <section className="marketing-source" aria-labelledby="source-title">
           <div className="marketing-container marketing-source-grid">
             <div>

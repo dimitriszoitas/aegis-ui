@@ -83,6 +83,13 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Kept optional light component comparisons isolated from the site with a scoped light-token boundary. Both local homepage previews and the catalogue's portal-based detail/overlay examples still support intentional theme comparisons.
 - Type checking, full lint/token audit, and production build pass. Homepage checks at 1440/390/320px and catalogue checks at 1440/390px found no overflow or runtime errors; all 17 automated accessibility scans passed. Theme isolation, nested dialog focus restoration, search, and existing demonstration interactions remain verified.
 
+## Reference-led marketing presentation
+
+- Reviewed the live [Atlassian Design System](https://atlassian.design/) and [Untitled UI](https://www.untitledui.com/) sites, including Untitled UI's layered kit animation. Rebuilt the homepage around oversized type, neutral graphite surfaces, mint branding, and bounded blue, coral, lilac, and yellow accents. All illustrations are composed from Aegis components and original CSS; no reference-site assets are copied.
+- Added a responsive component canvas with a workspace, detached component library and token inspector, AI card, and metric. Scroll and pointer movement change perspective and layer depth using scheduled transforms; offscreen work stops and reduced motion is static. The decorative canvas is inert and hidden from assistive technology, with an accessible caption and functional component demonstrations below it.
+- Reworked curated component specimens and the complete catalogue with softer frames, larger typography, and category accents. Rebuilt foundations as visual color/type/spacing/intent tiles beside a live token lab, followed by the source-verified primitive → semantic role → component dependency. Preview themes stay isolated from the dark marketing shell.
+- Verification: full types, lint, semantic-token audit, production and Storybook builds, and all 15 existing tests pass. Homepage and catalogue checks at 1440/390/320px cover overflow, workflow interactions, navigation, search/categories, detail panels, copy/fallback, themes, focus restoration, and nested overlays. All 18 integrated accessibility scans pass, plus focused foundation and motion checks. Proofs and reports are saved under ignored `test-results/marketing-reference-revamp/`, `test-results/token-bento/`, and `test-results/component-canvas-qa.json`.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

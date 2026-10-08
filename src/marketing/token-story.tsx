@@ -6,7 +6,7 @@ import { SeverityBadge } from '@/components/severity-badge';
 import { StatusBadge } from '@/components/status-badge';
 import './token-story.css';
 
-/** A scoped, live demonstration of the design system's actual token roles. */
+/** Visual foundations with a scoped demonstration of the real component tokens. */
 export function TokenStory() {
   const [dark, setDark] = useState(true);
   const [triaged, setTriaged] = useState(false);
@@ -20,64 +20,151 @@ export function TokenStory() {
       aria-labelledby="token-system-title"
     >
       <div className="marketing-token-heading">
-        <p className="marketing-section-label">THE FOUNDATION</p>
-        <h2 id="token-system-title">Tokens give every value a job.</h2>
-      </div>
-      <div className="marketing-token-workbench-grid">
-        <div className="marketing-token-model">
-          <p className="marketing-token-intro">
-            A growing platform shouldn’t collect a different shade, spacing rule, and button
-            treatment on every screen. Shared tokens make those decisions part of the system.
-          </p>
-          <dl className="marketing-token-layers">
-            <div>
-              <dt>Primitives</dt>
-              <dd>A repeatable scale for spacing, type, and corners.</dd>
-            </div>
-            <div>
-              <dt>Semantic roles</dt>
-              <dd>Surface, text, and action colors with values for each theme.</dd>
-            </div>
-            <div>
-              <dt>Component settings</dt>
-              <dd>Shared choices applied to cards, controls, and dense grids.</dd>
-            </div>
-          </dl>
-          <div className="marketing-token-trace">
-            <span className="marketing-token-trace-label">FOLLOW THE SPACING</span>
-            <ol aria-label="Card padding token dependency">
-              <li>
-                <code>{spacingToken}</code>
-                <span>{spacing === 'roomy' ? '20px' : '12px'}</span>
-              </li>
-              <li>
-                <ArrowRight size={14} aria-hidden="true" />
-                <code>--layout-card-padding</code>
-              </li>
-              <li>
-                <ArrowRight size={14} aria-hidden="true" />
-                <code>CardContent</code>
-                <span>padding</span>
-              </li>
-            </ol>
-            <p>Change the setting here. Every card in the preview follows.</p>
-          </div>
+        <div>
+          <p className="marketing-section-label">FOUNDATIONS</p>
+          <h2 id="token-system-title">
+            Every detail.
+            <br />
+            One shared language.
+          </h2>
         </div>
-        <div
-          className={`marketing-token-preview ${dark ? 'dark' : 'aegis-theme-light'}`}
-          data-theme={dark ? 'dark' : 'light'}
-          style={
-            {
-              colorScheme: dark ? 'dark' : 'light',
-              '--layout-card-padding': `var(${spacingToken})`,
-            } as CSSProperties
-          }
-        >
-          <div className="marketing-token-preview-heading">
-            <div>
-              <p>LIVE COMPONENTS</p>
-              <h3>Try a system-wide decision.</h3>
+        <p>
+          Color with purpose. Type with hierarchy. Space that scales. The decisions behind clear,
+          data-heavy interfaces, already connected.
+        </p>
+      </div>
+
+      <div className="marketing-token-bento">
+        <article className="marketing-token-tile marketing-token-color-tile">
+          <div className="marketing-token-color-art" aria-hidden="true">
+            <div className="marketing-token-color-card marketing-token-color-card-blue">
+              <span>Action</span>
+              <strong>Aa</strong>
+              <i />
+              <small>FUNCTION</small>
             </div>
+            <div className="marketing-token-color-card marketing-token-color-card-mint">
+              <span>Surface</span>
+              <strong>Aa</strong>
+              <i />
+              <small>SEMANTIC</small>
+            </div>
+            <div className="marketing-token-color-card marketing-token-color-card-purple">
+              <span>Accent</span>
+              <strong>Aa</strong>
+              <i />
+              <small>INTENT</small>
+            </div>
+          </div>
+          <div className="marketing-token-tile-copy">
+            <span>COLOR</span>
+            <h3>Purpose, in every shade.</h3>
+            <p>Surface, text, and action roles adapt together across light and dark.</p>
+          </div>
+        </article>
+
+        <article className="marketing-token-tile marketing-token-type-tile">
+          <div className="marketing-token-type-art" aria-hidden="true">
+            <span className="marketing-token-type-family">
+              FIGTREE <i>+ MONOSPACE</i>
+            </span>
+            <div className="marketing-token-type-specimen">
+              Ag<span>123</span>
+            </div>
+            <div className="marketing-token-type-scale">
+              <strong>Investigate</strong>
+              <span>Scan the signal. Follow the detail.</span>
+              <code>event.id = 0x8f2a</code>
+            </div>
+          </div>
+          <div className="marketing-token-tile-copy">
+            <span>TYPOGRAPHY</span>
+            <h3>A clear reading order.</h3>
+            <p>
+              Distinct headings, quiet labels, and precise identifiers help dense views breathe.
+            </p>
+          </div>
+        </article>
+
+        <article className="marketing-token-tile marketing-token-space-tile">
+          <div className="marketing-token-space-art" aria-hidden="true">
+            <div className="marketing-token-space-ruler">
+              {[4, 8, 12, 16, 24, 32].map((value) => (
+                <span key={value}>
+                  <i style={{ height: value * 2 }} />
+                  <small>{value}</small>
+                </span>
+              ))}
+            </div>
+            <div className="marketing-token-space-specimen">
+              <div>
+                <i />
+                <i />
+                <i />
+              </div>
+              <span>12</span>
+              <div>
+                <i />
+                <i />
+              </div>
+            </div>
+            <code>
+              --space-3 <ArrowRight size={13} /> 12px
+            </code>
+          </div>
+          <div className="marketing-token-tile-copy">
+            <span>SPACING</span>
+            <h3>Rhythm at every density.</h3>
+            <p>A repeatable scale connects compact controls, card padding, and page layout.</p>
+          </div>
+        </article>
+
+        <article className="marketing-token-tile marketing-token-role-tile">
+          <div className="marketing-token-role-art" aria-hidden="true">
+            <div className="marketing-token-role-orbit">
+              <i />
+              <i />
+              <i />
+              <i />
+            </div>
+            <div className="marketing-token-role-stack">
+              <div>
+                <span className="marketing-token-role-function">Action</span>
+                <code>
+                  Investigate <ArrowRight size={13} />
+                </code>
+              </div>
+              <div>
+                <span className="marketing-token-role-success">Success</span>
+                <code>
+                  <Check size={13} /> Resolved
+                </code>
+              </div>
+              <div>
+                <span className="marketing-token-role-warning">Warning</span>
+                <code>Review required</code>
+              </div>
+            </div>
+          </div>
+          <div className="marketing-token-tile-copy">
+            <span>SEMANTIC INTENT</span>
+            <h3>Meaning stays consistent.</h3>
+            <p>Shared roles carry the same meaning through buttons, badges, and feedback.</p>
+          </div>
+        </article>
+
+        <div className="marketing-token-preview" data-theme={dark ? 'dark' : 'light'}>
+          <div className="marketing-token-preview-heading">
+            <span className="marketing-token-live-label">
+              <i aria-hidden="true" /> LIVE TOKEN LAB
+            </span>
+            <h3>
+              A small change.
+              <br />A shared result.
+            </h3>
+            <p>Try the actual tokens on real Aegis components.</p>
+          </div>
+          <div className="marketing-token-controls">
             <div className="marketing-token-theme" role="group" aria-label="Token preview theme">
               <button type="button" aria-pressed={!dark} onClick={() => setDark(false)}>
                 <Sun size={14} aria-hidden="true" /> Light
@@ -86,90 +173,136 @@ export function TokenStory() {
                 <Moon size={14} aria-hidden="true" /> Dark
               </button>
             </div>
+            <label className="marketing-token-spacing-control">
+              Card spacing
+              <select
+                aria-label="Card spacing"
+                value={spacing}
+                onChange={(event) =>
+                  setSpacing(event.target.value === 'roomy' ? 'roomy' : 'default')
+                }
+              >
+                <option value="default">Default · 12px</option>
+                <option value="roomy">Roomy · 20px</option>
+              </select>
+            </label>
           </div>
-
-          <label className="marketing-token-spacing-control">
-            Card spacing
-            <select
-              aria-label="Card spacing"
-              value={spacing}
-              onChange={(event) => setSpacing(event.target.value === 'roomy' ? 'roomy' : 'default')}
-            >
-              <option value="default">Default · 12px</option>
-              <option value="roomy">Roomy · 20px</option>
-            </select>
-            <span>Preview override</span>
-          </label>
-
           <div
-            className="marketing-token-role-swatches"
-            role="group"
-            aria-label="Live semantic token colors"
+            className={`marketing-token-live-surface ${dark ? 'dark' : 'aegis-theme-light'}`}
+            style={
+              {
+                colorScheme: dark ? 'dark' : 'light',
+                '--layout-card-padding': `var(${spacingToken})`,
+              } as CSSProperties
+            }
           >
-            <span>
-              <i className="marketing-token-swatch-surface" aria-hidden="true" /> Surface
-            </span>
-            <span>
-              <i className="marketing-token-swatch-text" aria-hidden="true" /> Text
-            </span>
-            <span>
-              <i className="marketing-token-swatch-action" aria-hidden="true" /> Action
-            </span>
-          </div>
-
-          <div className="marketing-token-components">
-            <Card elevation="flat" className="marketing-token-signal">
-              <CardHeader>
-                <div className="marketing-token-signal-meta">
-                  <span>Sample investigation</span>
-                  <SeverityBadge severity="high" />
-                </div>
-                <CardTitle>Unexpected privilege change</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="marketing-token-signal-description">
-                  A new administrator role was granted outside the approved change window.
-                </p>
-                <div className="marketing-token-signal-actions">
-                  <StatusBadge status={triaged ? 'triaged' : 'new'} />
-                  <Button
-                    size="sm"
-                    intent="function"
-                    emphasis="secondary"
-                    leadingIcon={triaged ? <Check size={14} /> : undefined}
-                    onClick={() => setTriaged((value) => !value)}
-                  >
-                    {triaged ? 'Undo triage' : 'Mark triaged'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            <div className="marketing-token-context">
-              <Card elevation="flat">
+            <div
+              className="marketing-token-role-swatches"
+              role="group"
+              aria-label="Live semantic token colors"
+            >
+              <span>
+                <i className="marketing-token-swatch-surface" aria-hidden="true" /> Surface
+              </span>
+              <span>
+                <i className="marketing-token-swatch-text" aria-hidden="true" /> Text
+              </span>
+              <span>
+                <i className="marketing-token-swatch-action" aria-hidden="true" /> Action
+              </span>
+            </div>
+            <div className="marketing-token-components">
+              <Card elevation="flat" className="marketing-token-signal">
+                <CardHeader>
+                  <div className="marketing-token-signal-meta">
+                    <span>Sample investigation</span>
+                    <SeverityBadge severity="high" />
+                  </div>
+                  <CardTitle>Unexpected privilege change</CardTitle>
+                </CardHeader>
                 <CardContent>
-                  <span>
-                    <Server size={14} aria-hidden="true" /> Entity
-                  </span>
-                  <strong>prod-api-03</strong>
-                  <small>Host identifier</small>
+                  <p className="marketing-token-signal-description">
+                    An administrator role was granted outside the approved change window.
+                  </p>
+                  <div className="marketing-token-signal-actions">
+                    <StatusBadge status={triaged ? 'triaged' : 'new'} />
+                    <Button
+                      size="sm"
+                      intent="function"
+                      emphasis="secondary"
+                      leadingIcon={triaged ? <Check size={14} /> : undefined}
+                      onClick={() => setTriaged((value) => !value)}
+                    >
+                      {triaged ? 'Undo triage' : 'Mark triaged'}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
-              <Card elevation="flat">
-                <CardContent>
-                  <span>
-                    <Layers size={14} aria-hidden="true" /> Evidence
-                  </span>
-                  <strong>24 events</strong>
-                  <small>Sample activity</small>
-                </CardContent>
-              </Card>
+              <div className="marketing-token-context">
+                <Card elevation="flat">
+                  <CardContent>
+                    <span>
+                      <Server size={14} aria-hidden="true" /> Entity
+                    </span>
+                    <strong>prod-api-03</strong>
+                    <small>Host identifier</small>
+                  </CardContent>
+                </Card>
+                <Card elevation="flat">
+                  <CardContent>
+                    <span>
+                      <Layers size={14} aria-hidden="true" /> Evidence
+                    </span>
+                    <strong>24 events</strong>
+                    <small>Sample activity</small>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
+          <div className="marketing-token-trace" aria-label="Card padding token dependency">
+            <code>{spacingToken}</code>
+            <ArrowRight size={13} aria-hidden="true" />
+            <code>Card padding</code>
+            <strong>
+              {spacing === 'roomy' ? '20' : '12'}
+              <small>px</small>
+            </strong>
+          </div>
           <p className="marketing-token-preview-note" aria-live="polite" role="status">
-            {dark ? 'Dark' : 'Light'} preview · {spacing === 'roomy' ? 'Roomy' : 'Default'} card
-            spacing · {triaged ? 'Sample marked triaged' : 'Sample awaiting review'}
+            {dark ? 'Dark' : 'Light'} preview · {spacing === 'roomy' ? 'Roomy' : 'Default'} spacing
+            · {triaged ? 'Sample triaged' : 'Awaiting review'}
           </p>
         </div>
+      </div>
+      <div className="marketing-token-architecture">
+        <ol aria-label="Aegis token layers">
+          <li>
+            <span>01 / PRIMITIVE</span>
+            <div>
+              <code>--space-3</code>
+              <small>12px</small>
+            </div>
+            <ArrowRight size={17} aria-hidden="true" />
+          </li>
+          <li>
+            <span>02 / SEMANTIC ROLE</span>
+            <code>--layout-card-padding</code>
+            <ArrowRight size={17} aria-hidden="true" />
+          </li>
+          <li>
+            <span>03 / COMPONENT</span>
+            <div>
+              <code>CardContent</code>
+              <small>padding</small>
+            </div>
+          </li>
+        </ol>
+        <p>
+          Reusable values feed named roles, which components consume. Central color roles prevent
+          one-off shades from drifting between screens and coordinate light and dark values across
+          the same components.
+        </p>
       </div>
     </section>
   );
