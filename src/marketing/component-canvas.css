@@ -1,14 +1,13 @@
 .component-canvas {
   width: 100%;
-  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 28px;
   overflow: clip;
   isolation: isolate;
 }
 .component-canvas-viewport {
   --canvas-scale: 1;
-  --canvas-height: 680px;
+  --canvas-height: 900px;
+  --canvas-spread: 1;
   position: relative;
   width: 100%;
   height: var(--canvas-height);
@@ -18,8 +17,8 @@
   position: absolute;
   top: 0;
   left: 50%;
-  width: 1240px;
-  height: 680px;
+  width: 1600px;
+  height: 900px;
   transform: translateX(-50%) scale(var(--canvas-scale));
   transform-origin: center top;
 }
@@ -39,15 +38,16 @@
   height: 100%;
   color: var(--marketing-text);
   font-family: var(--font-ui);
-  perspective: 1800px;
+  perspective: 2200px;
 }
 .component-canvas-plane {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
-  transform: translateY(var(--canvas-lift, 0px)) rotateX(var(--canvas-pitch, 9deg))
-    rotateY(var(--canvas-yaw, -4deg)) rotateZ(-2deg);
-  transform-origin: 50% 45%;
+  transform: translateY(calc(var(--canvas-spread) * 220px))
+    rotateX(calc(var(--canvas-spread) * 22deg)) rotateZ(calc(var(--canvas-spread) * -8deg))
+    scale(calc(1 - var(--canvas-spread) * 0.09));
+  transform-origin: 50% 40%;
 }
 .component-canvas-panel {
   position: absolute;
@@ -64,10 +64,10 @@
   line-height: 1.5;
 }
 .component-canvas-workspace {
-  left: 215px;
+  left: 250px;
   top: 65px;
-  width: 850px;
-  height: 523px;
+  width: 1100px;
+  height: 705px;
   transform: translateZ(0);
   background: var(--marketing-bg);
 }
@@ -143,7 +143,7 @@
   gap: 15px;
 }
 .component-canvas-workspace-body {
-  padding: 17px 22px 0;
+  padding: 20px 26px 0;
 }
 .component-canvas-pageheading {
   display: flex;
@@ -158,13 +158,13 @@
 }
 .component-canvas-pageheading h3 {
   margin: 3px 0 0;
-  font-size: 21px;
+  font-size: 25px;
   font-weight: 500;
   letter-spacing: -0.035em;
 }
 .component-canvas-overview {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
+  grid-template-columns: minmax(0, 1fr) 280px;
   gap: 12px;
 }
 .component-canvas .component-canvas-activity-card,
@@ -263,7 +263,7 @@
   border-bottom: 1px solid var(--marketing-line);
 }
 .component-canvas-table td {
-  height: 41px;
+  height: 45px;
   border-bottom: 1px solid color-mix(in srgb, var(--marketing-line) 65%, transparent);
 }
 .component-canvas-table tr:last-child td {
@@ -282,7 +282,7 @@
 }
 .component-canvas-table td > strong {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
 }
 .component-canvas-table td > span:not(.severity-badge, .status-badge) {
@@ -292,8 +292,8 @@
 }
 .component-canvas-table .severity-badge,
 .component-canvas-table .status-badge {
-  font-size: 9px;
-  min-height: 19px;
+  font-size: 10px;
+  min-height: 22px;
   padding: 1px 5px;
 }
 .component-canvas-workspace-footer {
@@ -317,10 +317,15 @@
   background: var(--marketing-accent);
 }
 .component-canvas-library {
-  left: 12px;
-  top: 11px;
-  width: 229px;
-  transform: translateZ(calc(72px + var(--canvas-depth, 0px))) rotateZ(-3deg);
+  left: 92px;
+  top: 255px;
+  width: 260px;
+  transform: translate3d(
+      calc(var(--canvas-spread) * -90px),
+      calc(var(--canvas-spread) * -220px),
+      calc(35px + var(--canvas-spread) * 160px)
+    )
+    rotateZ(calc(var(--canvas-spread) * -6deg));
 }
 .component-canvas-panel-header {
   display: flex;
@@ -409,10 +414,15 @@
   font-size: 8px;
 }
 .component-canvas-inspector {
-  right: 57px;
-  top: 121px;
-  width: 235px;
-  transform: translateZ(calc(92px + var(--canvas-depth, 0px))) rotateZ(4deg);
+  right: 54px;
+  top: 245px;
+  width: 265px;
+  transform: translate3d(
+      calc(var(--canvas-spread) * 100px),
+      calc(var(--canvas-spread) * -130px),
+      calc(50px + var(--canvas-spread) * 210px)
+    )
+    rotateZ(calc(var(--canvas-spread) * 7deg));
 }
 .component-canvas-inspector-section {
   padding: 13px;
@@ -525,12 +535,22 @@
   font-size: 9px;
 }
 .component-canvas .component-canvas-ai {
-  left: 735px;
-  top: 477px;
-  width: 339px;
-  padding: 16px;
-  border-color: color-mix(in srgb, var(--marketing-purple) 36%, var(--marketing-line));
-  transform: translateZ(calc(118px + var(--canvas-depth, 0px))) rotateZ(1deg);
+  left: 1015px;
+  top: 685px;
+  width: 370px;
+  padding: 20px;
+  border-color: color-mix(in srgb, var(--color-ai-fg) 45%, var(--marketing-line));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-ai-fg) 9%, var(--marketing-surface)),
+    var(--marketing-surface) 60%
+  );
+  transform: translate3d(
+      calc(var(--canvas-spread) * 80px),
+      calc(var(--canvas-spread) * 220px),
+      calc(65px + var(--canvas-spread) * 220px)
+    )
+    rotateZ(calc(var(--canvas-spread) * 5deg));
 }
 .component-canvas-ai-heading {
   display: flex;
@@ -566,11 +586,16 @@
   transform-origin: left center;
 }
 .component-canvas .component-canvas-metric {
-  left: 106px;
-  top: 504px;
-  width: 245px;
-  padding: 14px;
-  transform: translateZ(calc(91px + var(--canvas-depth, 0px))) rotateZ(-3deg);
+  left: 150px;
+  top: 740px;
+  width: 275px;
+  padding: 20px;
+  transform: translate3d(
+      calc(var(--canvas-spread) * -75px),
+      calc(var(--canvas-spread) * 180px),
+      calc(60px + var(--canvas-spread) * 180px)
+    )
+    rotateZ(calc(var(--canvas-spread) * -7deg));
 }
 .component-canvas-metric-label {
   display: flex;
@@ -604,39 +629,6 @@
   color: var(--marketing-accent);
   font-size: 10px;
 }
-.component-canvas-cursor {
-  position: absolute;
-  top: 426px;
-  left: 670px;
-  display: flex;
-  align-items: flex-start;
-  gap: 1px;
-  color: var(--marketing-purple);
-  transform: translateZ(145px);
-}
-.component-canvas-cursor > span {
-  margin-top: 18px;
-  padding: 4px 7px;
-  border-radius: 4px;
-  background: var(--marketing-purple);
-  color: var(--marketing-bg);
-  font-size: 9px;
-}
-.component-canvas-orbit {
-  position: absolute;
-  border: 1px solid color-mix(in srgb, var(--marketing-line) 40%, transparent);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.component-canvas-orbit-one {
-  inset: 90px -30px 40px;
-  transform: rotate(-12deg);
-}
-.component-canvas-orbit-two {
-  inset: 50px 80px -10px;
-  transform: rotate(18deg);
-  opacity: 0.5;
-}
 .component-canvas figcaption {
   display: flex;
   align-items: center;
@@ -660,19 +652,62 @@
   color: var(--marketing-subtle);
   font: 9px var(--font-mono);
 }
+
+.component-canvas-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.component-canvas-summary > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--marketing-line);
+  border-radius: 8px;
+  background: var(--marketing-surface);
+}
+.component-canvas-summary span {
+  grid-column: 1 / -1;
+  color: var(--marketing-muted);
+  font-size: 10px;
+}
+.component-canvas-summary strong {
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.component-canvas-summary small {
+  align-self: end;
+  color: var(--marketing-subtle);
+  font-size: 9px;
+}
+.component-canvas-event-count {
+  color: var(--marketing-muted);
+  font: 11px var(--font-mono);
+}
+.component-canvas-viewport[data-visible='true'] .component-canvas-plane,
+.component-canvas-viewport[data-visible='true'] .component-canvas-library,
+.component-canvas-viewport[data-visible='true'] .component-canvas-inspector,
+.component-canvas-viewport[data-visible='true'] .component-canvas-ai,
+.component-canvas-viewport[data-visible='true'] .component-canvas-metric {
+  will-change: transform;
+}
 .component-canvas-viewport[data-compact='true'] .component-canvas-scaler {
-  width: 860px;
-  height: 900px;
+  width: 1100px;
+  height: 1350px;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-workspace {
-  left: 11px;
-  top: 170px;
-  width: 840px;
+  left: 135px;
+  top: 300px;
+  width: 830px;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-library {
-  left: 20px;
-  top: 13px;
-  width: 238px;
+  left: 180px;
+  top: 20px;
+  width: 270px;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-library-items,
 .component-canvas-viewport[data-compact='true'] .component-canvas-library-label,
@@ -683,33 +718,28 @@
   margin-top: 0;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-inspector {
-  right: 17px;
-  top: 525px;
-  width: 242px;
+  left: 175px;
+  right: auto;
+  top: 945px;
+  width: 250px;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-payload {
   display: none;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-ai {
-  left: 179px;
-  top: 716px;
-  width: 341px;
+  left: 540px;
+  top: 1020px;
+  width: 370px;
 }
 .component-canvas-viewport[data-compact='true'] .component-canvas-metric {
-  left: 469px;
-  top: 57px;
+  left: 625px;
+  top: 115px;
 }
-.component-canvas-viewport[data-compact='true'] .component-canvas-cursor {
-  top: 652px;
-  left: 467px;
-}
-@media (max-width: 640px) {
-  .component-canvas {
-    padding: 0 12px;
-  }
+@media (max-width: 760px) {
   .component-canvas figcaption {
     max-width: 300px;
     margin: 0 auto;
+    padding: 12px 15px 20px;
     font-size: 10px;
   }
   .component-canvas-caption-note {
@@ -717,11 +747,12 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .component-canvas-plane {
-    transform: rotateX(7deg) rotateY(-3deg) rotateZ(-2deg);
+  .component-canvas-viewport {
+    --canvas-spread: 0;
   }
   .component-canvas * {
     animation: none !important;
     transition: none !important;
+    will-change: auto !important;
   }
 }

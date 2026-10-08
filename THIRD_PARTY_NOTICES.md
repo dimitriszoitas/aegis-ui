@@ -6,6 +6,8 @@ Aegis's original source code is MIT licensed; see LICENSE. That license does not
 
 The optional `fonts.css` entry includes self-hosted Figtree and JetBrains Mono font files distributed through Fontsource. Both font families use the SIL Open Font License 1.1. The original copyright notices and complete license texts are included in `lib-dist/licenses/figtree-OFL.txt` and `lib-dist/licenses/jetbrains-mono-OFL.txt`.
 
+The marketing website separately includes self-hosted Inter Latin font files from Fontsource 5.3.0, under the SIL Open Font License 1.1. Its copyright and license are preserved in `src/marketing/fonts/Inter-OFL.txt`. These website fonts are not included in the design system package.
+
 ## AWS architecture artwork
 
 The optional `@dimitriszoitas/aegis-ui/aws-logo` entry includes original SVG architecture artwork owned by Amazon Web Services. AWS names and marks remain AWS-owned; inclusion does not imply endorsement. This artwork is not covered by Aegis's MIT license. Source, release information, use guidance, and asset checksums are included in `lib-dist/licenses/AWS-ATTRIBUTION.md` and `lib-dist/licenses/AWS-checksums.json`. See [AWS architecture icons](https://aws.amazon.com/architecture/icons/) for the original artwork and current guidance.

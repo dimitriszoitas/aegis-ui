@@ -1,5 +1,6 @@
 :root:has(.aegis-marketing),
 .aegis-marketing {
+  --font-marketing: 'Aegis Marketing Inter', sans-serif;
   --marketing-bg: #101112;
   --marketing-surface: #1b1d20;
   --marketing-raised: #272a2e;

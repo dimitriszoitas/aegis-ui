@@ -79,93 +79,76 @@ export function ComponentCanvas() {
     const element = viewport.current;
     if (!element) return;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const finePointer = window.matchMedia('(pointer: fine)');
     let visible = false;
     let frame = 0;
-    let pointerX = 0;
-    let pointerY = 0;
+    let measuredWidth = -1;
 
     const measure = () => {
       const width = element.clientWidth;
-      const small = width < 640;
-      const sceneWidth = small ? 860 : 1240;
-      const sceneHeight = small ? 900 : 680;
-      const scale = (small ? width : Math.max(1, width - 60)) / sceneWidth;
+      if (width === measuredWidth) return;
+      measuredWidth = width;
+      const compact = width < 760;
+      const scale = compact
+        ? Math.max(0.4, Math.min(0.72, width / 830))
+        : Math.min(1.06, width / 1440);
       element.style.setProperty('--canvas-scale', String(scale));
-      element.style.setProperty('--canvas-height', `${scale * sceneHeight + (small ? 0 : 18)}px`);
-      element.dataset.compact = String(small);
+      element.style.setProperty('--canvas-height', `${scale * (compact ? 1350 : 900)}px`);
+      element.dataset.compact = String(compact);
     };
     const update = () => {
       frame = 0;
-      if (!visible || motion.matches) return;
-      const bounds = element.getBoundingClientRect();
+      if (motion.matches) {
+        element.style.setProperty('--canvas-spread', '0');
+        return;
+      }
+      if (!visible) return;
+      const top = element.getBoundingClientRect().top;
       const progress = Math.max(
         0,
-        Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)),
+        Math.min(1, (window.innerHeight * 0.95 - top) / (window.innerHeight * 0.85)),
       );
-      element.style.setProperty('--canvas-pitch', `${15 - progress * 12 + pointerY * 1.4}deg`);
-      element.style.setProperty('--canvas-yaw', `${-7 + progress * 5 + pointerX * 1.8}deg`);
-      element.style.setProperty('--canvas-lift', `${18 - progress * 30}px`);
-      element.style.setProperty('--canvas-depth', `${progress * 18}px`);
+      const eased = 1 - Math.pow(1 - progress, 2);
+      element.style.setProperty('--canvas-spread', String(1 - eased));
     };
     const schedule = () => {
-      if (!visible || motion.matches || frame) return;
+      if ((!visible && !motion.matches) || frame) return;
       frame = requestAnimationFrame(update);
     };
-    const reset = () => {
+    const changeMotion = () => {
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
-      pointerX = 0;
-      pointerY = 0;
-      for (const property of ['--canvas-pitch', '--canvas-yaw', '--canvas-lift', '--canvas-depth'])
-        element.style.removeProperty(property);
-      schedule();
+      update();
     };
-    const move = (event: PointerEvent) => {
-      if (!finePointer.matches || motion.matches) return;
-      const bounds = element.getBoundingClientRect();
-      pointerX = Math.max(
-        -1,
-        Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
-      );
-      pointerY = Math.max(
-        -1,
-        Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
-      );
-      schedule();
-    };
-    const leave = () => {
-      pointerX = 0;
-      pointerY = 0;
-      schedule();
-    };
-    const intersection = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (!visible && frame) {
-        cancelAnimationFrame(frame);
-        frame = 0;
-      }
-      schedule();
-    });
+    const intersection = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        element.dataset.visible = String(visible);
+        if (!visible && frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        }
+        schedule();
+      },
+      { rootMargin: '100px 0px' },
+    );
     const resize = new ResizeObserver(() => {
       measure();
       schedule();
     });
     measure();
+    changeMotion();
     intersection.observe(element);
     resize.observe(element);
     window.addEventListener('scroll', schedule, { passive: true });
-    element.addEventListener('pointermove', move, { passive: true });
-    element.addEventListener('pointerleave', leave);
-    motion.addEventListener('change', reset);
+    window.addEventListener('resize', schedule, { passive: true });
+    motion.addEventListener('change', changeMotion);
     return () => {
       if (frame) cancelAnimationFrame(frame);
       intersection.disconnect();
       resize.disconnect();
       window.removeEventListener('scroll', schedule);
-      element.removeEventListener('pointermove', move);
-      element.removeEventListener('pointerleave', leave);
-      motion.removeEventListener('change', reset);
+      window.removeEventListener('resize', schedule);
+      motion.removeEventListener('change', changeMotion);
     };
   }, []);
 
@@ -174,8 +157,6 @@ export function ComponentCanvas() {
       <div ref={viewport} className="component-canvas-viewport">
         <div className="component-canvas-scaler">
           <div className="component-canvas-scene dark" data-theme="dark" aria-hidden="true" inert>
-            <div className="component-canvas-orbit component-canvas-orbit-one" />
-            <div className="component-canvas-orbit component-canvas-orbit-two" />
             <div className="component-canvas-plane">
               <div className="component-canvas-workspace component-canvas-panel">
                 <div className="component-canvas-windowbar">
@@ -185,7 +166,7 @@ export function ComponentCanvas() {
                     <i />
                   </span>
                   <span>
-                    <Layers size={13} /> Aegis / React workspace
+                    <Layers size={13} /> Aegis / Security workspace
                   </span>
                   <span className="component-canvas-windowhint">⌘ K</span>
                 </div>
@@ -206,7 +187,7 @@ export function ComponentCanvas() {
                   <div className="component-canvas-pageheading">
                     <div>
                       <span className="component-canvas-kicker">PRODUCTION / EU-WEST-1</span>
-                      <h3>Signal, without the noise.</h3>
+                      <h3>Security overview</h3>
                     </div>
                     <Button
                       size="sm"
@@ -215,6 +196,19 @@ export function ComponentCanvas() {
                     >
                       Configure view
                     </Button>
+                  </div>
+                  <div className="component-canvas-summary">
+                    {[
+                      ['Open signals', '124', '+8 today'],
+                      ['Investigating', '18', '6 analysts'],
+                      ['Mean response', '4m 32s', '−18% this week'],
+                    ].map(([label, value, detail]) => (
+                      <div key={label}>
+                        <span>{label}</span>
+                        <strong>{value}</strong>
+                        <small>{detail}</small>
+                      </div>
+                    ))}
                   </div>
                   <div className="component-canvas-overview">
                     <Card className="component-canvas-activity-card">
@@ -298,6 +292,7 @@ export function ComponentCanvas() {
                         <th>Signal</th>
                         <th>Severity</th>
                         <th>Status</th>
+                        <th>Events</th>
                         <th>Detected</th>
                       </tr>
                     </thead>
@@ -321,6 +316,9 @@ export function ComponentCanvas() {
                           <td>
                             <StatusBadge status={row.status} />
                           </td>
+                          <td className="component-canvas-event-count">
+                            {[182, 64, 28, 12][index]}
+                          </td>
                           <td>{row.time}</td>
                         </tr>
                       ))}
@@ -329,7 +327,7 @@ export function ComponentCanvas() {
                 </div>
                 <div className="component-canvas-workspace-footer">
                   <span>
-                    <span className="component-canvas-online" /> All systems connected
+                    <span className="component-canvas-online" /> Sample workspace
                   </span>
                   <span>Illustrative workspace · Native React components</span>
                 </div>
@@ -493,12 +491,6 @@ export function ComponentCanvas() {
                   variant="area"
                 />
               </Card>
-              <span className="component-canvas-cursor">
-                <svg width="19" height="22" viewBox="0 0 19 22" fill="currentColor">
-                  <path d="M1 1 18 12l-8 1-4 8Z" />
-                </svg>
-                <span>Component / Card</span>
-              </span>
             </div>
           </div>
         </div>

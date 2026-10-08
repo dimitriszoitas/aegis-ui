@@ -21,12 +21,8 @@ export function TokenStory() {
     >
       <div className="marketing-token-heading">
         <div>
-          <p className="marketing-section-label">FOUNDATIONS</p>
-          <h2 id="token-system-title">
-            Every detail.
-            <br />
-            One shared language.
-          </h2>
+          <p className="marketing-section-label">Foundations</p>
+          <h2 id="token-system-title">A consistent foundation for every interface.</h2>
         </div>
         <p>
           Color with purpose. Type with hierarchy. Space that scales. The decisions behind clear,

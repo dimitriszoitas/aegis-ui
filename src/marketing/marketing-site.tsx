@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, ArrowUpRight, Check, Copy, Plus, Search } from '@/components/icon';
+import { ArrowRight, ArrowUpRight, Check, Copy, Plus, Search, Layers } from '@/components/icon';
 import { Button } from '@/components/button';
 import { Kbd } from '@/components/kbd';
 import { SeverityBadge } from '@/components/severity-badge';
@@ -8,6 +8,7 @@ import { Sparkline } from '@/components/sparkline';
 import { applyTheme } from '@/lib/theme';
 import { ComponentShowcase } from './component-showcase';
 import { ComponentCanvas } from './component-canvas';
+import { HeroShowcase } from './hero-showcase';
 import { TokenStory } from './token-story';
 import { MarketingHeader, MarketingFooter, marketingLinks } from './marketing-chrome';
 import './marketing-site.css';
@@ -17,20 +18,17 @@ const clone = 'git clone https://github.com/dimitriszoitas/aegis-ui.git';
 function CollectionPreview() {
   return (
     <section
-      id="components"
+      id="collection"
       className="marketing-collection marketing-container"
       aria-labelledby="collection-title"
     >
       <div className="marketing-collection-heading">
         <div>
-          <p className="marketing-section-label">THE COMPONENT COLLECTION</p>
-          <h2 id="collection-title">
-            Small details.
-            <br />A complete system.
-          </h2>
+          <p className="marketing-section-label">Explore Aegis</p>
+          <h2 id="collection-title">A considered starting point for your next product.</h2>
           <p className="marketing-heading-description">
-            From the first input to the thousandth row. Components that share a language, at every
-            scale.
+            Build with the same visual language across controls, data, code, and the workflows that
+            connect them.
           </p>
         </div>
         <a className="marketing-underlined-link" href={marketingLinks.components}>
@@ -170,7 +168,7 @@ export function MarketingSite() {
   const [copyError, setCopyError] = useState(false);
   useEffect(() => {
     applyTheme('dark', { persist: false });
-    document.title = 'Aegis — A design system for technical work';
+    document.title = 'Aegis — React components for technical products';
   }, []);
   async function copySource() {
     try {
@@ -186,89 +184,107 @@ export function MarketingSite() {
     <div className="aegis-marketing marketing-home" id="top">
       <MarketingHeader active="home" />
       <main id="main">
-        <section className="marketing-hero marketing-container" aria-labelledby="hero-title">
-          <div className="marketing-hero-label">
-            <span>
-              <i /> Aegis Design System
-            </span>
-            <span>Open source</span>
-          </div>
-          <div className="marketing-hero-intro">
-            <h1 id="hero-title">
-              Clarity for the
+        <HeroShowcase />
+        <section
+          className="marketing-overview marketing-container"
+          aria-labelledby="overview-title"
+        >
+          <div className="marketing-overview-heading">
+            <h2 id="overview-title">
+              Designed for the tools
               <br />
-              <span>deeply technical.</span>
-            </h1>
-            <p className="marketing-hero-description">
-              A React design system for data-heavy products.{' '}
-              <br className="marketing-desktop-break" />
-              Give your SIEM, developer platform, or engineering tool a clearer interface.
+              people depend on.
+            </h2>
+            <p>
+              Security operations. Developer platforms. Cloud infrastructure. Give dense information
+              a clear hierarchy, with the right detail at the right moment.
             </p>
-            <div className="marketing-hero-actions">
-              <a
-                className="marketing-link-button marketing-link-primary"
-                href={marketingLinks.components}
-              >
-                Explore components <ArrowRight size={18} />
-              </a>
-              <a
-                className="marketing-link-button marketing-link-secondary"
-                href={marketingLinks.docs}
-              >
-                Read the docs <ArrowUpRight size={18} />
-              </a>
+          </div>
+          <dl className="marketing-system-facts">
+            <div>
+              <dt>Component families</dt>
+              <dd>84</dd>
+              <dd className="marketing-fact-description">
+                From everyday inputs to technical workflows.
+              </dd>
             </div>
-            <p className="marketing-hero-meta">
-              84 components <span>·</span> Semantic tokens <span>·</span> React + TypeScript
+            <div>
+              <dt>Component categories</dt>
+              <dd>12</dd>
+              <dd className="marketing-fact-description">
+                A connected library, with room to make it yours.
+              </dd>
+            </div>
+            <div>
+              <dt>Color themes</dt>
+              <dd>2</dd>
+              <dd className="marketing-fact-description">
+                Shared semantic roles for light and dark.
+              </dd>
+            </div>
+            <div>
+              <dt>Open-source license</dt>
+              <dd>MIT</dd>
+              <dd className="marketing-fact-description">
+                Read the source. Adapt it to your product.
+              </dd>
+            </div>
+          </dl>
+        </section>
+        <CollectionPreview />
+        <section className="marketing-system-section" aria-labelledby="system-title">
+          <div className="marketing-section-heading marketing-container">
+            <span className="marketing-feature-icon" aria-hidden="true">
+              <Layers size={28} />
+            </span>
+            <p className="marketing-section-label">The Aegis system</p>
+            <h2 id="system-title">Components that fit together. By design.</h2>
+            <p>
+              One set of foundations, from the smallest control to an entire workspace. Explore how
+              the pieces become a product.
             </p>
           </div>
           <ComponentCanvas />
-        </section>
-        <div className="marketing-purpose-band">
-          <div className="marketing-container">
-            <p>
-              Made for interfaces
-              <br />
-              <strong>where the details matter.</strong>
-            </p>
-            <ul aria-label="Platforms Aegis is designed for">
-              <li>SIEM & security</li>
-              <li>Developer platforms</li>
-              <li>Cloud & infrastructure</li>
-              <li>Data & observability</li>
-            </ul>
+          <div className="marketing-section-actions">
+            <a
+              className="marketing-link-button marketing-link-secondary"
+              href={marketingLinks.docs}
+            >
+              Documentation <ArrowUpRight size={16} />
+            </a>
+            <a
+              className="marketing-link-button marketing-link-primary"
+              href={marketingLinks.components}
+            >
+              Explore the library <ArrowRight size={16} />
+            </a>
           </div>
-        </div>
-        <CollectionPreview />
-        <TokenStory />
+        </section>
         <section
           className="marketing-workflows marketing-container"
           aria-labelledby="workflows-title"
         >
           <div className="marketing-collection-heading">
             <div>
-              <p className="marketing-section-label">BETTER TOGETHER</p>
-              <h2 id="workflows-title">
-                The parts are good.
-                <br />
-                The whole is the point.
-              </h2>
+              <p className="marketing-section-label">Working examples</p>
+              <h2 id="workflows-title">From a signal to a decision.</h2>
             </div>
             <p className="marketing-heading-description">
-              Move from a signal to its evidence, then review an AI suggestion. This is Aegis in
-              use. Try it.
+              Try a real workflow. Filter the queue, inspect the evidence, and review an AI
+              suggestion with context close at hand.
             </p>
           </div>
           <ComponentShowcase />
         </section>
+        <TokenStory />
         <section className="marketing-source" aria-labelledby="source-title">
           <div className="marketing-container marketing-source-grid">
             <div>
-              <p className="marketing-section-label">YOUR NEXT BUILD</p>
+              <p className="marketing-section-label">Start building</p>
               <h2 id="source-title">
-                Take it apart.
+                Your product.
                 <br />
-                Make it your own.
+                Your design system.
               </h2>
               <p>
                 Typed components, shared CSS tokens, and working patterns. Start with the source,
@@ -314,7 +330,7 @@ export function MarketingSite() {
           </div>
         </section>
         <section className="marketing-faq marketing-container" aria-labelledby="faq-title">
-          <h2 id="faq-title">A few practical details.</h2>
+          <h2 id="faq-title">Frequently asked questions</h2>
           <div>
             <details>
               <summary>What is included?</summary>

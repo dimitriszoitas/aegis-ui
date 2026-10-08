@@ -1,28 +1,26 @@
 .marketing-token-story {
-  padding-block: 100px;
+  padding-block: 88px;
   border-top: 1px solid var(--marketing-line);
   color: var(--marketing-text);
 }
 .marketing-token-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 48px;
-  margin-bottom: 40px;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 44px;
 }
 .marketing-token-story .marketing-token-heading h2 {
   margin: 0;
-  font-size: clamp(36px, 4.2vw, 60px);
-  line-height: 1.06;
-  font-weight: 500;
-  letter-spacing: -0.05em;
+  font-size: clamp(28px, 2.55vw, 36px);
+  line-height: 1.24;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 .marketing-token-heading > p {
-  max-width: 345px;
-  margin: 0 0 3px;
+  max-width: 720px;
+  margin: 18px auto 0;
   color: var(--marketing-muted);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 18px;
+  line-height: 1.6;
 }
 .marketing-token-bento {
   display: grid;
@@ -52,17 +50,17 @@
 .marketing-token-tile-copy h3 {
   margin: 9px 0 9px;
   color: var(--marketing-text);
-  font-size: clamp(20px, 1.65vw, 25px);
-  font-weight: 500;
-  letter-spacing: -0.035em;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.18;
 }
 .marketing-token-tile-copy p {
   max-width: 310px;
   margin: 0;
   color: var(--marketing-muted);
-  font-size: 12px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.6;
 }
 .marketing-token-color-art,
 .marketing-token-type-art,
@@ -98,12 +96,12 @@
 }
 .marketing-token-color-card > span {
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .marketing-token-color-card strong {
   margin-top: 12px;
   font-size: 42px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 1;
 }
@@ -135,6 +133,7 @@
   transform: translateX(73px) rotate(17deg);
 }
 .marketing-token-type-art {
+  font-family: var(--font-ui);
   padding: 23px 26px;
   color: var(--marketing-purple);
   background: linear-gradient(
@@ -176,7 +175,7 @@
 .marketing-token-type-scale strong {
   color: var(--marketing-text);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .marketing-token-type-scale span {
   color: var(--marketing-muted);
@@ -302,7 +301,7 @@
 }
 .marketing-token-role-stack span {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .marketing-token-role-stack code {
   display: flex;
@@ -389,9 +388,9 @@
 }
 .marketing-token-preview-heading h3 {
   margin: 16px 0 10px;
-  font-size: 27px;
+  font-size: 24px;
   line-height: 1.13;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 .marketing-token-preview-heading p {
@@ -427,7 +426,7 @@
   border-radius: 4px;
   color: var(--marketing-muted);
   background: transparent;
-  font: 10px var(--font-ui);
+  font: 12px var(--font-ui);
   cursor: pointer;
 }
 .marketing-token-theme button[aria-pressed='true'] {
@@ -448,7 +447,7 @@
   display: grid;
   gap: 6px;
   color: var(--marketing-muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .marketing-token-spacing-control select {
   min-height: 36px;
@@ -457,10 +456,11 @@
   border-radius: 5px;
   background: var(--marketing-bg);
   color: var(--marketing-text);
-  font: 10px var(--font-ui);
+  font: 12px var(--font-ui);
   cursor: pointer;
 }
 .marketing-token-live-surface {
+  font-family: var(--font-ui);
   min-width: 0;
   padding: 12px;
   border: 1px solid var(--color-border-default);
@@ -613,7 +613,7 @@
     align-self: end;
   }
   .marketing-token-tile-copy h3 {
-    font-size: 25px;
+    font-size: 20px;
   }
 }
 @media (max-width: 760px) {
@@ -636,7 +636,7 @@
     padding: 0 20px 23px;
   }
   .marketing-token-tile-copy h3 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .marketing-token-preview {
     display: flex;
@@ -663,13 +663,13 @@
     grid-template-columns: 1fr;
   }
   .marketing-token-story .marketing-token-heading h2 {
-    font-size: 39px;
+    font-size: 28px;
   }
   .marketing-token-tile-copy {
     padding-inline: 26px;
   }
   .marketing-token-tile-copy h3 {
-    font-size: 25px;
+    font-size: 20px;
   }
   .marketing-token-preview {
     grid-column: 1;
