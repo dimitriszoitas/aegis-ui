@@ -157,28 +157,11 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-3);
 }
-.nav-section-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--color-text-tertiary);
-  padding: 0 var(--space-2);
-  margin: 0 0 var(--space-2);
-  letter-spacing: 0;
-  height: 16px;
-  line-height: 16px;
-  overflow: hidden;
-  white-space: nowrap;
-  transition:
-    height var(--motion-fast) var(--ease-out),
-    margin-bottom var(--motion-fast) var(--ease-out),
-    opacity var(--motion-fast);
-}
-.side-nav[data-collapsed='true'] .nav-section-label {
-  height: 0;
-  margin-bottom: 0;
-  opacity: 0;
+.nav-section {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
 }
 .nav-items {
   display: flex;

@@ -4,6 +4,8 @@
 @import '../styles/tokens.css';
 @import '../styles/theme.css';
 @import '../styles/layout-theme.css';
+@import '../styles/minimalistic-tokens.css';
+@import '../styles/minimalistic.css';
 @import '../styles/scrollbars.css';
 @source '../components';
 @source '../patterns';

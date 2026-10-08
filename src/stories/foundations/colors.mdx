@@ -5,11 +5,11 @@ import { ColorSwatches, IntentExamples, SeverityExamples } from './foundation-ex
 
 # Color and intent
 
-Components consume semantic CSS variables. Light and dark values below are read directly from the token source, so the documentation stays in step with the implementation.
+Components consume semantic CSS variables. The paired swatches below read the base Floating/Fixed light and dark palettes directly from the token source. Minimalistic applies a separate neutral presentation to those semantic roles; use its console example or the UI approach toolbar to inspect it in context.
 
 ## Backgrounds
 
-Canvas establishes the workspace, surface holds content, and raised surface provides hierarchy. Hover and selected are interaction states, not extra elevation levels.
+Canvas establishes the workspace, surface holds content, and raised surface provides hierarchy. Hover and selected are interaction states, not extra elevation levels. Minimalistic reduces the surface hierarchy to gray and white in light mode or two charcoal tones in dark mode; border and text hierarchy carry the remaining distinctions.
 
 <ColorSwatches prefix="--color-bg-" />
 
@@ -21,7 +21,7 @@ Primary text carries decisions and data. Secondary text carries descriptions and
 
 ## Borders
 
-Subtle borders separate surfaces without visual noise. Default borders clarify controls and stronger boundaries.
+Subtle borders separate surfaces without visual noise. Default borders clarify controls and stronger boundaries. Minimalistic softens ordinary neutral borders while keeping focus, validation, and semantic tag outlines distinct.
 
 <ColorSwatches prefix="--color-border-" />
 
@@ -29,21 +29,23 @@ Subtle borders separate surfaces without visual noise. Default borders clarify c
 
 Each intent provides a fill, foreground, and soft surface. Use the function intent for primary analyst actions, AI for generated assistance, destroy for consequential removal, success for confirmation, and warning for caution. Neutral remains the default.
 
-AI carries three distinct stops—magenta, pink, then blue—through every emphasis. Dedicated `--color-ai-*`, `--color-ai-pink-*`, and `--color-ai-blue-*` tokens keep the AI palette independent from function blue. Primary buttons use the filled `--gradient-ai`; secondary buttons and badges use `--gradient-ai-soft`; tertiary buttons add `--gradient-ai-border` around a quiet surface. AI text and icons use `--gradient-ai-text`, including text-only ghost buttons. Generated-content containers use the quieter `--gradient-ai-surface`. These tokens adapt in both themes, and the sparkles marker keeps AI identifiable beyond color.
+Across all three approaches, AI carries three distinct stops—magenta, pink, then blue—through every emphasis. Dedicated `--color-ai-*`, `--color-ai-pink-*`, and `--color-ai-blue-*` tokens keep the AI palette independent from function blue. Primary buttons use the filled `--gradient-ai`; secondary buttons use `--gradient-ai-soft`; tertiary buttons add `--gradient-ai-border` around a quiet surface. AI text and icons use `--gradient-ai-text`, including text-only ghost buttons. Generated-content containers use the quieter `--gradient-ai-surface`. These tokens adapt in both themes, and the sparkles marker keeps AI identifiable beyond color.
 
-Success uses a warm green. Warning uses orange-yellow tints with a stronger ochre foreground in light mode to preserve text contrast. Medium severity follows the same warning palette. Tag and severity borders remain visible in both themes; dark tags receive a small foreground lift, while light status badges use a slightly stronger fill.
+Success uses a warm green. Warning uses orange-yellow tints with a stronger ochre foreground in light mode to preserve text contrast. Medium severity follows the same warning palette. Generic tags and severity badges use transparent backgrounds. Status badges use a borderless pill shape with a restrained 8% semantic tint and a colored dot, including in Minimalistic. All three use primary theme text in every approach and color theme; generic tags and severity badges carry semantic color in their outlines and dots.
 
 <IntentExamples />
 
+Minimalistic keeps ordinary controls monochrome with restrained blue hover and focus feedback. AI controls, labels, and markers retain their magenta–pink–blue intent, while their containers stay neutral and shadow-free. Status, severity, success, warning, errors, syntax, and added or removed code retain their semantic colors. Labels and icons continue to identify AI assistance and consequential actions.
+
 ## Severity
 
-Severity measures alert urgency. Every level combines a tinted background, readable foreground, and border. Keep the visible label even when the surrounding interface uses compact badges; dot-only variants need an accessible name.
+Severity measures alert urgency. Every level uses primary theme text on a transparent background, with a semantic outline and dot. Keep the visible label even when the surrounding interface uses compact badges; dot-only variants need an accessible name.
 
 <SeverityExamples />
 
 ## Data visualization
 
-Chart fills have their own palette: blue, cyan, purple, coral, gold, and green. Severity charts keep a consistent red-to-orange-to-gold urgency scale, followed by blue and cool gray. Plot segments, histogram stacks, and legend markers share these tokens; labels retain the normal text colors. This lets a warning segment use clear gold while its small-text badge keeps the stronger foreground required for readability.
+Chart fills have their own palette: blue, cyan, purple, coral, gold, and green. Severity charts keep a consistent red-to-orange-to-gold urgency scale, followed by blue and cool gray. Plot segments, histogram stacks, and legend markers share these tokens; labels retain the normal text colors. This lets a warning segment use clear gold while badge labels retain the same readable primary text as the surrounding interface.
 
 <ColorSwatches prefix="--color-chart-" />
 
@@ -53,4 +55,4 @@ Chart fills have their own palette: blue, cyan, purple, coral, gold, and green. 
 2. Semantic tokens express purpose, such as `--color-bg-surface` and `--color-severity-high-fg`, and adapt to the active theme.
 3. Component tokens cover exceptional layout needs, such as grid row heights and sidebar widths.
 
-Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme. Floating and Fixed layout choices use the separate `data-layout-theme` attribute; color values are identical across the two layouts.
+Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme. The separate `data-layout-theme` attribute selects `floating`, `fixed`, or `minimalistic`. Floating and Fixed share color values; Minimalistic changes neutral surface and control presentation while preserving semantic meaning. Every approach supports both light and dark.

@@ -59,7 +59,8 @@ export function TimeRangePicker({
     <Popover
       label={label}
       className="time-range-popover"
-      width={custom ? 528 : 240}
+      width={custom ? 480 : 216}
+      density="tight"
       align="end"
       footer={
         custom ? (
@@ -108,7 +109,7 @@ export function TimeRangePicker({
         </Button>
       }
     >
-      <div className="time-range-content">
+      <div className="time-range-content" data-custom={custom}>
         <div className="time-range-presets">
           <p className="muted" style={{ fontSize: 'var(--text-xs)' }}>
             Relative range
@@ -116,6 +117,8 @@ export function TimeRangePicker({
           {timePresets.map((p) => (
             <Button
               key={p.value}
+              className="time-range-preset"
+              data-active={active.mode === 'relative' && active.preset === p.value && !custom}
               emphasis="ghost"
               intent={
                 active.mode === 'relative' && active.preset === p.value ? 'function' : 'default'
@@ -133,7 +136,12 @@ export function TimeRangePicker({
               {p.label}
             </Button>
           ))}
-          <Button emphasis={custom ? 'secondary' : 'ghost'} onClick={() => setCustom(true)}>
+          <Button
+            className="time-range-preset"
+            data-active={custom}
+            emphasis="ghost"
+            onClick={() => setCustom(true)}
+          >
             Custom range
           </Button>
         </div>

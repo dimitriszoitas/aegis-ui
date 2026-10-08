@@ -1,4 +1,4 @@
-import { useRef, useState, type HTMLAttributes } from 'react';
+import { useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Columns3, Funnel, Rows2, Rows3, Rows4 } from '@/components/icon';
 import type { Analyst } from '@/sample-data/types';
 import { Button } from '@/components/button';
@@ -40,6 +40,8 @@ export interface FilterBarProps extends Omit<
 > {
   /** Bar mode edits filters inline; panel mode delegates editing to the sidebar. */
   filterMode?: FilterMode;
+  /** Replaces the normal filter/search row while records are selected. */
+  selectionActions?: ReactNode;
   value: AlertFilterState;
   onValueChange: (value: AlertFilterState) => void;
   analysts?: readonly Analyst[];
@@ -192,6 +194,7 @@ function FilterPicker({ value, dispatch, analysts, disabled }: FilterPickerProps
 /** Search and view controls, plus a removable summary while the facet sidebar is closed. */
 export function FilterBar({
   filterMode = 'bar',
+  selectionActions,
   value,
   onValueChange,
   analysts = [],
@@ -246,7 +249,8 @@ export function FilterBar({
       data-filter-mode={filterMode}
       aria-label={props['aria-label'] ?? 'Alert filters'}
     >
-      <div className="aegis-filter-bar-main">
+      {selectionActions && <div className="aegis-filter-bar-selection">{selectionActions}</div>}
+      <div className="aegis-filter-bar-main" hidden={!!selectionActions}>
         {filterMode === 'bar' && (
           <FilterPicker value={value} dispatch={dispatch} analysts={analysts} disabled={disabled} />
         )}

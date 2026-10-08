@@ -59,7 +59,7 @@ import type { AiContextItem, AiRequest } from '@/lib/ai';
 import { applyAlertFilters, createDefaultFilters, type AlertFilterState } from '@/lib/filters';
 import { formatTimeRange, resolveTimeRange } from '@/lib/time-range';
 import type { Theme } from '@/lib/theme';
-import type { LayoutTheme } from '@/lib/layout-theme';
+import { layoutThemeLabels, layoutThemeOptions, type LayoutTheme } from '@/lib/layout-theme';
 import {
   alerts as fixtureAlerts,
   analysts,
@@ -550,14 +550,14 @@ export function SiemConsole({
                   </IconButton>
                   {onLayoutThemeChange && (
                     <DropdownMenu
-                      label="Layout theme"
+                      label="UI approach"
                       trigger={
                         <IconButton
-                          aria-label={`Layout theme: ${layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}`}
-                          title="Layout theme"
+                          aria-label={`UI approach: ${layoutThemeLabels[layoutTheme]}`}
+                          title="UI approach"
                           emphasis="ghost"
                         >
-                          {layoutTheme === 'fixed' ? (
+                          {layoutTheme !== 'floating' ? (
                             <PanelLeft size={17} />
                           ) : (
                             <PanelsTopLeft size={17} />
@@ -568,13 +568,10 @@ export function SiemConsole({
                         {
                           type: 'radio-group',
                           id: 'layout-theme',
-                          label: 'Layout theme',
+                          label: 'UI approach',
                           value: layoutTheme,
                           onValueChange: (value) => onLayoutThemeChange(value as LayoutTheme),
-                          options: [
-                            { value: 'floating', label: 'Floating' },
-                            { value: 'fixed', label: 'Fixed' },
-                          ],
+                          options: [...layoutThemeOptions],
                         },
                       ]}
                     />
@@ -653,12 +650,14 @@ export function SiemConsole({
                     />
                     <MetricCard
                       label="Critical alerts"
+                      intent="destroy"
                       value={scopedAlerts.filter((alert) => alert.severity === 'critical').length}
                       sparkline={metricTrend((alert) => alert.severity === 'critical')}
                       sparklineLabel="Critical alerts by last seen in the selected time range"
                     />
                     <MetricCard
                       label="Resolved alerts"
+                      intent="success"
                       value={scopedAlerts.filter((alert) => alert.status === 'resolved').length}
                       sparkline={metricTrend((alert) => alert.status === 'resolved')}
                       sparklineLabel="Resolved alerts by last seen in the selected time range"

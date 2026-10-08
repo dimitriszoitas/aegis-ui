@@ -12,19 +12,19 @@ import {
 
 Aegis helps security analysts see what matters, understand the evidence, and act with confidence. Dense event data and AI assistance share a calm, consistent visual language.
 
-## Float the workspace
+## Give the workspace a clear hierarchy
 
-The canvas gives every container breathing room. A surface holds content; a raised surface groups it; a floating surface carries persistent navigation or actions; an overlay presents a focused task. Borders and shadows work together in both themes.
+The canvas gives every container breathing room. A surface holds content; a raised surface groups it; a floating surface carries persistent navigation or actions; an overlay presents a focused task. Floating and Fixed use borders and shadows together. Minimalistic uses two neutral surfaces and quieter neutral borders, with no shadows, in both color themes. The examples below show the base light/dark surface tokens.
 
 <SurfaceExamples />
 
-Treat layout and color as independent choices. Floating is the default: navigation and sheets have 12px exterior insets and 12px corners, with 8px corners on the compact navigation rail. Fixed uses full-height chrome against the left and right workspace edges with dividers, square outside corners, and no chrome shadow. Both use the same light/dark colors, typography, controls, and cards. Navigation is 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its 34px icon rows and top toggle remain stable; labels fade and clip during the fast toggle without wrapping. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Console pages start with 20px top spacing, reduced to 16px on narrow screens, and related sections use 16px gaps.
+Treat UI approach and light/dark color as independent choices. Floating is the default: navigation and sheets have 12px exterior insets and 12px corners, with 8px corners on the compact navigation rail. Fixed uses full-height chrome against the left and right workspace edges with dividers, square outside corners, and no chrome shadow. Floating and Fixed share color and component styling. Minimalistic adds a distinct presentation with flush chrome, two neutral fills, no shadows, compact corners, and monochrome ordinary controls. All three preserve typography, control heights, content, and interaction state. Navigation is 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Subtle horizontal dividers separate navigation groups without visible group headings. Its 34px icon rows and top toggle remain stable; labels fade and clip during the fast toggle without wrapping. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Console pages start with 20px top spacing, reduced to 16px on narrow screens, and related sections use 16px gaps.
 
-Use 10px standard surface corners and 12px large/floating surface corners. Nested surfaces use the shared calculation `12px − 4px = 8px`; apply it to surfaces without changing nested control radii. Corners scale with control height: 28/34/40px buttons use 4/5/6px radii, while inputs and selects retain 6/7/8px. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. These compact curves keep dense controls clear while borders and shadows establish the surface hierarchy.
+In Floating and Fixed, use 10px standard surface corners and 12px large/floating surface corners. Nested surfaces use the shared calculation `12px − 4px = 8px`; apply it to surfaces without changing nested control radii. Corners scale with control height: 28/34/40px buttons use 4/5/6px radii, while inputs and selects retain 6/7/8px. Tags and severity badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Status badges keep a pill shape in every approach, including Minimalistic. Minimalistic instead uses 4/5/6px control corners, 6px surfaces and avatars, and 4px nested surfaces and chips; chrome remains square, and genuine circular markers retain their shape. These choices preserve density without changing control height or interaction targets.
 
 ## Give color a job
 
-Neutral surfaces carry most of the interface. Function blue identifies the next action. A magenta-to-pink-to-blue gradient identifies AI assistance across filled, soft, and text treatments. Red marks destructive actions, green confirms success, and amber calls for attention. Severity is a separate scale: critical, high, medium, low, and informational. Pair color with a label or icon so meaning never depends on color alone.
+Neutral surfaces carry most of the interface. In Floating and Fixed, function blue identifies the next action. Across all three approaches, a magenta-to-pink-to-blue gradient identifies AI assistance across filled, soft, and text treatments. Minimalistic uses monochrome ordinary controls, restrained blue hover and focus feedback, and quieter neutral framing. Red marks destructive actions, green confirms success, and amber calls for attention. Severity is a separate scale: critical, high, medium, low, and informational. Generic tags and severity badges have transparent backgrounds, semantic outlines, and colored dots. Borderless status pills use a restrained 8% semantic tint and a colored dot. All three keep primary theme text in every approach and color theme. Pair color with a label or icon so meaning never depends on color alone.
 
 ## Preserve the analyst’s attention
 
@@ -38,7 +38,7 @@ Keep compact breadcrumbs and page actions available from the first scroll on eve
 
 ## Make every path accessible
 
-Every action has a visible label or accessible name. Focus uses the same 2px function-colored ring and 2px offset throughout. Keyboard users can enter and leave menus, navigate trees and grids, and complete dialogs. Restore focus after closing an overlay. Reduced-motion preferences remove decorative animation while preserving clear state changes.
+Every action has a visible label or accessible name. Focus uses the semantic focus token with a 2px ring and 2px offset throughout. Keyboard users can enter and leave menus, navigate trees and grids, and complete dialogs. Restore focus after closing an overlay. Reduced-motion preferences remove decorative animation while preserving clear state changes.
 
 ## Guide multi-step work
 
@@ -46,7 +46,7 @@ The console opens rule creation with a vertical stepper so progress stays beside
 
 ## Keep AI accountable
 
-AI is an explicit intent with recognizable gradient treatments and the sparkles marker. Use the filled gradient for prominent AI actions, the soft gradient for quiet AI surfaces, and the foreground gradient for AI text. Generated content always carries an “AI generated” label. Show the context an assistant can access, link its claims to evidence, and distinguish confidence from certainty.
+AI is an explicit intent with a recognizable label and sparkles marker. All three approaches use filled gradients for prominent AI actions, soft gradients for secondary AI controls, and foreground gradients for AI text. Minimalistic keeps generated-content containers neutral and shadow-free while preserving the AI label, evidence, and review controls. Generated content always carries an “AI generated” label. Show the context an assistant can access, link its claims to evidence, and distinguish confidence from certainty.
 
 <AiLanguageExample />
 

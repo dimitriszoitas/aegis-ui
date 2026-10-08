@@ -1,18 +1,24 @@
 .rdp-root {
-  --rdp-accent-color: var(--color-function-fg);
-  --rdp-accent-background-color: var(--color-function-soft);
-  --rdp-today-color: var(--color-function-fg);
+  --calendar-accent: var(--minimal-interaction-bg, var(--color-function-bg));
+  --calendar-accent-text: var(--minimal-interaction-fg, var(--color-function-fg));
+  --calendar-accent-soft: color-mix(in srgb, var(--calendar-accent) 10%, var(--color-bg-surface));
+  --rdp-accent-color: var(--calendar-accent);
+  --rdp-accent-background-color: var(--calendar-accent-soft);
+  --rdp-today-color: var(--calendar-accent-text);
   --rdp-range_start-color: var(--color-on-intent);
-  --rdp-range_start-background: var(--color-function-bg);
-  --rdp-range_middle-background-color: var(--color-function-soft);
-  --rdp-range_middle-color: var(--color-function-fg);
+  --rdp-range_start-background: transparent;
+  --rdp-range_middle-background-color: var(--calendar-accent-soft);
+  --rdp-range_middle-color: var(--color-text-primary);
   --rdp-range_end-color: var(--color-on-intent);
-  --rdp-range_end-background: var(--color-function-bg);
-  --rdp-selected-border: 1px solid var(--color-function-bg);
-  --rdp-day-height: 36px;
-  --rdp-day-width: 36px;
-  --rdp-day_button-height: 34px;
-  --rdp-day_button-width: 34px;
+  --rdp-range_end-background: transparent;
+  --rdp-selected-border: 1px solid var(--calendar-accent);
+  --rdp-day-height: 34px;
+  --rdp-day-width: 34px;
+  --rdp-day_button-height: 30px;
+  --rdp-day_button-width: 30px;
+  --rdp-nav_button-height: 28px;
+  --rdp-nav_button-width: 28px;
+  --rdp-nav-height: 34px;
   --rdp-day_button-border-radius: var(--radius-sm);
   --rdp-selected-font: 600 var(--text-base) var(--font-ui);
   font-family: var(--font-ui);
@@ -23,8 +29,41 @@
   background: var(--color-bg-hover);
 }
 .rdp-selected .rdp-day_button {
-  background: var(--color-function-bg);
+  background: var(--calendar-accent);
   color: var(--color-on-intent);
+}
+.rdp-selected {
+  font-size: inherit;
+  font-weight: 600;
+}
+.rdp-caption_label {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+.rdp-chevron {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-text-secondary);
+}
+.rdp-button_previous,
+.rdp-button_next {
+  border-radius: var(--radius-sm);
+}
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  background: var(--color-bg-hover);
+}
+.rdp-range_middle .rdp-day_button {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text-primary);
+  font-weight: 400;
+}
+.rdp-day_button:focus-visible,
+.rdp-button_previous:focus-visible,
+.rdp-button_next:focus-visible {
+  outline: 2px solid var(--calendar-accent);
+  outline-offset: 1px;
 }
 .rdp-weekday {
   color: var(--color-text-secondary);
@@ -36,12 +75,21 @@
   max-width: calc(100vw - 48px);
 }
 .time-range-presets {
-  min-width: 150px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+.time-range-content[data-custom='true'] .time-range-presets {
+  flex: 0 0 154px;
   border-right: 1px solid var(--color-border-subtle);
   padding-right: var(--space-3);
+}
+.time-range-presets > p,
+.time-range-custom > p {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xs);
 }
 .time-range-presets button {
   justify-content: flex-start;
@@ -50,7 +98,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  min-width: 260px;
+  min-width: 238px;
+  flex: 1;
 }
 .time-range-clock {
   display: grid;
@@ -59,7 +108,9 @@
 }
 .time-range-clock input {
   width: 100%;
-  border: 1px solid var(--color-border-strong);
+  min-width: 0;
+  height: var(--space-8);
+  border: 1px solid var(--color-border-default);
   background: var(--color-bg-surface);
   border-radius: var(--radius-md);
   padding: var(--space-2);
@@ -76,11 +127,18 @@
     flex-direction: column;
   }
   .time-range-presets {
-    border: 0;
+    width: 100%;
+  }
+  .time-range-content[data-custom='true'] .time-range-presets {
+    flex-basis: auto;
+    border-right: 0;
     border-bottom: 1px solid var(--color-border-subtle);
     padding: 0 0 var(--space-3);
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  .time-range-content[data-custom='true'] .time-range-presets > p {
+    grid-column: 1 / -1;
   }
   .time-range-custom {
     min-width: 0;

@@ -346,6 +346,7 @@ export function AlertsExplorer({
               onValueChange={updateFilters}
               analysts={analysts}
               now={now}
+              selectionActions={api.selectionActions}
               density={api.density}
               onDensityChange={api.setDensity}
               columns={api.columns}
@@ -360,6 +361,7 @@ export function AlertsExplorer({
           )}
           renderBulkActions={(selected, clear) => (
             <BulkActionsBar
+              position="inline"
               selectedCount={selected.length}
               analysts={analysts}
               onClear={() => {

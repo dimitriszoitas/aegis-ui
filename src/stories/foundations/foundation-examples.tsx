@@ -2,6 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { ArrowRight, BellRing, ShieldCheck, Sparkles } from '@/components/icon';
 import { Separator } from '@/components/separator';
 import { Button } from '@/components/button';
+import { SeverityBadge } from '@/components/severity-badge';
 import { tokenNames, tokenValues, type TokenTheme } from './token-source';
 import './foundations.css';
 
@@ -98,19 +99,8 @@ export function SeverityExamples() {
       {(['light', 'dark'] as const).map((theme) => (
         <ThemeFrame key={theme} theme={theme}>
           <div className="foundation-wrap">
-            {['critical', 'high', 'medium', 'low', 'info'].map((severity) => (
-              <span
-                className="foundation-severity"
-                key={severity}
-                style={{
-                  background: `var(--color-severity-${severity}-bg)`,
-                  color: `var(--color-severity-${severity}-fg)`,
-                  borderColor: `var(--color-severity-${severity}-border)`,
-                }}
-              >
-                <span aria-hidden>●</span>
-                {severity}
-              </span>
+            {(['critical', 'high', 'medium', 'low', 'info'] as const).map((severity) => (
+              <SeverityBadge key={severity} severity={severity} />
             ))}
           </div>
         </ThemeFrame>

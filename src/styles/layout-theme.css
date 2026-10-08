@@ -1,4 +1,5 @@
-/* Layout changes geometry only. Surface colors and control sizing stay on their own axes. */
+/* Floating and Fixed vary chrome geometry. Minimalistic also applies a neutral visual system
+   through minimalistic-tokens.css and minimalistic.css; light/dark remains independent. */
 [data-layout-theme='floating'] {
   --chrome-inset: var(--space-3);
   --chrome-gap: var(--space-3);
@@ -20,6 +21,18 @@
   --chrome-sheet-border-width: 0 0 0 1px;
   --sidebar-radius-expanded: var(--chrome-radius);
   --sidebar-radius-collapsed: max(0px, calc(var(--chrome-radius) - var(--space-1)));
+}
+/* Minimalistic uses flush chrome; palette and compact geometry are on their own tokens. */
+[data-layout-theme='minimalistic'] {
+  --chrome-inset: 0px;
+  --chrome-gap: 0px;
+  --chrome-radius: 0px;
+  --chrome-shadow: none;
+  --chrome-overlay-shadow: none;
+  --chrome-nav-border-width: 0 1px 0 0;
+  --chrome-sheet-border-width: 0 0 0 1px;
+  --sidebar-radius-expanded: 0px;
+  --sidebar-radius-collapsed: 0px;
 }
 /* Only known surface components inherit the smaller nested corner; controls keep their own radii. */
 :where(

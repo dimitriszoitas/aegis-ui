@@ -15,23 +15,25 @@ import {
 
 Use the same measured rhythm from a filter chip to the complete investigation workspace.
 
-## Layout themes
+## UI approaches
 
-Floating and Fixed are a layout axis independent of light and dark color. Floating is the default: navigation and sheets have 12px exterior insets, 12px corners, and a floating shadow. The compact navigation rail derives its 8px corners from the same 4px subtraction. Fixed removes those exterior gaps, corner rounding, and chrome shadows. Navigation fills the left edge with a right divider; sheets and the assistant fill the right edge with a left divider.
+Floating, Fixed, and Minimalistic are three UI approaches, each available in light and dark. Floating is the default: navigation and sheets have 12px exterior insets, 12px corners, and a floating shadow. The compact navigation rail derives its 8px corners from the same 4px subtraction. Fixed removes those exterior gaps, corner rounding, and chrome shadows. Navigation fills the left edge with a right divider; sheets and the assistant fill the right edge with a left divider.
 
-Both layouts keep the same color tokens, typography, control sizes, card geometry, and content. Use the Storybook layout and color controls to explore all four combinations. The console's Floating layout and Fixed layout examples keep the assistant open for comparison; Alerts lets you switch interactively.
+Floating and Fixed share their color tokens and interior component styling. Minimalistic also changes the presentation: two neutral surface fills, no shadows, quieter neutral borders, monochrome ordinary controls, and compact corners. AI actions and provenance retain their magenta–pink–blue intent; ordinary control hover and focus use restrained blue feedback. Light uses gray and white; dark uses a charcoal pair. Semantic status, severity, feedback, syntax, and diff colors retain their meaning. The chrome is flush like Fixed; surfaces and overlays have at most 6px corners, and control corners scale through 4/5/6px. Status badges remain pill-shaped in every approach; status dots and radio indicators retain their circular shape.
 
-`data-layout-theme` selects the layout independently from `.dark` and `data-theme`. The document attribute also supplies the layout to portaled chrome.
+Typography, control heights, data density, content, and interaction state remain consistent across approaches. Use Storybook's UI approach and color controls to explore all six combinations. The console's Floating layout, Fixed layout, and Minimalistic examples keep the assistant open for comparison; Alerts lets you switch interactively.
+
+`data-layout-theme` accepts `floating`, `fixed`, or `minimalistic`, independently from `.dark` and `data-theme`. The existing layout-theme API name and storage key remain compatible. Apply the document attribute so portaled chrome receives the same presentation.
 
 ## Surface hierarchy and shadows
 
-Raised surfaces use a subtle border and a small shadow. Floating chrome uses a layered shadow. Overlays use the strongest shadow to establish focus. Dark mode relies more on border contrast and a lighter surface than on shadow strength.
+In Floating and Fixed, raised surfaces use a subtle border and a small shadow. Floating chrome uses a layered shadow. Overlays use the strongest shadow to establish focus. Dark mode relies more on border contrast and a lighter surface than on shadow strength. Minimalistic uses its two surfaces and quiet neutral borders for hierarchy and removes shadows throughout. The paired examples below document the base light/dark tokens.
 
 <SurfaceExamples />
 
 ## Radius
 
-Surface corners range from 8–12px. Buttons and icon buttons use 4/5/6px corners at small/medium/large sizes; inputs and selects retain 6/7/8px. Checkboxes keep a 4px radius. Use button tokens for button geometry and control tokens for fields.
+The base Floating/Fixed surface corners range from 8–12px. Buttons and icon buttons use 4/5/6px corners at small/medium/large sizes; inputs and selects retain 6/7/8px. Checkboxes keep a 4px radius. Use button tokens for button geometry and control tokens for fields.
 
 | Size   | Height | Button radius              | Input/select radius         |
 | ------ | ------ | -------------------------- | --------------------------- |
@@ -39,23 +41,23 @@ Surface corners range from 8–12px. Buttons and icon buttons use 4/5/6px corner
 | Medium | 34px   | 5px (`--button-radius-md`) | 7px (`--control-radius-md`) |
 | Large  | 40px   | 6px (`--button-radius-lg`) | 8px (`--control-radius-lg`) |
 
-Checkboxes use `--control-radius-xs` (4px).
+These are the base Floating/Fixed values. Minimalistic replaces the control radius scale with 4/5/6px and caps surface corners at 6px. Checkboxes use `--control-radius-xs` (4px in the base approaches).
 
 <ControlRadiusExamples />
 
 Standard cards and charts use `--surface-radius` (10px). Large or floating surfaces use `--surface-radius-floating` (12px). Nested surface components use `--surface-radius-nested`: `calc(var(--surface-radius-floating) - var(--space-1))`, so a 12px parent and a 4px inset step produce 8px child corners. Use this shared relationship rather than independent corner values. It applies to surface components, never to nested controls.
 
-Fixed chrome uses square outside corners while cards retain the same 10/12/8px geometry in both layouts. The navigation toggle stays at the top in both states. Chips and badges remain rounded rectangles with 6px corners from `--chip-radius`.
+Fixed chrome uses square outside corners while Floating and Fixed cards retain the same 10/12/8px geometry. Minimalistic keeps the chrome flush and replaces this surface scale with compact corners of at most 6px. The navigation toggle stays at the top in both states. Base tags and severity badges use 6px corners from `--chip-radius`; Minimalistic uses 4px chip corners and 4px nested surface corners. Status badges are an explicit exception: they retain a pill shape in every approach and color theme.
 
 <SurfaceRadiusExamples />
 
-The control primitive scale remains 6px for `xs` and `sm`, 7px for `md`, and 8px for `lg`, `xl`, and `2xl`. The legacy `--radius-full` token is also capped at 8px. Small dots can still appear circular because their dimensions constrain the rendered curve. Values below come from the shared primitive scale.
+The base control primitive scale is 6px for `xs` and `sm`, 7px for `md`, and 8px for `lg`, `xl`, and `2xl`. The legacy `--radius-full` token is also capped at 8px. Small dots can still appear circular because their dimensions constrain the rendered curve. Values below come from the shared primitive scale.
 
 <RadiusExamples />
 
 ## Spacing
 
-The spacing scale uses a 4px base. Floating chrome has a 12px exterior inset; Fixed chrome has none. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Grid cell padding follows density: 3px vertically in compact rows, 8px by default, and 10px in comfortable rows.
+The spacing scale uses a 4px base. Floating chrome has a 12px exterior inset; Fixed and Minimalistic chrome have none. Panels, charts, dialogs, and sheets use 16px interior padding; cards use 12px. Grid cell padding follows density: 3px vertically in compact rows, 8px by default, and 10px in comfortable rows.
 
 <SpacingExamples />
 
@@ -75,7 +77,7 @@ Browsers using the standards fallback render a thin scrollbar. Forced-colors mod
 
 ## Separators
 
-Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs.
+Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs. Navigation groups use subtle horizontal dividers without visible group headings in all three approaches.
 
 <SeparatorExamples />
 

@@ -24,6 +24,7 @@ import {
 import { SideSheet } from '@/components/side-sheet';
 import { Tabs } from '@/components/tabs';
 import { applyTheme, type Theme } from '@/lib/theme';
+import { layoutThemeOptions, useLayoutTheme, type LayoutTheme } from '@/lib/layout-theme';
 import {
   componentCatalogue,
   catalogueCategories,
@@ -177,14 +178,45 @@ function PreviewTheme({
   );
 }
 
+function PreviewApproach({
+  value,
+  onChange,
+  label = 'Preview UI approach',
+}: {
+  value: LayoutTheme;
+  onChange: (value: LayoutTheme) => void;
+  label?: string;
+}) {
+  return (
+    <label className="catalogue-approach-control">
+      <span>UI approach</span>
+      <select
+        aria-label={label}
+        value={value}
+        onChange={(event) => onChange(event.target.value as LayoutTheme)}
+      >
+        {layoutThemeOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function ComponentDetails({
   entry,
   theme,
   onThemeChange,
+  approach,
+  onApproachChange,
 }: {
   entry: ComponentCatalogueEntry;
   theme: Theme;
   onThemeChange: (theme: Theme) => void;
+  approach: LayoutTheme;
+  onApproachChange: (value: LayoutTheme) => void;
 }) {
   const [reset, setReset] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -214,6 +246,11 @@ function ComponentDetails({
         <div>
           <span>Interactive preview</span>
           <PreviewTheme theme={theme} onChange={onThemeChange} label="Detail preview color theme" />
+          <PreviewApproach
+            value={approach}
+            onChange={onApproachChange}
+            label="Detail preview UI approach"
+          />
         </div>
         <Button
           size="sm"
@@ -344,6 +381,7 @@ export function ComponentsPage() {
     );
   });
   const [theme, setTheme] = useState<Theme>('dark');
+  const { layoutTheme, setLayoutTheme } = useLayoutTheme();
   const [selected, setSelected] = useState<ComponentCatalogueEntry | null>(() => {
     if (typeof window === 'undefined') return null;
     const id = new URLSearchParams(window.location.search).get('component');
@@ -431,8 +469,8 @@ export function ComponentsPage() {
             <h1>The component library.</h1>
             <p>
               Explore {componentCatalogue.length} components for data-heavy interfaces. Try the
-              interactions, compare color themes, and find the right building blocks for your
-              product.
+              interactions, compare UI approaches and color themes, and find the right building
+              blocks for your product.
             </p>
           </div>
           <div className="catalogue-hero-note">
@@ -471,9 +509,12 @@ export function ComponentsPage() {
                 </button>
               )}
             </div>
-            <div className="catalogue-theme-bar">
-              <span>Preview theme</span>
-              <PreviewTheme theme={theme} onChange={setTheme} />
+            <div className="catalogue-preview-settings">
+              <PreviewApproach value={layoutTheme} onChange={setLayoutTheme} />
+              <div className="catalogue-theme-bar">
+                <span>Color</span>
+                <PreviewTheme theme={theme} onChange={setTheme} />
+              </div>
             </div>
           </div>
           <div className="catalogue-category-row">
@@ -558,6 +599,8 @@ export function ComponentsPage() {
             entry={selected}
             theme={theme}
             onThemeChange={setTheme}
+            approach={layoutTheme}
+            onApproachChange={setLayoutTheme}
           />
         )}
       </SideSheet>

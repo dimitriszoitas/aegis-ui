@@ -34,7 +34,6 @@ export function Tag({
       ? undefined
       : ({
           '--tag-fg': `var(--color-${intent}-fg)`,
-          '--tag-bg': `var(--color-${intent}-soft)`,
         } as CSSProperties);
   const props = {
     className: cn('tag', className),
@@ -52,11 +51,13 @@ export function Tag({
         aria-pressed={selected}
         onClick={() => onSelectedChange?.(!selected)}
       >
+        {intent !== 'default' && <span className="tag-dot" aria-hidden />}
         {children}
       </button>
     );
   return (
     <span {...props}>
+      {intent !== 'default' && <span className="tag-dot" aria-hidden />}
       {children}
       {variant === 'counter' && <span className="tag-count">{count ?? 0}</span>}
       {variant === 'removable' && (

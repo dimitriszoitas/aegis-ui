@@ -2,19 +2,19 @@
 
 [Live Storybook](https://dimitriszoitas.github.io/aegis-ui/) · [Full DataGrid presentation](https://dimitriszoitas.github.io/aegis-ui/?path=/story/components-data-datagrid--full-presentation) · [SIEM console](https://dimitriszoitas.github.io/aegis-ui/?path=/story/console-siem-console--alerts)
 
-Aegis is a token-based React design system for engineers building SIEMs, developer tools, infrastructure consoles, and other code-first platforms. It includes independent light/dark color and Floating/Fixed layout themes, dense investigation tools, and reviewable AI interactions.
+Aegis is a token-based React design system for engineers building SIEMs, developer tools, infrastructure consoles, and other code-first platforms. It includes independent light/dark color and Floating, Fixed, or Minimalistic UI approaches, dense investigation tools, and reviewable AI interactions.
 
 Storybook is the component reference and consumption guide. The repository also runs a marketing website and a complete SIEM console in Vite. The reusable design system is packaged as `@dimitriszoitas/aegis-ui@0.1.0`, with ESM modules, TypeScript declarations, compiled styles, and 91 public entry points. This release can be installed from a package archive; it has not been published to the npm registry.
 
 ![Aegis console in dark mode, with floating navigation, alert metrics, and an investigation grid](docs/images/console-dark.png)
 
-Compare layouts: [Floating · Light](docs/images/console-light.png) · [Floating · Dark](docs/images/console-dark.png) · [Fixed · Light](docs/images/console-fixed-light.png) · [Fixed · Dark](docs/images/console-fixed-dark.png).
+Floating and Fixed reference screenshots: [Floating · Light](docs/images/console-light.png) · [Floating · Dark](docs/images/console-dark.png) · [Fixed · Light](docs/images/console-fixed-light.png) · [Fixed · Dark](docs/images/console-fixed-dark.png).
 
 ## Explore the system
 
 Start with **Foundations → Principles**, then open **Console → SIEM console → Alerts**. The console includes:
 
-- Collapsible navigation in Floating or Fixed layout, with working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
+- Collapsible navigation with Floating, Fixed, and Minimalistic presentation, with working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
 - An alerts grid with sorting and multi-sort, constrained column resizing, visibility settings, three densities, selection, bulk actions, nested evidence, and a virtualized large-data example.
 - Choose toolbar filters or a left filter panel backed by the same filter state, with time ranges, severity histograms, and removable applied chips while the panel is closed.
 - A vertically resizable bottom sheet that spans the workspace between navigation and the assistant.
@@ -22,9 +22,9 @@ Start with **Foundations → Principles**, then open **Console → SIEM console 
 - A docked assistant with attached context, streaming, stop, retry, regenerate, feedback, and evidence navigation.
 - A detection-rule wizard with horizontal and vertical layouts, inline suggestions, YAML review, sample replay, explicit approval, and an approval audit line.
 
-For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between toolbar/sidebar filters, 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states. A trailing Actions column stays compact and pinned to the right by default; the last visible data column before it fills any spare width.
+For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines synchronized filters, search, density and column controls, sorting and resizing, selection and bulk changes, evidence expansion, editable details, and AI summaries. Presentation controls switch between toolbar/sidebar filters, 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states. Selecting rows replaces the search and table-controls row with bulk actions; clearing selection restores the unchanged search. Header indicators show sorting direction and multi-sort priority without an extra summary row. A trailing Actions column stays compact and pinned to the right by default; the last visible data column before it fills any spare width.
 
-All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers color and layout preferences.
+All records are synthetic. The default fixture has 150 alerts generated with a fixed seed and an October 6, 2026 reference clock. AI responses run locally without API keys or model requests. Console edits live in memory and reset on reload; the standalone playground remembers color and UI approach preferences.
 
 The wizard's replay evaluates eight labeled Windows process events using a deliberately limited Sigma-style subset. Unsupported conditions and log sources produce an explicit error. Connect a production rule engine through the host application before using it for operational validation.
 
@@ -131,7 +131,7 @@ pnpm install
 pnpm storybook
 ```
 
-Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and Floating/Fixed layout. Floating is the default. Console examples with an open assistant show each layout in either color theme. To run the marketing website and standalone console:
+Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and the Floating, Fixed, or Minimalistic UI approach. Floating is the default. Console examples with an open assistant show each approach in either color theme, covering six combinations. To run the marketing website and standalone console:
 
 ```sh
 pnpm dev
@@ -141,17 +141,17 @@ Use the local URL printed by Vite. The root opens the marketing website, with in
 
 ## Design principles
 
-**Two workspace layouts.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Both layouts use the same colors, typography, controls, cards, and data. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top.
+**Three UI approaches.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Floating and Fixed share their colors and interior component styling. Minimalistic adds a distinct presentation: two neutral surface fills (gray/white in light mode and a charcoal pair in dark mode), no shadows, quieter neutral borders, compact corners, and monochrome ordinary controls. Its chrome is flush like Fixed. All three preserve typography, control heights, data density, content, and interaction state. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top. Subtle horizontal dividers separate navigation groups without visible group headings.
 
-Selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. The same treatment applies in the compact rail and nested navigation.
+In Floating and Fixed, selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. Minimalistic uses neutral selection. Each approach applies its treatment consistently to the compact rail and nested navigation.
 
-**Corners stay compact.** Small, medium, and large controls are 28/34/40px high. Buttons and icon buttons use 4/5/6px corners; inputs and selects keep 6/7/8px corners. Surfaces use 10px standard corners, 12px large/floating corners, and 8px nested corners. The nested token subtracts the shared 4px step from the 12px parent radius. Chips and badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Line and dot separators each offer normal and light emphasis.
+**Corners stay compact.** Small, medium, and large controls are 28/34/40px high. Floating and Fixed buttons and icon buttons use 4/5/6px corners; inputs and selects keep 6/7/8px corners. Their surfaces use 10px standard corners, 12px large/floating corners, and 8px nested corners. The nested token subtracts the shared 4px step from the 12px parent radius. Base tags and severity badges use rounded rectangular shapes with 6px corners; checkboxes keep 4px corners. Status badges use a pill shape in every approach, including Minimalistic. Minimalistic uses 4/5/6px control corners, 6px surfaces and avatars, and 4px nested surfaces and chips, with square chrome and genuine circular markers preserved. Line and dot separators each offer normal and light emphasis.
 
 **Overflow stays usable.** Pages, tables, editors, and panels share slim, theme-aware native scrollbars. Thumbs appear while scrolling or using keyboard focus and hide again after activity stops, without changing the gutter. Hover and drag make them more prominent. Keyboard, wheel, and touch scrolling stay native; forced-colors mode keeps system styling.
 
 **Hierarchy stays clear.** Accordion bodies, navigation children, tree levels, JSON branches, and expanded table content use a shared 12px inset.
 
-**Color has a purpose.** Function blue identifies primary actions; the AI intent carries a magenta–pink–blue gradient through filled, soft, and foreground treatments. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
+**Color has a purpose.** Floating and Fixed use function blue for primary actions. All three approaches retain magenta–pink–blue gradients for AI actions and provenance. Minimalistic uses monochrome ordinary controls with restrained blue hover and focus feedback, while semantic color identifies AI, status, severity, feedback, syntax, and added or removed code. Generic tags and severity badges have transparent backgrounds with semantic outlines and dots. Status pills are borderless, with a restrained 8% semantic tint and a colored dot. All three use the theme’s primary text color across all approaches and color themes. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long alert titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density never removes investigation actions.
 
@@ -167,11 +167,11 @@ The token system has three layers:
 2. Semantic tokens: surfaces, text, borders, intent, severity, syntax, charts, and focus.
 3. Component tokens: control radii, sidebar dimensions, and grid densities.
 
-[`src/styles/tokens.css`](src/styles/tokens.css) is the color source of truth. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
+[`src/styles/tokens.css`](src/styles/tokens.css) defines the base palette; [`minimalistic-tokens.css`](src/styles/minimalistic-tokens.css) supplies the Minimalistic surface, control, and radius overrides. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
 
-Button radius tokens use 4/5/6px. Other control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners.
+The base Floating/Fixed button radius tokens use 4/5/6px. Other control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`; pill-shaped status badges are an explicit exception. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners. Minimalistic overrides the surface and control scales for its compact presentation without changing control heights.
 
-The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent layout axis uses `data-layout-theme` with `floating` or `fixed`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's two toolbar controls preview every color/layout combination without persisting a standalone preference.
+The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent UI approach uses `data-layout-theme` with `floating`, `fixed`, or `minimalistic`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's color and UI approach toolbar controls preview all six combinations without persisting a standalone preference.
 
 In a consuming application, use package imports:
 
@@ -197,7 +197,12 @@ Mount the theme hooks in your application shell to follow preferences and keep p
 'use client';
 
 import { Button } from '@dimitriszoitas/aegis-ui';
-import { useTheme, useLayoutTheme, useAutoHideScrollbars } from '@dimitriszoitas/aegis-ui/theme';
+import {
+  useTheme,
+  useLayoutTheme,
+  useAutoHideScrollbars,
+  layoutThemeOptions,
+} from '@dimitriszoitas/aegis-ui/theme';
 
 export function AppearanceControls() {
   const { theme, toggleTheme } = useTheme();
@@ -207,15 +212,24 @@ export function AppearanceControls() {
   return (
     <>
       <Button onClick={toggleTheme}>Color: {theme}</Button>
-      <Button onClick={() => setLayoutTheme(layoutTheme === 'floating' ? 'fixed' : 'floating')}>
-        Layout: {layoutTheme}
-      </Button>
+      <div role="group" aria-label="UI approach">
+        {layoutThemeOptions.map(({ value, label }) => (
+          <Button
+            key={value}
+            aria-pressed={layoutTheme === value}
+            emphasis={layoutTheme === value ? 'primary' : 'tertiary'}
+            onClick={() => setLayoutTheme(value)}
+          >
+            {label}
+          </Button>
+        ))}
+      </div>
     </>
   );
 }
 ```
 
-Theme helpers apply `.dark`, `data-theme`, and `data-layout-theme` to `<html>` so menus, dialogs, and sheets portaled outside your app root receive the same tokens. `useAutoHideScrollbars` enables the optional activity-based scrollbar behavior for that document. Imperative `applyTheme` and `applyLayoutTheme` accept `{ persist: false }` for temporary previews.
+Theme helpers apply `.dark`, `data-theme`, and `data-layout-theme` to `<html>` so menus, dialogs, and sheets portaled outside your app root receive the same tokens. `useAutoHideScrollbars` enables the optional activity-based scrollbar behavior for that document. Imperative `applyTheme` and `applyLayoutTheme` accept `{ persist: false }` for temporary previews. `layoutThemeOptions`, `layoutThemeLabels`, and `isLayoutTheme` share the supported values across controls and integrations. Existing `layoutTheme` prop names, `data-layout-theme`, and the `aegis-layout-theme` storage key remain compatible.
 
 ## Component refinements
 

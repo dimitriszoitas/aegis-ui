@@ -48,7 +48,6 @@ import {
   Pin,
   PinOff,
   RotateCcw,
-  X,
 } from '@/components/icon';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
@@ -79,6 +78,8 @@ export interface GridColumnSetting {
   hideable: boolean;
 }
 export interface DataGridToolbarApi {
+  /** Selection controls for custom toolbars; replace the normal toolbar row while present. */
+  selectionActions?: ReactNode;
   density: GridDensity;
   setDensity: (density: GridDensity) => void;
   columns: GridColumnSetting[];
@@ -211,6 +212,7 @@ export function DataGrid<T>({
 }: DataGridProps<T>) {
   const id = useId();
   const instructionsId = `${id}-instructions`;
+  const bulkRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null);
   const headerElements = useRef(new Map<string, HTMLTableCellElement>());
@@ -843,7 +845,50 @@ export function DataGrid<T>({
       },
     ];
   }
+  function clearSelection() {
+    const group = bulkRef.current;
+    const grid = group?.closest('.aegis-data-grid');
+    const restoreFocus = !!group?.contains(group.ownerDocument.activeElement);
+    table.resetRowSelection(true);
+    if (restoreFocus) {
+      requestAnimationFrame(() => {
+        const search = grid?.querySelector<HTMLInputElement>(
+          '.aegis-grid-toolbar input[type="search"]',
+        );
+        const checkbox = grid?.querySelector<HTMLButtonElement>(
+          '.aegis-grid-selection-column button',
+        );
+        (search && search.getClientRects().length ? search : checkbox)?.focus({
+          preventScroll: true,
+        });
+      });
+    }
+  }
+  const selectionActions =
+    selected.length > 0 ? (
+      <div
+        ref={bulkRef}
+        className="aegis-grid-bulk"
+        role="region"
+        aria-label="Selected alert actions"
+      >
+        {renderBulkActions ? (
+          renderBulkActions(selected, clearSelection)
+        ) : (
+          <>
+            <span>
+              <Check size={16} aria-hidden />
+              {selected.length.toLocaleString()} selected
+            </span>
+            <Button size="sm" emphasis="ghost" onClick={clearSelection}>
+              Clear selection
+            </Button>
+          </>
+        )}
+      </div>
+    ) : undefined;
   const toolbarApi: DataGridToolbarApi = {
+    selectionActions,
     density,
     setDensity,
     columns: dataColumns.map((column) => ({
@@ -896,11 +941,13 @@ export function DataGrid<T>({
           renderToolbar(toolbarApi)
         ) : (
           <>
-            <div className="aegis-grid-heading">
-              <strong>{label}</strong>
-              <span>{data.length.toLocaleString()} results</span>
-            </div>
-            <div className="aegis-grid-tools">
+            {selectionActions ?? (
+              <div className="aegis-grid-heading">
+                <strong>{label}</strong>
+                <span>{data.length.toLocaleString()} results</span>
+              </div>
+            )}
+            <div className="aegis-grid-tools" hidden={!!selectionActions}>
               <div className="aegis-grid-density" role="group" aria-label="Row density">
                 {(['compact', 'default', 'comfortable'] as const).map((value) => (
                   <button
@@ -926,22 +973,6 @@ export function DataGrid<T>({
           </>
         )}
       </div>
-      {sorting.length > 0 && (
-        <div className="aegis-grid-sort-summary">
-          <span>
-            Sorted by{' '}
-            {sorting
-              .map(
-                (sort, index) =>
-                  `${index + 1}. ${columnLabel(table.getColumn(sort.id)!)} ${sort.desc ? 'descending' : 'ascending'}`,
-              )
-              .join(', ')}
-          </span>
-          <button type="button" onClick={() => setSorting([])}>
-            Clear sorting <X size={12} aria-hidden />
-          </button>
-        </div>
-      )}
       <p className="aegis-grid-sr-only" id={instructionsId}>
         Use up and down arrows to move between rows. Press Enter to open a row, Space to select, and
         left or right arrows to collapse or expand details. Hold Shift while sorting to sort by
@@ -1013,6 +1044,11 @@ export function DataGrid<T>({
                               : sorted === 'asc'
                                 ? 'ascending'
                                 : 'descending'
+                            : undefined
+                        }
+                        aria-description={
+                          sorted
+                            ? `${sorted === 'asc' ? 'Ascending' : 'Descending'}, sort priority ${column.getSortIndex() + 1} of ${sorting.length}`
                             : undefined
                         }
                         className={cn(
@@ -1397,23 +1433,6 @@ export function DataGrid<T>({
           </span>
         )}
       </div>
-      {selected.length > 0 && (
-        <div className="aegis-grid-bulk" role="region" aria-label="Selected alert actions">
-          {renderBulkActions ? (
-            renderBulkActions(selected, () => table.resetRowSelection(true))
-          ) : (
-            <>
-              <span>
-                <Check size={16} aria-hidden />
-                {selected.length.toLocaleString()} selected
-              </span>
-              <Button size="sm" emphasis="ghost" onClick={() => table.resetRowSelection(true)}>
-                Clear selection
-              </Button>
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 }

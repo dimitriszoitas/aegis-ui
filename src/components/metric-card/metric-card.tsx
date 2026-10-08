@@ -16,6 +16,8 @@ export interface MetricCardProps extends Omit<CardProps, 'children'> {
   sparkline?: readonly number[];
   sparklineLabel?: string;
   sparklineVariant?: SparklineProps['variant'];
+  /** Gives the metric a semantic accent, independently of whether its delta is favorable. */
+  intent?: SparklineProps['intent'];
   loading?: boolean;
   format?: Intl.NumberFormatOptions;
 }
@@ -29,6 +31,7 @@ export function MetricCard({
   sparkline,
   sparklineLabel,
   sparklineVariant = 'line',
+  intent,
   loading = false,
   format,
   className,
@@ -42,6 +45,7 @@ export function MetricCard({
     <Card
       {...props}
       className={cn('aegis-metric-card', className)}
+      data-intent={intent}
       aria-label={label}
       aria-busy={loading || undefined}
     >
@@ -68,7 +72,7 @@ export function MetricCard({
               <Sparkline
                 data={sparkline}
                 variant={sparklineVariant}
-                intent={trend === 'neutral' ? 'function' : trend}
+                intent={intent ?? (trend === 'neutral' ? 'function' : trend)}
                 label={sparklineLabel ?? `${label} over the last 24 hours`}
               />
             )}

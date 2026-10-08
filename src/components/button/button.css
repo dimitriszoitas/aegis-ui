@@ -150,6 +150,8 @@
 }
 .button-group > .aegis-button {
   border-radius: 0;
+}
+.button-group > .aegis-button:not(:last-child) {
   border-inline-end: 1px solid var(--color-border-default);
 }
 .button-group > .aegis-button:first-child {
@@ -159,9 +161,6 @@
 .button-group > .aegis-button:last-child {
   border-start-end-radius: var(--button-radius);
   border-end-end-radius: var(--button-radius);
-}
-.button-group > .aegis-button:last-child:not([data-emphasis='tertiary']) {
-  border-inline-end: 0;
 }
 .button-group > .aegis-button:focus-visible {
   z-index: 1;

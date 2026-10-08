@@ -9,13 +9,13 @@ Figtree supports fast scanning across a dense analyst workspace. JetBrains Mono 
 
 ## Typography
 
-Use 14px for the default interface and 13px for dense data grids. The primitive type scale still spans 12–30px. Semantic titles use 24px for pages, 16px for panels, and 15px for sections; compact chart headings use 14px. Titles use medium weight (500), while body text stays regular (400) and stronger emphasis is reserved for meaningful content. Metric values use 28px with tabular numerals. Use 12px for supporting labels. Sentence case keeps labels readable and direct.
+Use 14px for the default interface and 13px for dense data grids. The primitive type scale still spans 12–30px. Semantic titles use 24px for pages, 16px for panels, and 15px for sections; compact chart headings use 14px. Titles use medium weight (500), while body text stays regular (400) and stronger emphasis is reserved for meaningful content. Metric values use 28px at weight 700 with tabular numerals; their labels use weight 500. An optional semantic intent colors both the value and sparkline when the metric has a meaningful status, such as critical alerts or resolved work. Use 12px for supporting labels. Sentence case keeps labels readable and direct.
 
 <TypographyExamples />
 
 ## Motion
 
-Fast motion gives immediate control feedback; base motion connects small state changes; slide motion introduces a floating sheet. Ease-out curves settle quickly. Sidebar width and padding transition over `--motion-fast` (120ms), from 240px wide with 12px interior padding to 48px wide with 12px vertical and 6px horizontal padding. Labels fade and clip without wrapping. Floating navigation uses 12px expanded and 8px collapsed corners; Fixed chrome uses square outside corners. Layout switching changes exterior geometry, not colors or typography, and radius is not animated. The toggle stays at the top in both states, preserving a stable target. Sheets slide and fade.
+Fast motion gives immediate control feedback; base motion connects small state changes; slide motion introduces a floating sheet. Ease-out curves settle quickly. Sidebar width and padding transition over `--motion-fast` (120ms), from 240px wide with 12px interior padding to 48px wide with 12px vertical and 6px horizontal padding. Labels fade and clip without wrapping. Floating navigation uses 12px expanded and 8px collapsed corners; Fixed and Minimalistic chrome use square outside corners. Floating/Fixed switching changes exterior geometry; Minimalistic also changes surfaces, control styling, and corner scale. Typography and control heights remain consistent across all three, and radius is not animated. The toggle stays at the top in both states, preserving a stable target. Sheets slide and fade.
 
 <MotionExamples />
 

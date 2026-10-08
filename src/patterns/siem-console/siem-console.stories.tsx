@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { SiemConsole } from './siem-console';
+import { isLayoutTheme, layoutThemeLabels, layoutThemeOptions } from '@/lib/layout-theme';
 
 const meta = {
   title: 'Console/SIEM console',
@@ -16,7 +17,7 @@ const meta = {
         {...args}
         theme={globals.theme === 'dark' ? 'dark' : 'light'}
         onThemeChange={(theme) => updateGlobals({ theme })}
-        layoutTheme={globals.layoutTheme === 'fixed' ? 'fixed' : 'floating'}
+        layoutTheme={isLayoutTheme(globals.layoutTheme) ? globals.layoutTheme : 'floating'}
         onLayoutThemeChange={
           context.parameters.layoutThemeLocked
             ? undefined
@@ -62,6 +63,20 @@ export const FixedLayout: Story = {
     },
   },
 };
+export const Minimalistic: Story = {
+  globals: { layoutTheme: 'minimalistic' },
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: {
+    layoutThemeLocked: true,
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'A quieter presentation with two neutral surfaces, no shadows, 4–6px corners, retained AI gradients, and color reserved for meaning. Switch the color toolbar to compare light and dark; use Alerts to switch all three UI approaches interactively.',
+      },
+    },
+  },
+};
 export const LayoutSwitching: Story = {
   args: { defaultNavCollapsed: true },
   parameters: {
@@ -69,7 +84,7 @@ export const LayoutSwitching: Story = {
       story: { inline: false, height: 920 },
       description: {
         story:
-          'Switching layout preserves the active search and selected records. Color remains an independent choice.',
+          'Switching through Floating, Fixed, and Minimalistic preserves the active search and selected records. Light or dark remains an independent choice.',
       },
     },
   },
@@ -77,9 +92,8 @@ export const LayoutSwitching: Story = {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
     const root = canvasElement.ownerDocument.documentElement;
-    const initial = globals.layoutTheme === 'fixed' ? 'Fixed' : 'Floating';
-    const next = initial === 'Fixed' ? 'Floating' : 'Fixed';
-    await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', initial.toLowerCase()), {
+    const initial = isLayoutTheme(globals.layoutTheme) ? globals.layoutTheme : 'floating';
+    await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', initial), {
       timeout: 10000,
     });
     const colorSwitchLabel = canvas
@@ -90,24 +104,27 @@ export const LayoutSwitching: Story = {
     const selected = canvas.getAllByRole('checkbox', { name: /^Select ALR-/ })[0];
     const label = selected.getAttribute('aria-label')!;
     await userEvent.click(selected);
-    await step('Switch layout while keeping the investigation state', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: `Layout theme: ${initial}` }));
-      await userEvent.click(body.getByRole('menuitemradio', { name: next }));
-      await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', next.toLowerCase()), {
-        timeout: 10000,
-      });
-      await expect(canvas.getByRole('searchbox', { name: 'Search alerts' })).toHaveValue(
-        'powershell',
-      );
-      await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
-      await expect(canvas.getByRole('button', { name: colorSwitchLabel })).toBeVisible();
-      await userEvent.click(canvas.getByRole('button', { name: `Layout theme: ${next}` }));
-      await userEvent.click(body.getByRole('menuitemradio', { name: initial }));
-      await waitFor(
-        () => expect(root).toHaveAttribute('data-layout-theme', initial.toLowerCase()),
-        { timeout: 10000 },
-      );
-      await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
+    await step('Switch every UI approach while keeping the investigation state', async () => {
+      let current = initial;
+      const route = [
+        ...layoutThemeOptions.map(({ value }) => value).filter((value) => value !== initial),
+        initial,
+      ];
+      for (const next of route) {
+        await userEvent.click(
+          canvas.getByRole('button', { name: `UI approach: ${layoutThemeLabels[current]}` }),
+        );
+        await userEvent.click(body.getByRole('menuitemradio', { name: layoutThemeLabels[next] }));
+        await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', next), {
+          timeout: 10000,
+        });
+        await expect(canvas.getByRole('searchbox', { name: 'Search alerts' })).toHaveValue(
+          'powershell',
+        );
+        await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
+        await expect(canvas.getByRole('button', { name: colorSwitchLabel })).toBeVisible();
+        current = next;
+      }
     });
     await userEvent.click(canvas.getByRole('checkbox', { name: label }));
     await userEvent.clear(canvas.getByRole('searchbox', { name: 'Search alerts' }));

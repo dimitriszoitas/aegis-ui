@@ -22,6 +22,7 @@ export const ConsoleMetrics: StoryObj<typeof meta> = {
       />
       <MetricCard
         label="Critical alerts"
+        intent="destroy"
         value={alerts.filter((alert) => alert.severity === 'critical').length}
         delta={-8.3}
         trendIsPositive
@@ -29,6 +30,7 @@ export const ConsoleMetrics: StoryObj<typeof meta> = {
       />
       <MetricCard
         label="Mean time to resolution"
+        intent="success"
         value={24}
         unit="min"
         delta={-18.2}

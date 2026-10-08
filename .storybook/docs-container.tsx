@@ -9,7 +9,7 @@ import {
 } from 'storybook/preview-api';
 import { create } from 'storybook/theming';
 import { applyTheme, type Theme } from '../src/lib/theme';
-import { applyLayoutTheme, type LayoutTheme } from '../src/lib/layout-theme';
+import { applyLayoutTheme, isLayoutTheme, type LayoutTheme } from '../src/lib/layout-theme';
 import { useAutoHideScrollbars } from '../src/lib/scrollbars';
 
 const docsThemeAttribute = 'data-aegis-docs-theme';
@@ -31,7 +31,7 @@ function readDocsTheme(root: HTMLElement | null): Theme | undefined {
   return theme === 'light' || theme === 'dark' ? theme : undefined;
 }
 function layoutTheme(value: unknown): LayoutTheme | undefined {
-  return value === 'floating' || value === 'fixed' ? value : undefined;
+  return isLayoutTheme(value) ? value : undefined;
 }
 function LayoutThemeBoundary({ layout, children }: PropsWithChildren<{ layout: LayoutTheme }>) {
   useAutoHideScrollbars();
@@ -100,7 +100,7 @@ function initialLayoutTheme(context: DocsContainerProps['context']): LayoutTheme
   }
   for (const search of searches) {
     const globals = new URLSearchParams(search).get('globals') ?? '';
-    const layout = layoutTheme(globals.match(/(?:^|;)layoutTheme:(floating|fixed)(?:;|$)/)?.[1]);
+    const layout = layoutTheme(globals.match(/(?:^|;)layoutTheme:([^;]+)(?:;|$)/)?.[1]);
     if (layout) return layout;
   }
   try {

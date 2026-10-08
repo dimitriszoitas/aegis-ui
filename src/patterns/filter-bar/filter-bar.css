@@ -4,6 +4,7 @@
   gap: var(--space-3);
   min-width: 0;
   padding: var(--space-4);
+  padding-inline-start: var(--filter-bar-inline-start, var(--space-4));
   color: var(--color-text-primary);
   background: var(--color-bg-surface);
   border-bottom: 1px solid var(--color-border-subtle);
@@ -17,6 +18,7 @@
   flex-wrap: wrap;
 }
 .aegis-filter-bar-main {
+  min-height: 34px;
   gap: var(--space-3);
 }
 .aegis-filter-search {
@@ -58,4 +60,14 @@
 
 .aegis-filter-picker > .aegis-button {
   justify-self: end;
+}
+
+.aegis-filter-bar-main[hidden] {
+  display: none;
+}
+.aegis-filter-bar-selection {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  min-width: 0;
 }

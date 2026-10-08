@@ -24,7 +24,6 @@ export function SeverityBadge({ severity, compact = false, className = '' }: Sev
       style={
         {
           '--severity-fg': `var(--color-severity-${severity}-fg)`,
-          '--severity-bg': `var(--color-severity-${severity}-bg)`,
           '--severity-border': `var(--color-severity-${severity}-border)`,
         } as CSSProperties
       }

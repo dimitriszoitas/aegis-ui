@@ -180,7 +180,18 @@ export const FullPresentation: Story = {
       await user.keyboard('{Shift>}');
       await user.click(grid.getByRole('button', { name: 'Events' }));
       await user.keyboard('{/Shift}');
-      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events ascending/)).toBeVisible();
+      for (const [id, rank] of [
+        ['severity', '1'],
+        ['eventCount', '2'],
+      ] as const) {
+        const header = canvasElement.querySelector(`th[data-column-id="${id}"]`);
+        await expect(header).toHaveAttribute('aria-sort', 'other');
+        await expect(header).toHaveAttribute(
+          'aria-description',
+          `Ascending, sort priority ${rank} of 2`,
+        );
+        await expect(header?.querySelector('sup')).toHaveTextContent(rank);
+      }
       const resize = grid.getByRole('separator', { name: 'Resize Alert column' });
       const previous = Number(resize.getAttribute('aria-valuenow'));
       resize.focus();
@@ -202,7 +213,18 @@ export const FullPresentation: Story = {
         '151',
       );
       await expect(grid.getAllByRole('row').length).toBeLessThan(151);
-      await expect(canvas.getByText(/1\. Severity ascending, 2\. Events ascending/)).toBeVisible();
+      for (const [id, rank] of [
+        ['severity', '1'],
+        ['eventCount', '2'],
+      ] as const) {
+        const header = canvasElement.querySelector(`th[data-column-id="${id}"]`);
+        await expect(header).toHaveAttribute('aria-sort', 'other');
+        await expect(header).toHaveAttribute(
+          'aria-description',
+          `Ascending, sort priority ${rank} of 2`,
+        );
+        await expect(header?.querySelector('sup')).toHaveTextContent(rank);
+      }
       for (const label of selectedLabels)
         await expect(grid.getByRole('checkbox', { name: label })).toBeChecked();
       await user.click(canvas.getByRole('combobox', { name: 'Browsing mode' }));
@@ -323,14 +345,17 @@ export const HeaderControls: Story = {
       await user.unhover(edge);
       await expect(guide).not.toBeVisible();
     });
-    await step('Start numeric sorting ascending and then descending', async () => {
+    await step('Sort ascending, descending, and clear from the header', async () => {
       await user.click(canvas.getByRole('button', { name: 'Events' }));
       await expect(header('eventCount')).toHaveAttribute('aria-sort', 'ascending');
       await user.click(canvas.getByRole('button', { name: 'Events' }));
       await expect(header('eventCount')).toHaveAttribute('aria-sort', 'descending');
       await menu('Events', 'Sort A to Z');
       await expect(header('eventCount')).toHaveAttribute('aria-sort', 'ascending');
-      await user.click(canvas.getByRole('button', { name: 'Clear sorting' }));
+      await user.click(canvas.getByRole('button', { name: 'Events' }));
+      await expect(header('eventCount')).toHaveAttribute('aria-sort', 'descending');
+      await user.click(canvas.getByRole('button', { name: 'Events' }));
+      await expect(header('eventCount')).not.toHaveAttribute('aria-sort');
     });
     await step('Pin and unpin a column without losing its menu', async () => {
       await menu('Entity', 'Pin right');
@@ -367,11 +392,13 @@ export const DensityMatrix: Story = {
           data={alerts.slice(0, 3)}
           density={density}
           pagination={false}
-          renderToolbar={() => (
-            <strong style={{ textTransform: 'capitalize', fontSize: 'var(--text-sm)' }}>
-              {density} density
-            </strong>
-          )}
+          renderToolbar={(api) =>
+            api.selectionActions ?? (
+              <strong style={{ textTransform: 'capitalize', fontSize: 'var(--text-sm)' }}>
+                {density} density
+              </strong>
+            )
+          }
         />
       ))}
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { alerts as fixtures, analysts, referenceTime, type Alert } from '@/sample-data';
 import { SideSheet, SideSheetSection, SideSheetField } from '@/components/side-sheet';
 import { SeverityBadge } from '@/components/severity-badge';
@@ -90,6 +90,31 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
+export const BulkToolbar: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const query = 'powershell';
+    await userEvent.type(canvas.getByRole('searchbox', { name: 'Search alerts' }), query);
+    await userEvent.click(canvas.getAllByRole('checkbox', { name: /^Select ALR-/ })[0]);
+    const bulk = canvas.getByRole('region', { name: 'Bulk alert actions' });
+    await expect(bulk).toBeVisible();
+    await expect(bulk.closest('.aegis-grid-toolbar')).not.toBeNull();
+    await expect(
+      canvas.queryByRole('searchbox', { name: 'Search alerts' }),
+    ).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('group', { name: 'Row density' })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: 'Column settings' })).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear selected alerts' }));
+    await expect(
+      canvas.queryByRole('region', { name: 'Bulk alert actions' }),
+    ).not.toBeInTheDocument();
+    const search = canvas.getByRole('searchbox', { name: 'Search alerts' });
+    await expect(search).toHaveValue(query);
+    await waitFor(() => expect(search).toHaveFocus());
+    await expect(canvas.getByRole('group', { name: 'Row density' })).toBeVisible();
+    await userEvent.clear(search);
+  },
+};
 export const PushFilters: Story = { render: () => <ExplorerDemo panelOpen /> };
 export const BarFilters: Story = {
   render: () => <ExplorerDemo filterMode="bar" />,
@@ -111,9 +136,7 @@ export const FilterSynchronization: Story = {
     await expect(
       c.queryByRole('button', { name: 'Remove Critical severity filter' }),
     ).not.toBeInTheDocument();
-    await expect(
-      c.queryByRole('button', { name: 'Add filter' }),
-    ).not.toBeInTheDocument();
+    await expect(c.queryByRole('button', { name: 'Add filter' })).not.toBeInTheDocument();
     await userEvent.click(c.getByRole('button', { name: 'Hide filter panel' }));
     await expect(c.getByRole('button', { name: 'Remove Critical severity filter' })).toBeVisible();
     await userEvent.click(c.getByRole('button', { name: 'Remove Critical severity filter' }));

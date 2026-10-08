@@ -54,8 +54,6 @@ export function StatusBadge({ status }: StatusBadgeProps) {
               : intent === 'default'
                 ? 'var(--color-text-secondary)'
                 : `var(--color-${intent}-fg)`,
-          '--status-bg':
-            intent === 'default' ? 'var(--color-bg-hover)' : `var(--color-${intent}-soft)`,
         } as CSSProperties
       }
     >

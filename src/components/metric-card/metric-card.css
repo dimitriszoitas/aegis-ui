@@ -2,8 +2,24 @@
   padding: var(--layout-card-padding);
   min-width: 0;
 }
+.aegis-metric-card[data-intent='function'] {
+  --metric-accent: var(--color-function-fg);
+}
+.aegis-metric-card[data-intent='success'] {
+  --metric-accent: var(--color-success-fg);
+}
+.aegis-metric-card[data-intent='warning'] {
+  --metric-accent: var(--color-warning-fg);
+}
+.aegis-metric-card[data-intent='destroy'] {
+  --metric-accent: var(--color-destroy-fg);
+}
+.aegis-metric-card[data-intent='ai'] {
+  --metric-accent: var(--color-ai-fg);
+}
 .aegis-metric-label {
   font-size: var(--text-sm);
+  font-weight: 500;
   color: var(--color-text-secondary);
   margin-bottom: var(--space-2);
 }
@@ -17,8 +33,8 @@
 .aegis-metric-value {
   flex: 0 0 auto;
   max-width: 100%;
-  color: var(--color-text-primary);
-  font-weight: var(--title-weight);
+  color: var(--metric-accent, var(--color-text-primary));
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
   font-size: var(--metric-value-size);

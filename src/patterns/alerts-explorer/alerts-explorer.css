@@ -37,6 +37,16 @@
   padding: 0;
   border-bottom: 0;
 }
+.aegis-alerts-results .aegis-filter-bar {
+  --filter-bar-inline-start: var(--grid-content-inset);
+}
+/* Center the 34px filter trigger over the selection checkbox's 44px column. */
+.aegis-alerts-results
+  .aegis-filter-bar[data-filter-mode='panel']
+  .aegis-filter-bar-main
+  > .aegis-icon-button:first-child {
+  margin-inline-start: calc((var(--grid-checkbox-size) - 34px) / 2);
+}
 .aegis-alert-title {
   display: grid;
   gap: 2px;

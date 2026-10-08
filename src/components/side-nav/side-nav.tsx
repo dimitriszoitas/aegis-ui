@@ -244,14 +244,14 @@ export function SideNav({
       </NavTooltip>
       <div className="nav-sections">
         {sections.map((section, index) => (
-          <section key={section.label ?? index}>
-            {section.label && (
-              <h2 className="nav-section-label" aria-hidden={collapsed}>
-                {section.label}
-              </h2>
-            )}
+          <div
+            key={section.label ?? index}
+            className="nav-section"
+            role="group"
+            aria-label={section.label}
+          >
             <div className="nav-items">{section.items.map((item) => renderItem(item))}</div>
-          </section>
+          </div>
         ))}
       </div>
       <div className="nav-footer">{typeof footer === 'function' ? footer(collapsed) : footer}</div>

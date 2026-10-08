@@ -9,6 +9,9 @@
   user-select: none !important;
 }
 .aegis-data-grid {
+  --grid-selection-width: 44px;
+  --grid-checkbox-size: 18px;
+  --grid-content-inset: var(--space-4);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -21,9 +24,13 @@
   box-shadow: var(--shadow-raised);
   font-family: var(--font-ui);
 }
+.aegis-data-grid:has(.aegis-grid-selection-column) {
+  --grid-content-inset: calc((var(--grid-selection-width) - var(--grid-checkbox-size)) / 2);
+}
 .aegis-grid-toolbar {
   min-height: 60px;
   padding: var(--space-3) var(--space-4);
+  padding-inline-start: var(--grid-content-inset);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -73,28 +80,8 @@
   color: var(--color-text-primary);
   box-shadow: var(--shadow-raised);
 }
-.aegis-grid-sort-summary {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
-  color: var(--color-text-secondary);
-  background: var(--color-function-soft);
-  font-size: 11px;
-}
-.aegis-grid-sort-summary button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: 2px var(--space-1);
-  border: 0;
-  border-radius: var(--radius-xs);
-  background: transparent;
-  color: var(--color-function-fg);
-  font: inherit;
-  cursor: pointer;
+.aegis-grid-tools[hidden] {
+  display: none;
 }
 .aegis-grid-viewport {
   position: relative;
@@ -328,8 +315,8 @@
   box-shadow: -1px 0 0 var(--color-border-subtle);
 }
 .aegis-grid-selection-column {
-  width: 44px;
-  min-width: 44px;
+  width: var(--grid-selection-width);
+  min-width: var(--grid-selection-width);
 }
 .aegis-grid-table > thead > tr > th.aegis-grid-selection-column,
 .aegis-grid-table > tbody > tr > td.aegis-grid-selection-column {
@@ -339,6 +326,8 @@
   justify-content: center;
 }
 .aegis-grid-selection-column .aegis-checkbox-control {
+  width: var(--grid-checkbox-size);
+  height: var(--grid-checkbox-size);
   margin-top: 0;
 }
 .aegis-grid-table > thead > tr > th.aegis-grid-pinned {
@@ -385,6 +374,7 @@
 }
 .aegis-grid-footer {
   padding: var(--space-2) var(--space-4);
+  padding-inline-start: var(--grid-content-inset);
   border-top: 1px solid var(--color-border-subtle);
   color: var(--color-text-secondary);
   font-size: var(--text-xs);
@@ -395,21 +385,13 @@
   border-top: 0;
 }
 .aegis-grid-bulk {
-  position: sticky;
-  bottom: var(--space-3);
-  align-self: center;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
   gap: var(--space-3);
-  max-width: calc(100% - var(--space-6));
-  margin: var(--space-3) auto;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-xl);
-  background: var(--color-bg-surface-raised);
-  box-shadow: var(--shadow-floating);
-  z-index: calc(var(--z-sticky) + 1);
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
   font-size: var(--text-sm);
 }
 .aegis-grid-bulk > span {
@@ -419,15 +401,20 @@
   white-space: nowrap;
 }
 .aegis-grid-bulk .aegis-bulk-actions {
+  width: 100%;
+  max-width: 100%;
   position: static;
   margin: 0;
   border: 0;
   padding: 0;
   box-shadow: none;
   transform: none;
+  animation: none;
+}
+.aegis-grid-bulk .aegis-bulk-actions-row {
+  justify-content: flex-start;
 }
 .aegis-grid-density button:focus-visible,
-.aegis-grid-sort-summary button:focus-visible,
 .aegis-grid-sort-button:focus-visible,
 .aegis-grid-expand:focus-visible {
   outline: 2px solid var(--ring-focus);

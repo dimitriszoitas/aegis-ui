@@ -15,7 +15,7 @@
   color: var(--color-text-primary);
   box-shadow: var(--chrome-shadow);
 }
-[data-layout-theme='fixed'] .aegis-bottom-sheet {
+:is([data-layout-theme='fixed'], [data-layout-theme='minimalistic']) .aegis-bottom-sheet {
   border-inline: 0;
   border-bottom: 0;
 }

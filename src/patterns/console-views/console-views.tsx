@@ -24,7 +24,7 @@ import { List, ListItem } from '@/components/list';
 import { MetricCard } from '@/components/metric-card';
 import { RadioGroup } from '@/components/radio-group';
 import { Separator } from '@/components/separator';
-import type { LayoutTheme } from '@/lib/layout-theme';
+import { layoutThemeLabels, type LayoutTheme } from '@/lib/layout-theme';
 import { formatRelativeTime } from '@/components/relative-time';
 import { SearchInput } from '@/components/search-input';
 import { Select } from '@/components/select';
@@ -816,7 +816,7 @@ export function ConsoleSettings({
             <Separator emphasis="light" />
             {onLayoutThemeChange ? (
               <RadioGroup
-                label="Layout theme"
+                label="UI approach"
                 value={layoutTheme}
                 onValueChange={(value) => onLayoutThemeChange(value as LayoutTheme)}
                 options={[
@@ -830,12 +830,18 @@ export function ConsoleSettings({
                     label: 'Fixed',
                     description: 'Full-height navigation and assistant panels at the edges.',
                   },
+                  {
+                    value: 'minimalistic',
+                    label: 'Minimalistic',
+                    description:
+                      'Two neutral surfaces, tight corners, no shadows. Color carries meaning.',
+                  },
                 ]}
               />
             ) : (
               <div className="aegis-console-readonly-setting">
-                <span>Layout theme</span>
-                <Tag>{layoutTheme === 'fixed' ? 'Fixed' : 'Floating'}</Tag>
+                <span>UI approach</span>
+                <Tag>{layoutThemeLabels[layoutTheme]}</Tag>
               </div>
             )}
           </CardContent>
