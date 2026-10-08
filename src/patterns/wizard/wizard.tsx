@@ -119,10 +119,6 @@ export function Wizard({
       data-orientation={orientation}
       {...props}
     >
-      <header className="aegis-wizard-header">
-        <h2 id={titleId}>{title}</h2>
-        {description && <p>{description}</p>}
-      </header>
       <div className="aegis-wizard-body">
         <div className="aegis-wizard-progress">
           <Stepper
@@ -138,61 +134,67 @@ export function Wizard({
             disabled={pending}
           />
         </div>
-        <div
-          className="aegis-wizard-content"
-          aria-labelledby={contentTitleId}
-          aria-busy={pending || undefined}
-        >
-          <div className="aegis-wizard-step-heading">
-            <p>
-              Step {currentStep + 1} of {steps.length}
-            </p>
-            <h3 ref={titleRef} tabIndex={-1} id={contentTitleId}>
-              {step.title}
-            </h3>
+        <div className="aegis-wizard-panel">
+          <header className="aegis-wizard-header">
+            <h2 id={titleId}>{title}</h2>
+            {description && <p>{description}</p>}
+          </header>
+          <div
+            className="aegis-wizard-content"
+            aria-labelledby={contentTitleId}
+            aria-busy={pending || undefined}
+          >
+            <div className="aegis-wizard-step-heading">
+              <p>
+                Step {currentStep + 1} of {steps.length}
+              </p>
+              <h3 ref={titleRef} tabIndex={-1} id={contentTitleId}>
+                {step.title}
+              </h3>
+            </div>
+            {error?.step === currentStep && (
+              <Banner intent="destroy" title="Review this step">
+                {error.message}
+              </Banner>
+            )}
+            <fieldset className="aegis-wizard-step-content" disabled={pending}>
+              <legend className="sr-only">{step.title}</legend>
+              {step.content}
+            </fieldset>
           </div>
-          {error?.step === currentStep && (
-            <Banner intent="destroy" title="Review this step">
-              {error.message}
-            </Banner>
-          )}
-          <fieldset className="aegis-wizard-step-content" disabled={pending}>
-            <legend className="sr-only">{step.title}</legend>
-            {step.content}
-          </fieldset>
+          <footer className="aegis-wizard-footer">
+            <div>
+              {onCancel && (
+                <Button
+                  emphasis="ghost"
+                  disabled={pending}
+                  onClick={() => (dirty ? setGuardOpen(true) : onCancel())}
+                >
+                  {cancelLabel}
+                </Button>
+              )}
+            </div>
+            <div className="row">
+              <Button
+                emphasis="ghost"
+                disabled={pending || currentStep === 0}
+                leadingIcon={<ArrowLeft size={15} />}
+                onClick={() => move(currentStep - 1)}
+              >
+                Back
+              </Button>
+              <Button
+                intent="function"
+                loading={pending}
+                trailingIcon={isLast ? <Check size={15} /> : <ArrowRight size={15} />}
+                onClick={advance}
+              >
+                {isLast ? finishLabel : 'Continue'}
+              </Button>
+            </div>
+          </footer>
         </div>
       </div>
-      <footer className="aegis-wizard-footer">
-        <div>
-          {onCancel && (
-            <Button
-              emphasis="ghost"
-              disabled={pending}
-              onClick={() => (dirty ? setGuardOpen(true) : onCancel())}
-            >
-              {cancelLabel}
-            </Button>
-          )}
-        </div>
-        <div className="row">
-          <Button
-            emphasis="ghost"
-            disabled={pending || currentStep === 0}
-            leadingIcon={<ArrowLeft size={15} />}
-            onClick={() => move(currentStep - 1)}
-          >
-            Back
-          </Button>
-          <Button
-            intent="function"
-            loading={pending}
-            trailingIcon={isLast ? <Check size={15} /> : <ArrowRight size={15} />}
-            onClick={advance}
-          >
-            {isLast ? finishLabel : 'Continue'}
-          </Button>
-        </div>
-      </footer>
       <ConfirmDialog
         open={guardOpen}
         onOpenChange={setGuardOpen}

@@ -278,8 +278,9 @@
   width: 376px;
 }
 .aegis-console-wizard {
-  max-width: 1200px;
-  margin-inline: auto;
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: 0;
 }
 .aegis-console-wizard-toolbar {
   display: flex;

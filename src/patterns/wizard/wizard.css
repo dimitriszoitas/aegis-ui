@@ -1,6 +1,20 @@
 .aegis-wizard {
   width: 100%;
   max-width: 1040px;
+  min-width: 0;
+  align-self: start;
+  justify-self: start;
+  container-type: inline-size;
+  container-name: wizard;
+}
+.aegis-wizard-body {
+  display: grid;
+  align-items: start;
+  gap: var(--space-5);
+}
+.aegis-wizard-panel,
+.aegis-wizard-progress {
+  min-width: 0;
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--surface-corner-radius, var(--surface-radius-floating));
@@ -63,22 +77,11 @@
   gap: var(--space-4);
 }
 .aegis-wizard[data-orientation='vertical'] .aegis-wizard-body {
-  display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
 }
-.aegis-wizard[data-orientation='vertical'] .aegis-wizard-progress {
-  border-right: 1px solid var(--color-border-subtle);
-}
-.aegis-wizard[data-orientation='vertical'] .aegis-wizard-content {
-  padding-top: var(--layout-panel-padding);
-}
-@media (max-width: 660px) {
+@container wizard (max-width: 660px) {
   .aegis-wizard[data-orientation='vertical'] .aegis-wizard-body {
     grid-template-columns: 1fr;
-  }
-  .aegis-wizard[data-orientation='vertical'] .aegis-wizard-progress {
-    border-right: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
   }
   .aegis-wizard-header,
   .aegis-wizard-progress,

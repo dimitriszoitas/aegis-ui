@@ -31,7 +31,7 @@ Each intent provides a fill, foreground, and soft surface. Use the function inte
 
 Across all three approaches, AI carries three distinct stops—magenta, pink, then blue—through every emphasis. Dedicated `--color-ai-*`, `--color-ai-pink-*`, and `--color-ai-blue-*` tokens keep the AI palette independent from function blue. Primary buttons use the filled `--gradient-ai`; secondary buttons use `--gradient-ai-soft`; tertiary buttons add `--gradient-ai-border` around a quiet surface. AI text and icons use `--gradient-ai-text`, including text-only ghost buttons. Generated-content containers use the quieter `--gradient-ai-surface`. These tokens adapt in both themes, and the sparkles marker keeps AI identifiable beyond color.
 
-Success uses a warm green. Warning uses orange-yellow tints with a stronger ochre foreground in light mode to preserve text contrast. Medium severity follows the same warning palette. Generic tags and severity badges use transparent backgrounds. Status badges use a borderless pill shape with a restrained 8% semantic tint and a colored dot, including in Minimalistic. All three use primary theme text in every approach and color theme; generic tags and severity badges carry semantic color in their outlines and dots.
+Success uses a warm green. Warning uses orange-yellow tints with a stronger ochre foreground in light mode to preserve text contrast. Medium severity follows the same warning palette. Generic tags and severity badges use transparent backgrounds. Status badges use a borderless pill shape with a restrained 8% semantic tint and a colored dot, including in Minimalistic. All three use primary theme text in every approach and color theme; generic tags carry semantic color in their outlines and dots, while labeled severity badges use a semantic outline without a dot.
 
 <IntentExamples />
 
@@ -39,7 +39,7 @@ Minimalistic keeps ordinary controls monochrome with restrained blue hover and f
 
 ## Severity
 
-Severity measures alert urgency. Every level uses primary theme text on a transparent background, with a semantic outline and dot. Keep the visible label even when the surrounding interface uses compact badges; dot-only variants need an accessible name.
+Severity measures alert urgency. Labeled badges use primary theme text on a transparent background with a semantic outline and no dot in every approach and color theme. The explicit compact variant retains a colored dot and an accessible severity name.
 
 <SeverityExamples />
 

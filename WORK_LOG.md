@@ -108,6 +108,13 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Updated foundation guidance, consumption examples, and the console's layout-switching story. Type checking, lint, semantic-token validation, all 15 logic tests, and the final website, package, and Storybook builds pass. The built package exposes the Minimalistic helpers, types, and styles correctly. Eight mode-switching checks and isolated-docs inheritance pass; independent verification covers all six approach/color combinations, mobile gallery/portals, outlined tags and pill statuses, 16 calendar cases, and 48 grid alignment checks plus working bulk assignment/status/AI actions. Browser evidence is under ignored `test-results/minimalistic/`, `test-results/outlined-tags/`, and `test-results/calendar-refinement/`.
 - Started the requested local Storybook development server on port 6008 because 6006 belongs to another project. The Minimalistic story is open in the app; the Vite console remains on 5173.
 
+## Header, wizard, and dark-theme refinements
+
+- Added a subtle canvas fill to DataGrid headers across approaches and color themes, including pinned cells and column-menu buttons.
+- Separated wizard progress and form into independent cards. Vertical layouts align both cards at the top; horizontal layouts place progress above the form. The console and standalone example align to the left, and narrow containers stack without overflow.
+- Reduced Minimalistic dark structural borders to near-surface neutrals and removed the selected navigation border. Semantic outlines and keyboard focus indicators remain distinct. Labeled severity badges now show only their label and colored outline; the explicit compact indicator keeps its accessible dot.
+- Type checking, lint, token validation, and Storybook/package builds pass. Focused browser checks cover header fills, pinned cells, dark borders, navigation focus, and ten wizard layout/interaction cases, including mobile, validation, forward/back navigation, and focus restoration. Proofs are in ignored `test-results/minimalistic/` and `test-results/wizard-separate-cards/`.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

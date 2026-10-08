@@ -28,8 +28,7 @@ export function SeverityBadge({ severity, compact = false, className = '' }: Sev
         } as CSSProperties
       }
     >
-      <span className="severity-dot" aria-hidden />
-      {!compact && severityLabels[severity]}
+      {compact ? <span className="severity-dot" aria-hidden /> : severityLabels[severity]}
     </span>
   );
 }

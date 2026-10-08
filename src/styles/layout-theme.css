@@ -41,7 +41,8 @@
     .aegis-chart-container,
     .aegis-ai-card,
     .aegis-ai-highlight,
-    .aegis-wizard,
+    .aegis-wizard-panel,
+    .aegis-wizard-progress,
     .aegis-alerts-explorer,
     .aegis-console-alert-card,
     .aegis-modal
@@ -52,7 +53,8 @@
     .aegis-chart-container,
     .aegis-ai-card,
     .aegis-ai-highlight,
-    .aegis-wizard,
+    .aegis-wizard-panel,
+    .aegis-wizard-progress,
     .aegis-alerts-explorer,
     .aegis-data-grid
   ) {

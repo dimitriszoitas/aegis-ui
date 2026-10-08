@@ -90,7 +90,7 @@
   outline-offset: 0;
 }
 [data-layout-theme='minimalistic'] .nav-item.is-active {
-  border-color: var(--color-border-default);
+  border-color: transparent;
   font-weight: 600;
 }
 [data-layout-theme='minimalistic'] button.tag:hover {

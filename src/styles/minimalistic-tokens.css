@@ -10,8 +10,8 @@
   --color-text-primary: light-dark(#171717, #f2f2f2);
   --color-text-secondary: light-dark(#6b6b6b, #a3a3a3);
   --color-text-tertiary: var(--color-text-secondary);
-  --color-border-subtle: light-dark(#dedede, #383838);
-  --color-border-default: light-dark(#cdcdcd, #484848);
+  --color-border-subtle: light-dark(#dedede, #252525);
+  --color-border-default: light-dark(#cdcdcd, #2d2d2d);
   --color-border-strong: light-dark(#777777, #8a8a8a);
   --color-on-intent: light-dark(#ffffff, #111111);
   --color-scrim: light-dark(rgb(0 0 0 / 36%), rgb(0 0 0 / 60%));
