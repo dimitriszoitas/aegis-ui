@@ -30,6 +30,9 @@
   margin-top: var(--space-1);
   margin-inline-start: calc(-1 * var(--space-2));
 }
+.aegis-expandable-text-toggle :is(.button-label, .button-icon) {
+  color: var(--color-function-fg);
+}
 .aegis-expandable-text-content:focus-visible {
   outline: 2px solid var(--ring-focus);
   outline-offset: 2px;

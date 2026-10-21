@@ -14,6 +14,7 @@ import { foldAll, unfoldAll } from '@codemirror/language';
 import { type EditorView, type ViewUpdate } from '@codemirror/view';
 import type { Extension } from '@codemirror/state';
 import { cn } from '@/lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import {
   codeDimension,
   createCodeExtensions,
@@ -82,6 +83,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(function
   },
   forwardedRef,
 ) {
+  useInputFocusModality();
   const editorRef = useRef<ReactCodeMirrorRef>(null);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [cursor, setCursor] = useState({ line: 1, column: 1 });

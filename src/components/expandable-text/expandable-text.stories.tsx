@@ -52,7 +52,7 @@ export const KeyboardDisclosure: Story = {
     toggle.focus();
     await userEvent.keyboard('{Enter}');
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-    await expect(toggle).toHaveAccessibleName('Show less');
+    await expect(toggle).toHaveAccessibleName('Read less');
     expect(content.getBoundingClientRect().height).toBeGreaterThan(collapsedHeight);
     await userEvent.keyboard(' ');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
@@ -83,13 +83,13 @@ export const Controlled: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('button', { name: 'Toggle externally' }));
-    await expect(canvas.getByRole('button', { name: 'Show less' })).toHaveAttribute(
+    await expect(canvas.getByRole('button', { name: 'Read less' })).toHaveAttribute(
       'aria-expanded',
       'true',
     );
     await userEvent.click(canvas.getByRole('button', { name: 'Change text length' }));
-    await waitFor(() => expect(canvas.queryByRole('button', { name: 'Show less' })).toBeNull());
+    await waitFor(() => expect(canvas.queryByRole('button', { name: 'Read less' })).toBeNull());
     await userEvent.click(canvas.getByRole('button', { name: 'Change text length' }));
-    await expect(canvas.getByRole('button', { name: 'Show less' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Read less' })).toBeVisible();
   },
 };

@@ -2,6 +2,7 @@ import { ArrowDownRight, ArrowUpRight, Minus } from '@/components/icon';
 import { Card, type CardProps } from '@/components/card';
 import { Skeleton } from '@/components/skeleton';
 import { Sparkline, type SparklineProps } from '@/components/sparkline';
+import { MiniBarChart } from '@/components/mini-bar-chart';
 import { cn } from '@/lib/utils';
 import './metric-card.css';
 
@@ -41,6 +42,7 @@ export function MetricCard({
   const positive = trendIsPositive ?? (change !== undefined && change > 0);
   const trend = change === undefined || change === 0 ? 'neutral' : positive ? 'success' : 'destroy';
   const Arrow = change === 0 ? Minus : (change ?? 0) < 0 ? ArrowDownRight : ArrowUpRight;
+  const TrendChart = sparklineVariant === 'bar' ? MiniBarChart : Sparkline;
   return (
     <Card
       {...props}
@@ -69,9 +71,11 @@ export function MetricCard({
               {unit && <span>{unit}</span>}
             </div>
             {sparkline && (
-              <Sparkline
+              <TrendChart
                 data={sparkline}
                 variant={sparklineVariant}
+                width={100}
+                height={28}
                 intent={intent ?? (trend === 'neutral' ? 'function' : trend)}
                 label={sparklineLabel ?? `${label} over the last 24 hours`}
               />

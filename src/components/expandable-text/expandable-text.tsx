@@ -1,5 +1,6 @@
 import { useId, useLayoutEffect, useRef, useState, type ComponentPropsWithoutRef } from 'react';
 import { Button } from '@/components/button';
+import { ChevronDown, ChevronUp } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import './expandable-text.css';
 
@@ -22,7 +23,7 @@ export function ExpandableText({
   defaultExpanded = false,
   onExpandedChange,
   expandLabel = 'Read more',
-  collapseLabel = 'Show less',
+  collapseLabel = 'Read less',
   className,
   style,
   ...props
@@ -88,8 +89,12 @@ export function ExpandableText({
             toggleRef.current = event.currentTarget;
           }}
           className="aegis-expandable-text-toggle"
+          intent="function"
           emphasis="ghost"
           size="sm"
+          trailingIcon={
+            isExpanded ? <ChevronUp size={14} aria-hidden /> : <ChevronDown size={14} aria-hidden />
+          }
           aria-expanded={isExpanded}
           aria-controls={contentId}
           onClick={() => {

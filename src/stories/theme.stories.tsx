@@ -10,7 +10,7 @@ const actions: { intent: Intent; label: string }[] = [
   { intent: 'ai', label: 'Explain with AI' },
   { intent: 'destroy', label: 'Delete draft' },
 ];
-function ThemeSpecimen() {
+function ThemeSpecimen({ simple = false }: { simple?: boolean }) {
   const [selection, setSelection] = useState('Select a control to inspect its treatment.');
   return (
     <main className="stack story-pad" style={{ maxWidth: 1100 }}>
@@ -84,7 +84,11 @@ function ThemeSpecimen() {
                 )
               }
             >
-              {size === 'sm' ? 'Small · 28px' : size === 'md' ? 'Medium · 34px' : 'Large · 40px'}
+              {size === 'sm'
+                ? `Small · ${simple ? 32 : 28}px`
+                : size === 'md'
+                  ? `Medium · ${simple ? 36 : 34}px`
+                  : `Large · ${simple ? 44 : 40}px`}
             </Button>
           ))}
         </div>
@@ -104,3 +108,16 @@ export default { title: 'Foundations/Theme', component: ThemeSpecimen } satisfie
   typeof ThemeSpecimen
 >;
 export const Overview: StoryObj<typeof ThemeSpecimen> = {};
+export const V0Simple: StoryObj<typeof ThemeSpecimen> = {
+  name: 'v0 simple',
+  globals: { layoutTheme: 'v0-simple' },
+  args: { simple: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A restrained first iteration of the Lakewatch screenshots: familiar surfaces and blue, stronger control boundaries, neutral workflow labels, 32/36/44px controls and 4–6px corners. Use the color toolbar to compare light and dark.',
+      },
+    },
+  },
+};

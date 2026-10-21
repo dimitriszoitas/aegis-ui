@@ -332,6 +332,11 @@
       "import": "./lib-dist/metric-card.js",
       "default": "./lib-dist/metric-card.js"
     },
+    "./mini-bar-chart": {
+      "types": "./lib-dist/types/components/mini-bar-chart/index.d.ts",
+      "import": "./lib-dist/mini-bar-chart.js",
+      "default": "./lib-dist/mini-bar-chart.js"
+    },
     "./modal": {
       "types": "./lib-dist/types/components/modal/index.d.ts",
       "import": "./lib-dist/modal.js",
@@ -341,6 +346,11 @@
       "types": "./lib-dist/types/components/multi-combobox/index.d.ts",
       "import": "./lib-dist/multi-combobox.js",
       "default": "./lib-dist/multi-combobox.js"
+    },
+    "./notification": {
+      "types": "./lib-dist/types/components/notification/index.d.ts",
+      "import": "./lib-dist/notification.js",
+      "default": "./lib-dist/notification.js"
     },
     "./pagination": {
       "types": "./lib-dist/types/components/pagination/index.d.ts",
@@ -401,6 +411,11 @@
       "types": "./lib-dist/types/components/side-nav/index.d.ts",
       "import": "./lib-dist/side-nav.js",
       "default": "./lib-dist/side-nav.js"
+    },
+    "./sheet": {
+      "types": "./lib-dist/types/components/sheet/index.d.ts",
+      "import": "./lib-dist/sheet.js",
+      "default": "./lib-dist/sheet.js"
     },
     "./side-sheet": {
       "types": "./lib-dist/types/components/side-sheet/index.d.ts",

@@ -13,7 +13,7 @@ function PaginationDemo({ total = 150, startPage = 1 }: { total?: number; startP
   const [page, setPage] = useState(startPage);
   const [pageSize, setPageSize] = useState(25);
   return (
-    <div className="surface">
+    <div className="story-layout">
       <Pagination
         page={page}
         pageSize={pageSize}
@@ -33,7 +33,7 @@ export const States: Story = {
       <PaginationDemo total={0} />
       <PaginationDemo total={12} />
       <PaginationDemo total={150} startPage={6} />
-      <div className="surface">
+      <div className="story-layout">
         <Pagination
           page={3}
           pageSize={25}

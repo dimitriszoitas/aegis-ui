@@ -46,10 +46,36 @@ export function ResizeHandle({
   withGrip = true,
   className,
   children,
+  onPointerDownCapture,
+  onKeyDownCapture,
+  onFocusCapture,
+  onBlurCapture,
   ...props
 }: ResizeHandleProps) {
+  const [pointerFocus, setPointerFocus] = useState(false);
   return (
-    <Separator {...props} aria-label={label} className={cn('aegis-resize-handle', className)}>
+    <Separator
+      {...props}
+      aria-label={label}
+      className={cn('aegis-resize-handle', className)}
+      data-pointer-focus={pointerFocus || undefined}
+      onPointerDownCapture={(event) => {
+        if (event.button === 0) setPointerFocus(true);
+        onPointerDownCapture?.(event);
+      }}
+      onKeyDownCapture={(event) => {
+        setPointerFocus(false);
+        onKeyDownCapture?.(event);
+      }}
+      onFocusCapture={(event) => {
+        setPointerFocus(false);
+        onFocusCapture?.(event);
+      }}
+      onBlurCapture={(event) => {
+        setPointerFocus(false);
+        onBlurCapture?.(event);
+      }}
+    >
       {children ??
         (withGrip && (
           <span aria-hidden="true">

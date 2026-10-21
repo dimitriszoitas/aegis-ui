@@ -25,7 +25,10 @@ export interface NavSection {
   label?: string;
   items: NavItem[];
 }
+export type SideNavPresentation = 'transparent' | 'floating';
 export interface SideNavProps {
+  /** Omit to inherit the current UI approach. */
+  presentation?: SideNavPresentation;
   sections: NavSection[];
   activeId: string;
   onNavigate: (id: string) => void;
@@ -93,6 +96,7 @@ export function SideNav({
   footer,
   workspace = 'Northstar',
   className,
+  presentation,
 }: SideNavProps) {
   const [internal, setInternal] = useState(defaultCollapsed);
   const collapsed = controlled ?? internal;
@@ -197,6 +201,7 @@ export function SideNav({
     <nav
       className={cn('side-nav', className)}
       data-collapsed={collapsed}
+      data-presentation={presentation}
       aria-label="Main navigation"
     >
       <div className="nav-brand">

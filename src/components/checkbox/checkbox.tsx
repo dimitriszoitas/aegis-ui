@@ -15,6 +15,8 @@ export interface CheckboxProps extends Omit<
   label?: ReactNode;
   description?: ReactNode;
   invalid?: boolean;
+  /** Focusable and announced, but cannot be changed by pointer or keyboard. */
+  readOnly?: boolean;
   containerClassName?: string;
 }
 
@@ -25,11 +27,15 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Ch
     label,
     description,
     invalid,
+    readOnly = false,
     id,
     disabled,
     required,
     className,
     containerClassName,
+    onClick,
+    onKeyDown,
+    onCheckedChange,
     'aria-describedby': describedBy,
     'aria-labelledby': labelledBy,
     'aria-invalid': ariaInvalid,
@@ -54,12 +60,26 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(function Ch
       className={cn('aegis-checkbox-field', containerClassName)}
       data-size={size}
       data-disabled={control.disabled || undefined}
+      data-readonly={readOnly || undefined}
     >
       <CheckboxPrimitive.Root
         {...props}
         {...control}
         ref={ref}
         className={cn('aegis-checkbox-control', className)}
+        aria-readonly={readOnly || undefined}
+        data-readonly={readOnly || undefined}
+        onClick={(event) => {
+          if (readOnly) event.preventDefault();
+          onClick?.(event);
+        }}
+        onKeyDown={(event) => {
+          if (readOnly && event.key === ' ') event.preventDefault();
+          onKeyDown?.(event);
+        }}
+        onCheckedChange={(checked) => {
+          if (!readOnly) onCheckedChange?.(checked);
+        }}
       >
         <CheckboxPrimitive.Indicator className="aegis-checkbox-indicator">
           <Check className="aegis-checkbox-check" size={14} strokeWidth={2.5} aria-hidden="true" />

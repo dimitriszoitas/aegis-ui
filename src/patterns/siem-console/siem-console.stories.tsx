@@ -1,3 +1,7 @@
+import {
+  consolePreviewGlobals,
+  consolePreviewParameters,
+} from '../../../.storybook/console-canvas';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CSSProperties } from 'react';
 import { useGlobals } from 'storybook/preview-api';
@@ -7,8 +11,9 @@ import { isLayoutTheme, layoutThemeLabels, layoutThemeOptions } from '@/lib/layo
 
 const meta = {
   title: 'Console/SIEM console',
+  globals: consolePreviewGlobals,
   component: SiemConsole,
-  parameters: { layout: 'fullscreen' },
+  parameters: consolePreviewParameters,
   render: function Render(args, context) {
     const [, updateGlobals] = useGlobals();
     const globals = context.globals;
@@ -72,7 +77,7 @@ export const Minimalistic: Story = {
       story: { inline: false, height: 920 },
       description: {
         story:
-          'A quieter presentation with two neutral surfaces, no shadows, 4–6px corners, retained AI gradients, and color reserved for meaning. Switch the color toolbar to compare light and dark; use Alerts to switch all three UI approaches interactively.',
+          'A quieter presentation with two neutral surfaces, no shadows, 4–6px corners, retained AI gradients, and color reserved for meaning. Switch the color toolbar to compare light and dark; use Alerts to switch UI approaches interactively.',
       },
     },
   },
@@ -84,7 +89,7 @@ export const LayoutSwitching: Story = {
       story: { inline: false, height: 920 },
       description: {
         story:
-          'Switching through Floating, Fixed, and Minimalistic preserves the active search and selected records. Light or dark remains an independent choice.',
+          'Switching through Floating, Fixed, Minimalistic, v0 simple, and Fundamental preserves the active search and selected records. Light or dark remains an independent choice.',
       },
     },
   },
@@ -118,9 +123,9 @@ export const LayoutSwitching: Story = {
         await waitFor(() => expect(root).toHaveAttribute('data-layout-theme', next), {
           timeout: 10000,
         });
-        await expect(canvas.getByRole('searchbox', { name: 'Search alerts' })).toHaveValue(
-          'powershell',
-        );
+        await expect(
+          canvas.getByRole('searchbox', { name: 'Search alerts', hidden: true }),
+        ).toHaveValue('powershell');
         await expect(canvas.getByRole('checkbox', { name: label })).toBeChecked();
         await expect(canvas.getByRole('button', { name: colorSwitchLabel })).toBeVisible();
         current = next;
@@ -128,6 +133,35 @@ export const LayoutSwitching: Story = {
     });
     await userEvent.click(canvas.getByRole('checkbox', { name: label }));
     await userEvent.clear(canvas.getByRole('searchbox', { name: 'Search alerts' }));
+  },
+};
+export const V0Simple: Story = {
+  name: 'v0 simple',
+  globals: { layoutTheme: 'v0-simple' },
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: {
+    layoutThemeLocked: true,
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'A subtle Lakewatch refinement with restrained blue actions, neutral workflow statuses, clear field boundaries, visible keyboard focus and comfortable controls. Light and dark remain independent.',
+      },
+    },
+  },
+};
+export const Fundamental: Story = {
+  globals: { layoutTheme: 'fundamental' },
+  args: { defaultNavCollapsed: true, defaultAiOpen: true },
+  parameters: {
+    layoutThemeLocked: true,
+    docs: {
+      story: { inline: false, height: 920 },
+      description: {
+        story:
+          'Two neutral surfaces, no shadows, and restrained semantic accents keep the workspace focused. Fundamental supports both light and dark; use Alerts to switch approaches without losing investigation state.',
+      },
+    },
   },
 };
 export const WithFilters: Story = {
@@ -235,5 +269,41 @@ export const QueueNavigation: Story = {
     await waitFor(() =>
       expect(c.getByRole('heading', { name: 'Reports', level: 1 })).toBeVisible(),
     );
+  },
+};
+
+export const NavigationAppearance: Story = {
+  args: { defaultNavPresentation: 'transparent' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const search = canvas.getByRole('searchbox', { name: 'Search alerts' });
+    await userEvent.type(search, 'powershell');
+    await userEvent.click(canvas.getByRole('button', { name: /UI approach:/ }));
+    const floating = await body.findByRole('menuitemradio', { name: 'Floating navigation' });
+    floating.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() =>
+      expect(canvas.getByRole('navigation', { name: 'Main navigation' })).toHaveAttribute(
+        'data-presentation',
+        'floating',
+      ),
+    );
+    await expect(search).toHaveValue('powershell');
+    await expect(canvas.getByRole('button', { name: /UI approach:/ })).toHaveFocus();
+    await userEvent.click(canvas.getByRole('button', { name: 'Collapse navigation' }));
+    await expect(canvas.getByRole('button', { name: 'Expand navigation' })).toHaveFocus();
+    await userEvent.click(canvas.getByRole('button', { name: /UI approach:/ }));
+    await userEvent.click(
+      await body.findByRole('menuitemradio', { name: 'Transparent navigation' }),
+    );
+    await waitFor(() =>
+      expect(canvas.getByRole('navigation', { name: 'Main navigation' })).toHaveAttribute(
+        'data-presentation',
+        'transparent',
+      ),
+    );
+    await expect(canvas.getByRole('button', { name: 'Expand navigation' })).toBeVisible();
+    await expect(search).toHaveValue('powershell');
   },
 };

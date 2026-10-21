@@ -22,7 +22,7 @@ export const Sizes: Story = {
 };
 export const InlineStatus: Story = {
   render: () => (
-    <div className="surface row" role="status">
+    <div className="story-layout row" role="status">
       <Spinner />
       <span>Correlating 1,284 events across 3 sources…</span>
     </div>

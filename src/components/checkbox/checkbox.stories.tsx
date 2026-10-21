@@ -57,6 +57,43 @@ export const Compact: Story = {
   ),
 };
 
+export const ReadOnlyAndDisabled: Story = {
+  render: () => (
+    <div className="stack">
+      <Checkbox label="Unchecked read-only" readOnly />
+      <Checkbox label="Checked read-only" readOnly defaultChecked />
+      <Checkbox label="Unchecked disabled" disabled />
+      <Checkbox label="Checked disabled" disabled defaultChecked />
+      <Checkbox label="Editable checkbox" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const unchecked = canvas.getByRole('checkbox', { name: 'Unchecked read-only' });
+    const checked = canvas.getByRole('checkbox', { name: 'Checked read-only' });
+    for (const control of [unchecked, checked]) {
+      await expect(control).toHaveAttribute('aria-readonly', 'true');
+      await expect(control).not.toBeDisabled();
+      await userEvent.click(control);
+      await expect(control).toHaveFocus();
+      await userEvent.keyboard(' ');
+    }
+    await userEvent.click(canvas.getByText('Unchecked read-only'));
+    await userEvent.click(canvas.getByText('Checked read-only'));
+    await expect(unchecked).not.toBeChecked();
+    await expect(checked).toBeChecked();
+    const disabled = canvas.getByRole('checkbox', { name: 'Unchecked disabled' });
+    await expect(disabled).toBeDisabled();
+    await expect(canvas.getByRole('checkbox', { name: 'Checked disabled' })).toBeChecked();
+    checked.focus();
+    await userEvent.tab();
+    const editable = canvas.getByRole('checkbox', { name: 'Editable checkbox' });
+    await expect(editable).toHaveFocus();
+    await userEvent.keyboard(' ');
+    await expect(editable).toBeChecked();
+  },
+};
+
 export const SelectAll: Story = {
   render: function SelectAllExample() {
     const [selected, setSelected] = useState<string[]>(['critical']);

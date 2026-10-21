@@ -22,6 +22,7 @@ export interface MultiComboboxOption extends SelectOption {
 }
 
 export interface MultiComboboxProps extends FieldControlProps {
+  size?: 'sm' | 'md' | 'lg';
   options: readonly MultiComboboxOption[];
   value?: readonly string[];
   defaultValue?: readonly string[];
@@ -47,6 +48,7 @@ export interface MultiComboboxProps extends FieldControlProps {
 
 /** Cmdk list/group presentation with explicit multi-selection and active-descendant semantics. */
 export function MultiCombobox({
+  size = 'md',
   options,
   value,
   defaultValue = [],
@@ -210,6 +212,7 @@ export function MultiCombobox({
           <div
             ref={shellRef}
             className="aegis-multi-shell"
+            data-size={size}
             data-disabled={control.disabled || undefined}
             data-invalid={
               control['aria-invalid'] === true || control['aria-invalid'] === 'true' || undefined

@@ -6,7 +6,9 @@ async function walk(dir) {
     else if (
       /\.(css|tsx?|mdx)$/.test(path) &&
       !path.endsWith('/tokens.css') &&
-      path !== 'src/styles/minimalistic-tokens.css'
+      path !== 'src/styles/minimalistic-tokens.css' &&
+      path !== 'src/styles/v0-simple-tokens.css' &&
+      path !== 'src/styles/fundamental-tokens.css'
     ) {
       const source = await readFile(path, 'utf8');
       if (/#[\da-fA-F]{3,8}\b/.test(source))

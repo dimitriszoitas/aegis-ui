@@ -1,5 +1,6 @@
 import { createContext, useContext, useId, type AriaAttributes, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import './field.css';
 
 interface FieldContextValue {
@@ -33,6 +34,7 @@ export function mergeDescriptionIds(...values: (string | undefined)[]): string |
 
 /** Used by all Aegis inputs; public for composing new accessible controls. */
 export function useFieldControl(props: FieldControlProps = {}): FieldControlAttributes {
+  useInputFocusModality();
   const context = useContext(FieldContext);
   const generatedId = useId();
   return {

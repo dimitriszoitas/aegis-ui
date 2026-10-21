@@ -84,7 +84,7 @@ function BulkSelectionDemo({
           Select all alerts
         </Button>
       </div>
-      <div className="surface stack">
+      <div className="story-layout stack">
         {alerts.map((alert) => (
           <div
             key={alert.id}

@@ -1,3 +1,7 @@
+import {
+  consolePreviewGlobals,
+  consolePreviewParameters,
+} from '../../../.storybook/console-canvas';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -7,6 +11,8 @@ import { DetectionRuleWizard } from '@/patterns/detection-rule-wizard';
 import { rules, type DetectionRule } from '@/sample-data';
 const meta = {
   title: 'Patterns/Console views/Detection rules',
+  globals: consolePreviewGlobals,
+  parameters: consolePreviewParameters,
   component: ConsoleRules,
   tags: ['autodocs'],
   args: { rules, onCreateRule: () => undefined },

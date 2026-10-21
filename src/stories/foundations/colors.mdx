@@ -29,7 +29,7 @@ Subtle borders separate surfaces without visual noise. Default borders clarify c
 
 Each intent provides a fill, foreground, and soft surface. Use the function intent for primary analyst actions, AI for generated assistance, destroy for consequential removal, success for confirmation, and warning for caution. Neutral remains the default.
 
-Across all three approaches, AI carries three distinct stops—magenta, pink, then blue—through every emphasis. Dedicated `--color-ai-*`, `--color-ai-pink-*`, and `--color-ai-blue-*` tokens keep the AI palette independent from function blue. Primary buttons use the filled `--gradient-ai`; secondary buttons use `--gradient-ai-soft`; tertiary buttons add `--gradient-ai-border` around a quiet surface. AI text and icons use `--gradient-ai-text`, including text-only ghost buttons. Generated-content containers use the quieter `--gradient-ai-surface`. These tokens adapt in both themes, and the sparkles marker keeps AI identifiable beyond color.
+In Floating, Fixed, and Minimalistic, AI carries three distinct stops—magenta, pink, then blue—through every emphasis. Dedicated `--color-ai-*`, `--color-ai-pink-*`, and `--color-ai-blue-*` tokens keep the AI palette independent from function blue. Primary buttons use the filled `--gradient-ai`; secondary buttons use `--gradient-ai-soft`; tertiary buttons add `--gradient-ai-border` around a quiet surface. AI text and icons use `--gradient-ai-text`, including text-only ghost buttons. Generated-content containers use the quieter `--gradient-ai-surface`. These tokens adapt in both themes, and the sparkles marker keeps AI identifiable beyond color. v0 simple uses a single restrained blue for AI actions, retaining the explicit label and sparkles marker without a decorative color gradient.
 
 Success uses a warm green. Warning uses orange-yellow tints with a stronger ochre foreground in light mode to preserve text contrast. Medium severity follows the same warning palette. Generic tags and severity badges use transparent backgrounds. Status badges use a borderless pill shape with a restrained 8% semantic tint and a colored dot, including in Minimalistic. All three use primary theme text in every approach and color theme; generic tags carry semantic color in their outlines and dots, while labeled severity badges use a semantic outline without a dot.
 
@@ -49,10 +49,14 @@ Chart fills have their own palette: blue, cyan, purple, coral, gold, and green. 
 
 <ColorSwatches prefix="--color-chart-" />
 
+## Fundamental
+
+Fundamental pairs `--color-bg-canvas` with borderless cards using `--color-bg-surface`. Inputs use `--fundamental-control-fill`, while gray `--color-border-default` boundaries also define table row dividers. Overlays use `--fundamental-overlay-surface` with a soft shadow; modal tasks add a backdrop. Function blue supplies filled, soft, outlined, and ghost actions. AI gradients run from hot pink to purple-magenta, while red, green, and amber retain their semantic meaning. Both light and dark preserve the same hierarchy.
+
 ## Three token tiers
 
 1. Primitives define stable ramps and scales, including blue, violet, red, green, amber, orange, cool gray, and ink.
 2. Semantic tokens express purpose, such as `--color-bg-surface` and `--color-severity-high-fg`, and adapt to the active theme.
 3. Component tokens cover exceptional layout needs, such as grid row heights and sidebar widths.
 
-Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme. The separate `data-layout-theme` attribute selects `floating`, `fixed`, or `minimalistic`. Floating and Fixed share color values; Minimalistic changes neutral surface and control presentation while preserving semantic meaning. Every approach supports both light and dark.
+Use mapped Tailwind utilities or semantic variables in components and stories. Raw color values belong only in the token source. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active theme. The separate `data-layout-theme` attribute selects `floating`, `fixed`, `minimalistic`, `v0-simple`, or `fundamental`. Floating and Fixed share color values; Minimalistic changes neutral surface and control presentation while preserving semantic meaning. v0 simple preserves the audited Lakewatch palette while strengthening small supporting text and essential control boundaries; its workflow status labels stay neutral, and feedback/severity retain meaning. Every approach supports both light and dark.

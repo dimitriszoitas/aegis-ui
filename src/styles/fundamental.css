@@ -1,0 +1,366 @@
+/* Fundamental uses text hierarchy and a single card level. Floating overlays
+   receive their own separation in fundamental-overlays.css. */
+[data-layout-theme='fundamental'] {
+  font-family: var(--font-ui);
+  line-height: 1.5;
+}
+[data-layout-theme='fundamental']
+  :is(
+    [class^='aegis-'],
+    [class*=' aegis-'],
+    .surface,
+    .floating,
+    .side-nav,
+    .tag,
+    .status-badge,
+    .severity-badge
+  ),
+[data-layout-theme='fundamental'] :is([class^='aegis-'], [class*=' aegis-'], .side-nav) *,
+[data-layout-theme='fundamental'] :is([class^='aegis-'], [class*=' aegis-'])::before,
+[data-layout-theme='fundamental'] :is([class^='aegis-'], [class*=' aegis-'])::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+[data-layout-theme='fundamental'] :is(.aegis-console, .aegis-docs-theme, .aegis-catalogue-preview) {
+  font-family: var(--font-ui);
+}
+/* Surface fills and spacing define containers; control and intent borders remain explicit. */
+[data-layout-theme='fundamental']
+  :is(
+    .surface,
+    .floating,
+    .aegis-card,
+    .aegis-chart-container,
+    .aegis-chart-tooltip,
+    .aegis-ai-card,
+    .aegis-ai-highlight,
+    .aegis-wizard-panel,
+    .aegis-wizard-progress,
+    .aegis-filter-panel,
+    .aegis-tree,
+    .aegis-accordion-contained,
+    .aegis-json-viewer,
+    .aegis-yaml-presenter,
+    .aegis-diff-view,
+    .aegis-modal,
+    .aegis-sheet,
+    .aegis-bottom-sheet,
+    .aegis-popover,
+    .aegis-menu-content,
+    .aegis-context-content,
+    .aegis-select-content,
+    .aegis-multi-popover,
+    .command-dialog,
+    .aegis-tooltip,
+    .aegis-tooltip-rich,
+    .aegis-notification[data-variant='floating']
+  ) {
+  border-width: 0;
+}
+/* Space separates groups without adding visual weight or changing row geometry. */
+[data-layout-theme='fundamental'] :is(.aegis-console-summary, .aegis-console-metrics) {
+  gap: var(--layout-card-padding);
+}
+[data-layout-theme='fundamental'] .aegis-console-header-actions {
+  gap: var(--space-3);
+}
+[data-layout-theme='fundamental'] .nav-items {
+  gap: var(--space-2);
+}
+[data-layout-theme='fundamental'] .nav-sections {
+  gap: var(--space-4);
+}
+[data-layout-theme='fundamental'] .nav-section {
+  padding-block-start: var(--space-4);
+}
+[data-layout-theme='fundamental'] .aegis-filter-bar {
+  padding-block: var(--layout-card-padding);
+  gap: var(--space-4);
+}
+[data-layout-theme='fundamental'] .aegis-grid-toolbar:not(:has(> .aegis-filter-bar)) {
+  padding-block: var(--space-4);
+}
+[data-layout-theme='fundamental'] .aegis-grid-footer {
+  padding-block: var(--space-3);
+}
+[data-layout-theme='fundamental'] :is(.aegis-wizard-body, .aegis-rule-fields) {
+  gap: var(--layout-section-gap);
+}
+[data-layout-theme='fundamental']
+  :is(.aegis-wizard-step-content, .aegis-modal-body, .aegis-sheet-body)
+  > .stack {
+  gap: var(--layout-card-padding);
+}
+[data-layout-theme='fundamental'] .aegis-wizard-footer {
+  padding-block: var(--space-4);
+}
+[data-layout-theme='fundamental'] .side-nav {
+  background: var(--color-bg-canvas);
+}
+[data-layout-theme='fundamental'] .nav-item.is-active {
+  color: var(--color-text-primary);
+  background: var(--fundamental-nav-selected);
+  border-color: transparent;
+  font-weight: 600;
+}
+[data-layout-theme='fundamental'] .nav-item.is-active > svg {
+  color: inherit;
+}
+[data-layout-theme='fundamental'] .nav-item:hover:not(.is-active) {
+  background: var(--color-bg-surface);
+}
+[data-layout-theme='fundamental'] .workspace-switch {
+  border-color: transparent;
+  background: transparent;
+}
+[data-layout-theme='fundamental'] .aegis-metric-value {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+[data-layout-theme='fundamental'] :is(.aegis-metric-label, .aegis-grid-table > thead > tr > th) {
+  font-weight: 500;
+}
+[data-layout-theme='fundamental'] :is(.aegis-entity-cell-detail, .aegis-grid-cell-secondary) {
+  color: var(--color-text-secondary);
+}
+[data-layout-theme='fundamental'] .aegis-grid-cell-content .aegis-entity-cell-name {
+  line-height: 17px;
+}
+[data-layout-theme='fundamental'] .aegis-grid-cell-content .aegis-entity-cell-detail {
+  font-size: 13px;
+  line-height: 15px;
+}
+[data-layout-theme='fundamental']
+  .aegis-data-grid[data-density='compact']
+  .aegis-entity-cell-detail {
+  font-size: 12px;
+  line-height: 14px;
+}
+[data-layout-theme='fundamental'] .aegis-data-grid[data-density='compact'] .aegis-entity-cell-name {
+  font-size: 13px;
+  line-height: 15px;
+}
+/* Tables inherit the surrounding surface instead of adding another card. Sticky
+   cells still paint that surface so scrolling content cannot show through them. */
+[data-layout-theme='fundamental'] {
+  --fundamental-grid-surface: var(--color-bg-canvas);
+  --fundamental-grid-active: var(--color-bg-surface);
+}
+[data-layout-theme='fundamental']
+  :is(.aegis-card, .surface, .floating, .aegis-side-sheet, .aegis-modal) {
+  --fundamental-grid-surface: var(--color-bg-surface);
+  --fundamental-grid-active: var(--color-bg-canvas);
+}
+[data-layout-theme='fundamental']
+  :is(.aegis-console-alert-card, .aegis-alerts-explorer, .aegis-data-grid) {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+[data-layout-theme='fundamental'] .aegis-data-grid .aegis-filter-bar,
+[data-layout-theme='fundamental'] .aegis-grid-toolbar,
+[data-layout-theme='fundamental'] .aegis-console-queue-tabs .aegis-tabs-list {
+  background: transparent;
+  border-bottom: 0;
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > thead,
+[data-layout-theme='fundamental'] .aegis-grid-table > thead > tr > th {
+  background: var(--fundamental-grid-surface);
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > thead > tr > th {
+  border-bottom-color: var(--color-border-subtle);
+  color: var(--color-text-tertiary);
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > tr > td,
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > tr.aegis-grid-expanded-row > td {
+  background: transparent;
+  border-bottom: 0;
+}
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > tbody
+  > tr:not(.aegis-grid-spacer):not(:last-child)
+  > td {
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+[data-layout-theme='fundamental'] .aegis-grid-scroll td.aegis-grid-pinned {
+  background: var(--fundamental-grid-surface);
+}
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > tbody
+  > .aegis-grid-row:is(:hover, .is-selected)
+  > td {
+  background: var(--fundamental-grid-active);
+}
+[data-layout-theme='fundamental'] .aegis-grid-footer,
+[data-layout-theme='fundamental'] .aegis-grid-bulk .aegis-bulk-actions {
+  background: transparent;
+  border-radius: 0;
+}
+/* Emphasis controls fill; intent supplies blue, destructive red, or the AI gradient. */
+[data-layout-theme='fundamental'] .aegis-button:not([data-intent='ai'], [data-intent='destroy']) {
+  --intent-bg: var(--color-function-bg);
+  --intent-fg: var(--color-function-fg);
+  --intent-soft: var(--color-function-soft);
+  --intent-on: var(--color-on-intent);
+  --intent-border: color-mix(in srgb, var(--color-function-fg) 55%, var(--color-bg-canvas));
+}
+[data-layout-theme='fundamental'] .aegis-button:hover:not(:disabled) {
+  background: var(--intent-soft);
+}
+[data-layout-theme='fundamental'] .aegis-button[data-emphasis='secondary']:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--intent-fg) 14%, var(--color-bg-surface));
+}
+[data-layout-theme='fundamental']
+  .aegis-button[data-emphasis='secondary']:not([data-intent='ai']):hover:not(:disabled) {
+  color: light-dark(
+    color-mix(in srgb, var(--intent-fg) 85%, var(--color-text-primary)),
+    var(--intent-fg)
+  );
+}
+[data-layout-theme='fundamental']
+  .aegis-button[data-emphasis='primary']:not([data-intent='ai'], [data-intent='destroy']):hover:not(
+    :disabled
+  ) {
+  background: var(--fundamental-action-hover);
+}
+[data-layout-theme='fundamental']
+  .aegis-button[data-emphasis='primary'][data-intent='destroy']:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--intent-bg) 92%, var(--color-text-primary));
+}
+[data-layout-theme='fundamental']
+  .aegis-button[data-emphasis='primary'][data-intent='ai']:hover:not(:disabled) {
+  background: var(--fundamental-ai-hover);
+}
+[data-layout-theme='fundamental']
+  .aegis-button[data-intent='ai']:not([data-emphasis='primary']):hover:not(:disabled) {
+  background: var(--gradient-ai-soft);
+}
+[data-layout-theme='fundamental'] .button-group > .aegis-button:not(:last-child) {
+  border-inline-end-color: transparent;
+}
+/* Resting field edges sit close to their fill; activation remains distinct. */
+[data-layout-theme='fundamental']
+  :is(.aegis-input-shell, .aegis-multi-shell):not([data-disabled], [data-readonly]),
+[data-layout-theme='fundamental']
+  :is(
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger[data-emphasis='secondary'],
+    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),
+    .aegis-pagination-size select,
+    .time-range-clock input
+  ):not(:disabled, [readonly]) {
+  background: var(--fundamental-control-fill);
+}
+[data-layout-theme='fundamental']
+  :is(.aegis-input-shell, .aegis-multi-shell, .aegis-code-editor, .aegis-prompt):not(
+    [data-invalid],
+    [aria-invalid='true']
+  ):not(:focus-within),
+[data-layout-theme='fundamental']
+  :is(
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-textarea-native,
+    .aegis-pagination-size select
+  ):not([aria-invalid='true']):not([data-state='open']):not(:focus),
+[data-layout-theme='fundamental'] .time-range-clock input:not(:focus) {
+  border-color: var(--fundamental-control-border);
+}
+[data-layout-theme='fundamental']
+  :is(.aegis-input-shell, .aegis-multi-shell):hover:not([data-invalid]):not([data-disabled]):not(
+    :focus-within
+  ):not([data-readonly]),
+[data-layout-theme='fundamental']
+  :is(.aegis-select-trigger, .aegis-date-picker-trigger, .aegis-textarea-native):hover:not(
+    :disabled
+  ):not([aria-invalid='true']):not([data-state='open']):not(:focus):not([readonly]) {
+  border-color: var(--fundamental-control-border-hover);
+}
+[data-layout-theme='fundamental'] :is(.aegis-code-editor, .aegis-prompt):focus-within {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+[data-layout-theme='fundamental']
+  :is(
+    .aegis-menu-item[data-highlighted],
+    .aegis-context-item[data-highlighted],
+    .aegis-select-option[data-highlighted],
+    .aegis-multi-option[data-active]
+  ) {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: -2px;
+}
+[data-layout-theme='fundamental'] .aegis-grid-row:focus-visible > td:not(.aegis-grid-pinned) {
+  position: relative;
+}
+[data-layout-theme='fundamental'] .aegis-grid-row:focus-visible > td::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-block: 2px solid var(--ring-focus);
+  pointer-events: none;
+  z-index: 3;
+}
+[data-layout-theme='fundamental'] .aegis-grid-row:focus-visible > td:first-child::after {
+  border-left: 2px solid var(--ring-focus);
+}
+[data-layout-theme='fundamental'] .aegis-grid-row:focus-visible > td:last-child::after {
+  border-right: 2px solid var(--ring-focus);
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > thead > tr > th.is-drag-target::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-left: 2px solid var(--ring-focus);
+  pointer-events: none;
+}
+[data-layout-theme='fundamental'] .aegis-time-range-trigger[aria-invalid='true'] {
+  outline: 1px solid var(--color-destroy-fg);
+  outline-offset: -1px;
+}
+[data-layout-theme='fundamental'] .aegis-avatar {
+  border-radius: var(--control-radius-sm);
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+}
+[data-layout-theme='fundamental'] .aegis-avatar-group > .aegis-avatar {
+  outline: 2px solid var(--color-bg-surface);
+  outline-offset: 0;
+}
+[data-layout-theme='fundamental'] .aegis-tabs-trigger[data-state='active'],
+[data-layout-theme='fundamental'] .aegis-tabs-trigger[data-state='active'] .aegis-tabs-count {
+  color: var(--color-text-primary);
+}
+[data-layout-theme='fundamental'] .aegis-tabs-trigger[data-state='active'] .aegis-tabs-count,
+[data-layout-theme='fundamental'] .aegis-tabs-pill .aegis-tabs-trigger[data-state='active'] {
+  background: var(--color-bg-canvas);
+}
+[data-layout-theme='fundamental']
+  :is(
+    .severity-dot,
+    .status-dot,
+    .aegis-avatar-status,
+    .workspace-status,
+    .aegis-radio-control,
+    .aegis-radio-indicator
+  ) {
+  border-radius: 50%;
+}
+[data-layout-theme='fundamental'] .aegis-skeleton[data-animate='true']::after {
+  display: none;
+}
+[data-layout-theme='fundamental'] .aegis-skeleton:not([data-variant='table-row']),
+[data-layout-theme='fundamental'] .aegis-skeleton-cell {
+  background: var(--color-border-default);
+}
+@media (forced-colors: active) {
+  [data-layout-theme='fundamental'] {
+    --ring-focus: Highlight;
+  }
+  [data-layout-theme='fundamental'] .aegis-button {
+    border-color: ButtonText;
+  }
+}

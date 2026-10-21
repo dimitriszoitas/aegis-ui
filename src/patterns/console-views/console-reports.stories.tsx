@@ -1,9 +1,15 @@
+import {
+  consolePreviewGlobals,
+  consolePreviewParameters,
+} from '../../../.storybook/console-canvas';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { ConsoleReports } from './console-views';
 import { alerts } from '@/sample-data';
 const meta = {
   title: 'Patterns/Console views/Reports',
+  globals: consolePreviewGlobals,
+  parameters: consolePreviewParameters,
   component: ConsoleReports,
   tags: ['autodocs'],
   args: { alerts, scopeLabel: 'Last 24 hours' },

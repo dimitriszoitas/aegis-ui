@@ -1,0 +1,114 @@
+/* Pointer activation changes the existing boundary, never adds a second halo.
+   Only input-like surfaces participate; native button focus remains independent. */
+:root[data-aegis-input-focus='pointer']
+  :is(
+    .aegis-input-shell,
+    .aegis-multi-shell,
+    .aegis-code-editor,
+    .aegis-diff-host .cm-editor,
+    .aegis-yaml-presenter,
+    .aegis-prompt
+  ):focus-within,
+:root[data-aegis-input-focus='pointer']
+  :is(
+    .aegis-input-native,
+    .aegis-textarea-native,
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-time-range-trigger,
+    .aegis-multi-search input,
+    .aegis-prompt-menu [cmdk-input],
+    .aegis-pagination-size select,
+    .aegis-json-fallback textarea,
+    .time-range-clock input,
+    .aegis-code-editor .cm-panels input,
+    .rdp-day_button,
+    .rdp-button_previous,
+    .rdp-button_next
+  ):focus {
+  outline: none;
+  box-shadow: none;
+}
+:root[data-aegis-input-focus]
+  :is(.aegis-input-shell, .aegis-multi-shell):focus-within:not([data-invalid]):not(
+    [data-disabled]
+  ):not([data-readonly]),
+:root[data-aegis-input-focus]
+  :is(.aegis-code-editor, .aegis-yaml-presenter, .aegis-prompt):focus-within:not(
+    [aria-invalid='true']
+  ):not([data-invalid]),
+:root[data-aegis-input-focus]
+  :is(
+    .aegis-textarea-native,
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-time-range-trigger,
+    .aegis-pagination-size select,
+    .aegis-prompt-menu [cmdk-input],
+    .time-range-clock input
+  ):focus:not([aria-invalid='true']):not(:disabled):not([readonly]) {
+  border-color: var(--color-text-secondary);
+}
+:root[data-aegis-input-focus]
+  :is(
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-time-range-trigger
+  )[data-state='open']:not([aria-invalid='true']) {
+  border-color: var(--color-text-secondary);
+}
+:root[data-aegis-input-focus]
+  :is(.aegis-input-shell, .aegis-multi-shell)[data-invalid]:is(:hover, :focus-within),
+:root[data-aegis-input-focus]
+  :is(
+    .aegis-textarea-native,
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-time-range-trigger
+  )[aria-invalid='true']:is(:hover, :focus) {
+  border-color: var(--color-destroy-fg);
+}
+
+/* Keyboard navigation gets one visible ring around the control's outer shell. */
+:root[data-aegis-input-focus='keyboard']
+  :is(
+    .aegis-input-shell,
+    .aegis-multi-shell,
+    .aegis-code-editor,
+    .aegis-diff-host .cm-editor,
+    .aegis-yaml-presenter,
+    .aegis-prompt
+  ):focus-within,
+:root[data-aegis-input-focus='keyboard']
+  :is(
+    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),
+    .aegis-select-trigger,
+    .aegis-date-picker-trigger,
+    .aegis-time-range-trigger,
+    .aegis-multi-search input,
+    .aegis-prompt-menu [cmdk-input],
+    .aegis-pagination-size select,
+    .aegis-json-fallback textarea,
+    .time-range-clock input,
+    .aegis-code-editor .cm-panels input
+  ):focus-visible {
+  /* Keep this shared keyboard cue above layout-specific border-only treatments. */
+  outline: 2px solid var(--ring-focus) !important;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+:root[data-aegis-input-focus] .aegis-prompt .aegis-textarea-native:focus {
+  outline: none;
+  box-shadow: none;
+}
+:root[data-aegis-input-focus] .aegis-yaml-presenter .aegis-code-editor:focus-within {
+  outline: none !important;
+  box-shadow: none;
+}
+
+/* An opened list can focus its selected option without indicating keyboard use. */
+:root[data-aegis-input-focus='pointer']
+  :is(.aegis-select-option[data-highlighted], .aegis-multi-option[data-active]) {
+  outline: none !important;
+  box-shadow: none;
+}

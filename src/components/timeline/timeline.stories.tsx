@@ -58,7 +58,7 @@ type Story = StoryObj<typeof meta>;
 export const Investigation: Story = {
   decorators: [
     (Story) => (
-      <div className="surface" style={{ maxWidth: 640 }}>
+      <div className="story-layout" style={{ maxWidth: 640 }}>
         <Story />
       </div>
     ),

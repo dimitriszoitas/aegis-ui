@@ -17,13 +17,19 @@ Use the same measured rhythm from a filter chip to the complete investigation wo
 
 ## UI approaches
 
-Floating, Fixed, and Minimalistic are three UI approaches, each available in light and dark. Floating is the default: navigation and sheets have 12px exterior insets, 12px corners, and a floating shadow. The compact navigation rail derives its 8px corners from the same 4px subtraction. Fixed removes those exterior gaps, corner rounding, and chrome shadows. Navigation fills the left edge with a right divider; sheets and the assistant fill the right edge with a left divider.
+Floating, Fixed, Minimalistic, v0 simple, and Fundamental are five UI approaches, each available in light and dark. Floating is the default: navigation and sheets have 12px exterior insets, 12px corners, and a floating shadow. The compact navigation rail derives its 8px corners from the same 4px subtraction. Fixed removes those exterior gaps, corner rounding, and chrome shadows. Navigation fills the left edge with a right divider; sheets and the assistant fill the right edge with a left divider.
 
-Floating and Fixed share their color tokens and interior component styling. Minimalistic also changes the presentation: two neutral surface fills, no shadows, quieter neutral borders, monochrome ordinary controls, and compact corners. AI actions and provenance retain their magenta–pink–blue intent; ordinary control hover and focus use restrained blue feedback. Light uses gray and white; dark uses a charcoal pair. Semantic status, severity, feedback, syntax, and diff colors retain their meaning. The chrome is flush like Fixed; surfaces and overlays have at most 6px corners, and control corners scale through 4/5/6px. Status badges remain pill-shaped in every approach; status dots and radio indicators retain their circular shape.
+Floating and Fixed share their color tokens and interior component styling. Minimalistic also changes the presentation: two neutral surface fills, no shadows, quieter neutral borders, monochrome ordinary controls, and compact corners. AI actions and provenance retain their magenta–pink–blue intent; ordinary control hover and focus use restrained blue feedback. Light uses gray and white; dark uses a charcoal pair. Semantic status, severity, feedback, syntax, and diff colors retain their meaning. The chrome is flush like Fixed; surfaces and overlays have at most 6px corners, and control corners scale through 4/5/6px. Status badges remain pill-shaped in these three approaches; status dots and radio indicators retain their circular shape.
 
-Typography, control heights, data density, content, and interaction state remain consistent across approaches. Use Storybook's UI approach and color controls to explore all six combinations. The console's Floating layout, Fixed layout, and Minimalistic examples keep the assistant open for comparison; Alerts lets you switch interactively.
+Floating, Fixed, and Minimalistic retain their existing control heights and typography. v0 simple retains familiar white/charcoal surfaces and restrained blue, strengthens essential control boundaries and supporting text, keeps workflow statuses neutral, and removes decorative effects. Its small/default/comfortable control heights are 32/36/44px; button labels stay 14px at every size. Checkbox and radio marks stay 18px inside real 32px button targets. Surfaces use 4–6px corners and flush chrome. Content and interaction state remain independent of the approach. Use Storybook's UI approach and color controls to explore all ten combinations. The console's Floating layout, Fixed layout, and Minimalistic examples keep the assistant open for comparison; Alerts lets you switch interactively.
 
-`data-layout-theme` accepts `floating`, `fixed`, or `minimalistic`, independently from `.dark` and `data-theme`. The existing layout-theme API name and storage key remain compatible. Apply the document attribute so portaled chrome receives the same presentation.
+Fundamental uses borderless cards and transparent tables with horizontal row dividers. Inputs have their own quiet fill and gray boundaries; overlays use a distinct surface and soft shadow, with a backdrop for modal tasks. Navigation independently supports transparent and floating presentation. Cards use 8px corners, standard controls use 6px corners, and chips use 4px. Figtree and JetBrains Mono distinguish interface text from machine-readable evidence. The approach remains independent of light/dark color.
+
+Console and Console views stories use a 1600px canvas. Smaller Storybook windows can scroll horizontally or use preview zoom; this presentation setting does not change the responsive application.
+
+Component examples use transparent layout wrappers with spacing rather than automatic cards. Add a Card when the composition needs a distinct surface. Interactive catalogue tiles gain a quiet fill on hover; selection uses an accent and checkmark, while keyboard focus retains its outline. Passive groups remain transparent.
+
+`data-layout-theme` accepts `floating`, `fixed`, `minimalistic`, `v0-simple`, or `fundamental`, independently from `.dark` and `data-theme`. The existing layout-theme API name and storage key remain compatible. Apply the document attribute so portaled chrome receives the same presentation.
 
 ## Surface hierarchy and shadows
 
@@ -47,7 +53,7 @@ These are the base Floating/Fixed values. Minimalistic replaces the control radi
 
 Standard cards and charts use `--surface-radius` (10px). Large or floating surfaces use `--surface-radius-floating` (12px). Nested surface components use `--surface-radius-nested`: `calc(var(--surface-radius-floating) - var(--space-1))`, so a 12px parent and a 4px inset step produce 8px child corners. Use this shared relationship rather than independent corner values. It applies to surface components, never to nested controls.
 
-Fixed chrome uses square outside corners while Floating and Fixed cards retain the same 10/12/8px geometry. Minimalistic keeps the chrome flush and replaces this surface scale with compact corners of at most 6px. The navigation toggle stays at the top in both states. Base tags and severity badges use 6px corners from `--chip-radius`; Minimalistic uses 4px chip corners and 4px nested surface corners. Status badges are an explicit exception: they retain a pill shape in every approach and color theme.
+Fixed chrome uses square outside corners while Floating and Fixed cards retain the same 10/12/8px geometry. Minimalistic keeps the chrome flush and replaces this surface scale with compact corners of at most 6px. The navigation toggle stays at the top in both states. Base tags and severity badges use 6px corners from `--chip-radius`; Minimalistic uses 4px chip corners and 4px nested surface corners. Status badges retain a pill shape in the original three approaches; v0 simple uses the compact chip radius.
 
 <SurfaceRadiusExamples />
 
@@ -77,7 +83,7 @@ Browsers using the standards fallback render a thin scrollbar. Forced-colors mod
 
 ## Separators
 
-Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs. Navigation groups use subtle horizontal dividers without visible group headings in all three approaches.
+Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens to remain visible at their smaller size. Choose emphasis by how much separation the surrounding content needs. Navigation groups use subtle horizontal dividers without visible group headings in all five approaches.
 
 <SeparatorExamples />
 

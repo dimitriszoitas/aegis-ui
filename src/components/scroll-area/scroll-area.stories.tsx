@@ -9,7 +9,7 @@ export const Matrix: StoryObj<typeof ScrollArea> = {
       <section className="stack">
         <h3>Vertical event stream</h3>
         <p className="muted">Focus the event stream and use the arrow keys or Page Down.</p>
-        <ScrollArea label="Authentication event stream" maxHeight={240} className="surface">
+        <ScrollArea label="Authentication event stream" maxHeight={240} className="story-layout">
           {Array.from({ length: 24 }, (_, index) => (
             <p
               key={index}
@@ -26,7 +26,11 @@ export const Matrix: StoryObj<typeof ScrollArea> = {
       <section className="stack">
         <h3>Horizontal evidence sequence</h3>
         <p className="muted">Scroll sideways to compare the complete authentication sequence.</p>
-        <ScrollArea label="Authentication evidence sequence" maxHeight={200} className="surface">
+        <ScrollArea
+          label="Authentication evidence sequence"
+          maxHeight={200}
+          className="story-layout"
+        >
           <ol
             style={{
               display: 'flex',
@@ -38,7 +42,7 @@ export const Matrix: StoryObj<typeof ScrollArea> = {
             }}
           >
             {Array.from({ length: 8 }, (_, index) => (
-              <li key={index} className="surface stack" style={{ width: 220 }}>
+              <li key={index} className="story-layout stack" style={{ width: 220 }}>
                 <strong>Evidence {index + 1}</strong>
                 <span className="mono">08:{String(index + 10).padStart(2, '0')}:24 UTC</span>
                 <span className="muted">
@@ -60,7 +64,7 @@ export const BothAxes: StoryObj<typeof ScrollArea> = {
         The evidence table exceeds the viewport in both directions. Focus it to scroll with the
         arrow keys.
       </p>
-      <ScrollArea label="Wide authentication evidence" maxHeight={300} className="surface">
+      <ScrollArea label="Wide authentication evidence" maxHeight={300} className="story-layout">
         <table style={{ width: 1200, borderCollapse: 'collapse', whiteSpace: 'nowrap' }}>
           <caption style={{ textAlign: 'left', paddingBottom: 'var(--space-3)' }}>
             Correlated authentication events
@@ -115,7 +119,7 @@ export const NoOverflow: StoryObj<typeof ScrollArea> = {
     <section className="stack" style={{ maxWidth: 760 }}>
       <h3>Short investigation note</h3>
       <p className="muted">Content that fits the available space does not need a scrollbar.</p>
-      <ScrollArea label="Investigation summary" maxHeight={180} className="surface">
+      <ScrollArea label="Investigation summary" maxHeight={180} className="story-layout">
         <p>All related sign-ins have been reviewed. No additional evidence is available.</p>
       </ScrollArea>
     </section>

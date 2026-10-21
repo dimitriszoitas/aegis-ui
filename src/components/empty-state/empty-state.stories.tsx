@@ -15,7 +15,7 @@ function PresetDemo({ preset }: { preset: 'no-results' | 'no-data' | 'error' }) 
   const [resolved, setResolved] = useState(false);
   if (resolved)
     return (
-      <div className="surface">
+      <div className="story-layout">
         <Banner
           intent="success"
           title={
@@ -43,7 +43,7 @@ function PresetDemo({ preset }: { preset: 'no-results' | 'no-data' | 'error' }) 
       </div>
     );
   return (
-    <div className="surface">
+    <div className="story-layout">
       <EmptyState
         preset={preset}
         action={
@@ -84,7 +84,7 @@ export const Presets: Story = {
 };
 export const Compact: Story = {
   render: () => (
-    <div className="surface" style={{ maxWidth: 420 }}>
+    <div className="story-layout" style={{ maxWidth: 420 }}>
       <EmptyState
         compact
         icon={<ShieldCheck size={24} />}

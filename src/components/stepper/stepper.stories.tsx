@@ -19,10 +19,10 @@ type Story = StoryObj<typeof meta>;
 export const Orientations: Story = {
   render: () => (
     <div className="stack" style={{ gap: 'var(--space-10)' }}>
-      <div className="surface">
+      <div className="story-layout">
         <Stepper steps={steps} currentStep={1} />
       </div>
-      <div className="surface" style={{ maxWidth: 400 }}>
+      <div className="story-layout" style={{ maxWidth: 400 }}>
         <Stepper steps={steps} currentStep={2} orientation="vertical" />
       </div>
     </div>
@@ -40,7 +40,7 @@ export const AllStates: Story = {
 function InteractiveDemo() {
   const [currentStep, setCurrentStep] = useState(2);
   return (
-    <div className="surface stack">
+    <div className="story-layout stack">
       <Stepper steps={steps} currentStep={currentStep} onStepChange={setCurrentStep} />
       <div className="between" style={{ marginTop: 'var(--space-6)' }}>
         <p className="muted" style={{ margin: 0 }}>

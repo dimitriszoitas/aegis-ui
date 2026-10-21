@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Matrix: Story = {
   render: () => (
-    <div className="surface stack">
+    <div className="story-layout stack">
       {[0, 45000, 360000, 3600000, 86400000, 2592000000, -7200000].map((offset) => (
         <div className="row" key={offset}>
           <RelativeTime value={referenceTime - offset} now={referenceTime} />

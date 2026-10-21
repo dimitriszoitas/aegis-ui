@@ -13,8 +13,10 @@
   border-radius: var(--radius-lg);
   transition: background var(--motion-fast) var(--ease-out);
 }
-.aegis-list-item:hover,
-.aegis-list-item:focus-within {
+.aegis-list-item:not([data-disabled='true']):has(> button.aegis-list-item-main):is(
+    :hover,
+    :focus-within
+  ) {
   background: var(--color-bg-hover);
 }
 .aegis-list-item[data-selected='true'] {

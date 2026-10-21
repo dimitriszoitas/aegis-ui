@@ -2,6 +2,7 @@ import { useId, useMemo, useState, type ComponentProps, type CSSProperties } fro
 import { Button } from '@/components/button';
 import { SearchInput } from '@/components/search-input';
 import { Select } from '@/components/select';
+import { Check } from '@/components/icon';
 import { cn } from '@/lib/utils';
 import manifest from './manifest.json';
 import './aws-logo.css';
@@ -218,6 +219,9 @@ export function AwsLogoCatalog({
                   setCopyState('');
                 }}
               >
+                {selected === logo.id && (
+                  <Check className="aegis-aws-catalog-check" size={16} aria-hidden="true" />
+                )}
                 <AwsLogo name={logo.id} size={48} decorative />
                 <strong>{logo.name}</strong>
                 <span>{logo.category}</span>

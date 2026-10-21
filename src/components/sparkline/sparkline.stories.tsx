@@ -10,7 +10,7 @@ const meta = {
 export default meta;
 export const VariantsAndIntents: StoryObj<typeof meta> = {
   render: (args) => (
-    <div className="surface stack" style={{ maxWidth: 540 }}>
+    <div className="story-layout stack" style={{ maxWidth: 540 }}>
       {(['line', 'area', 'bar'] as const).map((variant) => (
         <div className="between" key={variant}>
           <span className="muted">{variant}</span>
@@ -24,7 +24,7 @@ export const VariantsAndIntents: StoryObj<typeof meta> = {
 };
 export const States: StoryObj<typeof meta> = {
   render: (args) => (
-    <div className="surface row" style={{ gap: 'var(--space-6)' }}>
+    <div className="story-layout row" style={{ gap: 'var(--space-6)' }}>
       <Sparkline {...args} loading />
       <Sparkline data={[]} />
       <Sparkline data={[12]} />

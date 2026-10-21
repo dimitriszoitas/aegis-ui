@@ -10,7 +10,7 @@ export default {
 function ActionsDemo() {
   const [message, setMessage] = useState('Ready for investigation');
   return (
-    <div className="surface stack" style={{ maxWidth: 560 }}>
+    <div className="story-layout stack" style={{ maxWidth: 560 }}>
       <div className="between">
         <span>Encoded PowerShell on WS-ATH-114</span>
         <ActionsCell

@@ -7,6 +7,7 @@ import { CopyButton } from '@/components/copy-button';
 import { Pagination } from '@/components/pagination';
 import { SearchInput } from '@/components/search-input';
 import { Select } from '@/components/select';
+import { Check } from '@/components/icon';
 import './icon-gallery.css';
 
 // Full namespaces belong only to this reference gallery, never the application bundle.
@@ -205,6 +206,9 @@ export function IconGallery({ initialQuery = '', initialLibrary = 'hugeicons' }:
                   aria-pressed={selected.name === entry.name}
                   onClick={() => setSelected(entry)}
                 >
+                  {selected.name === entry.name && (
+                    <Check className="aegis-icon-gallery-check" size={16} aria-hidden="true" />
+                  )}
                   <IconPreview
                     entry={entry}
                     size={Number(size)}

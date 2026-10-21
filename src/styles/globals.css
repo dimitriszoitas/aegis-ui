@@ -10,6 +10,11 @@
 @import './layout-theme.css';
 @import './minimalistic-tokens.css';
 @import './minimalistic.css';
+@import './v0-simple-tokens.css';
+@import './v0-simple.css';
+@import './fundamental-tokens.css';
+@import './fundamental.css';
+@import './fundamental-overlays.css';
 @import './scrollbars.css';
 
 * {

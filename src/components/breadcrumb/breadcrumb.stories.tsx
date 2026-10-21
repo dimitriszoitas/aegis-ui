@@ -37,7 +37,7 @@ export const Hierarchy: Story = {
 function NavigationDemo() {
   const [location, setLocation] = useState('Alert detail');
   return (
-    <div className="surface stack">
+    <div className="story-layout stack">
       <Breadcrumb
         items={[
           { label: 'Overview', onClick: () => setLocation('Overview') },

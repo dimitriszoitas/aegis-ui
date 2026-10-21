@@ -211,6 +211,35 @@ export const FooterOnly: Story = {
   args: { showHeader: false, showClose: false, defaultOpen: true },
 };
 export const HeaderAndFooter: Story = { args: { defaultOpen: true } };
+export const HeaderActionsKeyboardOrder: Story = {
+  args: {
+    showClose: false,
+    headerActions: <Button emphasis="ghost">Preview assignment</Button>,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('button', { name: 'Assign alert' });
+    await userEvent.click(trigger);
+    const dialog = await page.findByRole('dialog');
+    const content = within(dialog);
+    const headerAction = content.getByRole('button', { name: 'Preview assignment' });
+    await waitFor(() => expect(headerAction).toHaveFocus());
+    await userEvent.tab();
+    await expect(content.getByRole('region', { name: 'Dialog content' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(content.getByRole('textbox', { name: 'Investigation note' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(content.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(content.getByRole('button', { name: 'Save assignment' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(headerAction).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await expect(page.queryByRole('dialog')).not.toBeInTheDocument();
+  },
+};
 export const HeaderlessWithClose: Story = {
   args: { showHeader: false, footer: undefined, defaultOpen: true },
 };

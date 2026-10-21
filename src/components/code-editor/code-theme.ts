@@ -5,8 +5,9 @@ import { tags } from '@lezer/highlight';
 import { yaml } from '@codemirror/lang-yaml';
 import { json } from '@codemirror/lang-json';
 import { basicSetup } from '@uiw/react-codemirror';
+import { pythonLanguage, sqlLanguage } from './source-languages';
 
-export type CodeLanguage = 'yaml' | 'json';
+export type CodeLanguage = 'yaml' | 'json' | 'sql' | 'python';
 export interface HighlightedLineRange {
   /** Inclusive, one-based line numbers. */ from: number;
   to: number;
@@ -138,7 +139,7 @@ export function createCodeExtensions({
       autocompletion: !readOnly,
     }),
     codeTheme,
-    language === 'yaml' ? yaml() : json(),
+    language === 'yaml' ? yaml() : language === 'json' ? json() : language === 'sql' ? sqlLanguage : pythonLanguage,
     EditorState.readOnly.of(readOnly),
     EditorView.editable.of(!readOnly),
     EditorView.contentAttributes.of({

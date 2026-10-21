@@ -4,6 +4,7 @@ import { mergeDescriptionIds, useFieldControl } from '@/components/field';
 import './textarea.css';
 
 export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'defaultValue'> {
+  size?: 'sm' | 'md' | 'lg';
   value?: string;
   defaultValue?: string;
   label?: ReactNode;
@@ -16,7 +17,7 @@ export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaE
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
-  value, defaultValue = '', label, invalid, disabled, required, id, autoGrow = false, maxRows = 10,
+  size = 'md', value, defaultValue = '', label, invalid, disabled, required, id, autoGrow = false, maxRows = 10,
   showCount = false, maxLength, rows = 3, className, textareaClassName, style, onChange, onValueChange,
   'aria-describedby': describedBy, 'aria-labelledby': labelledBy, 'aria-invalid': ariaInvalid, ...props
 }, forwardedRef) {
@@ -51,7 +52,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     });
     observer.observe(input);
     return () => observer.disconnect();
-  }, [text, autoGrow, rows, maxRows]);
+  }, [text, autoGrow, rows, maxRows, size]);
 
   function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
     if (value === undefined) setUncontrolledValue(event.currentTarget.value);
@@ -62,7 +63,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   return <div className={cn('aegis-textarea', className)}>
     {label && <label id={labelId} htmlFor={control.id} className="aegis-field-label">{label}</label>}
     <textarea {...props} {...control} ref={inputRef} value={text} onChange={handleChange} rows={rows} maxLength={maxLength} style={style}
-      className={cn('aegis-textarea-native', textareaClassName)} data-autogrow={autoGrow || undefined} />
+      className={cn('aegis-textarea-native', textareaClassName)} data-size={size} data-autogrow={autoGrow || undefined} />
     {showCount && <span id={countId} className="aegis-textarea-count">{text.length.toLocaleString()}{maxLength !== undefined ? ` / ${maxLength.toLocaleString()}` : ''} characters</span>}
   </div>;
 });

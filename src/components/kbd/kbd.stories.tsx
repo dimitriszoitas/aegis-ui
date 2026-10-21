@@ -26,7 +26,7 @@ export const Sizes: Story = {
 };
 export const AnalystShortcuts: Story = {
   render: () => (
-    <div className="surface stack" style={{ maxWidth: 400 }}>
+    <div className="story-layout stack" style={{ maxWidth: 400 }}>
       {[
         ['Search alerts', '/'],
         ['Next alert', 'J'],

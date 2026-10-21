@@ -20,7 +20,7 @@ export const Matrix: Story = {
   render: () => (
     <div className="stack">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <section className="surface stack" key={size}>
+        <section className="story-layout stack" key={size}>
           <h3>
             {size === 'sm'
               ? 'Compact actions'
@@ -59,7 +59,7 @@ export const States: Story = {
   render: () => (
     <div className="stack">
       {(['primary', 'secondary', 'tertiary', 'ghost'] as const).map((emphasis) => (
-        <section className="surface stack" key={emphasis}>
+        <section className="story-layout stack" key={emphasis}>
           <h3>{emphasis}</h3>
           <div className="row">
             <Button emphasis={emphasis} intent="function" leadingIcon={<Plus />}>
@@ -95,7 +95,7 @@ export const IconSpacing: Story = {
   render: () => (
     <div className="stack">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <section className="surface stack" key={size}>
+        <section className="story-layout stack" key={size}>
           <h3>
             {size === 'sm' ? 'Small · 28px' : size === 'md' ? 'Medium · 34px' : 'Large · 40px'}
           </h3>

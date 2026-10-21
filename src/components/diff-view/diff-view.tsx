@@ -21,6 +21,7 @@ import {
   type CodeLanguage,
 } from '@/components/code-editor/code-theme';
 import { cn } from '@/lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import './diff-view.css';
 
 export type DiffMode = 'split' | 'unified';
@@ -149,6 +150,7 @@ export function DiffView({
   style,
   ...props
 }: DiffViewProps) {
+  useInputFocusModality();
   const [internalMode, setInternalMode] = useState(defaultMode);
   const activeMode = mode ?? internalMode;
   const [summary, setSummary] = useState<ChangeSummary>({ sections: 0, added: 0, removed: 0 });

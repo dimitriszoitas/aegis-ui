@@ -11,6 +11,7 @@ import {
 import { Braces, Check, ChevronRight, Copy, ListCollapse, LocateFixed } from '@/components/icon';
 import { Button } from '../button';
 import { cn } from '../../lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import './json-viewer.css';
 
 export type JsonValue =
@@ -174,6 +175,7 @@ export function JsonViewer({
   onCopy,
   className,
 }: JsonViewerProps) {
+  useInputFocusModality();
   const baseId = useId();
   const pageSize = Number.isFinite(maxVisibleItems)
     ? Math.max(1, Math.floor(maxVisibleItems))

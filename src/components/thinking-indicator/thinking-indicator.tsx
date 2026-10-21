@@ -46,7 +46,7 @@ export function ThinkingIndicator({
       className={cn('aegis-thinking-indicator', className)}
       data-compact={compact}
     >
-      <AiLabel>{compact ? 'Thinking' : 'Aegis is working'}</AiLabel>
+      <AiLabel>{compact ? 'Thinking' : 'Assistant is working'}</AiLabel>
       <span className="aegis-thinking-dots" aria-hidden="true">
         <i />
         <i />

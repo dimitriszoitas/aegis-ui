@@ -72,7 +72,7 @@ function CellTable() {
   return (
     <div className="stack">
       <div
-        className="surface"
+        className="story-layout"
         style={{ overflowX: 'auto', padding: 0 }}
         role="region"
         aria-label="Alert cell examples"
@@ -195,7 +195,7 @@ function CellTable() {
         {activity}
       </p>
       {expanded.length > 0 && (
-        <div className="surface">
+        <div className="story-layout">
           <strong>Expanded event groups</strong>
           <p className="muted" style={{ margin: 'var(--space-2) 0 0' }}>
             {expanded.join(', ')} · Process creation, identity correlation and network evidence are
@@ -211,7 +211,7 @@ export const Entities: Story = {
   render: () => (
     <div className="stack" style={{ maxWidth: 320 }}>
       {rows.map((row) => (
-        <div className="surface" key={row.id}>
+        <div className="story-layout" key={row.id}>
           <EntityCell entity={row.entity} />
         </div>
       ))}

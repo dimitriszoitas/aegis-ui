@@ -58,7 +58,7 @@ export const KeyboardComposer: Story = {
   render: () => <Demo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox', { name: 'Message to Aegis AI' });
+    const input = canvas.getByRole('textbox', { name: 'Message to AI assistant' });
     await userEvent.click(input);
     await userEvent.keyboard('/');
     const page = within(canvasElement.ownerDocument.body);

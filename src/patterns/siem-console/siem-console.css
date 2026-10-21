@@ -8,7 +8,7 @@
   color: var(--color-text-primary);
 }
 .aegis-console > .side-nav {
-  height: calc(var(--console-height, 100dvh) - 2 * var(--chrome-inset));
+  height: calc(var(--console-height, 100dvh) - 2 * var(--side-nav-inset));
 }
 .aegis-console-main {
   container-type: inline-size;
@@ -57,9 +57,6 @@
   min-width: 0;
   margin-bottom: 0;
 }
-.aegis-console-header[data-pinned='true'] .aegis-console-environment {
-  display: none;
-}
 .aegis-console-header[data-pinned='true'] .aegis-console-title-row {
   display: contents;
 }
@@ -80,20 +77,6 @@
 }
 .aegis-console-breadcrumb-row {
   margin-bottom: var(--layout-section-gap);
-}
-.aegis-console-environment {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
-  white-space: nowrap;
-}
-.aegis-console-environment > span {
-  width: 6px;
-  height: 6px;
-  background: var(--color-success-fg);
-  border-radius: var(--radius-full);
 }
 .aegis-console-title-row h1 {
   font-size: var(--title-page-size);
@@ -421,5 +404,19 @@
   }
   .aegis-console-bottom-list > button > span:last-child {
     display: none;
+  }
+}
+
+/* Explicit nav styles share the same track, including in the compact overlay layout. */
+@media (max-width: 1000px) {
+  .aegis-console[data-nav-presentation] .side-nav + .aegis-console-workspace {
+    margin-left: var(--sidebar-collapsed);
+  }
+}
+
+@media (max-width: 1000px) {
+  /* An expanded overlay needs a canvas backing so workspace text cannot show through. */
+  .aegis-console > .side-nav[data-presentation='transparent'][data-collapsed='false'] {
+    background: var(--color-bg-canvas);
   }
 }

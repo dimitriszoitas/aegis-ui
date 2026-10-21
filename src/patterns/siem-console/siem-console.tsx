@@ -33,12 +33,12 @@ import { Button } from '@/components/button';
 import { CommandPalette, type CommandAction } from '@/components/command-palette';
 import type { GridDensity } from '@/components/data-grid';
 import { EventHistogram } from '@/components/event-histogram';
-import { DropdownMenu } from '@/components/dropdown-menu';
+import { DropdownMenu, type DropdownMenuEntry } from '@/components/dropdown-menu';
 import { IconButton } from '@/components/icon-button';
 import { MetricCard } from '@/components/metric-card';
 import { ConfirmDialog } from '@/components/modal';
 import { Separator } from '@/components/separator';
-import { SideNav, type NavSection } from '@/components/side-nav';
+import { SideNav, type NavSection, type SideNavPresentation } from '@/components/side-nav';
 import { Tabs } from '@/components/tabs';
 import { TimeRangePicker } from '@/components/time-range-picker';
 import { Toaster, showToast } from '@/components/toast';
@@ -76,6 +76,7 @@ export type ConsolePage =
 export interface SiemConsoleProps {
   initialPage?: ConsolePage;
   defaultNavCollapsed?: boolean;
+  defaultNavPresentation?: SideNavPresentation;
   defaultAiOpen?: boolean;
   defaultBottomOpen?: boolean;
   defaultFilterPanelOpen?: boolean;
@@ -134,6 +135,7 @@ interface ConsoleNavigationProps {
   sections: NavSection[];
   page: ConsolePage;
   defaultCollapsed: boolean;
+  presentation: SideNavPresentation;
   onNavigate: (page: ConsolePage) => void;
   onSearch: () => void;
 }
@@ -143,6 +145,7 @@ function ConsoleNavigation({
   sections,
   page,
   defaultCollapsed,
+  presentation,
   onNavigate,
   onSearch,
 }: ConsoleNavigationProps) {
@@ -152,6 +155,7 @@ function ConsoleNavigation({
   useImperativeHandle(navigationRef, () => ({ closeMobile: () => setMobileExpanded(false) }), []);
   return (
     <SideNav
+      presentation={presentation}
       sections={sections}
       activeId={page}
       onNavigate={(id) => onNavigate(id as ConsolePage)}
@@ -196,6 +200,7 @@ function ConsoleNavigation({
 export function SiemConsole({
   initialPage = 'alerts',
   defaultNavCollapsed = false,
+  defaultNavPresentation,
   defaultAiOpen = false,
   defaultBottomOpen = false,
   defaultFilterPanelOpen = false,
@@ -206,6 +211,9 @@ export function SiemConsole({
 }: SiemConsoleProps) {
   const dockAssistant = useMediaQuery('(min-width: 1280px)');
   const [page, setPage] = useState<ConsolePage>(initialPage);
+  const [navPresentation, setNavPresentation] = useState<SideNavPresentation>(
+    () => defaultNavPresentation ?? (layoutTheme === 'floating' ? 'floating' : 'transparent'),
+  );
   const navigationRef = useRef<ConsoleNavigationHandle>(null);
   const [alerts, setAlerts] = useState<Alert[]>(() => fixtureAlerts.map((alert) => ({ ...alert })));
   const [rules, setRules] = useState<DetectionRule[]>(fixtureRules);
@@ -484,6 +492,7 @@ export function SiemConsole({
       className="aegis-console"
       data-ai-open={aiOpen && dockAssistant}
       data-layout-theme={layoutTheme}
+      data-nav-presentation={navPresentation}
     >
       <a className="aegis-console-skip" href={`#${mainId}`}>
         Skip to workspace
@@ -493,6 +502,7 @@ export function SiemConsole({
         sections={sections}
         page={page}
         defaultCollapsed={defaultNavCollapsed}
+        presentation={navPresentation}
         onNavigate={navigate}
         onSearch={() => setCommandOpen(true)}
       />
@@ -513,10 +523,6 @@ export function SiemConsole({
                     { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
                   ]}
                 />
-                <span className="aegis-console-environment">
-                  <span />
-                  Demo workspace
-                </span>
               </div>
               <div className="aegis-console-title-row">
                 <div className="aegis-console-title-copy">
@@ -548,34 +554,53 @@ export function SiemConsole({
                   >
                     <Rows2 size={17} />
                   </IconButton>
-                  {onLayoutThemeChange && (
-                    <DropdownMenu
-                      label="UI approach"
-                      trigger={
-                        <IconButton
-                          aria-label={`UI approach: ${layoutThemeLabels[layoutTheme]}`}
-                          title="UI approach"
-                          emphasis="ghost"
-                        >
-                          {layoutTheme !== 'floating' ? (
-                            <PanelLeft size={17} />
-                          ) : (
-                            <PanelsTopLeft size={17} />
-                          )}
-                        </IconButton>
-                      }
-                      items={[
-                        {
-                          type: 'radio-group',
-                          id: 'layout-theme',
-                          label: 'UI approach',
-                          value: layoutTheme,
-                          onValueChange: (value) => onLayoutThemeChange(value as LayoutTheme),
-                          options: [...layoutThemeOptions],
-                        },
-                      ]}
-                    />
-                  )}
+                  <DropdownMenu
+                    label="Workspace appearance"
+                    trigger={
+                      <IconButton
+                        aria-label={
+                          onLayoutThemeChange
+                            ? `UI approach: ${layoutThemeLabels[layoutTheme]}`
+                            : 'Navigation appearance'
+                        }
+                        title="Workspace appearance"
+                        emphasis="ghost"
+                      >
+                        {navPresentation === 'floating' ? (
+                          <PanelsTopLeft size={17} />
+                        ) : (
+                          <PanelLeft size={17} />
+                        )}
+                      </IconButton>
+                    }
+                    items={[
+                      ...(onLayoutThemeChange
+                        ? ([
+                            {
+                              type: 'radio-group',
+                              id: 'layout-theme',
+                              label: 'UI approach',
+                              value: layoutTheme,
+                              onValueChange: (value: string) =>
+                                onLayoutThemeChange(value as LayoutTheme),
+                              options: [...layoutThemeOptions],
+                            },
+                            { type: 'separator', id: 'navigation-appearance-separator' },
+                          ] satisfies DropdownMenuEntry[])
+                        : []),
+                      {
+                        type: 'radio-group',
+                        id: 'navigation-appearance',
+                        label: 'Navigation appearance',
+                        value: navPresentation,
+                        onValueChange: (value) => setNavPresentation(value as SideNavPresentation),
+                        options: [
+                          { value: 'transparent', label: 'Transparent navigation' },
+                          { value: 'floating', label: 'Floating navigation' },
+                        ],
+                      },
+                    ]}
+                  />
                   {onThemeChange && (
                     <IconButton
                       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}

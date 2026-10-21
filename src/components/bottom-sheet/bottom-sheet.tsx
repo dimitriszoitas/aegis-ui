@@ -52,6 +52,7 @@ export function BottomSheet({
   const [localHeight, setLocalHeight] = useState(defaultHeight);
   const [availableHeight, setAvailableHeight] = useState(maxHeight);
   const [resizing, setResizing] = useState(false);
+  const [pointerFocus, setPointerFocus] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
   const focusWithinRef = useRef(false);
   const restoreOnCloseRef = useRef(false);
@@ -157,11 +158,15 @@ export function BottomSheet({
         aria-valuemax={maximum}
         aria-valuenow={panelHeight}
         aria-valuetext={`${Math.round(panelHeight)} pixels high`}
+        data-pointer-focus={pointerFocus || undefined}
         tabIndex={0}
+        onFocus={() => setPointerFocus(false)}
+        onBlur={() => setPointerFocus(false)}
         onPointerDown={(event) => {
           if (event.button !== 0 || drag.current) return;
           event.preventDefault();
           event.currentTarget.focus({ preventScroll: true });
+          setPointerFocus(true);
           event.currentTarget.setPointerCapture(event.pointerId);
           drag.current = { y: event.clientY, height: panelHeight };
           setResizing(true);
@@ -176,6 +181,7 @@ export function BottomSheet({
         onPointerCancel={() => stopDragRef.current?.()}
         onLostPointerCapture={() => stopDragRef.current?.()}
         onKeyDown={(event) => {
+          setPointerFocus(false);
           const step = event.shiftKey ? 40 : 20;
           if (event.key === 'ArrowUp') changeHeight(panelHeight + step);
           else if (event.key === 'ArrowDown') changeHeight(panelHeight - step);

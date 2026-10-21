@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Copy, Check } from '@/components/icon';
-import { toast } from 'sonner';
+import { showNotification } from '@/components/notification';
 import { IconButton, type IconButtonProps } from '@/components/icon-button';
 export interface CopyButtonProps extends Omit<
   IconButtonProps,
@@ -31,11 +31,14 @@ export function CopyButton({
           await navigator.clipboard.writeText(text);
           setCopied(true);
           onCopy?.();
-          if (notify) toast.success('Copied to clipboard');
+          if (notify) showNotification({ intent: 'success', title: 'Copied to clipboard' });
           clearTimeout(timer.current);
           timer.current = setTimeout(() => setCopied(false), 2000);
         } catch {
-          toast.error('Clipboard unavailable. Select and copy the text.');
+          showNotification({
+            intent: 'destroy',
+            title: 'Clipboard unavailable. Select and copy the text.',
+          });
         }
       }}
     >

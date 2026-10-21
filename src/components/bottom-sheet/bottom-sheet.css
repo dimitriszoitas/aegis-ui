@@ -36,6 +36,9 @@
   background: transparent;
   transition: background var(--motion-fast);
 }
+.aegis-bottom-sheet-resizer[data-pointer-focus] {
+  outline: none;
+}
 .aegis-bottom-sheet-resizer > span {
   position: absolute;
   top: 3px;
@@ -45,7 +48,8 @@
   border-radius: var(--radius-full);
   background: var(--color-border-strong);
 }
-.aegis-bottom-sheet-resizer:is(:hover, :focus-visible)::before,
+.aegis-bottom-sheet-resizer:hover::before,
+.aegis-bottom-sheet-resizer:focus-visible:not([data-pointer-focus])::before,
 .aegis-bottom-sheet[data-resizing] .aegis-bottom-sheet-resizer::before {
   background: var(--color-function-fg);
 }

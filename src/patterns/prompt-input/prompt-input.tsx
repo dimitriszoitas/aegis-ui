@@ -137,7 +137,7 @@ export function PromptInput({
       )}
       <Textarea
         ref={textarea}
-        aria-label="Message to Aegis AI"
+        aria-label="Message to AI assistant"
         aria-describedby={`${helpId}${error ? ` ${errorId}` : ''}`}
         autoGrow
         rows={2}

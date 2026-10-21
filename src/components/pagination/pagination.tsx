@@ -1,6 +1,7 @@
 import { useId, type ComponentProps } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from '@/components/icon';
 import { cn } from '@/lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import './pagination.css';
 
 export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'onChange'> {
@@ -26,6 +27,7 @@ export function Pagination({
   className,
   ...props
 }: PaginationProps) {
+  useInputFocusModality();
   const sizeId = useId();
   const safeTotal = Number.isFinite(total) ? Math.max(0, Math.floor(total)) : 0;
   const size = Number.isFinite(pageSize) ? Math.max(1, Math.floor(pageSize)) : 25;

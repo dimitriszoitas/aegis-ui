@@ -1,3 +1,7 @@
+import {
+  consolePreviewGlobals,
+  consolePreviewParameters,
+} from '../../../.storybook/console-canvas';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConsoleOverview } from './console-views';
@@ -6,6 +10,8 @@ import { Banner } from '@/components/banner';
 import { alerts, referenceTime } from '@/sample-data';
 const meta = {
   title: 'Patterns/Console views/Overview',
+  globals: consolePreviewGlobals,
+  parameters: consolePreviewParameters,
   component: ConsoleOverview,
   tags: ['autodocs'],
   args: { alerts, now: referenceTime, onOpenAlert: () => undefined },

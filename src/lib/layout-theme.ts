@@ -1,22 +1,26 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 /** UI presentation is independent of the light/dark color theme. */
-export type LayoutTheme = 'floating' | 'fixed' | 'minimalistic';
+export type LayoutTheme = 'floating' | 'fixed' | 'minimalistic' | 'v0-simple' | 'fundamental';
 export const layoutThemeLabels: Record<LayoutTheme, string> = {
   floating: 'Floating',
   fixed: 'Fixed',
   minimalistic: 'Minimalistic',
+  'v0-simple': 'v0 simple',
+  fundamental: 'Fundamental',
 };
 export const layoutThemeOptions: readonly { value: LayoutTheme; label: string }[] = [
   { value: 'floating', label: layoutThemeLabels.floating },
   { value: 'fixed', label: layoutThemeLabels.fixed },
   { value: 'minimalistic', label: layoutThemeLabels.minimalistic },
+  { value: 'v0-simple', label: layoutThemeLabels['v0-simple'] },
+  { value: 'fundamental', label: layoutThemeLabels.fundamental },
 ];
 export const layoutThemeStorageKey = 'aegis-layout-theme';
 const layoutThemeChangeEvent = 'aegis:layout-theme-change';
 
 export function isLayoutTheme(value: unknown): value is LayoutTheme {
-  return value === 'floating' || value === 'fixed' || value === 'minimalistic';
+  return layoutThemeOptions.some((option) => option.value === value);
 }
 
 export function getInitialLayoutTheme(): LayoutTheme {

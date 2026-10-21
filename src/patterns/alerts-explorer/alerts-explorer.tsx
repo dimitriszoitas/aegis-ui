@@ -8,7 +8,6 @@ import {
   EntityCell,
   NumberCell,
   SeverityCell,
-  SparklineCell,
   StatusCell,
   TagsCell,
   TimeCell,
@@ -16,6 +15,7 @@ import {
 import { BulkActionsBar } from '@/components/bulk-actions-bar';
 import { Avatar } from '@/components/avatar';
 import { JsonViewer } from '@/components/json-viewer';
+import { MiniBarChart } from '@/components/mini-bar-chart';
 import { Tooltip } from '@/components/tooltip';
 import { FilterBar } from '@/patterns/filter-bar';
 import { FilterPanel } from '@/patterns/filter-panel';
@@ -168,7 +168,7 @@ export function AlertsExplorer({
     {
       accessorKey: 'title',
       header: 'Alert',
-      size: 330,
+      size: 300,
       minSize: 220,
       enableHiding: false,
       cell: ({ row }) => (
@@ -188,7 +188,7 @@ export function AlertsExplorer({
       id: 'entity',
       accessorFn: (row) => row.entity.name,
       header: 'Entity',
-      size: 230,
+      size: 210,
       cell: ({ row }) => <EntityCell entity={row.original.entity} />,
     },
     {
@@ -215,7 +215,14 @@ export function AlertsExplorer({
       header: 'Activity',
       size: 126,
       enableSorting: false,
-      cell: ({ row }) => <SparklineCell data={row.original.sparkline} variant="area" />,
+      cell: ({ row }) => (
+        <MiniBarChart
+          data={row.original.sparkline}
+          width={100}
+          height={28}
+          label={`${row.original.id} activity across ${row.original.sparkline.length} time buckets`}
+        />
+      ),
     },
     {
       id: 'aiVerdict',

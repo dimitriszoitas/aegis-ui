@@ -9,7 +9,7 @@ export default {
 } satisfies Meta<typeof TimeCell>;
 export const Matrix: StoryObj<typeof TimeCell> = {
   render: () => (
-    <div className="surface stack" style={{ maxWidth: 500 }}>
+    <div className="story-layout stack" style={{ maxWidth: 500 }}>
       {[
         ['Last event', '2026-10-06T11:59:42Z'],
         ['First seen', '2026-10-06T09:14:00Z'],

@@ -10,17 +10,17 @@ type Story = StoryObj<typeof meta>;
 export const Presets: Story = {
   render: () => (
     <div className="story-grid" role="status" aria-label="Loading alert details">
-      <section className="surface stack">
+      <section className="story-layout stack">
         <h3>Text</h3>
         <Skeleton />
         <Skeleton width="85%" />
         <Skeleton width="65%" />
       </section>
-      <section className="surface stack">
+      <section className="story-layout stack">
         <h3>Block</h3>
         <Skeleton variant="block" />
       </section>
-      <section className="surface stack">
+      <section className="story-layout stack">
         <h3>Avatar</h3>
         <div className="row">
           <Skeleton variant="avatar" />
@@ -36,7 +36,7 @@ export const Presets: Story = {
 export const AlertTable: Story = {
   render: () => (
     <div
-      className="surface"
+      className="story-layout"
       role="status"
       aria-label="Loading alerts"
       style={{ padding: 0, maxWidth: 920, overflow: 'hidden' }}

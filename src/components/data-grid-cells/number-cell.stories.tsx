@@ -8,7 +8,7 @@ export default {
 } satisfies Meta<typeof NumberCell>;
 export const Matrix: StoryObj<typeof NumberCell> = {
   render: () => (
-    <div className="surface stack" style={{ width: 320 }}>
+    <div className="story-layout stack" style={{ width: 320 }}>
       <div className="between">
         <span>Correlated events</span>
         <NumberCell value={1284} />

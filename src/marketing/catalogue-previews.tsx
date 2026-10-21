@@ -4,7 +4,7 @@ import { Accordion } from '@/components/accordion';
 import { AiCard, AiHighlight } from '@/components/ai-card';
 import { AiInlineSuggestion } from '@/components/ai-inline-suggestion';
 import { Avatar, AvatarGroup } from '@/components/avatar';
-import { Banner, Callout } from '@/components/banner';
+import { Notification } from '@/components/notification';
 import { BottomSheet } from '@/components/bottom-sheet';
 import { Breadcrumb } from '@/components/breadcrumb';
 import { BulkActionsBar } from '@/components/bulk-actions-bar';
@@ -83,6 +83,7 @@ import { SideSheet, SideSheetField, SideSheetSection } from '@/components/side-s
 import { Skeleton } from '@/components/skeleton';
 import { Slider } from '@/components/slider';
 import { Sparkline } from '@/components/sparkline';
+import { MiniBarChart } from '@/components/mini-bar-chart';
 import { Spinner } from '@/components/spinner';
 import { StatusBadge, StatusDot } from '@/components/status-badge';
 import { Stepper } from '@/components/stepper';
@@ -95,7 +96,6 @@ import { Textarea } from '@/components/textarea';
 import { ThinkingIndicator } from '@/components/thinking-indicator';
 import { TimeRangePicker } from '@/components/time-range-picker';
 import { Timeline } from '@/components/timeline';
-import { Toast } from '@/components/toast';
 import { Tooltip, RichTooltip } from '@/components/tooltip';
 import { TreeView } from '@/components/tree-view';
 import type { AiMessageData } from '@/lib/ai';
@@ -1137,55 +1137,30 @@ function PreviewContent({ id, expanded = false }: ComponentPreviewProps) {
         </div>
       );
       break;
-    case 'toast':
+    case 'notification':
       content = (
         <div className="catalogue-preview-stack">
           {!active ? (
-            <Toast
-              title="Sample rule saved"
-              description={expanded ? 'The local draft is ready for review.' : undefined}
-              intent="success"
+            <Notification
+              variant="inline"
+              title="One source needs attention"
+              description="Review the collector connection."
+              intent="warning"
               onDismiss={() => setActive(true)}
-              action={
-                expanded
-                  ? {
-                      label: 'Undo',
-                      onClick: () => {
-                        setActive(true);
-                        report('Local save undone.');
-                      },
-                    }
-                  : undefined
-              }
             />
           ) : (
-            <Button size="sm" onClick={() => setActive(false)}>
-              Show notification
-            </Button>
-          )}
-        </div>
-      );
-      break;
-    case 'banner':
-      content = (
-        <div className="catalogue-preview-stack">
-          {!active ? (
-            <Banner
-              intent="warning"
-              title="One source needs attention"
-              onDismiss={() => setActive(true)}
-            >
-              Review the collector connection.
-            </Banner>
-          ) : (
             <Button size="sm" emphasis="secondary" onClick={() => setActive(false)}>
-              Restore banner
+              Restore notification
             </Button>
           )}
           {expanded && (
-            <Callout intent="info" title="Sample environment">
-              These records are generated for the preview.
-            </Callout>
+            <Notification
+              variant="floating"
+              intent="success"
+              title="Sample rule saved"
+              description="The local draft is ready for review."
+              action={{ label: 'Undo', onClick: () => report('Local save undone.') }}
+            />
           )}
         </div>
       );
@@ -1468,6 +1443,18 @@ function PreviewContent({ id, expanded = false }: ComponentPreviewProps) {
           now={referenceTime}
           onValueChange={setRange}
         />
+      );
+      break;
+    case 'mini-bar-chart':
+      content = (
+        <div className="catalogue-preview-stack">
+          <MiniBarChart
+            data={sparklineData}
+            width={expanded ? 240 : 160}
+            height={expanded ? 56 : 40}
+            label="Sample event counts over the last twelve hours"
+          />
+        </div>
       );
       break;
     case 'sparkline':

@@ -24,6 +24,8 @@ export interface ModalProps extends Omit<
   children?: ReactNode;
   trigger?: ReactElement;
   footer?: ReactNode;
+  /** Secondary actions beside the title, such as export or duplicate. */
+  headerActions?: ReactNode;
   /** Width presets: 400px, 560px, and 800px, each clamped to the viewport. */
   size?: 'small' | 'regular' | 'large';
   /** Hide the visible header while retaining title and description for assistive technology. */
@@ -40,6 +42,7 @@ function ModalContent({
   description,
   children,
   footer,
+  headerActions,
   size = 'regular',
   showHeader = true,
   className,
@@ -98,6 +101,7 @@ function ModalContent({
               </Primitive.Description>
             )}
           </div>
+          {headerActions && <div className="aegis-modal-header-actions">{headerActions}</div>}
           {showClose && (
             <Primitive.Close className="aegis-modal-close" aria-label={closeLabel}>
               <X size={18} />

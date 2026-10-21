@@ -35,7 +35,7 @@ export const SizesAndPresence: Story = {
 };
 export const Groups: Story = {
   render: () => (
-    <div className="surface stack" style={{ maxWidth: 460 }}>
+    <div className="story-layout stack" style={{ maxWidth: 460 }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <div className="between" key={size}>
           <span>Identity response team</span>

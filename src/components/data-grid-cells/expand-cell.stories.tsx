@@ -9,7 +9,7 @@ export default {
 function ExpandDemo() {
   const [expanded, setExpanded] = useState(false);
   return (
-    <div className="surface stack" style={{ maxWidth: 540 }}>
+    <div className="story-layout stack" style={{ maxWidth: 540 }}>
       <div className="row">
         <ExpandCell
           expanded={expanded}

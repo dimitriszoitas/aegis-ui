@@ -6,6 +6,11 @@
 @import '../styles/layout-theme.css';
 @import '../styles/minimalistic-tokens.css';
 @import '../styles/minimalistic.css';
+@import '../styles/v0-simple-tokens.css';
+@import '../styles/v0-simple.css';
+@import '../styles/fundamental-tokens.css';
+@import '../styles/fundamental.css';
+@import '../styles/fundamental-overlays.css';
 @import '../styles/scrollbars.css';
 @source '../components';
 @source '../patterns';

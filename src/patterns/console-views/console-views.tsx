@@ -836,6 +836,12 @@ export function ConsoleSettings({
                     description:
                       'Two neutral surfaces, tight corners, no shadows. Color carries meaning.',
                   },
+                  {
+                    value: 'v0-simple',
+                    label: layoutThemeLabels['v0-simple'],
+                    description:
+                      'Familiar surfaces, restrained blue actions, clearer boundaries and focus.',
+                  },
                 ]}
               />
             ) : (

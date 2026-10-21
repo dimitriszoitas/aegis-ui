@@ -2,9 +2,9 @@
 
 [Live Storybook](https://dimitriszoitas.github.io/aegis-ui/) · [Full DataGrid presentation](https://dimitriszoitas.github.io/aegis-ui/?path=/story/components-data-datagrid--full-presentation) · [SIEM console](https://dimitriszoitas.github.io/aegis-ui/?path=/story/console-siem-console--alerts)
 
-Aegis is a token-based React design system for engineers building SIEMs, developer tools, infrastructure consoles, and other code-first platforms. It includes independent light/dark color and Floating, Fixed, or Minimalistic UI approaches, dense investigation tools, and reviewable AI interactions.
+Aegis is a token-based React design system for engineers building SIEMs, developer tools, infrastructure consoles, and other code-first platforms. It includes independent light/dark color and Floating, Fixed, Minimalistic, v0 simple, or Fundamental UI approaches, dense investigation tools, and reviewable AI interactions.
 
-Storybook is the component reference and consumption guide. The repository also runs a marketing website and a complete SIEM console in Vite. The reusable design system is packaged as `@dimitriszoitas/aegis-ui@0.1.0`, with ESM modules, TypeScript declarations, compiled styles, and 91 public entry points. This release can be installed from a package archive; it has not been published to the npm registry.
+Storybook is the component reference and consumption guide. The repository also runs a marketing website and a complete SIEM console in Vite. The reusable design system is packaged as `@dimitriszoitas/aegis-ui@0.1.0`, with ESM modules, TypeScript declarations, compiled styles, and direct component entry points. This release can be installed from a package archive; it has not been published to the npm registry.
 
 ![Aegis console in dark mode, with floating navigation, alert metrics, and an investigation grid](docs/images/console-dark.png)
 
@@ -14,7 +14,7 @@ Floating and Fixed reference screenshots: [Floating · Light](docs/images/consol
 
 Start with **Foundations → Principles**, then open **Console → SIEM console → Alerts**. The console includes:
 
-- Collapsible navigation with Floating, Fixed, and Minimalistic presentation, with working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
+- Collapsible navigation across all five UI approaches, with independent transparent or floating presentation, and working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
 - An alerts grid with sorting and multi-sort, constrained column resizing, visibility settings, three densities, selection, bulk actions, nested evidence, and a virtualized large-data example.
 - Choose toolbar filters or a left filter panel backed by the same filter state, with time ranges, severity histograms, and removable applied chips while the panel is closed.
 - A vertically resizable bottom sheet that spans the workspace between navigation and the assistant.
@@ -131,17 +131,23 @@ pnpm install
 pnpm storybook
 ```
 
-Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and the Floating, Fixed, or Minimalistic UI approach. Floating is the default. Console examples with an open assistant show each approach in either color theme, covering six combinations. To run the marketing website and standalone console:
+Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and the Floating, Fixed, Minimalistic, v0 simple, or Fundamental UI approach. Floating is the default. Console examples with an open assistant show each approach in either color theme, covering ten combinations. To run the marketing website and standalone console:
 
 ```sh
 pnpm dev
 ```
 
-Use the local URL printed by Vite. The root opens the marketing website, with interactive investigation examples and a live token demonstration. Open `?view=components` for the complete catalogue: 84 component families with searchable previews, categories, light/dark themes, and detail panels with usage code, anatomy, and variants. Deep links support `component=button` or a category such as `category=charts`. Add `?view=console` to open the standalone console. No environment variables, credentials, or external services are required.
+Use the local URL printed by Vite. The root opens the marketing website, with interactive investigation examples and a live token demonstration. Open `?view=components` for the complete catalogue, with searchable previews, categories, light/dark themes, and detail panels with usage code, anatomy, and variants. Deep links support `component=button` or a category such as `category=charts`. Add `?view=console` to open the standalone console. No environment variables, credentials, or external services are required.
+
+Console and Console views stories use a fixed 1600px canvas with horizontal scrolling and Storybook zoom on smaller displays. The standalone application keeps its responsive layout.
 
 ## Design principles
 
-**Three UI approaches.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Floating and Fixed share their colors and interior component styling. Minimalistic adds a distinct presentation: two neutral surface fills (gray/white in light mode and a charcoal pair in dark mode), no shadows, quieter neutral borders, compact corners, and monochrome ordinary controls. Its chrome is flush like Fixed. All three preserve typography, control heights, data density, content, and interaction state. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top. Subtle horizontal dividers separate navigation groups without visible group headings.
+**UI approaches.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Floating and Fixed share their colors and interior component styling. Minimalistic adds a distinct presentation: two neutral surface fills (gray/white in light mode and a charcoal pair in dark mode), no shadows, quieter neutral borders, compact corners, and monochrome ordinary controls. Its chrome is flush like Fixed. All three preserve typography, control heights, data density, content, and interaction state. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top. Subtle horizontal dividers separate navigation groups without visible group headings.
+
+**Fundamental** uses a canvas and one card surface in light and dark. Containers are borderless; subtle horizontal dividers organize data and form controls retain a quiet boundary. Floating overlays use soft shadows and modal backdrops to separate from the page. Ordinary actions use blue, AI actions use a hot pink to purple-magenta gradient, and red, green, amber, and cyan communicate semantic state. Its interface uses Figtree, with JetBrains Mono for code and identifiers.
+
+`SideNav` accepts `presentation="transparent"` or `presentation="floating"` independently of the UI approach. The floating option has a subtle background and rounded corners on every side. Leaving the prop unset preserves the approach's default. In the console, **Navigation appearance** changes this choice without resetting the route, filters, or collapsed state.
 
 In Floating and Fixed, selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. Minimalistic uses neutral selection. Each approach applies its treatment consistently to the compact rail and nested navigation.
 
@@ -167,11 +173,11 @@ The token system has three layers:
 2. Semantic tokens: surfaces, text, borders, intent, severity, syntax, charts, and focus.
 3. Component tokens: control radii, sidebar dimensions, and grid densities.
 
-[`src/styles/tokens.css`](src/styles/tokens.css) defines the base palette; [`minimalistic-tokens.css`](src/styles/minimalistic-tokens.css) supplies the Minimalistic surface, control, and radius overrides. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
+[`src/styles/tokens.css`](src/styles/tokens.css) defines the base palette; [`minimalistic-tokens.css`](src/styles/minimalistic-tokens.css) supplies the Minimalistic surface, control, and radius overrides. [`v0-simple-tokens.css`](src/styles/v0-simple-tokens.css) supplies the audited Lakewatch refinement; [`fundamental-tokens.css`](src/styles/fundamental-tokens.css) supplies Fundamental’s neutral surfaces and restrained semantic tones. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume tokens rather than raw colors. Foundation swatches read the token source directly.
 
 The base Floating/Fixed button radius tokens use 4/5/6px. Other control primitives retain 6px (`xs` and `sm`), 7px (`md`), and 8px (`lg`, `xl`, and `2xl`). The legacy `--radius-full` stays 8px and chips use the dedicated 6px `--chip-radius`; pill-shaped status badges are an explicit exception. Surface tokens are separate: `--surface-radius` is 10px, `--surface-radius-floating` is 12px, and `--surface-radius-nested` is `calc(var(--surface-radius-floating) - var(--space-1))`, or 8px. Nested surface rules never change control corners. Minimalistic overrides the surface and control scales for its compact presentation without changing control heights.
 
-The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent UI approach uses `data-layout-theme` with `floating`, `fixed`, or `minimalistic`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's color and UI approach toolbar controls preview all six combinations without persisting a standalone preference.
+The theme is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent UI approach uses `data-layout-theme` with `floating`, `fixed`, `minimalistic`, `v0-simple`, or `fundamental`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document for portaled sheets and menus. Storybook's color and UI approach toolbar controls preview all ten combinations without persisting a standalone preference. **v0 simple** retains the Lakewatch white/charcoal surfaces and restrained blue while strengthening essential boundaries and supporting text. It uses 32/36/44px control sizes, visible focus, neutral workflow statuses, 4–6px corners, and no decorative shadows.
 
 In a consuming application, use package imports:
 
@@ -190,6 +196,10 @@ export function ExplainAction({ onExplain }: { onExplain: () => void }) {
 ```
 
 For source-level development in this repository, the `@/` alias resolves to `src/`; it is not needed by package consumers. Each component folder exports its public components and prop types. Use Storybook's component docs for individual APIs. For example, `AlertDetailSheet` uses the canonical alert record alongside a separate filtered navigation list, and `AiPanel` accepts a keyed request and an evidence callback.
+
+`MiniBarChart`, available from `/mini-bar-chart` or the root export, provides compact zero-based activity bars with the same data, semantic intents, and accessible labeling as `Sparkline`. Use `sparklineVariant="bar"` in `MetricCard` to use it beside a metric. Storybook includes standalone, intent, metric-card, table-cell, and loading/empty examples.
+
+`Notification`, available from `/notification` or the root export, unifies inline messages and floating notifications. The default `variant="inline"` has a transparent background and semantic border; `variant="floating"` uses a surface suitable for overlays. Both accept intent, title, description, actions, and dismissal. Mount `NotificationViewport` once and call `showNotification` for timed floating messages; `dismissNotification` dismisses them programmatically. Existing `Banner`, `Callout`, `Toast`, `Toaster`, and `showToast` imports remain compatible adapters. Storybook presents both variants under **Components → Feedback → Notification**.
 
 Mount the theme hooks in your application shell to follow preferences and keep portaled overlays in sync:
 

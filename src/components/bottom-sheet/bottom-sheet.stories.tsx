@@ -88,6 +88,7 @@ export const FloatingWithAi: Story = {
   parameters: { docs: { story: { height: 680 } } },
 };
 export const KeyboardResize: Story = {
+  parameters: { docs: { story: { inline: true, autoplay: false, height: 600 } } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const edge = canvas.getByRole('separator', { name: 'Resize bottom panel' });

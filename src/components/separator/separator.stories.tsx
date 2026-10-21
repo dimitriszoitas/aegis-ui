@@ -9,7 +9,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Orientations: Story = {
   render: () => (
-    <div className="surface stack" style={{ maxWidth: 580 }}>
+    <div className="story-layout stack" style={{ maxWidth: 580 }}>
       <div>
         <h3>Authentication activity</h3>
         <p className="muted" style={{ margin: 0 }}>
@@ -29,7 +29,7 @@ export const Orientations: Story = {
 };
 export const InToolbar: Story = {
   render: () => (
-    <div className="surface row">
+    <div className="story-layout row">
       <span>All alerts</span>
       <Separator orientation="vertical" />
       <span className="muted">Updated 30 seconds ago</span>
@@ -41,7 +41,7 @@ export const Matrix: Story = {
   render: () => (
     <div className="stack" style={{ maxWidth: 580 }}>
       {(['light', 'normal'] as const).map((emphasis) => (
-        <section key={emphasis} className="surface stack">
+        <section key={emphasis} className="story-layout stack">
           <h3>{emphasis === 'light' ? 'Light emphasis' : 'Normal emphasis'}</h3>
           <Separator emphasis={emphasis} />
           <div className="row">

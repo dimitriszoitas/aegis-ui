@@ -11,7 +11,7 @@ export interface ConsoleViewStoryFrameProps {
 export function ConsoleViewStoryFrame({ children }: ConsoleViewStoryFrameProps) {
   const [selected, setSelected] = useState<Alert>();
   return (
-    <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+    <div style={{ width: '100%' }}>
       {children(setSelected)}
       <SideSheet
         open={!!selected}

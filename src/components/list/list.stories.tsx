@@ -38,7 +38,7 @@ function AlertListDemo() {
   const [selected, setSelected] = useState('');
   const [acknowledged, setAcknowledged] = useState<string[]>([]);
   return (
-    <div className="surface" style={{ maxWidth: 780 }}>
+    <div className="story-layout" style={{ maxWidth: 780 }}>
       <List aria-label="Alerts to investigate">
         {alerts.map((alert) => (
           <ListItem
@@ -72,7 +72,7 @@ function AlertListDemo() {
 export const SelectableAlerts: Story = { render: () => <AlertListDemo /> };
 export const Analysts: Story = {
   render: () => (
-    <div className="surface" style={{ maxWidth: 660 }}>
+    <div className="story-layout" style={{ maxWidth: 660 }}>
       <List divided aria-label="On-call analysts">
         <ListItem
           title="Eleni Papadopoulos"
@@ -100,7 +100,7 @@ export const Densities: Story = {
   render: () => (
     <div className="story-grid">
       {(['compact', 'default', 'comfortable'] as const).map((density) => (
-        <section className="surface" key={density}>
+        <section className="story-layout" key={density}>
           <h3>{density[0].toUpperCase() + density.slice(1)} density</h3>
           <List density={density}>
             {alerts.map((alert) => (

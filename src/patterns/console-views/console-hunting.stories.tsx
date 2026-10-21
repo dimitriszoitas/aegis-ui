@@ -1,3 +1,7 @@
+import {
+  consolePreviewGlobals,
+  consolePreviewParameters,
+} from '../../../.storybook/console-canvas';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { ConsoleHunting } from './console-views';
@@ -5,6 +9,8 @@ import { ConsoleViewStoryFrame } from './console-view-story-helpers';
 import { alerts, referenceTime } from '@/sample-data';
 const meta = {
   title: 'Patterns/Console views/Hunting',
+  globals: consolePreviewGlobals,
+  parameters: consolePreviewParameters,
   component: ConsoleHunting,
   tags: ['autodocs'],
   args: { alerts, now: referenceTime, onOpenAlert: () => undefined },

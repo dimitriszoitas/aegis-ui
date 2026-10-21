@@ -1,8 +1,10 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByClassName, withThemeByDataAttribute } from '@storybook/addon-themes';
 import { AegisDocsContainer, WithDocsTheme } from './docs-container';
+import { WithConsoleCanvas } from './console-canvas';
 import { layoutThemeOptions } from '../src/lib/layout-theme';
 import '../src/styles/globals.css';
+import './story-layout.css';
 const preview: Preview = {
   tags: ['autodocs'],
   initialGlobals: { layoutTheme: 'floating' },
@@ -18,6 +20,7 @@ const preview: Preview = {
     },
   },
   decorators: [
+    WithConsoleCanvas,
     withThemeByClassName({
       themes: { light: 'light', dark: 'dark' },
       defaultTheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',

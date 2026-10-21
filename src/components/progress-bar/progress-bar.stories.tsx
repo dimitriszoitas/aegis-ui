@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const Intents: Story = {
   render: () => (
-    <div className="surface stack" style={{ width: 480 }}>
+    <div className="story-layout stack" style={{ width: 480 }}>
       {(['function', 'success', 'warning', 'destroy', 'ai'] as const).map((intent, index) => (
         <ProgressBar
           key={intent}
@@ -34,7 +34,7 @@ export const Intents: Story = {
 };
 export const States: Story = {
   render: () => (
-    <div className="surface stack" style={{ width: 480 }}>
+    <div className="story-layout stack" style={{ width: 480 }}>
       <ProgressBar label="Queued for analysis" value={0} showValue />
       <ProgressBar label="Rule validation complete" value={100} intent="success" showValue />
       <ProgressBar label="Querying event sources" showValue />
@@ -50,7 +50,7 @@ function CollectionDemo() {
     return () => clearTimeout(timer);
   }, [value]);
   return (
-    <div className="surface stack" style={{ width: 480 }}>
+    <div className="story-layout stack" style={{ width: 480 }}>
       <ProgressBar
         label={
           value === 100 ? 'Evidence collection complete' : 'Collecting evidence from WS-ATH-114'

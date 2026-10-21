@@ -420,7 +420,7 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     'Side navigation',
     'Navigation',
     'Organize a workspace into stable destinations and nested groups.',
-    'Control activeId with onNavigate. The rail can collapse without losing item labels or keyboard access.',
+    'Control activeId with onNavigate. Choose a transparent rail or a subtly filled floating panel with rounded corners. Both can collapse without losing item labels or keyboard access.',
     [
       'Workspace identity',
       'Search action',
@@ -436,7 +436,10 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
       jsx: '<SideNav activeId={active} onNavigate={setActive}\n  sections={[{ label: "Workspace", items: [\n    { id: "alerts", label: "Alerts", icon: <Shield size={17} />, count: 12 },\n    { id: "rules", label: "Rules", icon: <FileCode2 size={17} /> },\n  ] }]} />',
     },
     'components-navigation-sidenav',
-    [v('collapsed', ['false', 'true'], 'false')],
+    [
+      v('presentation', ['transparent', 'floating'], 'Inherits UI approach'),
+      v('collapsed', ['false', 'true'], 'false'),
+    ],
   ),
   entry(
     'pagination',
@@ -904,6 +907,21 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     [v('sparklineVariant', ['line', 'area', 'bar'])],
   ),
   entry(
+    'mini-bar-chart',
+    'Mini bar chart',
+    'Charts',
+    'Compare small activity buckets without a full chart taking over the interface.',
+    'Use a compact series of nonnegative counts and an accessible label describing the measurement and period. Fits table cells and metric cards, with no axes or interaction required.',
+    ['Zero-based bars', 'Semantic color', 'Accessible summary'],
+    {
+      exports: 'MiniBarChart',
+      jsx: '<MiniBarChart data={[12, 18, 14, 26, 21, 34, 28, 42, 31, 48, 39, 54]}\n  width={120} height={32} label="Hourly event volume over the last twelve hours" />',
+    },
+    'components-charts-mini-bar-chart',
+    [v('intent', ['function', 'ai', 'success', 'warning', 'destroy'], 'function')],
+    ['bars', 'spark bars', 'activity', 'compact'],
+  ),
+  entry(
     'sparkline',
     'Sparkline',
     'Charts',
@@ -1092,19 +1110,24 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
   ),
 
   entry(
-    'banner',
-    'Banner',
+    'notification',
+    'Notification',
     'Feedback',
-    'Keep a relevant message visible beside the work it affects.',
-    'Choose an intent and optionally supply a title, action, or dismiss callback. Use a visible message for information that must not depend on hover.',
+    'Deliver inline feedback or a floating notification with one component.',
+    'Use the inline variant for persistent context: transparent with a semantic border. Use the floating variant for transient feedback; mount NotificationViewport once and call showNotification. Both support actions and dismissal.',
     ['Intent icon', 'Title', 'Message', 'Optional action', 'Dismiss control'],
     {
-      exports: 'Banner',
+      exports: 'Notification, NotificationViewport, showNotification',
+      imports: [buttonImport],
       setup: 'const [visible, setVisible] = useState(true);',
-      jsx: '<div>\n  {visible && <Banner intent="warning" title="Partial data" onDismiss={() => setVisible(false)}>\n    Identity events are delayed by four minutes.\n  </Banner>}\n</div>',
+      jsx: '<div>\n  {visible && <Notification variant="inline" intent="warning" title="Partial data" onDismiss={() => setVisible(false)}>\n    Identity events are delayed by four minutes.\n  </Notification>}\n  <Button onClick={() => showNotification({ title: "Rule saved", intent: "success" })}>Save rule</Button>\n  <NotificationViewport />\n</div>',
     },
-    'components-feedback-banner',
-    [v('intent', ['info', 'success', 'warning', 'destroy', 'ai'], 'info')],
+    'components-feedback-notification',
+    [
+      v('variant', ['inline', 'floating'], 'inline'),
+      v('intent', ['info', 'success', 'warning', 'destroy', 'ai', 'loading'], 'info'),
+    ],
+    ['banner', 'toast', 'callout', 'alert', 'message'],
   ),
   entry(
     'empty-state',
@@ -1167,22 +1190,6 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
       v('intent', ['function', 'success', 'warning', 'destroy', 'ai'], 'function'),
     ],
   ),
-  entry(
-    'toast',
-    'Toast',
-    'Feedback',
-    'Confirm an action without interrupting the current workflow.',
-    'Mount Toaster once, then call showToast. Static Toast is also exported for inline presentations and custom integrations.',
-    ['Intent icon', 'Title and description', 'Optional action', 'Dismiss control'],
-    {
-      exports: 'Toaster, showToast',
-      imports: [buttonImport],
-      jsx: '<>\n  <Button onClick={() => showToast({ title: "Rule saved", intent: "success",\n    description: "The rule remains disabled until you enable it." })}>Save rule</Button>\n  <Toaster />\n</>',
-    },
-    'components-feedback-toast',
-    [v('intent', ['info', 'success', 'warning', 'destroy', 'ai', 'loading'], 'info')],
-  ),
-
   entry(
     'card',
     'Card',

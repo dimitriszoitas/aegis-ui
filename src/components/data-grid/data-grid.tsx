@@ -90,6 +90,8 @@ export interface DataGridProps<T> {
   columns: ColumnDef<T>[];
   getRowId: (row: T) => string;
   label?: string;
+  /** Plural record name displayed in the pagination summary. */
+  noun?: string;
   rowLabel?: (row: T) => string;
   density?: GridDensity;
   onDensityChange?: (density: GridDensity) => void;
@@ -184,6 +186,7 @@ export function DataGrid<T>({
   columns,
   getRowId,
   label = 'Security alerts',
+  noun = 'alerts',
   rowLabel,
   density: controlledDensity,
   onDensityChange,
@@ -1425,11 +1428,12 @@ export function DataGrid<T>({
               scrollRef.current?.scrollTo({ top: 0 });
             }}
             disabled={loading}
-            noun="alerts"
+            noun={noun}
           />
         ) : (
           <span>
-            {data.length.toLocaleString()} alerts{shouldVirtualize && ' · Virtual scrolling'}
+            {data.length.toLocaleString()} {noun}
+            {shouldVirtualize && ' · Virtual scrolling'}
           </span>
         )}
       </div>

@@ -88,7 +88,7 @@ export function AiMessage({
   return (
     <article
       {...props}
-      aria-label="Aegis assistant response"
+      aria-label="Assistant response"
       className={cn('aegis-ai-message', className)}
       data-status={message.status}
     >
@@ -221,9 +221,9 @@ export function AiMessage({
       )}
       <span role="status" className="sr-only">
         {streaming
-          ? 'Aegis is generating a response'
+          ? 'Generating a response'
           : message.status === 'complete'
-            ? 'Aegis response complete'
+            ? 'Response complete'
             : message.status === 'stopped'
               ? 'Generation stopped'
               : 'Response interrupted'}

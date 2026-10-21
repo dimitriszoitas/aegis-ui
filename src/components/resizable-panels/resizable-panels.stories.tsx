@@ -18,7 +18,7 @@ const meta = {
   render: (args) => (
     <ResizablePanels {...args} style={{ height: 420 }}>
       <ResizablePanel id="alerts" defaultSize="65%" minSize="25%">
-        <div className="surface" style={{ height: '100%' }}>
+        <div className="story-layout" style={{ height: '100%' }}>
           <h3>Alert queue</h3>
           <p className="muted">
             Drag the divider or focus it and use the arrow keys to resize the investigation
@@ -32,7 +32,7 @@ const meta = {
       </ResizablePanel>
       <ResizeHandle label="Resize alert queue and evidence" />
       <ResizablePanel id="evidence" defaultSize="35%" minSize="20%">
-        <div className="surface" style={{ height: '100%' }}>
+        <div className="story-layout" style={{ height: '100%' }}>
           <h3>Evidence</h3>
           <p className="muted">Six related process events</p>
           <code>WINWORD.EXE → powershell.exe</code>
@@ -50,14 +50,14 @@ export const Collapsible: Story = {
   render: () => (
     <ResizablePanels style={{ height: 320 }}>
       <ResizablePanel id="assistant" defaultSize="30%" minSize="20%" collapsible collapsedSize="0%">
-        <div className="surface" style={{ height: '100%' }}>
+        <div className="story-layout" style={{ height: '100%' }}>
           <h3>Aegis assistant</h3>
           <p className="muted">Review the selected alert evidence.</p>
         </div>
       </ResizablePanel>
       <ResizeHandle label="Resize or collapse assistant" />
       <ResizablePanel id="main" defaultSize="70%" minSize="30%">
-        <div className="surface" style={{ height: '100%' }}>
+        <div className="story-layout" style={{ height: '100%' }}>
           <h3>Investigation</h3>
           <p>Press Enter on the divider to collapse or restore the assistant.</p>
         </div>

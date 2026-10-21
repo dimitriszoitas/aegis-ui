@@ -11,7 +11,7 @@ export default {
 } satisfies Meta<typeof SparklineCell>;
 export const Matrix: StoryObj<typeof SparklineCell> = {
   render: () => (
-    <div className="surface stack" style={{ maxWidth: 400 }}>
+    <div className="story-layout stack" style={{ maxWidth: 400 }}>
       {(['line', 'area', 'bar'] as const).map((variant) => (
         <div className="between" key={variant}>
           <span className="muted">24-hour event activity · {variant}</span>
