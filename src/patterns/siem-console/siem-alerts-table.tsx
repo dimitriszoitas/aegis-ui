@@ -4,19 +4,20 @@ import { DropdownMenu } from '@/components/dropdown-menu';
 import { IconButton } from '@/components/icon-button';
 import { Columns3, Funnel } from '@/components/icon';
 import { FilterOptions, FilterPanel } from '@/patterns/filter-panel';
+import { AppliedFilterGroups, type AppliedFilterGroup } from '@/patterns/filter-bar';
 import { Accordion } from '@/components/accordion';
 import { Checkbox } from '@/components/checkbox';
 import { DataGrid, type GridDensity } from '@/components/data-grid';
 import { SearchInput } from '@/components/search-input';
-import { SeverityBadge } from '@/components/severity-badge';
+import { SeverityBadge, severityLabels } from '@/components/severity-badge';
 import { Tag } from '@/components/tag';
 import { MiniBarChart } from '@/components/mini-bar-chart';
 import { BulkActionsBar } from '@/components/bulk-actions-bar';
 import { TimeRangePicker } from '@/components/time-range-picker';
 import {
   applyAlertFilters,
-  createDefaultFilters,
   getAppliedFilterCount,
+  UNASSIGNED,
   type AlertFilterState,
 } from '@/lib/filters';
 import type { Alert, Analyst, DetectionRule } from '@/sample-data';
@@ -85,9 +86,61 @@ export function SiemAlertsTable({
     else shellRef.current?.querySelector<HTMLElement>('.aegis-grid-scroll')?.focus();
   }
   function clearFilters() {
-    onFiltersChange(createDefaultFilters());
+    patch({ severities: [], statuses: [], sources: [], assignees: [], rules: [] });
     onRuleChange([]);
   }
+  function focusFilterToggle() {
+    const toggle = shellRef.current?.querySelector<HTMLButtonElement>(
+      `button[aria-controls="${panelId}"]`,
+    );
+    (toggle ?? shellRef.current?.querySelector<HTMLElement>('.aegis-grid-scroll'))?.focus({
+      preventScroll: true,
+    });
+  }
+  const appliedGroups: AppliedFilterGroup[] = [
+    {
+      id: 'detection-rule',
+      label: 'Detection rule',
+      values: ruleIds.map((id) => rules.find((rule) => rule.id === id)?.name ?? id),
+      onRemove: () => onRuleChange([]),
+    },
+    {
+      id: 'severity',
+      label: 'Severity',
+      values: filters.severities.map((severity) => severityLabels[severity]),
+      onRemove: () => patch({ severities: [] }),
+    },
+    {
+      id: 'state',
+      label: 'State',
+      values: filters.statuses.map((state) => siemStateLabels[state]),
+      onRemove: () => patch({ statuses: [] }),
+    },
+    {
+      id: 'source',
+      label: 'Source',
+      values: filters.sources,
+      onRemove: () => patch({ sources: [] }),
+    },
+    {
+      id: 'assignee',
+      label: 'Assignee',
+      values: filters.assignees.map((id) =>
+        id === UNASSIGNED
+          ? 'Unassigned'
+          : (analysts.find((analyst) => analyst.id === id)?.name ?? id),
+      ),
+      onRemove: () => patch({ assignees: [] }),
+    },
+    {
+      id: 'conditions',
+      label: 'Conditions',
+      values: filters.rules.map(
+        (rule) => `${rule.field} ${rule.operator.replaceAll('-', ' ')} ${rule.value}`,
+      ),
+      onRemove: () => patch({ rules: [] }),
+    },
+  ];
   const columns: ColumnDef<Alert>[] = [
     {
       accessorKey: 'title',
@@ -272,55 +325,64 @@ export function SiemAlertsTable({
           onSelectedRowsChange={(_, rows) => onSelectionChange?.(rows)}
           emptyTitle="No alerts match your filters"
           emptyDescription="Try another rule, severity, or time range."
-          renderToolbar={(api) =>
-            api.selectionActions ?? (
-              <div className="siem-alerts-toolbar">
-                <div className="siem-alerts-filter-toggle">
-                  <IconButton
-                    emphasis="tertiary"
-                    aria-label={filterCount > 0 ? `Filters, ${filterCount} applied` : 'Filters'}
-                    aria-controls={panelId}
-                    aria-expanded={panelOpen}
-                    onClick={() => setPanelOpen((open) => !open)}
-                  >
-                    <Funnel size={16} />
-                  </IconButton>
-                </div>
-                <SearchInput
-                  aria-label="Search alerts"
-                  placeholder="Search alerts, rules, or IDs…"
-                  value={filters.query}
-                  onValueChange={(query) => patch({ query })}
-                />
-                <TimeRangePicker
-                  value={filters.timeRange}
-                  onValueChange={(timeRange) => patch({ timeRange })}
-                  now={now}
-                />
-                <DropdownMenu
-                  label="Alert columns"
-                  trigger={
+          renderToolbar={(api) => (
+            <div className="siem-alerts-toolbar-stack">
+              {api.selectionActions ?? (
+                <div className="siem-alerts-toolbar">
+                  <div className="siem-alerts-filter-toggle">
                     <IconButton
-                      className="siem-alerts-columns-toggle"
-                      aria-label="Alert columns"
-                      emphasis="ghost"
+                      emphasis="tertiary"
+                      aria-label={filterCount > 0 ? `Filters, ${filterCount} applied` : 'Filters'}
+                      aria-controls={panelId}
+                      aria-expanded={panelOpen}
+                      onClick={() => setPanelOpen((open) => !open)}
                     >
-                      <Columns3 size={17} />
+                      <Funnel size={16} />
                     </IconButton>
-                  }
-                  items={api.columns
-                    .filter((c) => c.hideable)
-                    .map((c) => ({
-                      type: 'checkbox',
-                      id: c.id,
-                      label: c.label,
-                      checked: c.visible,
-                      onCheckedChange: (checked) => api.setColumnVisibility(c.id, checked),
-                    }))}
+                  </div>
+                  <SearchInput
+                    aria-label="Search alerts"
+                    placeholder="Search alerts, rules, or IDs…"
+                    value={filters.query}
+                    onValueChange={(query) => patch({ query })}
+                  />
+                  <TimeRangePicker
+                    value={filters.timeRange}
+                    onValueChange={(timeRange) => patch({ timeRange })}
+                    now={now}
+                  />
+                  <DropdownMenu
+                    label="Alert columns"
+                    trigger={
+                      <IconButton
+                        className="siem-alerts-columns-toggle"
+                        aria-label="Alert columns"
+                        emphasis="ghost"
+                      >
+                        <Columns3 size={17} />
+                      </IconButton>
+                    }
+                    items={api.columns
+                      .filter((c) => c.hideable)
+                      .map((c) => ({
+                        type: 'checkbox',
+                        id: c.id,
+                        label: c.label,
+                        checked: c.visible,
+                        onCheckedChange: (checked) => api.setColumnVisibility(c.id, checked),
+                      }))}
+                  />
+                </div>
+              )}
+              {!panelOpen && (
+                <AppliedFilterGroups
+                  groups={appliedGroups}
+                  focusFallback={focusFilterToggle}
+                  onClearAll={clearFilters}
                 />
-              </div>
-            )
-          }
+              )}
+            </div>
+          )}
           renderBulkActions={(selected, clear) => (
             <BulkActionsBar
               position="inline"

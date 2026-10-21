@@ -32,6 +32,7 @@ import { Textarea } from '@/components/textarea';
 import { TextInput } from '@/components/text-input';
 import { Timeline } from '@/components/timeline';
 import { FilterOptions } from '@/patterns/filter-panel';
+import { AppliedFilterGroups } from '@/patterns/filter-bar';
 import type { Alert, DetectionRule } from '@/sample-data';
 import {
   formatSiemTime,
@@ -494,29 +495,20 @@ export function ConsoleDetections({
       </form>
     </Modal>
   );
-  const appliedFilters = filtersCount > 0 && (
-    <div className="aegis-detections-applied" aria-label="Applied rule filters" role="group">
-      {(Object.keys(filters) as RuleFacet[]).flatMap((facet) =>
-        filters[facet].map((value) => {
-          const label =
-            facetOptions[facet].find((option) => option.value === value)?.label ?? value;
-          return (
-            <Tag
-              key={`${facet}-${value}`}
-              variant="removable"
-              onRemove={() => {
-                toggleFilter(facet, value);
-                searchRef.current?.focus();
-              }}
-              removeLabel={`Remove ${ruleFacetLabels[facet].toLowerCase()} filter: ${label}`}
-            >
-              {ruleFacetLabels[facet]}: {label}
-            </Tag>
-          );
-        }),
-      )}
-    </div>
-  );
+  const appliedGroups = (Object.keys(filters) as RuleFacet[]).map((facet) => ({
+    id: facet,
+    label: ruleFacetLabels[facet],
+    values: filters[facet].map(
+      (value) => facetOptions[facet].find((option) => option.value === value)?.label ?? value,
+    ),
+    onRemove: () => setFilters((current) => ({ ...current, [facet]: [] })),
+  }));
+  function focusFilterControl() {
+    const control = workspaceRef.current?.querySelector<HTMLElement>(
+      `button[aria-controls="${filterPanelId}"], .aegis-grid-bulk button, .aegis-grid-scroll`,
+    );
+    control?.focus({ preventScroll: true });
+  }
   if (!selected)
     return (
       <div
@@ -607,39 +599,49 @@ export function ConsoleDetections({
             initialSorting={[{ id: 'name', desc: false }]}
             emptyTitle="No detection rules match"
             emptyDescription="Try another rule name or clear the active filters."
-            renderToolbar={(api) =>
-              api.selectionActions ?? (
-                <div className="aegis-detections-toolbar">
-                  <div className="aegis-detections-filter-toggle">
-                    <IconButton
-                      emphasis="tertiary"
-                      aria-label={filtersCount > 0 ? `Filters, ${filtersCount} applied` : 'Filters'}
-                      aria-controls={filterPanelId}
-                      aria-expanded={panelOpen}
-                      onClick={() => setPanelOpen((open) => !open)}
-                    >
-                      <Funnel size={16} />
-                    </IconButton>
-                  </div>
-                  <SearchInput
-                    ref={searchRef}
-                    aria-label="Search detection rules"
-                    placeholder="Search detection rules"
-                    value={query}
-                    onValueChange={setQuery}
-                  />
+            renderToolbar={(api) => (
+              <div className="aegis-detections-toolbar-stack">
+                {api.selectionActions ?? (
+                  <div className="aegis-detections-toolbar">
+                    <div className="aegis-detections-filter-toggle">
+                      <IconButton
+                        emphasis="tertiary"
+                        aria-label={
+                          filtersCount > 0 ? `Filters, ${filtersCount} applied` : 'Filters'
+                        }
+                        aria-controls={filterPanelId}
+                        aria-expanded={panelOpen}
+                        onClick={() => setPanelOpen((open) => !open)}
+                      >
+                        <Funnel size={16} />
+                      </IconButton>
+                    </div>
+                    <SearchInput
+                      ref={searchRef}
+                      aria-label="Search detection rules"
+                      placeholder="Search detection rules"
+                      value={query}
+                      onValueChange={setQuery}
+                    />
 
-                  <Button
-                    className="aegis-detections-create"
-                    leadingIcon={<Plus size={15} />}
-                    onClick={onCreateRule}
-                  >
-                    Create detection rule
-                  </Button>
-                  {!panelOpen && appliedFilters}
-                </div>
-              )
-            }
+                    <Button
+                      className="aegis-detections-create"
+                      leadingIcon={<Plus size={15} />}
+                      onClick={onCreateRule}
+                    >
+                      Create detection rule
+                    </Button>
+                  </div>
+                )}
+                {!panelOpen && (
+                  <AppliedFilterGroups
+                    groups={appliedGroups}
+                    onClearAll={clearFilters}
+                    focusFallback={focusFilterControl}
+                  />
+                )}
+              </div>
+            )}
           />
         </div>
       </div>

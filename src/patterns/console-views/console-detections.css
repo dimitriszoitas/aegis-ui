@@ -63,7 +63,6 @@
 .aegis-detections-create {
   margin-inline-start: auto;
 }
-.aegis-detections-applied,
 .aegis-detections-tags {
   display: flex;
   flex-wrap: wrap;
@@ -228,8 +227,11 @@
     flex-basis: 100%;
   }
 }
-.aegis-detections-toolbar > .aegis-detections-applied {
-  flex-basis: 100%;
+.aegis-detections-toolbar-stack {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
 }
 
 .aegis-detections-detail-title h1:focus {

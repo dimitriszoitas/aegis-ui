@@ -1,0 +1,30 @@
+.aegis-applied-filter-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
+}
+.aegis-applied-filter-label {
+  flex: 0 0 auto;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.aegis-applied-filter-groups .aegis-applied-filter-group {
+  min-width: 0;
+  max-width: min(420px, 100%);
+}
+.aegis-applied-filter-summary {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-applied-filter-category {
+  color: var(--color-text-secondary);
+}
+.aegis-applied-filter-group .tag-remove {
+  flex: 0 0 16px;
+}

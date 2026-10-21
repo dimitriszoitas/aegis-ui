@@ -73,11 +73,11 @@
   flex: 0 0 44px;
   width: 44px;
 }
-.aegis-datasources-applied {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  flex-basis: 100%;
+.aegis-datasources-toolbar-stack {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
 }
 .aegis-datasources-create {
   margin-inline-start: auto;
@@ -214,9 +214,6 @@
   .aegis-datasources-toolbar > .aegis-input {
     flex-basis: 100%;
     order: 1;
-  }
-  .aegis-datasources-applied {
-    order: 2;
   }
 }
 @media (prefers-reduced-motion: reduce) {

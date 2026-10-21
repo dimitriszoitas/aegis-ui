@@ -169,6 +169,14 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Balanced the visible insets around filter dividers and aligned collapse controls, chevrons, and counts in one trailing column. Shared selects truncate long values without changing control height. Empty table bodies have a faint surface across their full area.
 - Overview activity charts now sit in matching cards with slightly darker resting bars and preserved hover feedback. Breadcrumb text and separators use 12px. Overview omits breadcrumbs; rule details use an Alerts-style back/title/ID header and preserve list selection on return.
 
+## Applied filter summaries and chart contrast
+
+- Added a shared closed-panel filter summary to Alerts, Detection rules, and Datasources. “Filters Applied” precedes one removable chip per category, followed by Clear all. Long values truncate with their complete text available; summaries remain visible during bulk selection and empty results.
+- Removing a chip clears that category only. Clear all clears selected categories while preserving the search and time range. Keyboard focus moves to the next chip or returns to the filter/table controls after the last removal.
+- Deepened Overview chart bars in their default state, with a lighter hover and keyboard highlight in both color themes.
+- Reduced the desktop Overview column gap from 64px to 32px, keeping the charts and lower sections aligned.
+- The publication snapshot passes type checking, full lint and semantic-token checks, all 21 tests, and Storybook/package builds. Desktop/mobile checks in both color themes cover grouped removal, Clear all, long labels, empty results, selection transitions, keyboard focus, and accessibility across all three lists.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

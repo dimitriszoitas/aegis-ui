@@ -110,7 +110,7 @@
 .siem-overview-queues {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-16);
+  gap: var(--space-8);
   min-width: 0;
 }
 .siem-overview-charts {
@@ -119,10 +119,17 @@
 .siem-overview .siem-overview-chart-card.aegis-card {
   --color-chart-2: color-mix(
     in srgb,
-    var(--overview-activity-blue) 85%,
+    var(--overview-activity-blue) 65%,
     light-dark(var(--color-text-primary), var(--color-bg-canvas))
   );
   padding: var(--space-6);
+}
+.siem-overview-chart-card .recharts-active-bar .recharts-rectangle {
+  fill: color-mix(
+    in srgb,
+    var(--color-chart-2) 75%,
+    light-dark(var(--color-bg-surface), var(--color-text-primary))
+  );
 }
 .siem-overview-queues {
   align-items: start;

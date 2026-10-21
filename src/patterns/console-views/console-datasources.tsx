@@ -14,9 +14,9 @@ import { MiniBarChart } from '@/components/mini-bar-chart';
 import { Modal } from '@/components/modal';
 import { SearchInput } from '@/components/search-input';
 import { Select } from '@/components/select';
-import { Tag } from '@/components/tag';
 import { TextInput } from '@/components/text-input';
 import { FilterOptions } from '@/patterns/filter-panel';
+import { AppliedFilterGroups } from '@/patterns/filter-bar';
 import { DatasourceProviderIcon } from './datasource-provider-icon';
 import {
   createDatasourceFixtures,
@@ -132,16 +132,14 @@ export function ConsoleDatasources() {
   }
   const filtered = sources.filter((source) => matchesFilters(source));
   const filterCount = Object.values(facetValues).reduce((sum, values) => sum + values.length, 0);
-  const activeFilters = facetGroups.flatMap((group) =>
-    group.options
+  const appliedGroups = facetGroups.map((group) => ({
+    id: group.id,
+    label: group.label,
+    values: group.options
       .filter((option) => facetValues[group.id].includes(option.value))
-      .map((option) => ({
-        id: `${group.id}:${option.value}`,
-        label: group.label,
-        value: option.label,
-        clear: () => toggleFacet(group.id, option.value, false),
-      })),
-  );
+      .map((option) => option.label),
+    onRemove: () => setFacetValues((current) => ({ ...current, [group.id]: [] })),
+  }));
   function toggleFacet(facet: DatasourceFacet, value: string, checked: boolean) {
     setFacetValues((current) => ({
       ...current,
@@ -477,52 +475,39 @@ export function ConsoleDatasources() {
             emptyTitle="No matching datasources"
             emptyDescription="Try another search or clear a filter."
             renderToolbar={() => (
-              <div className="aegis-datasources-toolbar">
-                <div className="aegis-datasources-filter-toggle">
-                  <IconButton
-                    emphasis="tertiary"
-                    aria-label={filterCount > 0 ? `Filters, ${filterCount} applied` : 'Filters'}
-                    aria-controls={filterPanelId}
-                    aria-expanded={panelOpen}
-                    onClick={() => setPanelOpen((open) => !open)}
-                  >
-                    <Funnel size={16} />
-                  </IconButton>
-                </div>
-                <SearchInput
-                  aria-label="Search datasources"
-                  placeholder="Search datasources"
-                  value={query}
-                  onValueChange={setQuery}
-                />
-                <Button
-                  className="aegis-datasources-create"
-                  leadingIcon={<Plus size={16} />}
-                  onClick={beginCreate}
-                >
-                  Create datasource
-                </Button>
-                {!panelOpen && activeFilters.length > 0 && (
-                  <div
-                    className="aegis-datasources-applied"
-                    aria-label="Applied datasource filters"
-                  >
-                    {activeFilters.map((filter) => (
-                      <Tag
-                        key={filter.id}
-                        variant="removable"
-                        size="sm"
-                        intent="function"
-                        onRemove={() => {
-                          filter.clear();
-                          requestAnimationFrame(focusFilterToggle);
-                        }}
-                        removeLabel={`Remove ${filter.label.toLowerCase()} filter`}
-                      >
-                        {filter.label}: {filter.value}
-                      </Tag>
-                    ))}
+              <div className="aegis-datasources-toolbar-stack">
+                <div className="aegis-datasources-toolbar">
+                  <div className="aegis-datasources-filter-toggle">
+                    <IconButton
+                      emphasis="tertiary"
+                      aria-label={filterCount > 0 ? `Filters, ${filterCount} applied` : 'Filters'}
+                      aria-controls={filterPanelId}
+                      aria-expanded={panelOpen}
+                      onClick={() => setPanelOpen((open) => !open)}
+                    >
+                      <Funnel size={16} />
+                    </IconButton>
                   </div>
+                  <SearchInput
+                    aria-label="Search datasources"
+                    placeholder="Search datasources"
+                    value={query}
+                    onValueChange={setQuery}
+                  />
+                  <Button
+                    className="aegis-datasources-create"
+                    leadingIcon={<Plus size={16} />}
+                    onClick={beginCreate}
+                  >
+                    Create datasource
+                  </Button>
+                </div>
+                {!panelOpen && (
+                  <AppliedFilterGroups
+                    groups={appliedGroups}
+                    onClearAll={clearFilters}
+                    focusFallback={focusFilterToggle}
+                  />
                 )}
               </div>
             )}
