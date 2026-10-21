@@ -239,10 +239,29 @@ export function DataGrid<T>({
   const [hoveredResizeColumn, setHoveredResizeColumn] = useState<string | null>(null);
   const [draggingColumn, setDraggingColumn] = useState<string | null>(null);
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([]);
-  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(() =>
-    initialPinnedColumns(columns),
-  );
+  const [initialPinning] = useState(() => initialPinnedColumns(columns));
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(initialPinning);
+  const [defaultPinWasCustomized, setDefaultPinWasCustomized] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(0);
+  const defaultPinnedColumnId = initialPinning.left?.[0];
+  // Keep the stored desktop preference while making room to scroll on narrow containers.
+  // A user's explicit pin/unpin choice takes precedence over this automatic default.
+  const releaseDefaultPin = viewportWidth > 0 && viewportWidth < 600 && !defaultPinWasCustomized;
+  const effectiveColumnPinning = useMemo<ColumnPinningState>(
+    () => ({
+      left: [
+        ...(enableSelection ? [selectionColumnId] : []),
+        ...(renderExpandedRow ? [expansionColumnId] : []),
+        ...(columnPinning.left ?? []).filter(
+          (columnId) =>
+            !isUtilityColumn(columnId) &&
+            !(releaseDefaultPin && columnId === defaultPinnedColumnId),
+        ),
+      ],
+      right: (columnPinning.right ?? []).filter((columnId) => !isUtilityColumn(columnId)),
+    }),
+    [columnPinning, defaultPinnedColumnId, enableSelection, releaseDefaultPin, renderExpandedRow],
+  );
   const [dragTarget, setDragTarget] = useState<string | null>(null);
   const [columnAnnouncement, setColumnAnnouncement] = useState('');
   const [internalSelection, setInternalSelection] = useState<RowSelectionState>(() =>
@@ -309,14 +328,7 @@ export function DataGrid<T>({
       columnVisibility,
       columnSizing,
       columnOrder,
-      columnPinning: {
-        left: [
-          ...(enableSelection ? [selectionColumnId] : []),
-          ...(renderExpandedRow ? [expansionColumnId] : []),
-          ...(columnPinning.left ?? []).filter((columnId) => !isUtilityColumn(columnId)),
-        ],
-        right: (columnPinning.right ?? []).filter((columnId) => !isUtilityColumn(columnId)),
-      },
+      columnPinning: effectiveColumnPinning,
       rowSelection,
       expanded,
       pagination: safePagination,
@@ -360,6 +372,9 @@ export function DataGrid<T>({
     ...table.getCenterVisibleLeafColumns(),
     ...table.getRightVisibleLeafColumns(),
   ];
+  const primaryDataColumnId = visibleColumns.find(
+    (column) => !isUtilityColumn(column.id) && !isActionsColumn(column.id, column.columnDef),
+  )?.id;
   // Utility and action columns retain their configured width. Spare space belongs
   // to the final visible data column, including after hiding or reordering fields.
   const fillColumnId = [...visibleColumns]
@@ -534,7 +549,7 @@ export function DataGrid<T>({
     return () => observer.disconnect();
   }, [
     table,
-    columnPinning,
+    effectiveColumnPinning,
     columnOrder,
     columnSizing,
     columnVisibility,
@@ -587,7 +602,7 @@ export function DataGrid<T>({
       observer.disconnect();
       scroll.removeEventListener('scroll', updateGuide);
     };
-  }, [activeResizeColumn, columnSizing, columnVisibility, columnPinning, columnOrder]);
+  }, [activeResizeColumn, columnSizing, columnVisibility, effectiveColumnPinning, columnOrder]);
   const rows = table.getRowModel().rows;
   const entries = useMemo(
     () =>
@@ -601,6 +616,12 @@ export function DataGrid<T>({
       ]),
     [rows, expanded, renderExpandedRow, canExpandRow],
   );
+  // Use the complete displayed row model so virtualized slices keep their joins.
+  // An expanded detail row interrupts the selected group visually.
+  function isSelectedEntry(index: number) {
+    const entry = entries[index];
+    return !!entry && !entry.detail && entry.row.getIsSelected();
+  }
   const shouldVirtualize =
     (virtualize ?? data.length > 200) && entries.length > 0 && !loading && !error;
   const headerHeight = table.getHeaderGroups().length * 40;
@@ -751,6 +772,10 @@ export function DataGrid<T>({
       `${columnLabel(source)} column moved ${source.getIndex(side || undefined) < target.getIndex(side || undefined) ? 'right' : 'left'}.`,
     );
   }
+  function pinColumn(column: Column<T>, side: false | 'left' | 'right') {
+    if (column.id === defaultPinnedColumnId) setDefaultPinWasCustomized(true);
+    column.pin(side);
+  }
   function columnMenu(column: Column<T>): DropdownMenuEntry[] {
     const side = column.getIsPinned();
     const peers = visibleColumns.filter(
@@ -766,7 +791,7 @@ export function DataGrid<T>({
         icon: <Pin size={14} />,
         disabled: !column.getCanPin() || side === 'left',
         onSelect: () => {
-          column.pin('left');
+          pinColumn(column, 'left');
           focusMenu();
         },
       },
@@ -776,7 +801,7 @@ export function DataGrid<T>({
         icon: <Pin size={14} />,
         disabled: !column.getCanPin() || side === 'right',
         onSelect: () => {
-          column.pin('right');
+          pinColumn(column, 'right');
           focusMenu();
         },
       },
@@ -788,7 +813,7 @@ export function DataGrid<T>({
               icon: <PinOff size={14} />,
               disabled: !column.getCanPin(),
               onSelect: () => {
-                column.pin(false);
+                pinColumn(column, false);
                 focusMenu();
               },
             },
@@ -873,7 +898,7 @@ export function DataGrid<T>({
         ref={bulkRef}
         className="aegis-grid-bulk"
         role="region"
-        aria-label="Selected alert actions"
+        aria-label="Selected row actions"
       >
         {renderBulkActions ? (
           renderBulkActions(selected, clearSelection)
@@ -1062,6 +1087,7 @@ export function DataGrid<T>({
                           draggingColumn === column.id && 'is-dragging',
                           column.id === expansionColumnId && 'aegis-grid-expand-column',
                         )}
+                        data-align={column.columnDef.meta?.align}
                         style={{
                           ...pinnedStyle(column),
                           width: renderedWidth(column),
@@ -1143,6 +1169,14 @@ export function DataGrid<T>({
                           <button
                             type="button"
                             className="aegis-grid-sort-button"
+                            style={{
+                              justifyContent:
+                                column.columnDef.meta?.align === 'right'
+                                  ? 'flex-end'
+                                  : column.columnDef.meta?.align === 'center'
+                                    ? 'center'
+                                    : 'flex-start',
+                            }}
                             onClick={column.getToggleSortingHandler()}
                             title="Shift-click to add a sort column"
                           >
@@ -1316,6 +1350,12 @@ export function DataGrid<T>({
                         tabIndex={currentFocusedId === row.id ? 0 : -1}
                         data-index={virtualIndex}
                         data-grid-row={row.id}
+                        data-selected-before={
+                          (row.getIsSelected() && isSelectedEntry(index - 1)) || undefined
+                        }
+                        data-selected-after={
+                          (row.getIsSelected() && isSelectedEntry(index + 1)) || undefined
+                        }
                         className={cn(
                           'aegis-grid-row',
                           onRowClick && 'aegis-grid-clickable',
@@ -1345,6 +1385,12 @@ export function DataGrid<T>({
                           <td
                             key={cell.id}
                             data-column-id={cell.column.id}
+                            data-primary-column={
+                              !isUtilityColumn(cell.column.id) &&
+                              !isActionsColumn(cell.column.id, cell.column.columnDef)
+                                ? cell.column.id === primaryDataColumnId
+                                : undefined
+                            }
                             data-pinned={cell.column.getIsPinned() || undefined}
                             role="gridcell"
                             aria-colindex={columnIndex + 1}

@@ -561,7 +561,12 @@
     "./fonts.css": "./lib-dist/fonts.css",
     "./reset.css": "./lib-dist/reset.css",
     "./tokens.css": "./lib-dist/tokens.css",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./patterns/alert-detail": {
+      "types": "./lib-dist/types/patterns/alert-detail/index.d.ts",
+      "import": "./lib-dist/patterns/alert-detail.js",
+      "default": "./lib-dist/patterns/alert-detail.js"
+    }
   },
   "peerDependencies": {
     "react": "^19.0.0",

@@ -18,12 +18,12 @@
 }
 .aegis-bulk-actions[data-position='inline'] {
   position: relative;
-  margin-inline: auto;
+  margin-inline: 0;
 }
 .aegis-bulk-actions-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: var(--space-2);
 }

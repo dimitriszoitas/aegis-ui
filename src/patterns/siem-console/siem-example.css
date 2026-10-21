@@ -1,0 +1,225 @@
+.siem-cell-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.siem-cell-copy strong {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.siem-cell-copy > span,
+.siem-cell-copy > time {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.siem-filter-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  width: 100%;
+  padding-block: var(--space-2);
+}
+.siem-filter-row > :first-child {
+  flex: 1 1 280px;
+}
+.siem-filter-row .aegis-select {
+  max-width: 230px;
+}
+.siem-overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-width: 0;
+}
+.siem-genie-prompt {
+  --siem-genie-border-wash: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 52px;
+  padding: var(--space-1) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(var(--color-bg-surface), var(--color-bg-surface)) padding-box,
+    linear-gradient(var(--siem-genie-border-wash), var(--siem-genie-border-wash)) border-box,
+    var(--gradient-ai-border) border-box;
+  color: var(--color-ai-fg);
+}
+.siem-genie-prompt:focus-within {
+  --siem-genie-border-wash: transparent;
+}
+.siem-genie-prompt > svg {
+  flex: 0 0 auto;
+}
+.siem-genie-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  min-height: 40px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+}
+.siem-genie-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+/* Editing strengthens the existing border without adding an outline or ring. */
+.siem-overview .siem-genie-prompt,
+.siem-overview .siem-genie-input:is(:focus, :focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+.siem-overview .siem-genie-input:is(:focus, :focus-visible) {
+  border: 0;
+}
+.siem-genie-submit {
+  flex: 0 0 auto;
+}
+.siem-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+.siem-section-heading h2 {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+.siem-activity-coverage {
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  line-height: 1.6;
+  margin: 0;
+}
+.siem-overview-charts,
+.siem-overview-queues {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16);
+  min-width: 0;
+}
+/* Transparent only in Overview; standalone chart cards retain their surface treatment. */
+.siem-overview .siem-overview-chart-card.aegis-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-2) 0 0;
+}
+.siem-overview-queues {
+  align-items: start;
+  margin-block-start: var(--space-8);
+}
+.siem-overview-queue,
+.siem-overview-errors {
+  min-width: 0;
+  background: transparent;
+  border: 0;
+}
+.siem-overview-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  min-height: 28px;
+}
+.siem-overview-section-heading h2 {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+.siem-overview-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding-block: var(--space-4) var(--space-5);
+}
+.siem-overview-metrics .aegis-metric-card {
+  padding: var(--space-3);
+}
+.siem-overview-metrics .aegis-metric-value {
+  font-size: var(--text-2xl);
+}
+.siem-overview-table > .aegis-grid-toolbar:empty,
+.siem-overview-table > .aegis-grid-footer {
+  display: none;
+}
+.siem-overview-source-issue {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+  white-space: nowrap;
+}
+.siem-overview-source-issue strong {
+  flex: 0 1 auto;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+.siem-overview-source-issue > span {
+  color: var(--color-text-secondary);
+}
+.siem-overview-source-issue > span:last-child {
+  flex: 1 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.siem-system-error-severity {
+  width: max-content;
+  flex: 0 0 auto;
+  justify-self: start;
+}
+.siem-system-errors-empty {
+  min-height: min(480px, 60dvh);
+}
+@container console-workspace (max-width: 900px) {
+  .siem-overview-charts,
+  .siem-overview-queues {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .siem-overview {
+    gap: var(--space-6);
+  }
+  .siem-overview-charts,
+  .siem-overview-queues {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+  .siem-overview-queues {
+    margin-block-start: var(--space-6);
+  }
+  .siem-genie-prompt {
+    gap: var(--space-3);
+    padding-inline: var(--space-3);
+  }
+  .siem-genie-input {
+    font-size: var(--text-sm);
+  }
+  .siem-filter-row > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+.siem-persistent-view[hidden] {
+  display: none !important;
+}

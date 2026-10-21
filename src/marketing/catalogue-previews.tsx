@@ -64,7 +64,7 @@ import {
 import { JsonViewer } from '@/components/json-viewer';
 import { Kbd } from '@/components/kbd';
 import { List, ListItem } from '@/components/list';
-import { MetricCard } from '@/components/metric-card';
+import { MetricCard, ChartMetricCard } from '@/components/metric-card';
 import { ConfirmDialog, Modal } from '@/components/modal';
 import { MultiCombobox } from '@/components/multi-combobox';
 import { Pagination } from '@/components/pagination';
@@ -678,6 +678,22 @@ function PreviewContent({ id, expanded = false }: ComponentPreviewProps) {
             </CardFooter>
           )}
         </Card>
+      );
+      break;
+    case 'chart-metric-card':
+      content = (
+        <ChartMetricCard
+          label="Detection signals"
+          metric={61800}
+          delta={364.3}
+          trendIsPositive
+          period="in past 7d"
+          height={180}
+          data={[10100, 9300, 9900, 6100, 7000, 9700, 9700].map((value, i) => ({
+            label: `Oct ${15 + i}`,
+            value,
+          }))}
+        />
       );
       break;
     case 'metric-card':

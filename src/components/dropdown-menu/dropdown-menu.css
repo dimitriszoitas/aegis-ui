@@ -69,11 +69,11 @@
   background: var(--color-destroy-soft);
 }
 .aegis-menu-checkable {
-  padding-left: 34px;
+  padding-inline-end: 34px;
 }
 .aegis-menu-indicator {
   position: absolute;
-  left: var(--space-3);
+  inset-inline-end: var(--space-3);
   width: 14px;
   display: inline-flex;
   align-items: center;

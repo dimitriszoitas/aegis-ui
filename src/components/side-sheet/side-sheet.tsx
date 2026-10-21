@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useId,
   useLayoutEffect,
   useRef,
@@ -6,6 +7,7 @@ import {
   type ComponentPropsWithoutRef,
   type ReactElement,
   type ReactNode,
+  type RefObject,
 } from 'react';
 import { Dialog as Primitive } from 'radix-ui';
 import { ChevronLeft, ChevronRight, X } from '@/components/icon';
@@ -29,12 +31,158 @@ export interface SideSheetProps extends Omit<
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   docked?: boolean;
+  /** Allow pointer and keyboard resizing from the left edge on desktop. */
+  resizable?: boolean;
+  minWidth?: number;
+  maxWidth?: number;
   /** One-based position within the current filtered result set. */
   position?: number;
   total?: number;
   onPrevious?: () => void;
   onNext?: () => void;
   closeLabel?: string;
+}
+
+function SheetResizeHandle({
+  docked,
+  minWidth,
+  maxWidth,
+  widthRef,
+  panelId,
+}: {
+  docked: boolean;
+  minWidth: number;
+  maxWidth: number;
+  widthRef: RefObject<number | null>;
+  panelId: string;
+}) {
+  const handle = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLElement | null>(null);
+  const limits = useRef({ min: minWidth, max: maxWidth });
+  const drag = useRef<{ pointerId: number; x: number; width: number } | null>(null);
+  const [size, setSize] = useState({ width: minWidth, min: minWidth, max: maxWidth });
+  const resize = useCallback(
+    (next: number) => {
+      const element = panel.current;
+      if (!element) return;
+      const width = Math.round(Math.max(limits.current.min, Math.min(limits.current.max, next)));
+      widthRef.current = width;
+      element.style.setProperty('--sheet-resized-width', `${width}px`);
+      element.dataset.resized = 'true';
+      setSize((current) =>
+        current.width === width &&
+        current.min === limits.current.min &&
+        current.max === limits.current.max
+          ? current
+          : { width, ...limits.current },
+      );
+    },
+    [widthRef],
+  );
+  useLayoutEffect(() => {
+    const element = handle.current?.closest<HTMLElement>('.aegis-sheet');
+    if (!element) return;
+    panel.current = element;
+    const parent = element.parentElement;
+    const flexibleSiblings =
+      docked && parent
+        ? [...parent.children].filter(
+            (child): child is HTMLElement =>
+              child instanceof HTMLElement &&
+              child !== element &&
+              Number(getComputedStyle(child).flexGrow) > 0,
+          )
+        : [];
+    function measure() {
+      if (!element) return;
+      const style = getComputedStyle(element);
+      const inset = Number.parseFloat(style.getPropertyValue('--chrome-inset')) || 0;
+      const viewportWidth = document.documentElement.clientWidth - 2 * inset;
+      const available = flexibleSiblings.length
+        ? element.getBoundingClientRect().width +
+          flexibleSiblings.reduce((sum, sibling) => sum + sibling.getBoundingClientRect().width, 0)
+        : (parent?.clientWidth ?? viewportWidth);
+      // Keep a useful workspace beside a docked sheet; overlays use the viewport.
+      const maximum = Math.max(
+        1,
+        Math.min(
+          maxWidth,
+          viewportWidth,
+          docked ? Math.min(available, Math.max(minWidth, available - 480)) : viewportWidth,
+        ),
+      );
+      limits.current = { min: Math.min(minWidth, maximum), max: maximum };
+      resize(widthRef.current ?? element.getBoundingClientRect().width);
+    }
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (parent) observer.observe(parent);
+    for (const sibling of flexibleSiblings) observer.observe(sibling);
+    window.addEventListener('resize', measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+      panel.current = null;
+    };
+  }, [docked, minWidth, maxWidth, widthRef, resize]);
+  function finishResize() {
+    drag.current = null;
+    if (panel.current) delete panel.current.dataset.resizing;
+  }
+  return (
+    <div
+      ref={handle}
+      className="aegis-sheet-resize-handle"
+      role="separator"
+      tabIndex={0}
+      aria-label="Resize side panel"
+      aria-controls={panelId}
+      aria-orientation="vertical"
+      aria-valuemin={Math.round(size.min)}
+      aria-valuemax={Math.round(size.max)}
+      aria-valuenow={size.width}
+      aria-valuetext={`${size.width} pixels wide`}
+      onPointerDown={(event) => {
+        if (event.button !== 0 || !panel.current) return;
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        drag.current = {
+          pointerId: event.pointerId,
+          x: event.clientX,
+          width: panel.current.getBoundingClientRect().width,
+        };
+        panel.current.dataset.resizing = 'true';
+      }}
+      onPointerMove={(event) => {
+        if (drag.current?.pointerId === event.pointerId)
+          resize(drag.current.width + drag.current.x - event.clientX);
+      }}
+      onPointerUp={(event) => {
+        if (event.currentTarget.hasPointerCapture(event.pointerId))
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        finishResize();
+      }}
+      onPointerCancel={finishResize}
+      onLostPointerCapture={finishResize}
+      onKeyDown={(event) => {
+        const current = widthRef.current ?? size.width;
+        const step = event.shiftKey ? 48 : 16;
+        const next =
+          event.key === 'ArrowLeft'
+            ? current + step
+            : event.key === 'ArrowRight'
+              ? current - step
+              : event.key === 'Home'
+                ? limits.current.min
+                : event.key === 'End'
+                  ? limits.current.max
+                  : undefined;
+        if (next === undefined) return;
+        event.preventDefault();
+        resize(next);
+      }}
+    />
+  );
 }
 export interface SideSheetSectionProps {
   title?: ReactNode;
@@ -160,12 +308,14 @@ function OverlayContent({
   trigger,
   titleId,
   descriptionId,
+  panelId,
 }: {
   children: ReactNode;
   className: string;
   trigger?: ReactElement;
   titleId: string;
   descriptionId?: string;
+  panelId: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -173,6 +323,7 @@ function OverlayContent({
   return (
     <Primitive.Content
       ref={ref}
+      id={panelId}
       className={className}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
@@ -198,12 +349,14 @@ function DockedContent({
   className,
   titleId,
   descriptionId,
+  panelId,
   onClose,
 }: {
   children: ReactNode;
   className: string;
   titleId: string;
   descriptionId?: string;
+  panelId: string;
   onClose: () => void;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -232,6 +385,7 @@ function DockedContent({
   return (
     <aside
       ref={ref}
+      id={panelId}
       className={className}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
@@ -261,6 +415,9 @@ export function SideSheet({
   size = 'md',
   className,
   docked = false,
+  resizable = false,
+  minWidth = 320,
+  maxWidth = 720,
   position,
   total,
   onPrevious,
@@ -271,12 +428,23 @@ export function SideSheet({
   const isOpen = open ?? internalOpen;
   const titleId = useId();
   const descriptionId = useId();
+  const panelId = useId();
+  const widthRef = useRef<number | null>(null);
   function changeOpen(next: boolean) {
     if (open === undefined) setInternalOpen(next);
     onOpenChange?.(next);
   }
   const contents = (
     <>
+      {resizable && (
+        <SheetResizeHandle
+          docked={docked}
+          minWidth={minWidth}
+          maxWidth={maxWidth}
+          widthRef={widthRef}
+          panelId={panelId}
+        />
+      )}
       <SheetHeader
         title={title}
         description={description}
@@ -301,6 +469,7 @@ export function SideSheet({
     'aegis-sheet',
     `aegis-sheet-${size}`,
     docked && 'aegis-sheet-docked',
+    resizable && 'aegis-sheet-resizable',
     className,
   );
   return (
@@ -311,6 +480,7 @@ export function SideSheet({
           <DockedContent
             className={classes}
             titleId={titleId}
+            panelId={panelId}
             descriptionId={description ? descriptionId : undefined}
             onClose={() => changeOpen(false)}
           >
@@ -324,6 +494,7 @@ export function SideSheet({
             className={classes}
             trigger={trigger}
             titleId={titleId}
+            panelId={panelId}
             descriptionId={description ? descriptionId : undefined}
           >
             {contents}

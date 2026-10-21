@@ -12,6 +12,16 @@ The marketing website separately includes self-hosted Inter Latin font files fro
 
 The optional `@dimitriszoitas/aegis-ui/aws-logo` entry includes original SVG architecture artwork owned by Amazon Web Services. AWS names and marks remain AWS-owned; inclusion does not imply endorsement. This artwork is not covered by Aegis's MIT license. Source, release information, use guidance, and asset checksums are included in `lib-dist/licenses/AWS-ATTRIBUTION.md` and `lib-dist/licenses/AWS-checksums.json`. See [AWS architecture icons](https://aws.amazon.com/architecture/icons/) for the original artwork and current guidance.
 
+## Datasource provider artwork
+
+The local Datasources example identifies the connector provider beside each source name. Amazon S3 and CloudWatch reuse the original AWS architecture artwork described above. Slack uses the installed Hugeicons free Slack mark.
+
+The Azure Event Hubs SVG is copied unchanged from Microsoft's [Azure architecture icon collection](https://learn.microsoft.com/en-us/azure/architecture/icons/), [release V24](https://arch-center.azureedge.net/icons/Azure_Public_Service_Icons_V24.zip), at `Azure_Public_Service_Icons/Icons/analytics/00039-icon-service-Event-Hubs.svg`. Microsoft permits these icons in architecture diagrams, training materials, and documentation; the console is an illustrative connector example. Microsoft retains ownership of its artwork and marks.
+
+The compact Workday icon is copied unchanged from [Workday's official website icon](https://www.workday.com/favicon.ico). Workday retains ownership of its artwork and marks. These provider assets identify third-party integrations in the example and do not imply endorsement; Aegis's MIT license does not relicense them.
+
+Both additional assets are bundled locally in `src/patterns/console-views/assets/`; the example does not load provider artwork from third-party servers at runtime.
+
 ## Runtime dependencies
 
 The compiled `styles.css` includes CSS from Tailwind CSS (Tailwind Labs), tw-animate-css (Wombosvideo), and React DayPicker (Giampaolo Bellavite). Their complete original MIT license texts are included in `lib-dist/licenses/tailwindcss-MIT.txt`, `lib-dist/licenses/tw-animate-css-MIT.txt`, and `lib-dist/licenses/react-day-picker-MIT.txt`.

@@ -136,6 +136,30 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - SideNav supports independent transparent or floating presentation. Floating navigation has a subtle fill, insets, and rounded corners on all sides; both options retain the same allocated track and collapse state. The console appearance menu switches presentation without resetting route or filters.
 - Verification: the exact publication snapshot passes TypeScript, full ESLint, semantic token checks, whitespace checks, all 18 shipped logic tests, and Storybook/playground builds; the package build also passes. Browser checks cover transparent and nested tables, light/dark palettes and text contrast, MiniBarChart states, expandable text, desktop/mobile spacing, pointer versus keyboard input/resize behavior, 96 button combinations, notification compatibility, and both navigation options. Existing raw v0 color declarations were moved unchanged into tokens. The separate local review route, review fixtures, and generated audit/build output remain outside this publication.
 
+## Fundamental AI palette follow-up
+
+- Softened Fundamental AI intent from hot pink/purple-magenta to muted teal–blue. Shared AI token roles and emphasis treatments remain intact; other approaches retain their existing palettes. Updated current README and foundation guidance to distinguish the approach-specific colors.
+
+## Connected SIEM example follow-up
+
+- Retained one console Storybook entry, “SIEM example,” with the requested Environment selector and navigation groups, Settings and profile anchored below.
+- Added reusable ChartMetricCard bar/area/compact compositions and connected single-series weekly activity cards to Overview.
+- Added a shared Oct 21 fixture clock, 60 connected alerts and their actual signals, searchable rule/assignee/state filters, full-page investigation detail, comments, and a keyboard-accessible signal inspector. Record update times remain distinct from evidence times.
+- Added Datasources with 72 consistent records, aggregate metrics, processed-event bars, search/provider filtering, source details and local creation.
+- Added detection-rule list/detail views with configuration, run history, related alerts/errors and local editing, plus Environment/Folders/Administrators and preference sections in Settings.
+- Console width is responsive up to 2160px and centered on larger displays. Local edits, filters, comments and pagination persist across page navigation for the session.
+- Verified targeted light/dark desktop/mobile interactions and accessibility, type/lint checks, unit tests, Storybook build, and public package generation. Browser evidence is stored under ignored test-results directories.
+
+## SIEM visual refinements
+
+- Replaced navigation presentation variants with one flush, full-height sidebar; dark surfaces use a darker nav, lighter workspace, and slightly brighter cards. The console is branded Lakewatch without a shield; search, the footer divider, and the profile's job title were removed. Workspace controls moved into Settings → Appearance.
+- Overview uses shorter activity charts and single-line Alerts/System errors tables with 48px rows and small metric cards. The four information blocks have wider horizontal and vertical gaps, with five illustrative system errors. A working date-range picker sits beside the activity heading with 10px coverage text; only complete available daily buckets contribute to the totals. Chart bars change color on hover or keyboard activation. The shorter AI field has an icon submit and a subdued resting border that strengthens on focus without an added ring. Quick prompts were removed. The dedicated System errors page demonstrates its empty state.
+- Added equal-height severity/status tags, reusable dot-status styling, an icon-only collapsed alert Context rail, larger alert controls with primary AI triage, and rule-name detail headings with breadcrumbs. Date values use right-aligned monospace, while normal-font headers place sorting/options before their titles. Primary accents use a softer blue.
+- Fundamental tables use borderless rows and rounded neutral hover states; consecutive selections join into one rounded group, and bulk counts align with checkboxes. The first data column stays bright while supporting values are subtly softened, including after hiding or reordering columns. Light-theme checkbox boundaries use the strong border token for readable unchecked states. Toasts use raised neutral surfaces, rounded corners, quiet outlines and text actions.
+- Alerts and Detection rules use icon-only filter controls aligned over their selection checkboxes, with sliding side filters, transparent surfaces and right dividers. Page headers and toolbars share a compact spacing rhythm across Alerts, Detection rules, and Datasources. Panel headers align with their toolbars; the activity chart was removed from the filter panel. Detection rules use single-line Rule and Namespace columns with the shared row-selection and clear-selection behavior. All three list toolbars have a larger gap before the table. Narrow grids release the automatic first data-column pin while preserving explicit pinning choices and table state.
+- Datasources show processed events as a compact bar widget in the top metric row. Metrics stay global while search/provider filters update table rows; creating a source still updates totals. Local provider artwork, rounded icon corners, and single-line capitalized display names replace repeated generic icons and subtitles.
+- The AI side panel has a separating border and bounded pointer/keyboard resizing, preserving conversation and draft state. Breadcrumbs use 10px text with a 12px gap before the page heading.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

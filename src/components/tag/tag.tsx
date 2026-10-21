@@ -5,9 +5,11 @@ import { cn } from '@/lib/utils';
 import './tag.css';
 export interface TagProps {
   children: ReactNode;
-  variant?: 'static' | 'removable' | 'interactive' | 'counter';
+  variant?: 'static' | 'removable' | 'interactive' | 'counter' | 'status';
   size?: 'sm' | 'md';
   intent?: Intent | 'success' | 'warning';
+  /** Optional semantic CSS color for a status dot, independent of action intent. */
+  dotColor?: CSSProperties['color'];
   count?: number;
   selected?: boolean;
   onSelectedChange?: (selected: boolean) => void;
@@ -21,6 +23,7 @@ export function Tag({
   variant = 'static',
   size = 'md',
   intent = 'default',
+  dotColor,
   count,
   selected = false,
   onSelectedChange,
@@ -29,16 +32,20 @@ export function Tag({
   disabled,
   className,
 }: TagProps) {
-  const style =
-    intent === 'default'
-      ? undefined
-      : ({
-          '--tag-fg': `var(--color-${intent}-fg)`,
-        } as CSSProperties);
+  const intentColor =
+    intent === 'default' ? 'var(--color-text-secondary)' : `var(--color-${intent}-fg)`;
+  const style = {
+    ...(intent !== 'default' && { '--tag-fg': intentColor }),
+    ...(variant === 'status' && {
+      '--tag-fg': dotColor ?? intentColor,
+      '--status-fg': 'var(--tag-fg)',
+    }),
+  } as CSSProperties;
   const props = {
-    className: cn('tag', className),
+    className: cn('tag', variant === 'status' && 'status-badge', className),
     style,
     'data-size': size,
+    'data-variant': variant,
     'data-intent': intent,
     'data-selected': selected,
   };
@@ -57,7 +64,7 @@ export function Tag({
     );
   return (
     <span {...props}>
-      {intent !== 'default' && <span className="tag-dot" aria-hidden />}
+      {(intent !== 'default' || variant === 'status') && <span className="tag-dot" aria-hidden />}
       {children}
       {variant === 'counter' && <span className="tag-count">{count ?? 0}</span>}
       {variant === 'removable' && (

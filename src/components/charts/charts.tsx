@@ -442,6 +442,9 @@ function CartesianPlot({
                 key={item.key}
                 {...common}
                 fill={color}
+                activeBar={{
+                  fill: `color-mix(in srgb, ${color} 75%, var(--color-text-primary))`,
+                }}
                 stackId={stacked ? 'series' : undefined}
                 radius={stacked ? 0 : [3, 3, 0, 0]}
                 maxBarSize={42}

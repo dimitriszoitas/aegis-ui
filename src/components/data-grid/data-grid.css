@@ -29,8 +29,7 @@
 }
 .aegis-grid-toolbar {
   min-height: 60px;
-  padding: var(--space-3) var(--space-4);
-  padding-inline-start: var(--grid-content-inset);
+  padding: var(--space-3) 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -401,7 +400,7 @@
   gap: var(--space-2);
   white-space: nowrap;
 }
-.aegis-grid-bulk .aegis-bulk-actions {
+.aegis-grid-bulk .aegis-bulk-actions[data-position='inline'] {
   width: 100%;
   max-width: 100%;
   position: static;
@@ -414,6 +413,16 @@
 }
 .aegis-grid-bulk .aegis-bulk-actions-row {
   justify-content: flex-start;
+}
+.aegis-grid-bulk .aegis-bulk-selection {
+  padding-inline: 0;
+}
+.aegis-data-grid:has(.aegis-grid-selection-column) .aegis-grid-bulk .aegis-bulk-selection {
+  display: grid;
+  grid-template-columns: var(--grid-selection-width) auto;
+}
+.aegis-grid-bulk .aegis-bulk-count {
+  justify-self: center;
 }
 .aegis-grid-density button:focus-visible,
 .aegis-grid-sort-button:focus-visible,
@@ -470,4 +479,20 @@
 .aegis-grid-event-table code {
   font-family: var(--font-mono);
   font-size: 11px;
+}
+
+/* Keep a right-aligned column title flush with its values; controls precede it. */
+.aegis-grid-data-header[data-align='right'] .aegis-grid-sort-button {
+  padding-inline: 0;
+}
+.aegis-grid-data-header[data-align='right'] .aegis-grid-sort-icon {
+  order: -1;
+}
+.aegis-grid-data-header[data-align='right'] .aegis-grid-column-menu {
+  inset-inline-start: 10px;
+  inset-inline-end: auto;
+}
+.aegis-grid-data-header[data-align='right']:is(:hover, :focus-within) .aegis-grid-sort-button {
+  padding-inline-start: 28px;
+  padding-inline-end: 0;
 }

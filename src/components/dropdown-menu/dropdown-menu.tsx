@@ -104,11 +104,11 @@ function MenuEntries({ items }: { items: DropdownMenuEntry[] }) {
             onSelect={(event) => event.preventDefault()}
             className="aegis-menu-item aegis-menu-checkable"
           >
+            <span className="aegis-menu-item-label">{item.label}</span>
+            {item.shortcut && <kbd>{item.shortcut}</kbd>}
             <Primitive.ItemIndicator className="aegis-menu-indicator">
               {item.checked === 'indeterminate' ? <Minus size={14} /> : <Check size={14} />}
             </Primitive.ItemIndicator>
-            <span className="aegis-menu-item-label">{item.label}</span>
-            {item.shortcut && <kbd>{item.shortcut}</kbd>}
           </Primitive.CheckboxItem>
         );
       case 'radio-group':
@@ -125,10 +125,10 @@ function MenuEntries({ items }: { items: DropdownMenuEntry[] }) {
                   disabled={option.disabled}
                   className="aegis-menu-item aegis-menu-checkable"
                 >
+                  <span className="aegis-menu-item-label">{option.label}</span>
                   <Primitive.ItemIndicator className="aegis-menu-indicator">
                     <Circle size={7} fill="currentColor" />
                   </Primitive.ItemIndicator>
-                  {option.label}
                 </Primitive.RadioItem>
               ))}
             </Primitive.RadioGroup>

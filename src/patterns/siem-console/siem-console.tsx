@@ -7,23 +7,21 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type ReactNode,
   type Ref,
 } from 'react';
 import {
-  Activity,
-  FileChartColumn,
+  CircleAlert,
+  Database,
+  FileCode,
   FlaskConical,
+  Folder,
   LayoutDashboard,
-  PanelsTopLeft,
-  PanelLeft,
-  Rows2,
   Plus,
   Settings,
   ShieldAlert,
   ShieldCheck,
   Sparkles,
-  Sun,
-  Moon,
 } from '@/components/icon';
 import { Avatar } from '@/components/avatar';
 import { BottomSheet } from '@/components/bottom-sheet';
@@ -32,51 +30,57 @@ import { Breadcrumb } from '@/components/breadcrumb';
 import { Button } from '@/components/button';
 import { CommandPalette, type CommandAction } from '@/components/command-palette';
 import type { GridDensity } from '@/components/data-grid';
-import { EventHistogram } from '@/components/event-histogram';
-import { DropdownMenu, type DropdownMenuEntry } from '@/components/dropdown-menu';
-import { IconButton } from '@/components/icon-button';
-import { MetricCard } from '@/components/metric-card';
+import { EmptyState } from '@/components/empty-state';
 import { ConfirmDialog } from '@/components/modal';
 import { Separator } from '@/components/separator';
-import { SideNav, type NavSection, type SideNavPresentation } from '@/components/side-nav';
-import { Tabs } from '@/components/tabs';
+import { Select } from '@/components/select';
+import { SideNav, type NavSection } from '@/components/side-nav';
 import { TimeRangePicker } from '@/components/time-range-picker';
 import { Toaster, showToast } from '@/components/toast';
 import { Tooltip } from '@/components/tooltip';
 import { AiPanel } from '@/patterns/ai-panel';
-import { AlertDetailSheet } from '@/patterns/alert-detail-sheet';
-import { AlertsExplorer } from '@/patterns/alerts-explorer';
+import { AlertDetailPage, type AlertDetailComment } from '@/patterns/alert-detail';
+import { SiemAlertsTable } from './siem-alerts-table';
+import { SiemOverview, SiemSystemErrors } from './siem-overview';
+import { SiemSettings } from './siem-settings';
+import { ConsoleDatasources } from '@/patterns/console-views/console-datasources';
+import { ConsoleDetections } from '@/patterns/console-views/console-detections';
 import {
-  ConsoleOverview,
+  siemExampleAlerts as fixtureAlerts,
+  siemExampleRules as fixtureRules,
+  siemExampleTime as referenceTime,
+} from '@/sample-data/siem-example';
+import {
   ConsoleIncidents,
   ConsoleHunting,
-  ConsoleRules,
   ConsoleReports,
   ConsoleSettings,
 } from '@/patterns/console-views';
 import { DetectionRuleWizard, type CreatedDetectionRule } from '@/patterns/detection-rule-wizard';
 import type { AiContextItem, AiRequest } from '@/lib/ai';
 import { applyAlertFilters, createDefaultFilters, type AlertFilterState } from '@/lib/filters';
-import { formatTimeRange, resolveTimeRange } from '@/lib/time-range';
+import { formatTimeRange } from '@/lib/time-range';
 import type { Theme } from '@/lib/theme';
-import { layoutThemeLabels, layoutThemeOptions, type LayoutTheme } from '@/lib/layout-theme';
-import {
-  alerts as fixtureAlerts,
-  analysts,
-  referenceTime,
-  rules as fixtureRules,
-  timeSeries,
-  type Alert,
-  type DetectionRule,
-} from '@/sample-data';
+import { type LayoutTheme } from '@/lib/layout-theme';
+import { analysts, type Alert, type DetectionRule } from '@/sample-data';
 import './siem-console.css';
 
 export type ConsolePage =
-  'overview' | 'alerts' | 'incidents' | 'hunting' | 'rules' | 'reports' | 'settings';
+  | 'overview'
+  | 'alerts'
+  | 'system-errors'
+  | 'hunting'
+  | 'datasources'
+  | 'rules'
+  | 'content-library'
+  | 'parsers'
+  | 'settings'
+  | 'incidents'
+  | 'reports';
+type ConsoleDestination = ConsolePage | 'genie';
 export interface SiemConsoleProps {
   initialPage?: ConsolePage;
   defaultNavCollapsed?: boolean;
-  defaultNavPresentation?: SideNavPresentation;
   defaultAiOpen?: boolean;
   defaultBottomOpen?: boolean;
   defaultFilterPanelOpen?: boolean;
@@ -88,20 +92,44 @@ export interface SiemConsoleProps {
 const pageLabels: Record<ConsolePage, string> = {
   overview: 'Overview',
   alerts: 'Alerts',
+  'system-errors': 'System errors',
   incidents: 'Incidents',
-  hunting: 'Hunting',
+  hunting: 'Query',
+  datasources: 'Datasources',
   rules: 'Detection rules',
+  'content-library': 'Content library',
+  parsers: 'Parsers',
   reports: 'Reports',
   settings: 'Settings',
 };
 const pageDescriptions: Record<ConsolePage, string> = {
   overview: 'A clear view of your security posture.',
   alerts: 'Investigate signals. Find what matters.',
+  'system-errors': 'Inspect collection and processing issues.',
   incidents: 'Follow related signals across your environment.',
   hunting: 'Explore the evidence behind every signal.',
+  datasources: 'Review the sources that bring evidence into your environment.',
   rules: 'Detection logic, ready for human review.',
+  'content-library': 'Reusable investigation content for your team.',
+  parsers: 'Turn incoming records into structured evidence.',
   reports: 'Turn investigation activity into a clear handoff.',
   settings: 'Make the workspace feel right for you.',
+};
+const emptyPages: Partial<
+  Record<ConsolePage, { title: string; description: string; icon: ReactNode }>
+> = {
+  'content-library': {
+    title: 'Your content library is not connected',
+    description:
+      'Saved searches and reusable investigation content are not included in this local example.',
+    icon: <Folder size={25} />,
+  },
+  parsers: {
+    title: 'Parser configuration is not connected',
+    description:
+      'Sample events are already structured. Managing ingestion parsers requires a connected data source.',
+    icon: <FileCode size={25} />,
+  },
 };
 function useMediaQuery(query: string) {
   const subscribe = useCallback(
@@ -135,8 +163,7 @@ interface ConsoleNavigationProps {
   sections: NavSection[];
   page: ConsolePage;
   defaultCollapsed: boolean;
-  presentation: SideNavPresentation;
-  onNavigate: (page: ConsolePage) => void;
+  onNavigate: (page: ConsoleDestination) => void;
   onSearch: () => void;
 }
 /** Keep rail-only state here so toggles do not render the investigation workspace. */
@@ -145,7 +172,6 @@ function ConsoleNavigation({
   sections,
   page,
   defaultCollapsed,
-  presentation,
   onNavigate,
   onSearch,
 }: ConsoleNavigationProps) {
@@ -155,13 +181,25 @@ function ConsoleNavigation({
   useImperativeHandle(navigationRef, () => ({ closeMobile: () => setMobileExpanded(false) }), []);
   return (
     <SideNav
-      presentation={presentation}
+      showSearch={false}
+      brandName="Lakewatch"
+      brandIcon={null}
       sections={sections}
       activeId={page}
-      onNavigate={(id) => onNavigate(id as ConsolePage)}
+      onNavigate={(id) => onNavigate(id as ConsoleDestination)}
       collapsed={compact ? !mobileExpanded : collapsed}
       onCollapsedChange={(next) => (compact ? setMobileExpanded(!next) : setCollapsed(next))}
       onSearch={onSearch}
+      workspaceContent={
+        <div className="aegis-console-environment">
+          <Select
+            label="Environment"
+            value="main"
+            size="sm"
+            options={[{ value: 'main', label: 'Main', description: 'Local sample environment' }]}
+          />
+        </div>
+      }
       footer={(small) => (
         <>
           <Tooltip content="Workspace settings">
@@ -187,7 +225,6 @@ function ConsoleNavigation({
             />
             <div className="aegis-console-user-copy" aria-hidden={small || undefined}>
               <strong>{analysts[0].name}</strong>
-              <span>Security analyst</span>
             </div>
           </div>
         </>
@@ -200,10 +237,8 @@ function ConsoleNavigation({
 export function SiemConsole({
   initialPage = 'alerts',
   defaultNavCollapsed = false,
-  defaultNavPresentation,
   defaultAiOpen = false,
   defaultBottomOpen = false,
-  defaultFilterPanelOpen = false,
   theme = 'light',
   onThemeChange,
   layoutTheme = 'floating',
@@ -211,18 +246,26 @@ export function SiemConsole({
 }: SiemConsoleProps) {
   const dockAssistant = useMediaQuery('(min-width: 1280px)');
   const [page, setPage] = useState<ConsolePage>(initialPage);
-  const [navPresentation, setNavPresentation] = useState<SideNavPresentation>(
-    () => defaultNavPresentation ?? (layoutTheme === 'floating' ? 'floating' : 'transparent'),
-  );
+  const [selectedRuleId, setSelectedRuleId] = useState<string>();
+  const emptyPage = emptyPages[page];
   const navigationRef = useRef<ConsoleNavigationHandle>(null);
   const [alerts, setAlerts] = useState<Alert[]>(() => fixtureAlerts.map((alert) => ({ ...alert })));
   const [rules, setRules] = useState<DetectionRule[]>(fixtureRules);
+  const detailRule =
+    page === 'rules' ? rules.find((rule) => rule.id === selectedRuleId) : undefined;
   const [filters, setFilters] = useState(createDefaultFilters);
+  const [ruleFilter, setRuleFilter] = useState('all');
   const [density, setDensity] = useState<GridDensity>('default');
   const [selected, setSelected] = useState<Alert[]>([]);
-  const [selectedId, setSelectedId] = useState<string>();
-  const [detailIds, setDetailIds] = useState<string[]>([]);
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>(() =>
+    typeof window !== 'undefined'
+      ? (new URLSearchParams(window.location.search).get('alert') ?? undefined)
+      : undefined,
+  );
+  const [commentsByAlert, setCommentsByAlert] = useState<Record<string, AlertDetailComment[]>>({});
+  const [detailOpen, setDetailOpen] = useState(
+    () => !!selectedId && fixtureAlerts.some((alert) => alert.id === selectedId),
+  );
   const [aiOpen, setAiOpen] = useState(defaultAiOpen);
   const [bottomOpen, setBottomOpen] = useState(defaultBottomOpen);
   const [request, setRequest] = useState<AiRequest | undefined>(() =>
@@ -242,7 +285,6 @@ export function SiemConsole({
   const [wizardDirty, setWizardDirty] = useState(false);
   const [pendingPage, setPendingPage] = useState<ConsolePage>();
   const [wizardOrientation, setWizardOrientation] = useState<'horizontal' | 'vertical'>('vertical');
-  const [huntQuery, setHuntQuery] = useState('');
   const contentRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const headerContentRef = useRef<HTMLDivElement>(null);
@@ -301,41 +343,9 @@ export function SiemConsole({
     [alerts, filters],
   );
   const selectedAlert = alerts.find((alert) => alert.id === selectedId);
-  const detailAlerts = detailIds.flatMap((id) => {
-    const alert = alerts.find((item) => item.id === id);
-    return alert ? [alert] : [];
-  });
   const selectedRecords = alerts.filter((alert) => selected.some((item) => item.id === alert.id));
-  const { from: trendFrom, to: trendTo } = resolveTimeRange(filters.timeRange, referenceTime);
-  function metricTrend(matches: (alert: Alert) => boolean, events = false) {
-    const bins = Array<number>(24).fill(0);
-    const duration = Math.max(1, +trendTo - +trendFrom);
-    for (const alert of scopedAlerts.filter(matches)) {
-      const index = Math.min(
-        23,
-        Math.max(0, Math.floor(((Date.parse(alert.lastSeen) - +trendFrom) / duration) * 24)),
-      );
-      bins[index] += events ? alert.eventCount : 1;
-    }
-    return bins;
-  }
   const openAlerts = scopedAlerts.filter(
     (alert) => !['resolved', 'false-positive'].includes(alert.status),
-  );
-  const tab =
-    filters.assignees.length === 1 &&
-    filters.assignees[0] === analysts[0].id &&
-    filters.statuses.length === 0
-      ? 'mine'
-      : filters.statuses.length === 1 &&
-          filters.statuses[0] === 'new' &&
-          filters.assignees.length === 0
-        ? 'review'
-        : 'all';
-  const tabScope = applyAlertFilters(
-    alerts,
-    { ...filters, statuses: [], assignees: [] },
-    referenceTime,
   );
 
   function focusHeading() {
@@ -344,11 +354,16 @@ export function SiemConsole({
       headerPinnedRef.current = false;
       if (headerRef.current) headerRef.current.dataset.pinned = 'false';
       contentRef.current?.style.setProperty('--console-scroll-top', '0px');
-      headingRef.current?.focus();
+      const detailHeading = contentRef.current?.querySelector<HTMLElement>(
+        '.aegis-detail-heading h1',
+      );
+      (detailHeading ?? headingRef.current)?.focus();
     });
   }
   function performNavigation(next: ConsolePage) {
+    setSelectedRuleId(undefined);
     setPage(next);
+    setDetailOpen(false);
     setCreatingRule(false);
     navigationRef.current?.closeMobile();
     setSelected([]);
@@ -358,26 +373,29 @@ export function SiemConsole({
     if (creatingRule && wizardDirty) setPendingPage(next);
     else performNavigation(next);
   }
+  function navigateDestination(next: ConsoleDestination) {
+    if (next === 'genie') {
+      if (selectedRecords.length) setAiContext(selectedRecords.map(alertContext));
+      navigationRef.current?.closeMobile();
+      setAiOpen(true);
+    } else navigate(next);
+  }
   function updateFilters(next: AlertFilterState) {
     setFilters(next);
     setSelected([]);
   }
-  function openAlert(alert: Alert, visible: Alert[] = scopedAlerts) {
+  function openAlert(alert: Alert) {
     setSelectedId(alert.id);
-    setDetailIds(
-      (visible.some((item) => item.id === alert.id) ? visible : [alert, ...visible]).map(
-        (item) => item.id,
-      ),
-    );
     setDetailOpen(true);
+    focusHeading();
   }
-  function askAi(records: Alert[], prompt?: string) {
+  function askAi(records: Alert[], prompt?: string, contextScope = scopeLabel) {
     const context = records.map(alertContext);
     context.push({
       id: 'current-time-range',
       kind: 'scope',
-      label: scopeLabel,
-      description: 'Fixture snapshot: 6 October 2026, 08:30 UTC',
+      label: contextScope,
+      description: 'Fixture snapshot: 21 October 2026, 20:10 UTC',
     });
     setAiContext(context);
     setRequest({
@@ -389,11 +407,11 @@ export function SiemConsole({
           : `Summarize these ${records.length} alerts for an analyst handoff.`),
       context,
     });
-    setDetailOpen(false);
     setAiOpen(true);
   }
   function startRule() {
     setPage('rules');
+    setDetailOpen(false);
     setCreatingRule(true);
     setWizardDirty(false);
     setAiOpen(false);
@@ -419,17 +437,20 @@ export function SiemConsole({
     {
       label: 'Workspace',
       items: [
+        { id: 'genie', label: 'Genie', icon: <Sparkles /> },
         { id: 'overview', label: 'Overview', icon: <LayoutDashboard /> },
         { id: 'alerts', label: 'Alerts', icon: <ShieldAlert />, count: openAlerts.length },
-        { id: 'incidents', label: 'Incidents', icon: <Activity /> },
-        { id: 'hunting', label: 'Hunting', icon: <FlaskConical /> },
+        { id: 'system-errors', label: 'System errors', icon: <CircleAlert /> },
+        { id: 'hunting', label: 'Query', icon: <FlaskConical /> },
       ],
     },
     {
       label: 'Manage',
       items: [
+        { id: 'datasources', label: 'Datasources', icon: <Database /> },
         { id: 'rules', label: 'Detection rules', icon: <ShieldCheck /> },
-        { id: 'reports', label: 'Reports', icon: <FileChartColumn /> },
+        { id: 'content-library', label: 'Content library', icon: <Folder /> },
+        { id: 'parsers', label: 'Parsers', icon: <FileCode /> },
       ],
     },
   ];
@@ -438,10 +459,10 @@ export function SiemConsole({
       .flatMap((section) => section.items)
       .map((item) => ({
         id: item.id,
-        label: `Go to ${item.label.toLowerCase()}`,
+        label: item.id === 'genie' ? 'Open Genie' : `Go to ${item.label.toLowerCase()}`,
         group: 'Navigation',
         icon: item.icon,
-        onSelect: () => navigate(item.id as ConsolePage),
+        onSelect: () => navigateDestination(item.id as ConsoleDestination),
       })),
     {
       id: 'create-rule',
@@ -469,30 +490,33 @@ export function SiemConsole({
   // A document-level palette must not intercept shortcuts while a modal owns focus.
   const paletteShortcut = !detailOpen && !(aiOpen && !dockAssistant) && !creatingRule;
   const alertWorkspace = (
-    <AlertsExplorer
-      filterMode="panel"
+    <SiemAlertsTable
       alerts={alerts}
+      rules={rules}
       analysts={analysts}
-      onAlertsChange={setAlerts}
       filters={filters}
       onFiltersChange={updateFilters}
+      onAlertsChange={setAlerts}
       now={referenceTime}
       onOpenAlert={openAlert}
       onAskAi={askAi}
       onSelectionChange={setSelected}
-      defaultPanelOpen={defaultFilterPanelOpen}
       density={density}
-      onDensityChange={setDensity}
-      height={480}
+      selectedRowIds={selected.map((alert) => alert.id)}
+      ruleId={ruleFilter}
+      onRuleChange={(value) => {
+        setRuleFilter(value);
+        setSelected([]);
+      }}
     />
   );
 
   return (
     <div
       className="aegis-console"
+      data-page={page}
       data-ai-open={aiOpen && dockAssistant}
       data-layout-theme={layoutTheme}
-      data-nav-presentation={navPresentation}
     >
       <a className="aegis-console-skip" href={`#${mainId}`}>
         Skip to workspace
@@ -502,8 +526,7 @@ export function SiemConsole({
         sections={sections}
         page={page}
         defaultCollapsed={defaultNavCollapsed}
-        presentation={navPresentation}
-        onNavigate={navigate}
+        onNavigate={navigateDestination}
         onSearch={() => setCommandOpen(true)}
       />
       <div className="aegis-console-workspace aegis-bottom-sheet-workspace">
@@ -514,17 +537,27 @@ export function SiemConsole({
           className="aegis-console-main"
           onScroll={updatePinnedHeader}
         >
-          <header ref={headerRef} className="aegis-console-header" data-pinned="false">
+          <header
+            ref={headerRef}
+            hidden={detailOpen && !!selectedAlert}
+            className="aegis-console-header"
+            data-pinned="false"
+          >
             <div ref={headerContentRef} className="aegis-console-header-content">
               <div className="aegis-console-breadcrumb-row">
                 <Breadcrumb
                   items={[
                     { label: 'Northstar', onClick: () => navigate('overview') },
-                    { label: creatingRule ? 'Create detection rule' : pageLabels[page] },
+                    ...(detailRule
+                      ? [
+                          { label: 'Detection rules', onClick: () => setSelectedRuleId(undefined) },
+                          { label: detailRule.name },
+                        ]
+                      : [{ label: creatingRule ? 'Create detection rule' : pageLabels[page] }]),
                   ]}
                 />
               </div>
-              <div className="aegis-console-title-row">
+              <div className="aegis-console-title-row" hidden={!!detailRule}>
                 <div className="aegis-console-title-copy">
                   <h1 ref={headingRef} tabIndex={-1}>
                     {creatingRule ? 'Create detection rule' : pageLabels[page]}
@@ -536,7 +569,7 @@ export function SiemConsole({
                   </p>
                 </div>
                 <div className="aegis-console-header-actions">
-                  {!creatingRule && page !== 'settings' && (
+                  {!creatingRule && ['hunting', 'incidents', 'reports'].includes(page) && (
                     <div className="aegis-console-header-time-range" title={scopeLabel}>
                       <TimeRangePicker
                         value={filters.timeRange}
@@ -545,89 +578,40 @@ export function SiemConsole({
                       />
                     </div>
                   )}
-                  <IconButton
-                    aria-label={bottomOpen ? 'Close bottom panel' : 'Open bottom panel'}
-                    aria-pressed={bottomOpen}
-                    emphasis={bottomOpen ? 'secondary' : 'ghost'}
-                    intent={bottomOpen ? 'function' : 'default'}
-                    onClick={() => setBottomOpen(!bottomOpen)}
-                  >
-                    <Rows2 size={17} />
-                  </IconButton>
-                  <DropdownMenu
-                    label="Workspace appearance"
-                    trigger={
-                      <IconButton
-                        aria-label={
-                          onLayoutThemeChange
-                            ? `UI approach: ${layoutThemeLabels[layoutTheme]}`
-                            : 'Navigation appearance'
-                        }
-                        title="Workspace appearance"
-                        emphasis="ghost"
-                      >
-                        {navPresentation === 'floating' ? (
-                          <PanelsTopLeft size={17} />
-                        ) : (
-                          <PanelLeft size={17} />
-                        )}
-                      </IconButton>
-                    }
-                    items={[
-                      ...(onLayoutThemeChange
-                        ? ([
-                            {
-                              type: 'radio-group',
-                              id: 'layout-theme',
-                              label: 'UI approach',
-                              value: layoutTheme,
-                              onValueChange: (value: string) =>
-                                onLayoutThemeChange(value as LayoutTheme),
-                              options: [...layoutThemeOptions],
-                            },
-                            { type: 'separator', id: 'navigation-appearance-separator' },
-                          ] satisfies DropdownMenuEntry[])
-                        : []),
-                      {
-                        type: 'radio-group',
-                        id: 'navigation-appearance',
-                        label: 'Navigation appearance',
-                        value: navPresentation,
-                        onValueChange: (value) => setNavPresentation(value as SideNavPresentation),
-                        options: [
-                          { value: 'transparent', label: 'Transparent navigation' },
-                          { value: 'floating', label: 'Floating navigation' },
-                        ],
-                      },
-                    ]}
-                  />
-                  {onThemeChange && (
-                    <IconButton
-                      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-                      emphasis="ghost"
-                      onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
-                    >
-                      {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-                    </IconButton>
-                  )}
-                  <IconButton
-                    intent="ai"
-                    emphasis={aiOpen ? 'primary' : 'secondary'}
-                    aria-label={aiOpen ? 'Close AI panel' : 'Open AI panel'}
-                    aria-pressed={aiOpen}
-                    onClick={() => {
-                      if (!aiOpen && selectedRecords.length)
-                        setAiContext(selectedRecords.map(alertContext));
-                      setAiOpen(!aiOpen);
-                    }}
-                  >
-                    <Sparkles size={18} />
-                  </IconButton>
                 </div>
               </div>
             </div>
           </header>
-          {creatingRule ? (
+          {detailOpen && selectedAlert ? (
+            <AlertDetailPage
+              key={selectedAlert.id}
+              alert={selectedAlert}
+              analysts={analysts}
+              rules={rules}
+              now={referenceTime}
+              currentAnalyst={analysts[0]}
+              comments={commentsByAlert[selectedAlert.id] ?? []}
+              onAddComment={(comment) =>
+                setCommentsByAlert((current) => ({
+                  ...current,
+                  [selectedAlert.id]: [...(current[selectedAlert.id] ?? []), comment],
+                }))
+              }
+              onBack={() => navigate('alerts')}
+              onUpdate={(updated) =>
+                setAlerts((current) =>
+                  current.map((alert) =>
+                    alert.id === updated.id
+                      ? { ...updated, updatedAt: new Date(referenceTime).toISOString() }
+                      : alert,
+                  ),
+                )
+              }
+              onTriage={(alert) =>
+                askAi([alert], `Triage ${alert.id}: review its signals and recommend next steps.`)
+              }
+            />
+          ) : creatingRule ? (
             <section className="aegis-console-wizard">
               <div className="aegis-console-wizard-toolbar">
                 <span className="muted">Human review required</span>
@@ -659,122 +643,24 @@ export function SiemConsole({
             </section>
           ) : (
             <>
-              {(page === 'alerts' || page === 'overview') && (
-                <div className={page === 'alerts' ? 'aegis-console-summary' : undefined}>
-                  <section
-                    className="aegis-console-metrics"
-                    aria-label="Security activity in selected time range"
-                  >
-                    <MetricCard
-                      label="Open alerts"
-                      value={openAlerts.length}
-                      sparkline={metricTrend(
-                        (alert) => !['resolved', 'false-positive'].includes(alert.status),
-                      )}
-                      sparklineLabel="Open alerts by last seen in the selected time range"
-                    />
-                    <MetricCard
-                      label="Critical alerts"
-                      intent="destroy"
-                      value={scopedAlerts.filter((alert) => alert.severity === 'critical').length}
-                      sparkline={metricTrend((alert) => alert.severity === 'critical')}
-                      sparklineLabel="Critical alerts by last seen in the selected time range"
-                    />
-                    <MetricCard
-                      label="Resolved alerts"
-                      intent="success"
-                      value={scopedAlerts.filter((alert) => alert.status === 'resolved').length}
-                      sparkline={metricTrend((alert) => alert.status === 'resolved')}
-                      sparklineLabel="Resolved alerts by last seen in the selected time range"
-                    />
-                    <MetricCard
-                      label="Evidence events"
-                      value={scopedAlerts.reduce((sum, alert) => sum + alert.eventCount, 0)}
-                      sparklineVariant="bar"
-                      sparkline={metricTrend(() => true, true)}
-                      sparklineLabel="Evidence events by alert last seen in the selected time range"
-                    />
-                  </section>
-                  {page === 'alerts' && (
-                    <EventHistogram
-                      data={timeSeries}
-                      value={filters.timeRange}
-                      now={referenceTime}
-                      onValueChange={(timeRange) => updateFilters({ ...filters, timeRange })}
-                      brush
-                      height={112}
-                      title="Alert activity"
-                      description={
-                        <div className="aegis-console-activity-meta">
-                          <span>{filteredAlerts.length} matching alerts</span>
-                          <Separator variant="dot" emphasis="light" />
-                          <span>4 sources · UTC</span>
-                        </div>
-                      }
-                      action={
-                        <Button
-                          size="sm"
-                          emphasis="secondary"
-                          leadingIcon={<Plus size={15} />}
-                          onClick={startRule}
-                        >
-                          Create rule
-                        </Button>
-                      }
-                      className="aegis-console-histogram"
-                    />
-                  )}
-                </div>
-              )}
-              {page === 'alerts' && (
-                <section
-                  className="aegis-console-alert-card"
-                  aria-label="Alert investigation workspace"
-                >
-                  <Tabs
-                    label="Alert queues"
-                    value={tab}
-                    onValueChange={(next) =>
-                      updateFilters({
-                        ...filters,
-                        statuses: next === 'review' ? ['new'] : [],
-                        assignees: next === 'mine' ? [analysts[0].id] : [],
-                      })
-                    }
-                    listClassName="aegis-console-queue-tabs"
-                    sharedContent={alertWorkspace}
-                    items={[
-                      {
-                        value: 'all',
-                        label: 'All alerts',
-                        count: tabScope.length,
-                        content: null,
-                      },
-                      {
-                        value: 'review',
-                        label: 'Needs review',
-                        count: tabScope.filter((alert) => alert.status === 'new').length,
-                        content: null,
-                      },
-                      {
-                        value: 'mine',
-                        label: 'Assigned to me',
-                        count: tabScope.filter((alert) => alert.assignee?.id === analysts[0].id)
-                          .length,
-                        content: null,
-                      },
-                    ]}
-                  />
-                </section>
-              )}
               {page === 'overview' && (
-                <ConsoleOverview
-                  alerts={scopedAlerts}
-                  now={referenceTime}
+                <SiemOverview
+                  alerts={alerts}
                   onOpenAlert={openAlert}
-                  onShowAlerts={() => navigate('alerts')}
+                  onShowAlerts={() => {
+                    setRuleFilter('all');
+                    updateFilters({
+                      ...createDefaultFilters(),
+                      statuses: ['new', 'triaged', 'in-progress'],
+                      timeRange: { mode: 'relative', preset: '7d' },
+                    });
+                    navigate('alerts');
+                  }}
+                  onAskAi={(prompt) => askAi(alerts.slice(0, 3), prompt, 'Last 7 days')}
+                  onShowSystemErrors={() => navigate('system-errors')}
                 />
               )}
+              {page === 'system-errors' && <SiemSystemErrors />}
               {page === 'incidents' && (
                 <ConsoleIncidents
                   alerts={scopedAlerts}
@@ -784,18 +670,54 @@ export function SiemConsole({
               )}
               {page === 'hunting' && (
                 <ConsoleHunting
-                  key={huntQuery}
+                  terminology="query"
                   alerts={scopedAlerts}
-                  initialQuery={huntQuery}
                   now={referenceTime}
                   onOpenAlert={openAlert}
                 />
               )}
-              {page === 'rules' && <ConsoleRules rules={rules} onCreateRule={startRule} />}
+              {page === 'rules' && (
+                <ConsoleDetections
+                  selectedRuleId={selectedRuleId}
+                  onSelectedRuleChange={setSelectedRuleId}
+                  showBreadcrumb={false}
+                  rules={rules}
+                  alerts={alerts}
+                  onCreateRule={startRule}
+                  onOpenAlert={openAlert}
+                  onRulesChange={setRules}
+                  onShowContentLibrary={() => navigate('content-library')}
+                  now={referenceTime}
+                />
+              )}
+              {emptyPage && <EmptyState preset="no-data" {...emptyPage} />}
               {page === 'reports' && (
                 <ConsoleReports alerts={scopedAlerts} scopeLabel={scopeLabel} />
               )}
-              {page === 'settings' && (
+            </>
+          )}
+          <div
+            className="siem-persistent-view"
+            hidden={page !== 'alerts' || detailOpen || creatingRule}
+          >
+            {alertWorkspace}
+          </div>
+          <div
+            className="siem-persistent-view"
+            hidden={page !== 'datasources' || detailOpen || creatingRule}
+          >
+            <ConsoleDatasources />
+          </div>
+          <div
+            className="siem-persistent-view"
+            hidden={page !== 'settings' || detailOpen || creatingRule}
+          >
+            <SiemSettings
+              bottomOpen={bottomOpen}
+              onBottomOpenChange={setBottomOpen}
+              aiOpen={aiOpen}
+              onAiOpenChange={setAiOpen}
+              appearance={
                 <ConsoleSettings
                   theme={theme}
                   onThemeChange={onThemeChange}
@@ -804,12 +726,12 @@ export function SiemConsole({
                   density={density}
                   onDensityChange={setDensity}
                 />
-              )}
-            </>
-          )}
+              }
+            />
+          </div>
           <footer className="aegis-console-footnote">
             <ShieldCheck size={13} />
-            <span>Local demo · 6 Oct 2026, 08:30 UTC</span>
+            <span>Local demo · 21 Oct 2026, 23:10 GMT+3</span>
             <Separator variant="dot" emphasis="light" />
             <span>Changes last for this session</span>
           </footer>
@@ -849,30 +771,8 @@ export function SiemConsole({
         context={aiContext}
         availableContext={scopedAlerts.slice(0, 12).map(alertContext)}
         request={request}
-        scopeLabel={scopeLabel}
+        scopeLabel={aiContext.find((item) => item.id === 'current-time-range')?.label ?? scopeLabel}
         onEvidenceClick={openEvidence}
-      />
-      <AlertDetailSheet
-        alert={selectedAlert}
-        alerts={detailAlerts}
-        analysts={analysts}
-        rules={rules}
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-        now={referenceTime}
-        onNavigate={(alert) => setSelectedId(alert.id)}
-        onUpdate={(updated) => {
-          setAlerts((current) =>
-            current.map((alert) => (alert.id === updated.id ? updated : alert)),
-          );
-          showToast({ title: 'Alert updated', description: updated.id, intent: 'success' });
-        }}
-        onExplain={(alert) => askAi([alert])}
-        onOpenInvestigation={(alert) => {
-          setDetailOpen(false);
-          setHuntQuery(alert.entity.name);
-          navigate('hunting');
-        }}
       />
       <CommandPalette
         actions={actions}

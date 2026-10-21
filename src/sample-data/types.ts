@@ -41,6 +41,10 @@ export interface Alert {
   eventCount: number;
   firstSeen: string;
   lastSeen: string;
+  /** Record lifecycle timestamps, distinct from the observed evidence interval. */
+  createdAt?: string;
+  updatedAt?: string;
+  exportedTo?: string[];
   assignee?: Analyst;
   analystNote?: string;
   tags: string[];

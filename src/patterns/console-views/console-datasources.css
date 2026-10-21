@@ -1,0 +1,160 @@
+.aegis-datasources {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  padding-block-start: var(--space-2);
+}
+.aegis-datasources > .aegis-data-grid > .aegis-grid-toolbar {
+  min-height: calc(var(--v0-control-default, 34px) + 2 * var(--space-2));
+  padding-block: var(--space-2);
+}
+.aegis-datasources-note {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-datasources-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.aegis-datasources-processed {
+  --color-chart-function: var(--color-chart-2);
+}
+.aegis-datasources-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+.aegis-datasources-toolbar > .aegis-input {
+  flex: 1 1 240px;
+  max-width: 500px;
+}
+.aegis-datasources-toolbar > .aegis-select-field {
+  width: 190px;
+  max-width: 100%;
+}
+.aegis-datasources-count {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-datasources-create {
+  margin-inline-start: auto;
+}
+.aegis-datasource-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.aegis-datasource-name .aegis-datasource-provider-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+  color: var(--color-text-primary);
+}
+.aegis-datasource-provider-icon > img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.aegis-datasource-name button {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.aegis-datasource-name button:hover {
+  text-decoration: underline;
+}
+.aegis-datasource-name button:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+.aegis-datasource-error {
+  color: var(--color-destroy-fg);
+}
+.aegis-datasource-runs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.aegis-datasource-runs span {
+  display: flex;
+  color: var(--color-text-secondary);
+}
+.aegis-datasource-runs [data-run='success'] {
+  color: var(--color-success-fg);
+}
+.aegis-datasource-runs [data-run='error'] {
+  color: var(--color-destroy-fg);
+}
+.aegis-datasources-announcement {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-datasources-announcement:empty {
+  display: none;
+}
+.aegis-datasource-form {
+  display: grid;
+  gap: var(--space-4);
+}
+.aegis-datasource-details {
+  display: grid;
+  gap: var(--space-4);
+}
+.aegis-datasource-details dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+.aegis-datasource-details dt,
+.aegis-datasource-details p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-datasource-details dd {
+  margin: var(--space-1) 0 0;
+  font-variant-numeric: tabular-nums;
+}
+.aegis-datasource-details p {
+  margin: 0;
+}
+@media (max-width: 1100px) {
+  .aegis-datasources-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .aegis-datasources-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 420px) {
+  .aegis-datasources-toolbar > .aegis-input {
+    flex-basis: 100%;
+  }
+  .aegis-datasources-toolbar > .aegis-select-field {
+    flex: 1;
+    min-width: 150px;
+  }
+}

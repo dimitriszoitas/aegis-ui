@@ -1,0 +1,250 @@
+.aegis-detections {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--layout-section-gap);
+}
+.aegis-detections-workspace {
+  --detections-control-height: var(--v0-control-default, 34px);
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.aegis-detections-facets {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+  transition:
+    flex-basis var(--motion-slide) var(--ease-out),
+    margin-inline-end var(--motion-slide) var(--ease-out);
+}
+.aegis-detections-workspace[data-panel-open='true'] > .aegis-detections-facets {
+  flex-basis: 300px;
+  margin-inline-end: var(--space-5);
+}
+.aegis-detections-workspace > .aegis-detections-facets > .aegis-detections-filter-panel {
+  width: 300px;
+  height: 100%;
+  max-height: 760px;
+  max-width: none;
+  padding-block-start: var(--space-2);
+  border: 0;
+  border-inline-end: 1px solid var(--color-border-subtle);
+  background: transparent;
+}
+.aegis-detections-filter-panel .aegis-filter-panel-heading {
+  min-height: var(--detections-control-height);
+}
+.aegis-detections-results {
+  flex: 1;
+  min-width: 0;
+}
+.aegis-detections-results > .aegis-data-grid > .aegis-grid-toolbar {
+  min-height: calc(var(--detections-control-height) + 2 * var(--space-2));
+  padding-block: var(--space-2);
+}
+.aegis-detections-filter-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--grid-selection-width, 44px);
+  width: var(--grid-selection-width, 44px);
+}
+.aegis-detections-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  width: 100%;
+}
+.aegis-detections-toolbar > .aegis-input {
+  flex: 1 1 250px;
+  max-width: 500px;
+}
+.aegis-detections-count {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-inline-end: auto;
+}
+.aegis-detections-filter-fields {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.aegis-detections-applied,
+.aegis-detections-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.aegis-detections-cell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.aegis-detections-rule-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.aegis-detections-cell strong {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-detections-cell small,
+.aegis-detections-note {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-detections-detail-header {
+  display: grid;
+  gap: var(--space-4);
+}
+.aegis-detections-detail-header > .aegis-button {
+  justify-self: start;
+}
+.aegis-detections-detail-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.aegis-detections-detail-title > div {
+  min-width: 0;
+}
+.aegis-detections-detail-title h1 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--title-page-size);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.aegis-detections-detail-title p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.aegis-detections-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: var(--layout-section-gap);
+}
+.aegis-detections-main,
+.aegis-detections-aside,
+.aegis-detections-editor {
+  min-width: 0;
+  display: grid;
+  gap: var(--layout-card-padding);
+}
+.aegis-detections-main .aegis-card-content > p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.aegis-detections-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.aegis-detections-main .aegis-detections-status > p {
+  margin: 0;
+}
+.aegis-detections-status > small {
+  flex-basis: 100%;
+  color: var(--color-text-secondary);
+}
+.aegis-detections-facts {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.aegis-detections-facts > div {
+  display: grid;
+  gap: var(--space-1);
+}
+.aegis-detections-facts dt {
+  color: var(--color-text-secondary);
+}
+.aegis-detections-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.aegis-detections-editor-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.aegis-detections-code {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.aegis-detections-aside .aegis-timeline-heading {
+  flex-wrap: wrap;
+}
+@container console-workspace (max-width: 850px) {
+  .aegis-detections-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .aegis-detections-aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .aegis-detections-detail-grid,
+  .aegis-detections-aside,
+  .aegis-detections-editor-fields {
+    grid-template-columns: 1fr;
+  }
+  .aegis-detections-detail-title {
+    flex-wrap: wrap;
+  }
+  .aegis-detections-toolbar > .aegis-input {
+    max-width: none;
+    flex-basis: 100%;
+  }
+}
+.aegis-detections-toolbar > .aegis-detections-applied {
+  flex-basis: 100%;
+}
+
+.aegis-detections-detail-title h1:focus {
+  outline: none;
+}
+
+@media (max-width: 700px) {
+  .aegis-detections-workspace {
+    flex-direction: column;
+  }
+  .aegis-detections-workspace[data-panel-open='true'] > .aegis-detections-facets {
+    flex-basis: auto;
+    margin: 0 0 var(--space-4);
+  }
+  .aegis-detections-workspace[data-panel-open='false'] > .aegis-detections-facets {
+    display: none;
+  }
+  .aegis-detections-workspace > .aegis-detections-facets > .aegis-detections-filter-panel {
+    width: 100%;
+    height: auto;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--color-border-subtle);
+  }
+  .aegis-detections-toolbar > .aegis-input {
+    flex-basis: 100%;
+    order: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-detections-facets {
+    transition: none;
+  }
+}

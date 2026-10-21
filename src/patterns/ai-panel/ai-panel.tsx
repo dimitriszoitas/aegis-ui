@@ -31,6 +31,8 @@ export interface AiPanelProps {
   onOpenChange?: (open: boolean) => void;
   trigger?: ReactElement;
   docked?: boolean;
+  /** Resizing preserves the conversation and composer; narrow screens remain viewport-fit. */
+  resizable?: boolean;
   size?: 'sm' | 'md' | 'lg';
   title?: string;
   modelLabel?: string;
@@ -64,6 +66,7 @@ export function AiPanel({
   onOpenChange,
   trigger,
   docked = false,
+  resizable = true,
   size = 'sm',
   title = 'AI assistant',
   modelLabel = 'Assistant · Local demo',
@@ -258,6 +261,7 @@ export function AiPanel({
       onOpenChange={changeOpen}
       trigger={trigger}
       docked={docked}
+      resizable={resizable}
       size={size}
       title={
         <span className="aegis-ai-panel-title">

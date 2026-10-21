@@ -25,10 +25,7 @@ export interface NavSection {
   label?: string;
   items: NavItem[];
 }
-export type SideNavPresentation = 'transparent' | 'floating';
 export interface SideNavProps {
-  /** Omit to inherit the current UI approach. */
-  presentation?: SideNavPresentation;
   sections: NavSection[];
   activeId: string;
   onNavigate: (id: string) => void;
@@ -36,8 +33,14 @@ export interface SideNavProps {
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   onSearch?: () => void;
+  showSearch?: boolean;
+  brandName?: string;
+  /** Pass null to show only the brand name. */
+  brandIcon?: ReactNode;
   footer?: ReactNode | ((collapsed: boolean) => ReactNode);
   workspace?: string;
+  /** Replace the expanded workspace summary; hidden and inert in the collapsed rail. */
+  workspaceContent?: ReactNode;
   className?: string;
 }
 
@@ -93,10 +96,13 @@ export function SideNav({
   defaultCollapsed = false,
   onCollapsedChange,
   onSearch,
+  showSearch = true,
+  brandName = 'Aegis',
+  brandIcon = <Shield size={22} strokeWidth={1.6} />,
   footer,
   workspace = 'Northstar',
+  workspaceContent,
   className,
-  presentation,
 }: SideNavProps) {
   const [internal, setInternal] = useState(defaultCollapsed);
   const collapsed = controlled ?? internal;
@@ -201,15 +207,12 @@ export function SideNav({
     <nav
       className={cn('side-nav', className)}
       data-collapsed={collapsed}
-      data-presentation={presentation}
       aria-label="Main navigation"
     >
       <div className="nav-brand">
         <div className="nav-brand-copy" aria-hidden={collapsed}>
-          <span className="nav-mark">
-            <Shield size={22} strokeWidth={1.6} />
-          </span>
-          <strong>Aegis</strong>
+          {brandIcon && <span className="nav-mark">{brandIcon}</span>}
+          <strong>{brandName}</strong>
         </div>
         <IconButton
           key="navigation-toggle"
@@ -221,32 +224,36 @@ export function SideNav({
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </IconButton>
       </div>
-      <div className="nav-workspace-collapse" aria-hidden={collapsed}>
+      <div className="nav-workspace-collapse" aria-hidden={collapsed} inert={collapsed}>
         <div className="nav-workspace-clip">
-          <div className="nav-workspace">
-            <span className="workspace-avatar">N</span>
-            <div>
-              <strong>{workspace}</strong>
-              <span>Security workspace</span>
+          {workspaceContent ?? (
+            <div className="nav-workspace">
+              <span className="workspace-avatar">N</span>
+              <div>
+                <strong>{workspace}</strong>
+                <span>Security workspace</span>
+              </div>
+              <span className="workspace-status" role="img" aria-label="All systems connected" />
             </div>
-            <span className="workspace-status" role="img" aria-label="All systems connected" />
-          </div>
+          )}
         </div>
       </div>
-      <NavTooltip content="Search workspace" enabled={collapsed}>
-        <button
-          type="button"
-          className={cn('nav-search', collapsed && 'nav-icon')}
-          aria-label="Search workspace"
-          onClick={onSearch}
-        >
-          <Search size={16} />
-          <span className="nav-search-copy" aria-hidden={collapsed}>
-            <span>Search workspace</span>
-            <Kbd>⌘K</Kbd>
-          </span>
-        </button>
-      </NavTooltip>
+      {showSearch && (
+        <NavTooltip content="Search workspace" enabled={collapsed}>
+          <button
+            type="button"
+            className={cn('nav-search', collapsed && 'nav-icon')}
+            aria-label="Search workspace"
+            onClick={onSearch}
+          >
+            <Search size={16} />
+            <span className="nav-search-copy" aria-hidden={collapsed}>
+              <span>Search workspace</span>
+              <Kbd>⌘K</Kbd>
+            </span>
+          </button>
+        </NavTooltip>
+      )}
       <div className="nav-sections">
         {sections.map((section, index) => (
           <div

@@ -907,6 +907,21 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     [v('sparklineVariant', ['line', 'area', 'bar'])],
   ),
   entry(
+    'chart-metric-card',
+    'Chart metric card',
+    'Charts',
+    'Combine a summary metric, comparison, and its time series in one card.',
+    'Choose a single-color bar, area, or compact chart. Exact values are available in an accessible data table. Changes are neutral unless their meaning is supplied.',
+    ['Metric and comparison', 'Latest interval', 'Time series', 'Exact data table'],
+    {
+      exports: 'ChartMetricCard',
+      subpath: 'metric-card',
+      jsx: '<ChartMetricCard label="Detection signals" metric={61800} delta={364.3}\n  trendIsPositive period="in past 7d" data={[10100, 9300, 9900, 6100, 7000, 9700, 9700].map((value, i) => ({ label: `Oct ${15 + i}`, value }))} />',
+    },
+    'components-charts-chart-metric-card',
+    [v('variant', ['bar', 'area', 'compact'], 'bar')],
+  ),
+  entry(
     'mini-bar-chart',
     'Mini bar chart',
     'Charts',

@@ -95,7 +95,7 @@
   padding-block: var(--space-4);
 }
 [data-layout-theme='fundamental'] .side-nav {
-  background: var(--color-bg-canvas);
+  background: var(--fundamental-nav-surface);
 }
 [data-layout-theme='fundamental'] .nav-item.is-active {
   color: var(--color-text-primary);
@@ -144,12 +144,10 @@
    cells still paint that surface so scrolling content cannot show through them. */
 [data-layout-theme='fundamental'] {
   --fundamental-grid-surface: var(--color-bg-canvas);
-  --fundamental-grid-active: var(--color-bg-surface);
 }
 [data-layout-theme='fundamental']
   :is(.aegis-card, .surface, .floating, .aegis-side-sheet, .aegis-modal) {
   --fundamental-grid-surface: var(--color-bg-surface);
-  --fundamental-grid-active: var(--color-bg-canvas);
 }
 [data-layout-theme='fundamental']
   :is(.aegis-console-alert-card, .aegis-alerts-explorer, .aegis-data-grid) {
@@ -168,34 +166,87 @@
   background: var(--fundamental-grid-surface);
 }
 [data-layout-theme='fundamental'] .aegis-grid-table > thead > tr > th {
-  border-bottom-color: var(--color-border-subtle);
-  color: var(--color-text-tertiary);
+  border: 0;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+/* Horizontal breathing room leaves the measured vertical density unchanged. */
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > :is(thead, tbody)
+  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer)
+  > :is(th, td):not(.aegis-grid-selection-column, .aegis-grid-expand-column) {
+  padding-inline: var(--space-4);
+}
+[data-layout-theme='fundamental']
+  .aegis-data-grid[data-density='compact']
+  .aegis-grid-table
+  > :is(thead, tbody)
+  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer)
+  > :is(th, td):not(.aegis-grid-selection-column, .aegis-grid-expand-column) {
+  padding-inline: var(--space-3);
 }
 [data-layout-theme='fundamental'] .aegis-grid-table > tbody > tr > td,
 [data-layout-theme='fundamental'] .aegis-grid-table > tbody > tr.aegis-grid-expanded-row > td {
   background: transparent;
-  border-bottom: 0;
-}
-[data-layout-theme='fundamental']
-  .aegis-grid-table
-  > tbody
-  > tr:not(.aegis-grid-spacer):not(:last-child)
-  > td {
-  border-bottom: 1px solid var(--color-border-subtle);
+  border: 0;
 }
 [data-layout-theme='fundamental'] .aegis-grid-scroll td.aegis-grid-pinned {
   background: var(--fundamental-grid-surface);
 }
+/* Keep the leading data value prominent, independent of utility columns and column order. */
 [data-layout-theme='fundamental']
   .aegis-grid-table
   > tbody
-  > .aegis-grid-row:is(:hover, .is-selected)
-  > td {
-  background: var(--fundamental-grid-active);
+  > .aegis-grid-row
+  > td[data-primary-column='false'] {
+  color: color-mix(in srgb, var(--color-text-primary) 85%, var(--color-text-secondary));
+}
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > tbody
+  > .aegis-grid-row
+  > td[data-primary-column]
+  :is(.aegis-entity-cell-name, .aegis-time-cell, .severity-badge, .status-badge, .tag:not(button)) {
+  color: inherit;
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > .aegis-grid-row:hover > td {
+  background: color-mix(in srgb, var(--color-text-primary) 5%, var(--fundamental-grid-surface));
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > .aegis-grid-row.is-selected > td {
+  background: color-mix(in srgb, var(--color-text-primary) 8%, var(--fundamental-grid-surface));
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > .aegis-grid-row > td:first-child {
+  border-start-start-radius: var(--radius-lg);
+  border-end-start-radius: var(--radius-lg);
+}
+[data-layout-theme='fundamental'] .aegis-grid-table > tbody > .aegis-grid-row > td:last-child {
+  border-start-end-radius: var(--radius-lg);
+  border-end-end-radius: var(--radius-lg);
+}
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > tbody
+  > .aegis-grid-row[data-selected-before='true']
+  > td:is(:first-child, :last-child) {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+[data-layout-theme='fundamental']
+  .aegis-grid-table
+  > tbody
+  > .aegis-grid-row[data-selected-after='true']
+  > td:is(:first-child, :last-child) {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+[data-layout-theme='fundamental'] .aegis-grid-event-table :is(th, td) {
+  border: 0;
 }
 [data-layout-theme='fundamental'] .aegis-grid-footer,
 [data-layout-theme='fundamental'] .aegis-grid-bulk .aegis-bulk-actions {
   background: transparent;
+  border: 0;
   border-radius: 0;
 }
 /* Emphasis controls fill; intent supplies blue, destructive red, or the AI gradient. */
@@ -240,7 +291,7 @@
 [data-layout-theme='fundamental'] .button-group > .aegis-button:not(:last-child) {
   border-inline-end-color: transparent;
 }
-/* Resting field edges sit close to their fill; activation remains distinct. */
+/* Field boundaries remain quiet and stable while editing. */
 [data-layout-theme='fundamental']
   :is(.aegis-input-shell, .aegis-multi-shell):not([data-disabled], [data-readonly]),
 [data-layout-theme='fundamental']
@@ -257,30 +308,32 @@
   :is(.aegis-input-shell, .aegis-multi-shell, .aegis-code-editor, .aegis-prompt):not(
     [data-invalid],
     [aria-invalid='true']
-  ):not(:focus-within),
+  ),
 [data-layout-theme='fundamental']
   :is(
     .aegis-select-trigger,
     .aegis-date-picker-trigger,
     .aegis-textarea-native,
     .aegis-pagination-size select
-  ):not([aria-invalid='true']):not([data-state='open']):not(:focus),
-[data-layout-theme='fundamental'] .time-range-clock input:not(:focus) {
+  ):not([aria-invalid='true']),
+[data-layout-theme='fundamental'] .time-range-clock input {
   border-color: var(--fundamental-control-border);
 }
 [data-layout-theme='fundamental']
+  .aegis-checkbox-control[data-state='unchecked']:not(:disabled, :hover, :focus):not(
+    [aria-invalid='true']
+  ) {
+  border-color: light-dark(var(--color-border-strong), var(--fundamental-control-border));
+}
+[data-layout-theme='fundamental']
   :is(.aegis-input-shell, .aegis-multi-shell):hover:not([data-invalid]):not([data-disabled]):not(
-    :focus-within
-  ):not([data-readonly]),
+    [data-readonly]
+  ),
 [data-layout-theme='fundamental']
   :is(.aegis-select-trigger, .aegis-date-picker-trigger, .aegis-textarea-native):hover:not(
     :disabled
-  ):not([aria-invalid='true']):not([data-state='open']):not(:focus):not([readonly]) {
+  ):not([aria-invalid='true']):not([readonly]) {
   border-color: var(--fundamental-control-border-hover);
-}
-[data-layout-theme='fundamental'] :is(.aegis-code-editor, .aegis-prompt):focus-within {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: 2px;
 }
 [data-layout-theme='fundamental']
   :is(

@@ -10,35 +10,24 @@ import {
   Settings,
   FileChartColumn,
 } from '@/components/icon';
-import { SideNav, type SideNavPresentation } from './side-nav';
+import { SideNav } from './side-nav';
 import { Avatar } from '@/components/avatar';
 export default {
   title: 'Components/Navigation/SideNav',
   component: SideNav,
   args: { onSearch: fn() },
-  argTypes: {
-    presentation: {
-      control: 'inline-radio',
-      options: ['transparent', 'floating'],
-      description:
-        'Optional navigation appearance, independent of the global UI approach. Omit to inherit the approach default.',
-    },
-  },
   parameters: { layout: 'fullscreen' },
 } satisfies Meta<typeof SideNav>;
 function Navigation({
   collapsed = false,
   onSearch,
-  presentation,
 }: {
   collapsed?: boolean;
-  presentation?: SideNavPresentation;
   onSearch?: () => void;
 }) {
   const [active, setActive] = useState('alerts');
   return (
     <SideNav
-      presentation={presentation}
       defaultCollapsed={collapsed}
       activeId={active}
       onNavigate={setActive}
@@ -80,17 +69,13 @@ function Navigation({
   );
 }
 export const Expanded: StoryObj<typeof SideNav> = {
-  render: (args) => <Navigation presentation={args.presentation} onSearch={args.onSearch} />,
+  render: (args) => <Navigation onSearch={args.onSearch} />,
 };
 export const Collapsed: StoryObj<typeof SideNav> = {
-  render: (args) => (
-    <Navigation collapsed presentation={args.presentation} onSearch={args.onSearch} />
-  ),
+  render: (args) => <Navigation collapsed onSearch={args.onSearch} />,
 };
 export const CollapsedKeyboard: StoryObj<typeof SideNav> = {
-  render: (args) => (
-    <Navigation collapsed presentation={args.presentation} onSearch={args.onSearch} />
-  ),
+  render: (args) => <Navigation collapsed onSearch={args.onSearch} />,
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const portal = within(document.body);
@@ -122,7 +107,7 @@ export const CollapsedKeyboard: StoryObj<typeof SideNav> = {
   },
 };
 export const ExpandedKeyboard: StoryObj<typeof SideNav> = {
-  render: (args) => <Navigation presentation={args.presentation} onSearch={args.onSearch} />,
+  render: (args) => <Navigation onSearch={args.onSearch} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const group = canvas.getByRole('button', { name: 'Detection rules' });
@@ -143,25 +128,4 @@ export const ExpandedKeyboard: StoryObj<typeof SideNav> = {
     await userEvent.tab();
     await expect(canvas.getByRole('button', { name: 'Reports' })).toHaveFocus();
   },
-};
-
-export const Transparent: StoryObj<typeof SideNav> = {
-  args: { presentation: 'transparent' },
-  render: (args) => <Navigation presentation={args.presentation} onSearch={args.onSearch} />,
-};
-export const Floating: StoryObj<typeof SideNav> = {
-  args: { presentation: 'floating' },
-  render: (args) => <Navigation presentation={args.presentation} onSearch={args.onSearch} />,
-};
-export const TransparentCollapsed: StoryObj<typeof SideNav> = {
-  args: { presentation: 'transparent' },
-  render: (args) => (
-    <Navigation collapsed presentation={args.presentation} onSearch={args.onSearch} />
-  ),
-};
-export const FloatingCollapsed: StoryObj<typeof SideNav> = {
-  args: { presentation: 'floating' },
-  render: (args) => (
-    <Navigation collapsed presentation={args.presentation} onSearch={args.onSearch} />
-  ),
 };

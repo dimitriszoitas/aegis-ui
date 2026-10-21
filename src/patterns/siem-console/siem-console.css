@@ -1,11 +1,22 @@
 .aegis-console {
   position: relative;
   display: flex;
+  width: 100%;
+  max-width: 2160px;
+  margin-inline: auto;
   height: var(--console-height, 100dvh);
   min-height: 0;
   overflow: hidden;
   background: var(--color-bg-canvas);
   color: var(--color-text-primary);
+}
+.aegis-console-environment {
+  width: var(--side-nav-workspace-width);
+  padding: var(--space-1);
+}
+.aegis-console-environment .aegis-field-label {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
 }
 .aegis-console > .side-nav {
   height: calc(var(--console-height, 100dvh) - 2 * var(--side-nav-inset));
@@ -32,6 +43,16 @@
 }
 .aegis-console-header {
   margin-bottom: var(--layout-section-gap);
+}
+.aegis-console:is([data-page='alerts'], [data-page='rules'], [data-page='datasources'])
+  .aegis-console-header {
+  margin-bottom: var(--space-3);
+}
+.aegis-console:is([data-page='alerts'], [data-page='rules'], [data-page='datasources'])
+  :is(.siem-alerts-results, .aegis-detections-results, .aegis-datasources)
+  > .aegis-data-grid
+  > .aegis-grid-toolbar {
+  padding-block-end: var(--space-4);
 }
 .aegis-console-header[data-pinned='true'] {
   position: sticky;
@@ -76,7 +97,14 @@
   gap: var(--space-4);
 }
 .aegis-console-breadcrumb-row {
-  margin-bottom: var(--layout-section-gap);
+  margin-bottom: var(--space-3);
+}
+.aegis-console .aegis-breadcrumb li {
+  font-size: 10px;
+}
+.aegis-console .aegis-breadcrumb-separator {
+  width: 10px;
+  height: 10px;
 }
 .aegis-console-title-row h1 {
   font-size: var(--title-page-size);
@@ -97,6 +125,9 @@
   gap: var(--space-2);
   min-width: 0;
   max-width: 100%;
+}
+.aegis-console-header-actions:empty {
+  display: none;
 }
 .aegis-console-header-actions > .aegis-icon-button {
   flex-shrink: 0;
@@ -302,7 +333,7 @@
     top: 0;
   }
   .aegis-console .side-nav + .aegis-console-workspace {
-    margin-left: calc(var(--sidebar-collapsed) + 2 * var(--chrome-inset));
+    margin-left: var(--sidebar-collapsed);
   }
 }
 @media (max-width: 700px) {
@@ -326,7 +357,7 @@
     align-items: flex-start;
     flex-direction: column;
     gap: var(--space-2);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
   }
   .aegis-console-title-row h1 {
     font-size: var(--text-2xl);
@@ -407,16 +438,10 @@
   }
 }
 
-/* Explicit nav styles share the same track, including in the compact overlay layout. */
-@media (max-width: 1000px) {
-  .aegis-console[data-nav-presentation] .side-nav + .aegis-console-workspace {
-    margin-left: var(--sidebar-collapsed);
-  }
+.aegis-console-title-row[hidden] {
+  display: none;
 }
 
-@media (max-width: 1000px) {
-  /* An expanded overlay needs a canvas backing so workspace text cannot show through. */
-  .aegis-console > .side-nav[data-presentation='transparent'][data-collapsed='false'] {
-    background: var(--color-bg-canvas);
-  }
+.aegis-console .nav-footer {
+  border-top: 0;
 }

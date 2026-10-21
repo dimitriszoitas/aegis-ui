@@ -1,9 +1,8 @@
 import type { Decorator } from '@storybook/react-vite';
 import './console-canvas.css';
 
-export const consolePreviewGlobals = {
-  viewport: { value: 'aegis-console-1600', isRotated: false },
-};
+/** Leave the preview responsive; the toolbar's 1600px preset remains optional. */
+export const consolePreviewGlobals = {};
 
 export const consolePreviewParameters = {
   layout: 'fullscreen',
@@ -19,16 +18,11 @@ export const consolePreviewParameters = {
   docs: { story: { inline: false, height: 1000 } },
 };
 
-/** Story-only desktop canvas; the shipped console retains its responsive layout. */
+/** Match the shipped console's available-width layout, centered above 2160px. */
 export const WithConsoleCanvas: Decorator = (Story, context) => {
   if (!/^(Console\/|Patterns\/Console views\/)/.test(context.title)) return <Story />;
   return (
-    <div
-      className="aegis-story-console-viewport"
-      role="region"
-      aria-label="Console preview, 1600 pixels wide"
-      tabIndex={0}
-    >
+    <div className="aegis-story-console-viewport">
       <div className="aegis-story-console-canvas">
         <Story />
       </div>

@@ -287,13 +287,17 @@ export function ConsoleIncidents({ alerts, onOpenAlert, now }: ConsoleIncidentsP
 
 export interface ConsoleHuntingProps extends ConsoleAlertViewProps {
   initialQuery?: string;
+  /** Adapt the local search copy when embedded in the console's Query destination. */
+  terminology?: 'hunt' | 'query';
 }
 export function ConsoleHunting({
   alerts,
   onOpenAlert,
   initialQuery = '',
+  terminology = 'hunt',
   now,
 }: ConsoleHuntingProps) {
+  const isQuery = terminology === 'query';
   const [draft, setDraft] = useState(initialQuery);
   const [query, setQuery] = useState(initialQuery);
   const [source, setSource] = useState('all');
@@ -374,7 +378,7 @@ export function ConsoleHunting({
   return (
     <div className="aegis-console-view">
       <ViewHeading
-        title="Threat hunting"
+        title={isQuery ? 'Query evidence' : 'Threat hunting'}
         description="Search the loaded alert fields and nested event payloads. Every search term must match."
       />
       <Card>
@@ -388,13 +392,13 @@ export function ConsoleHunting({
             }}
           >
             <SearchInput
-              aria-label="Hunt query"
+              aria-label={isQuery ? 'Query evidence' : 'Hunt query'}
               placeholder="PowerShell, a hostname, IP address, or MITRE technique"
               value={draft}
               onValueChange={setDraft}
             />
             <Select
-              aria-label="Hunt telemetry source"
+              aria-label={isQuery ? 'Query telemetry source' : 'Hunt telemetry source'}
               value={source}
               onValueChange={setSource}
               options={sourceOptions}
@@ -405,7 +409,7 @@ export function ConsoleHunting({
               leadingIcon={<Play size={14} />}
               disabled={!draft.trim()}
             >
-              Run hunt
+              {isQuery ? 'Run query' : 'Run hunt'}
             </Button>
             <Button
               emphasis="ghost"
@@ -437,13 +441,15 @@ export function ConsoleHunting({
             data={results}
             columns={columns}
             getRowId={(alert) => alert.id}
-            label="Hunt result alerts"
+            label={isQuery ? 'Query result alerts' : 'Hunt result alerts'}
             rowLabel={(alert) => alert.title}
             onRowClick={onOpenAlert}
             enableSelection={false}
             pageSize={10}
             height={420}
-            emptyTitle="No evidence matched this hunt"
+            emptyTitle={
+              isQuery ? 'No evidence matched this query' : 'No evidence matched this hunt'
+            }
             emptyDescription="Try fewer terms, another source, or a wider time range."
           />
         </>
@@ -462,7 +468,7 @@ export function ConsoleHunting({
                 setSubmittedSource('all');
               }}
             >
-              Hunt for PowerShell
+              {isQuery ? 'Query PowerShell' : 'Hunt for PowerShell'}
             </Button>
           }
         />
@@ -835,6 +841,11 @@ export function ConsoleSettings({
                     label: 'Minimalistic',
                     description:
                       'Two neutral surfaces, tight corners, no shadows. Color carries meaning.',
+                  },
+                  {
+                    value: 'fundamental',
+                    label: layoutThemeLabels.fundamental,
+                    description: 'Quiet surfaces, blue actions, and a muted teal-blue assistant.',
                   },
                   {
                     value: 'v0-simple',

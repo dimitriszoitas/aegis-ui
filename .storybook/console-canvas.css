@@ -1,19 +1,11 @@
 .aegis-story-console-viewport {
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
+  min-width: 0;
 }
 .aegis-story-console-canvas {
-  width: 1600px;
-  min-width: 1600px;
-}
-/* Docs has a supported height setting, but no iframe width setting. Scope the
-   desktop viewport to console embeds and keep their overflow inside each canvas. */
-.sb-story:is([id^='story--console-'], [id^='story--patterns-console-views-']) {
-  max-width: 100%;
-  overflow-x: auto;
-}
-iframe:is([id^='iframe--console-'], [id^='iframe--patterns-console-views-']) {
-  width: 1600px !important;
-  max-width: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 2160px;
+  margin-inline: auto;
 }

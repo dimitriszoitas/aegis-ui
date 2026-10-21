@@ -46,7 +46,16 @@ const meta = {
   component: AiPanel,
   tags: ['autodocs'],
   args: { defaultOpen: true, context, availableContext: context },
-  parameters: { layout: 'fullscreen', docs: { story: { inline: false, height: 760 } } },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'Drag the left edge to resize on desktop, or focus the separator and use Left/Right arrows (Shift for larger steps), Home, and End. Docked panels reserve 480px for the workspace when space allows. The conversation and draft remain intact while resizing; narrow screens fit the viewport. Set `resizable={false}` for a fixed-width panel.',
+      },
+      story: { inline: false, height: 760 },
+    },
+  },
 } satisfies Meta<typeof AiPanel>;
 export default meta;
 type Story = StoryObj<typeof meta>;

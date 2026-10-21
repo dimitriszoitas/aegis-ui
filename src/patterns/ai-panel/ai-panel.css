@@ -1,3 +1,6 @@
+.aegis-sheet.aegis-ai-panel.aegis-ai-panel {
+  border-inline-start: 1px solid var(--color-border-subtle);
+}
 .aegis-ai-panel .aegis-sheet-header {
   padding: var(--layout-panel-padding);
 }

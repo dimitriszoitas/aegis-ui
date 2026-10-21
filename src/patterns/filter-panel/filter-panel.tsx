@@ -1,5 +1,5 @@
 import { useId, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { Activity, CircleDot, RadioTower, ShieldAlert, UserRound, X } from '@/components/icon';
+import { CircleDot, RadioTower, ShieldAlert, UserRound, X } from '@/components/icon';
 import type { Alert, Analyst } from '@/sample-data/types';
 import { Accordion, type AccordionItem } from '@/components/accordion';
 import { Button } from '@/components/button';
@@ -8,9 +8,8 @@ import { CountBadge } from '@/components/count-badge';
 import { IconButton } from '@/components/icon-button';
 import { SearchInput } from '@/components/search-input';
 import { SeverityBadge, severityLabels } from '@/components/severity-badge';
-import { statusLabels } from '@/components/status-badge';
+import { statusLabels as defaultStatusLabels, type AlertStatus } from '@/components/status-badge';
 import { cn } from '@/lib/utils';
-import { formatTimeRange } from '@/lib/time-range';
 import {
   alertFilterReducer,
   applyAlertFilters,
@@ -18,7 +17,6 @@ import {
   filterSources,
   filterStatuses,
   getAlertFacetCounts,
-  getAlertHistogram,
   getAppliedFilterCount,
   UNASSIGNED,
   type AlertFilterAction,
@@ -38,6 +36,13 @@ export interface FilterPanelProps extends Omit<
   onClose?: () => void;
   disabled?: boolean;
   defaultSearch?: string;
+  /** Additional host-owned controls shown above the standard facets. */
+  children?: ReactNode;
+  /** Include host-owned criteria in the applied count and Clear all state. */
+  additionalFilterCount?: number;
+  onClearAll?: () => void;
+  statusGroupLabel?: string;
+  statusLabelOverrides?: Partial<Record<AlertStatus, string>>;
 }
 
 /** A 300px in-flow panel. The containing grid shell owns its push/collapse transition. */
@@ -50,17 +55,22 @@ export function FilterPanel({
   onClose,
   disabled = false,
   defaultSearch = '',
+  children,
+  additionalFilterCount = 0,
+  onClearAll,
+  statusGroupLabel = 'Status',
+  statusLabelOverrides,
   className,
   ...props
 }: FilterPanelProps) {
   const [search, setSearch] = useState(defaultSearch);
   const [expanded, setExpanded] = useState(['severity', 'status', 'source', 'assignee']);
   const titleId = useId();
-  const chartTitleId = useId();
   const anchor = now ?? Date.now();
   const query = search.trim().toLocaleLowerCase();
   const dispatch = (action: AlertFilterAction) => onValueChange(alertFilterReducer(value, action));
-  const count = getAppliedFilterCount(value);
+  const count = getAppliedFilterCount(value) + Math.max(0, additionalFilterCount);
+  const statusLabels = { ...defaultStatusLabels, ...statusLabelOverrides };
   const matching = applyAlertFilters(alerts, value, anchor).length;
   const severityCounts = getAlertFacetCounts(alerts, value, 'severities', anchor);
   const statusCounts = getAlertFacetCounts(alerts, value, 'statuses', anchor);
@@ -92,7 +102,9 @@ export function FilterPanel({
   const severities = filterSeverities.filter((severity) =>
     visible('severity', severityLabels[severity]),
   );
-  const statuses = filterStatuses.filter((status) => visible('status', statusLabels[status]));
+  const statuses = filterStatuses.filter((status) =>
+    visible(statusGroupLabel, statusLabels[status]),
+  );
   const sources = filterSources.filter((source) => visible('source', source));
   const visibleAssignees = assignees.filter((owner) => visible('assignee', owner.name));
   if (severities.length)
@@ -124,7 +136,7 @@ export function FilterPanel({
   if (statuses.length)
     groups.push({
       value: 'status',
-      title: 'Status',
+      title: statusGroupLabel,
       icon: <CircleDot size={15} />,
       count: value.statuses.length || undefined,
       content: (
@@ -190,14 +202,6 @@ export function FilterPanel({
         </div>
       ),
     });
-  const bins = getAlertHistogram(alerts, value, anchor);
-  const maximum = Math.max(1, ...bins.map((bin) => bin.count));
-  const timeLabel = (timestamp: number) =>
-    new Intl.DateTimeFormat('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'UTC',
-    }).format(timestamp);
   return (
     <aside
       {...props}
@@ -213,7 +217,7 @@ export function FilterPanel({
             emphasis="ghost"
             size="sm"
             disabled={disabled || count === 0}
-            onClick={() => dispatch({ type: 'reset' })}
+            onClick={() => (onClearAll ? onClearAll() : dispatch({ type: 'reset' }))}
           >
             Clear all
           </Button>
@@ -246,6 +250,7 @@ export function FilterPanel({
         role="region"
         aria-label="Filter options"
       >
+        {children && <div className="aegis-filter-panel-custom">{children}</div>}
         {groups.length ? (
           <Accordion
             type="multiple"
@@ -260,43 +265,6 @@ export function FilterPanel({
             No filter options match “{search}”.
           </p>
         )}
-        <figure className="aegis-filter-mini-chart">
-          <figcaption>
-            <span>
-              <Activity size={15} aria-hidden="true" />
-              Alert activity
-            </span>
-            <span>{formatTimeRange(value.timeRange)}</span>
-          </figcaption>
-          <svg viewBox="0 0 260 76" role="img" aria-labelledby={chartTitleId}>
-            <title id={chartTitleId}>
-              {matching} alerts by last seen, across {bins.length} time intervals.{' '}
-              {formatTimeRange(value.timeRange)}.
-            </title>
-            {bins.map((bin, index) => {
-              const height = (bin.count / maximum) * 64;
-              return (
-                <rect
-                  key={index}
-                  x={(index * 260) / bins.length + 1}
-                  y={72 - height}
-                  width={260 / bins.length - 3}
-                  height={Math.max(1, height)}
-                  rx={2}
-                  className={bin.count ? 'aegis-filter-mini-bar' : 'aegis-filter-mini-bar-empty'}
-                >
-                  <title>
-                    {timeLabel(bin.from)}–{timeLabel(bin.to)} UTC: {bin.count} alerts
-                  </title>
-                </rect>
-              );
-            })}
-          </svg>
-          <div className="aegis-filter-mini-axis" aria-hidden="true">
-            <span>{timeLabel(bins[0].from)} UTC</span>
-            <span>{timeLabel(bins[bins.length - 1].to)} UTC</span>
-          </div>
-        </figure>
       </div>
     </aside>
   );

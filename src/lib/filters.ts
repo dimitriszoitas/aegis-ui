@@ -165,6 +165,7 @@ export function applyAlertFilters<T extends Alert>(
       const searchable = [
         alert.id,
         alert.title,
+        alert.ruleId,
         alert.severity,
         alert.status,
         alert.source,

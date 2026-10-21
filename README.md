@@ -12,9 +12,9 @@ Floating and Fixed reference screenshots: [Floating · Light](docs/images/consol
 
 ## Explore the system
 
-Start with **Foundations → Principles**, then open **Console → SIEM console → Alerts**. The console includes:
+Start with **Foundations → Principles**, then open **Console → SIEM console → SIEM example**. The console includes:
 
-- Collapsible navigation across all five UI approaches, with independent transparent or floating presentation, and working Overview, Alerts, Incidents, Hunting, Detection rules, Reports, and Settings views.
+- Collapsible navigation across all five UI approaches, with independent transparent or floating presentation and an Environment selector. The investigation group contains Overview, Alerts, System errors, Query, and Genie; the management group contains Datasources, Detection rules, Content library, and Parsers. Settings and the analyst profile stay at the bottom. Query searches the local evidence, and Genie opens the existing assistant.
 - An alerts grid with sorting and multi-sort, constrained column resizing, visibility settings, three densities, selection, bulk actions, nested evidence, and a virtualized large-data example.
 - Choose toolbar filters or a left filter panel backed by the same filter state, with time ranges, severity histograms, and removable applied chips while the panel is closed.
 - A vertically resizable bottom sheet that spans the workspace between navigation and the assistant.
@@ -131,7 +131,7 @@ pnpm install
 pnpm storybook
 ```
 
-Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and the Floating, Fixed, Minimalistic, v0 simple, or Fundamental UI approach. Floating is the default. Console examples with an open assistant show each approach in either color theme, covering ten combinations. To run the marketing website and standalone console:
+Open [local Storybook](http://localhost:6006). Separate toolbar choices control light/dark color and the Floating, Fixed, Minimalistic, v0 simple, or Fundamental UI approach. Floating is the default. The Lakewatch SIEM example lets you switch approaches and color themes in Settings → Appearance, and open the assistant when needed. To run the marketing website and standalone console:
 
 ```sh
 pnpm dev
@@ -139,15 +139,15 @@ pnpm dev
 
 Use the local URL printed by Vite. The root opens the marketing website, with interactive investigation examples and a live token demonstration. Open `?view=components` for the complete catalogue, with searchable previews, categories, light/dark themes, and detail panels with usage code, anatomy, and variants. Deep links support `component=button` or a category such as `category=charts`. Add `?view=console` to open the standalone console. No environment variables, credentials, or external services are required.
 
-Console and Console views stories use a fixed 1600px canvas with horizontal scrolling and Storybook zoom on smaller displays. The standalone application keeps its responsive layout.
+The console and Console views stories use the available width up to 2160px, then stay centered on wider displays. Narrow previews use the responsive navigation and content layout; Storybook's 1600px viewport preset remains available as an optional preview size.
 
 ## Design principles
 
-**UI approaches.** Floating keeps navigation and sheets 12px from the viewport with 12px outer corners and layered shadows; the compact navigation rail uses 8px corners. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Floating and Fixed share their colors and interior component styling. Minimalistic adds a distinct presentation: two neutral surface fills (gray/white in light mode and a charcoal pair in dark mode), no shadows, quieter neutral borders, compact corners, and monochrome ordinary controls. Its chrome is flush like Fixed. All three preserve typography, control heights, data density, content, and interaction state. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top. Subtle horizontal dividers separate navigation groups without visible group headings.
+**UI approaches.** Floating keeps sheets 12px from the viewport with 12px outer corners and layered shadows; navigation uses the shared flush presentation. Fixed places full-height navigation and assistant chrome flush against the workspace edges, with dividers, square outer corners, and no chrome shadow. Floating and Fixed share their colors and interior component styling. Minimalistic adds a distinct presentation: two neutral surface fills (gray/white in light mode and a charcoal pair in dark mode), no shadows, quieter neutral borders, compact corners, and monochrome ordinary controls. Its chrome is flush like Fixed. All three preserve typography, control heights, data density, content, and interaction state. Navigation remains 240px expanded or 48px collapsed, with 12px expanded padding and 12px vertical/6px horizontal collapsed padding. Its toggle stays at the top. Subtle horizontal dividers separate navigation groups without visible group headings.
 
-**Fundamental** uses a canvas and one card surface in light and dark. Containers are borderless; subtle horizontal dividers organize data and form controls retain a quiet boundary. Floating overlays use soft shadows and modal backdrops to separate from the page. Ordinary actions use blue, AI actions use a hot pink to purple-magenta gradient, and red, green, amber, and cyan communicate semantic state. Its interface uses Figtree, with JetBrains Mono for code and identifiers.
+**Fundamental** uses quiet neutral surfaces in light and dark. Its dark workspace is lighter than the full-height navigation. Containers are borderless; subtle horizontal dividers organize data and form controls retain a quiet boundary. Floating overlays use soft shadows and modal backdrops to separate from the page. Ordinary actions use blue, AI actions use a muted teal-to-blue gradient, and red, green, amber, and cyan communicate semantic state. Its interface uses Figtree, with JetBrains Mono for code and identifiers.
 
-`SideNav` accepts `presentation="transparent"` or `presentation="floating"` independently of the UI approach. The floating option has a subtle background and rounded corners on every side. Leaving the prop unset preserves the approach's default. In the console, **Navigation appearance** changes this choice without resetting the route, filters, or collapsed state.
+`SideNav` uses one full-height, flush presentation across UI approaches. It can collapse to an icon rail while keeping Settings and the user profile at the bottom. `brandName` and `brandIcon` customize its identity; `brandIcon={null}` omits the mark. Workspace theme and panel controls are available under **Settings → Appearance**.
 
 In Floating and Fixed, selected navigation items use a soft accent fill with accent text and icons, without an item border or shadow. Minimalistic uses neutral selection. Each approach applies its treatment consistently to the compact rail and nested navigation.
 
@@ -157,7 +157,7 @@ In Floating and Fixed, selected navigation items use a soft accent fill with acc
 
 **Hierarchy stays clear.** Accordion bodies, navigation children, tree levels, JSON branches, and expanded table content use a shared 12px inset.
 
-**Color has a purpose.** Floating and Fixed use function blue for primary actions. All three approaches retain magenta–pink–blue gradients for AI actions and provenance. Minimalistic uses monochrome ordinary controls with restrained blue hover and focus feedback, while semantic color identifies AI, status, severity, feedback, syntax, and added or removed code. Generic tags have transparent backgrounds with semantic outlines and dots. Labeled severity badges use text and an outline only; their explicit compact variant keeps a colored dot. Status pills are borderless, with a restrained 8% semantic tint and a colored dot. All three use the theme’s primary text color across all approaches and color themes. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
+**Color has a purpose.** Floating and Fixed use function blue for primary actions. Floating, Fixed, and Minimalistic retain magenta–pink–blue gradients for AI actions and provenance. Minimalistic uses monochrome ordinary controls with restrained blue hover and focus feedback, while semantic color identifies AI, status, severity, feedback, syntax, and added or removed code. Generic tags have transparent backgrounds with semantic outlines and dots. Labeled severity badges use text and an outline only; their explicit compact variant keeps a colored dot. Status pills are borderless, with a restrained 8% semantic tint and a colored dot. All three use the theme’s primary text color across all approaches and color themes. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long alert titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density never removes investigation actions.
 
@@ -266,7 +266,7 @@ Third-party icon packs and logos retain their own licenses. Untitled UI's bundle
 | Code editor              | Tab and Shift+Tab leave the editor rather than trapping focus.                                                         |
 | Rule wizard              | Arrow navigation follows the stepper orientation; completed steps can be revisited; validation gates forward progress. |
 
-All interactive controls use visible token-based focus styling. Reduced-motion preferences suppress decorative animation, including loading shimmer and AI streaming effects.
+Text and select fields keep their normal border on focus without an added outline or color change; hover and validation styling remain intact. Buttons, options, trees, and grids retain their own keyboard focus cues. Reduced-motion preferences suppress decorative animation, including loading shimmer and AI streaming effects.
 
 ## Development and verification
 

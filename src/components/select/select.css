@@ -147,5 +147,7 @@
 
 .aegis-select-option > .aegis-select-icon,
 .aegis-select-option > .aegis-select-check {
-  margin-block-start: 2px;
+  min-height: 1lh;
+  margin-block-start: 0;
+  align-items: center;
 }
