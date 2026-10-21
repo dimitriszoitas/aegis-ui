@@ -52,7 +52,7 @@
   flex: 0 0 var(--grid-selection-width, 44px);
   width: var(--grid-selection-width, 44px);
 }
-.siem-alerts-toolbar > .aegis-time-range-trigger {
+.siem-alerts-columns-toggle {
   margin-inline-start: auto;
 }
 @media (max-width: 700px) {
@@ -72,9 +72,19 @@
     border-right: 0;
     border-bottom: 1px solid var(--color-border-subtle);
   }
+  .siem-alerts-toolbar {
+    display: grid;
+    grid-template-columns: var(--grid-selection-width, 44px) minmax(0, 1fr) auto;
+  }
   .siem-alerts-toolbar > .aegis-input {
-    flex-basis: 100%;
-    order: 1;
+    grid-column: 2 / -1;
+  }
+  .siem-alerts-toolbar > .aegis-time-range-trigger {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .siem-alerts-columns-toggle {
+    grid-column: 3;
   }
 }
 @media (prefers-reduced-motion: reduce) {

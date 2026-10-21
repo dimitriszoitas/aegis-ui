@@ -1,5 +1,5 @@
-import { useId, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { CircleDot, RadioTower, ShieldAlert, UserRound, X } from '@/components/icon';
+import { Children, useId, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { X } from '@/components/icon';
 import type { Alert, Analyst } from '@/sample-data/types';
 import { Accordion, type AccordionItem } from '@/components/accordion';
 import { Button } from '@/components/button';
@@ -23,6 +23,43 @@ import {
   type AlertFilterState,
 } from '@/lib/filters';
 import './filter-panel.css';
+
+export interface FilterOptionsProps {
+  children: ReactNode;
+  groupLabel: string;
+}
+
+/** Keep long facets compact without changing the host's selected filter values. */
+export function FilterOptions({ children, groupLabel }: FilterOptionsProps) {
+  const [expanded, setExpanded] = useState(false);
+  const options = Children.toArray(children);
+  const optionsId = useId();
+  const hasMore = options.length > 8;
+  return (
+    <div className="aegis-filter-options">
+      <div id={optionsId} className="aegis-filter-facets">
+        {expanded ? options : options.slice(0, 8)}
+      </div>
+      {hasMore && (
+        <Button
+          className="aegis-filter-options-toggle"
+          emphasis="ghost"
+          size="sm"
+          aria-expanded={expanded}
+          aria-controls={optionsId}
+          aria-label={
+            expanded
+              ? `Show first 8 of ${options.length} ${groupLabel} options`
+              : `Show all ${options.length} ${groupLabel} options`
+          }
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? 'Show less' : 'Show all'}
+        </Button>
+      )}
+    </div>
+  );
+}
 
 export interface FilterPanelProps extends Omit<
   HTMLAttributes<HTMLElement>,
@@ -111,10 +148,9 @@ export function FilterPanel({
     groups.push({
       value: 'severity',
       title: 'Severity',
-      icon: <ShieldAlert size={15} />,
       count: value.severities.length || undefined,
       content: (
-        <div className="aegis-filter-facets">
+        <FilterOptions groupLabel="Severity">
           {severities.map((severity) => (
             <Checkbox
               size="sm"
@@ -130,17 +166,16 @@ export function FilterPanel({
               }
             />
           ))}
-        </div>
+        </FilterOptions>
       ),
     });
   if (statuses.length)
     groups.push({
       value: 'status',
       title: statusGroupLabel,
-      icon: <CircleDot size={15} />,
       count: value.statuses.length || undefined,
       content: (
-        <div className="aegis-filter-facets">
+        <FilterOptions groupLabel={statusGroupLabel}>
           {statuses.map((status) => (
             <Checkbox
               size="sm"
@@ -153,17 +188,16 @@ export function FilterPanel({
               }
             />
           ))}
-        </div>
+        </FilterOptions>
       ),
     });
   if (sources.length)
     groups.push({
       value: 'source',
       title: 'Source',
-      icon: <RadioTower size={15} />,
       count: value.sources.length || undefined,
       content: (
-        <div className="aegis-filter-facets">
+        <FilterOptions groupLabel="Source">
           {sources.map((source) => (
             <Checkbox
               size="sm"
@@ -176,17 +210,16 @@ export function FilterPanel({
               }
             />
           ))}
-        </div>
+        </FilterOptions>
       ),
     });
   if (visibleAssignees.length)
     groups.push({
       value: 'assignee',
       title: 'Assignee',
-      icon: <UserRound size={15} />,
       count: value.assignees.length || undefined,
       content: (
-        <div className="aegis-filter-facets">
+        <FilterOptions groupLabel="Assignee">
           {visibleAssignees.map((owner) => (
             <Checkbox
               size="sm"
@@ -199,7 +232,7 @@ export function FilterPanel({
               }
             />
           ))}
-        </div>
+        </FilterOptions>
       ),
     });
   return (

@@ -49,7 +49,7 @@
   margin-bottom: var(--space-3);
 }
 .aegis-console:is([data-page='alerts'], [data-page='rules'], [data-page='datasources'])
-  :is(.siem-alerts-results, .aegis-detections-results, .aegis-datasources)
+  :is(.siem-alerts-results, .aegis-detections-results, .aegis-datasources-results)
   > .aegis-data-grid
   > .aegis-grid-toolbar {
   padding-block-end: var(--space-4);
@@ -100,11 +100,11 @@
   margin-bottom: var(--space-3);
 }
 .aegis-console .aegis-breadcrumb li {
-  font-size: 10px;
+  font-size: 12px;
 }
 .aegis-console .aegis-breadcrumb-separator {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 .aegis-console-title-row h1 {
   font-size: var(--title-page-size);

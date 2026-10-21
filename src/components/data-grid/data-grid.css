@@ -248,6 +248,18 @@
 .aegis-grid-table > tbody > tr:last-child > td {
   border-bottom: 0;
 }
+.aegis-data-grid .aegis-grid-table > tbody > .aegis-grid-empty-row > .aegis-grid-empty-cell {
+  padding: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--color-text-primary) 3%, var(--color-bg-canvas));
+}
+.aegis-grid-empty-cell > .aegis-empty-state {
+  position: sticky;
+  left: 0;
+  width: var(--grid-viewport-width, 100%);
+  max-width: 100%;
+  min-height: max(260px, var(--grid-empty-height, 480px));
+}
 .aegis-grid-row {
   outline: none;
 }

@@ -3,10 +3,11 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { DropdownMenu } from '@/components/dropdown-menu';
 import { IconButton } from '@/components/icon-button';
 import { Columns3, Funnel } from '@/components/icon';
-import { FilterPanel } from '@/patterns/filter-panel';
+import { FilterOptions, FilterPanel } from '@/patterns/filter-panel';
+import { Accordion } from '@/components/accordion';
+import { Checkbox } from '@/components/checkbox';
 import { DataGrid, type GridDensity } from '@/components/data-grid';
 import { SearchInput } from '@/components/search-input';
-import { Select } from '@/components/select';
 import { SeverityBadge } from '@/components/severity-badge';
 import { Tag } from '@/components/tag';
 import { MiniBarChart } from '@/components/mini-bar-chart';
@@ -33,8 +34,8 @@ export interface SiemAlertsTableProps {
   onOpenAlert: (alert: Alert) => void;
   onAskAi: (alerts: Alert[]) => void;
   onSelectionChange?: (alerts: Alert[]) => void;
-  ruleId: string;
-  onRuleChange: (ruleId: string) => void;
+  ruleIds: string[];
+  onRuleChange: (ruleIds: string[]) => void;
   selectedRowIds: string[];
   density: GridDensity;
   now: number;
@@ -51,22 +52,29 @@ export function SiemAlertsTable({
   onSelectionChange,
   density,
   selectedRowIds,
-  ruleId,
+  ruleIds,
   onRuleChange,
   now,
 }: SiemAlertsTableProps) {
   const panelId = useId();
   const shellRef = useRef<HTMLDivElement>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [expandedRuleGroups, setExpandedRuleGroups] = useState(['rule']);
   const ruleAlerts = useMemo(
-    () => alerts.filter((alert) => ruleId === 'all' || alert.ruleId === ruleId),
-    [alerts, ruleId],
+    () => alerts.filter((alert) => ruleIds.length === 0 || ruleIds.includes(alert.ruleId)),
+    [alerts, ruleIds],
   );
   const filtered = useMemo(
     () => applyAlertFilters(ruleAlerts, filters, now),
     [ruleAlerts, filters, now],
   );
-  const filterCount = getAppliedFilterCount(filters) + Number(ruleId !== 'all');
+  const ruleFacetCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const alert of applyAlertFilters(alerts, filters, now))
+      counts.set(alert.ruleId, (counts.get(alert.ruleId) ?? 0) + 1);
+    return counts;
+  }, [alerts, filters, now]);
+  const filterCount = getAppliedFilterCount(filters) + ruleIds.length;
   const patch = (value: Partial<AlertFilterState>) => onFiltersChange({ ...filters, ...value });
   function closePanel() {
     setPanelOpen(false);
@@ -78,7 +86,7 @@ export function SiemAlertsTable({
   }
   function clearFilters() {
     onFiltersChange(createDefaultFilters());
-    onRuleChange('all');
+    onRuleChange([]);
   }
   const columns: ColumnDef<Alert>[] = [
     {
@@ -196,17 +204,50 @@ export function SiemAlertsTable({
             now={now}
             onClose={closePanel}
             onClearAll={clearFilters}
-            additionalFilterCount={Number(ruleId !== 'all')}
+            additionalFilterCount={ruleIds.length}
             statusGroupLabel="State"
             statusLabelOverrides={siemStateLabels}
           >
-            <Select
-              label="Detection rule"
-              value={ruleId}
-              onValueChange={onRuleChange}
-              options={[
-                { value: 'all', label: 'All detection rules' },
-                ...rules.map((rule) => ({ value: rule.id, label: rule.name })),
+            <Accordion
+              type="multiple"
+              value={expandedRuleGroups}
+              onValueChange={setExpandedRuleGroups}
+              items={[
+                {
+                  value: 'rule',
+                  title: 'Detection rule',
+                  count: ruleIds.length || undefined,
+                  content: (
+                    <FilterOptions groupLabel="Detection rule">
+                      {rules.map((rule) => {
+                        const count = ruleFacetCounts.get(rule.id) ?? 0;
+                        return (
+                          <Checkbox
+                            key={rule.id}
+                            size="sm"
+                            checked={ruleIds.includes(rule.id)}
+                            onCheckedChange={(checked) =>
+                              onRuleChange(
+                                checked
+                                  ? [...ruleIds, rule.id]
+                                  : ruleIds.filter((id) => id !== rule.id),
+                              )
+                            }
+                            label={
+                              <span className="aegis-filter-facet-label">
+                                <span title={rule.name}>{rule.name}</span>
+                                <span className="aegis-filter-facet-count">
+                                  <span className="sr-only">{count} matching alerts</span>
+                                  <span aria-hidden="true">{count}</span>
+                                </span>
+                              </span>
+                            }
+                          />
+                        );
+                      })}
+                    </FilterOptions>
+                  ),
+                },
               ]}
             />
           </FilterPanel>
@@ -259,7 +300,11 @@ export function SiemAlertsTable({
                 <DropdownMenu
                   label="Alert columns"
                   trigger={
-                    <IconButton aria-label="Alert columns" emphasis="ghost">
+                    <IconButton
+                      className="siem-alerts-columns-toggle"
+                      aria-label="Alert columns"
+                      emphasis="ghost"
+                    >
                       <Columns3 size={17} />
                     </IconButton>
                   }

@@ -160,6 +160,15 @@ The contract is [BUILD_PLAN.md](BUILD_PLAN.md). Phases are executed in order, wi
 - Datasources show processed events as a compact bar widget in the top metric row. Metrics stay global while search/provider filters update table rows; creating a source still updates totals. Local provider artwork, rounded icon corners, and single-line capitalized display names replace repeated generic icons and subtitles.
 - The AI side panel has a separating border and bounded pointer/keyboard resizing, preserving conversation and draft state. Breadcrumbs use 10px text with a 12px gap before the page heading.
 
+## List toolbar follow-up
+
+- Moved the Alerts date picker directly after search, with a second row beneath search on narrow screens. Alert rows retain their existing two-line details.
+- Removed list-toolbar result counts while preserving pagination totals and right-aligned creation.
+- Alerts, Detection rules, and Datasources share collapsible checkbox groups with contextual counts, OR within a category, and AND across categories. Detection rules are now a multi-select list in the Alerts panel; Datasources has Provider, Environment, Schedule, and Health facets while its KPIs remain global.
+- Categories use smaller muted headings, no leading icons, and more space between groups. Options have consistent checkbox gaps and single-line truncation. Long groups show eight options with Show all/Show less; Provider options include mini brand logos.
+- Balanced the visible insets around filter dividers and aligned collapse controls, chevrons, and counts in one trailing column. Shared selects truncate long values without changing control height. Empty table bodies have a faint surface across their full area.
+- Overview activity charts now sit in matching cards with slightly darker resting bars and preserved hover feedback. Breadcrumb text and separators use 12px. Overview omits breadcrumbs; rule details use an Alerts-style back/title/ID header and preserve list selection on return.
+
 ## Verification setup
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build-storybook`.

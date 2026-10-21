@@ -112,7 +112,9 @@ export function Select({
               {selected.icon}
             </span>
           )}
-          <Primitive.Value placeholder={placeholder} />
+          <span className="aegis-select-value" title={selected?.label ?? placeholder}>
+            <Primitive.Value placeholder={placeholder} />
+          </span>
           <Primitive.Icon className="aegis-select-chevron">
             <ChevronDown size={16} aria-hidden="true" />
           </Primitive.Icon>

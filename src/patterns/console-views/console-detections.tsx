@@ -1,11 +1,21 @@
-import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { parseDocument } from 'yaml';
-import { FileCode, Funnel, PanelLeftClose, Pencil, Plus, ShieldCheck } from '@/components/icon';
+import {
+  ArrowLeft,
+  FileCode,
+  Funnel,
+  PanelLeftClose,
+  Pencil,
+  Plus,
+  ShieldCheck,
+} from '@/components/icon';
 import { Button } from '@/components/button';
+import { Accordion, type AccordionItem } from '@/components/accordion';
+import { Checkbox } from '@/components/checkbox';
 import { IconButton } from '@/components/icon-button';
 import { CountBadge } from '@/components/count-badge';
-import { Breadcrumb } from '@/components/breadcrumb';
+import { CopyButton } from '@/components/copy-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/card';
 import { CodeEditor } from '@/components/code-editor';
 import { DataGrid } from '@/components/data-grid';
@@ -21,6 +31,7 @@ import { Tag } from '@/components/tag';
 import { Textarea } from '@/components/textarea';
 import { TextInput } from '@/components/text-input';
 import { Timeline } from '@/components/timeline';
+import { FilterOptions } from '@/patterns/filter-panel';
 import type { Alert, DetectionRule } from '@/sample-data';
 import {
   formatSiemTime,
@@ -41,7 +52,6 @@ export interface ConsoleDetectionsProps {
   onShowContentLibrary?: () => void;
   selectedRuleId?: string;
   onSelectedRuleChange?: (id: string | undefined) => void;
-  showBreadcrumb?: boolean;
   now?: number;
 }
 const severities: Severity[] = ['critical', 'high', 'medium', 'low', 'info'];
@@ -50,6 +60,34 @@ const severityOptions = severities.map((value) => ({
   label: value[0].toUpperCase() + value.slice(1),
 }));
 const schedules = ['Every 5m', 'Every 10m', 'Every 15m', 'Every hour'];
+type RuleFacet = 'severity' | 'state' | 'source';
+type RuleFilters = Record<RuleFacet, string[]>;
+const ruleFacetLabels: Record<RuleFacet, string> = {
+  severity: 'Severity',
+  state: 'State',
+  source: 'Source',
+};
+function ruleFacetValue(rule: SiemExampleRule, facet: RuleFacet) {
+  return facet === 'state' ? (rule.enabled ? 'enabled' : 'disabled') : rule[facet];
+}
+function matchesRuleFilters(
+  rule: SiemExampleRule,
+  filters: RuleFilters,
+  query: string,
+  excludedFacet?: RuleFacet,
+) {
+  return (
+    (Object.keys(filters) as RuleFacet[]).every(
+      (facet) =>
+        facet === excludedFacet ||
+        filters[facet].length === 0 ||
+        filters[facet].includes(ruleFacetValue(rule, facet)),
+    ) &&
+    `${rule.name} ${rule.id} ${rule.description} ${rule.technique}`
+      .toLocaleLowerCase()
+      .includes(query)
+  );
+}
 const fixtureById = new Map(siemExampleRules.map((rule) => [rule.id, rule]));
 function withMetadata(rule: DetectionRule): SiemExampleRule {
   const fixture = fixtureById.get(rule.id);
@@ -165,14 +203,13 @@ export function ConsoleDetections({
   onShowContentLibrary,
   selectedRuleId,
   onSelectedRuleChange,
-  showBreadcrumb = true,
   now = siemExampleTime,
 }: ConsoleDetectionsProps) {
   const [query, setQuery] = useState('');
-  const [severity, setSeverity] = useState('all');
-  const [state, setState] = useState('all');
-  const [source, setSource] = useState('all');
+  const [filters, setFilters] = useState<RuleFilters>({ severity: [], state: [], source: [] });
+  const [expandedFilters, setExpandedFilters] = useState(['severity', 'state', 'source']);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const filterPanelId = useId();
   const [internalSelectedId, setInternalSelectedId] = useState<string>();
@@ -196,21 +233,77 @@ export function ConsoleDetections({
   const selected = prepared.find((rule) => rule.id === selectedId);
   const isDetailOpen = selected !== undefined;
   useLayoutEffect(() => {
-    if (wasDetailOpen.current && !isDetailOpen) searchRef.current?.focus({ preventScroll: true });
+    if (wasDetailOpen.current && !isDetailOpen) {
+      (
+        searchRef.current ?? workspaceRef.current?.querySelector<HTMLElement>('.aegis-grid-scroll')
+      )?.focus({ preventScroll: true });
+    }
     wasDetailOpen.current = isDetailOpen;
   }, [isDetailOpen]);
-  const matching = prepared.filter(
-    (rule) =>
-      (severity === 'all' || rule.severity === severity) &&
-      (state === 'all' || (state === 'enabled') === rule.enabled) &&
-      (source === 'all' || rule.source === source) &&
-      `${rule.name} ${rule.id} ${rule.description} ${rule.technique}`
-        .toLocaleLowerCase()
-        .includes(query.trim().toLocaleLowerCase()),
-  );
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const matching = prepared.filter((rule) => matchesRuleFilters(rule, filters, normalizedQuery));
   const related = selected ? alerts.filter((alert) => alert.ruleId === selected.id) : [];
   const runs = sampleRuns(related);
-  const filtersCount = [severity, state, source].filter((value) => value !== 'all').length;
+  const filtersCount = Object.values(filters).reduce((sum, values) => sum + values.length, 0);
+  const facetOptions: Record<RuleFacet, { value: string; label: string; content?: ReactNode }[]> = {
+    severity: severityOptions.map((option) => ({
+      ...option,
+      content: <SeverityBadge severity={option.value} />,
+    })),
+    state: [
+      { value: 'enabled', label: 'Enabled' },
+      { value: 'disabled', label: 'Disabled' },
+    ],
+    source: [...new Set([...prepared.map((rule) => rule.source), ...filters.source])].map(
+      (value) => ({ value, label: value }),
+    ),
+  };
+  function toggleFilter(facet: RuleFacet, value: string) {
+    setFilters((current) => ({
+      ...current,
+      [facet]: current[facet].includes(value)
+        ? current[facet].filter((item) => item !== value)
+        : [...current[facet], value],
+    }));
+  }
+  const filterGroups: AccordionItem[] = (Object.keys(facetOptions) as RuleFacet[]).map((facet) => {
+    // Match Alerts: each facet count excludes its own category, but honors all other criteria.
+    const counts = new Map<string, number>();
+    for (const rule of prepared) {
+      if (!matchesRuleFilters(rule, filters, normalizedQuery, facet)) continue;
+      const value = ruleFacetValue(rule, facet);
+      counts.set(value, (counts.get(value) ?? 0) + 1);
+    }
+    return {
+      value: facet,
+      title: ruleFacetLabels[facet],
+      count: filters[facet].length || undefined,
+      content: (
+        <FilterOptions groupLabel={ruleFacetLabels[facet]}>
+          {facetOptions[facet].map(({ value, label, content }) => {
+            const count = counts.get(value) ?? 0;
+            return (
+              <Checkbox
+                key={value}
+                size="sm"
+                checked={filters[facet].includes(value)}
+                onCheckedChange={() => toggleFilter(facet, value)}
+                label={
+                  <span className="aegis-filter-facet-label">
+                    <span>{content ?? label}</span>
+                    <span className="aegis-filter-facet-count">
+                      <span className="sr-only">{count} matching rules</span>
+                      <span aria-hidden="true">{count}</span>
+                    </span>
+                  </span>
+                }
+              />
+            );
+          })}
+        </FilterOptions>
+      ),
+    };
+  });
   const columns = useMemo<ColumnDef<SiemExampleRule>[]>(
     () => [
       {
@@ -269,9 +362,7 @@ export function ConsoleDetections({
     (toggle ?? workspaceRef.current?.querySelector<HTMLElement>('.aegis-grid-scroll'))?.focus();
   }
   function clearFilters() {
-    setSeverity('all');
-    setState('all');
-    setSource('all');
+    setFilters({ severity: [], state: [], source: [] });
   }
   function openRule(rule: SiemExampleRule) {
     setSelectedId(rule.id);
@@ -280,7 +371,6 @@ export function ConsoleDetections({
   }
   function backToRules() {
     setSelectedId(undefined);
-    requestAnimationFrame(() => searchRef.current?.focus());
   }
   async function saveRule() {
     if (!draft || savingRef.current || !draft.name.trim() || !draft.sql.trim()) return;
@@ -406,41 +496,24 @@ export function ConsoleDetections({
   );
   const appliedFilters = filtersCount > 0 && (
     <div className="aegis-detections-applied" aria-label="Applied rule filters" role="group">
-      {severity !== 'all' && (
-        <Tag
-          variant="removable"
-          onRemove={() => {
-            setSeverity('all');
-            searchRef.current?.focus();
-          }}
-          removeLabel="Remove severity filter"
-        >
-          Severity: {severity}
-        </Tag>
-      )}
-      {state !== 'all' && (
-        <Tag
-          variant="removable"
-          onRemove={() => {
-            setState('all');
-            searchRef.current?.focus();
-          }}
-          removeLabel="Remove state filter"
-        >
-          State: {state}
-        </Tag>
-      )}
-      {source !== 'all' && (
-        <Tag
-          variant="removable"
-          onRemove={() => {
-            setSource('all');
-            searchRef.current?.focus();
-          }}
-          removeLabel="Remove source filter"
-        >
-          Source: {source}
-        </Tag>
+      {(Object.keys(filters) as RuleFacet[]).flatMap((facet) =>
+        filters[facet].map((value) => {
+          const label =
+            facetOptions[facet].find((option) => option.value === value)?.label ?? value;
+          return (
+            <Tag
+              key={`${facet}-${value}`}
+              variant="removable"
+              onRemove={() => {
+                toggleFilter(facet, value);
+                searchRef.current?.focus();
+              }}
+              removeLabel={`Remove ${ruleFacetLabels[facet].toLowerCase()} filter: ${label}`}
+            >
+              {ruleFacetLabels[facet]}: {label}
+            </Tag>
+          );
+        }),
       )}
     </div>
   );
@@ -501,34 +574,17 @@ export function ConsoleDetections({
               <span className="aegis-filter-panel-result" role="status">
                 {matching.length} of {prepared.length} rules match
               </span>
-              <div className="aegis-detections-filter-fields">
-                <Select
-                  label="Severity"
-                  value={severity}
-                  onValueChange={setSeverity}
-                  options={[{ value: 'all', label: 'All severities' }, ...severityOptions]}
-                />
-                <Select
-                  label="State"
-                  value={state}
-                  onValueChange={setState}
-                  options={[
-                    { value: 'all', label: 'All states' },
-                    { value: 'enabled', label: 'Enabled' },
-                    { value: 'disabled', label: 'Disabled' },
-                  ]}
-                />
-                <Select
-                  label="Source"
-                  value={source}
-                  onValueChange={setSource}
-                  options={[
-                    { value: 'all', label: 'All sources' },
-                    ...[...new Set(prepared.map((rule) => rule.source))].map((value) => ({
-                      value,
-                      label: value,
-                    })),
-                  ]}
+              <div
+                className="aegis-filter-panel-scroll"
+                tabIndex={0}
+                role="region"
+                aria-label="Rule filter options"
+              >
+                <Accordion
+                  type="multiple"
+                  value={expandedFilters}
+                  onValueChange={setExpandedFilters}
+                  items={filterGroups}
                 />
               </div>
             </aside>
@@ -541,6 +597,8 @@ export function ConsoleDetections({
             getRowId={(rule) => rule.id}
             rowLabel={(rule) => rule.name}
             onRowClick={openRule}
+            selectedRowIds={selectedRowIds}
+            onSelectedRowsChange={setSelectedRowIds}
             label="Detection rules"
             noun="rules"
             density="default"
@@ -571,8 +629,11 @@ export function ConsoleDetections({
                     onValueChange={setQuery}
                   />
 
-                  <span className="aegis-detections-count">{matching.length} rules</span>
-                  <Button leadingIcon={<Plus size={15} />} onClick={onCreateRule}>
+                  <Button
+                    className="aegis-detections-create"
+                    leadingIcon={<Plus size={15} />}
+                    onClick={onCreateRule}
+                  >
                     Create detection rule
                   </Button>
                   {!panelOpen && appliedFilters}
@@ -714,17 +775,18 @@ export function ConsoleDetections({
   return (
     <section className="aegis-detections" aria-label="Detection rule detail">
       <header className="aegis-detections-detail-header">
-        {showBreadcrumb && (
-          <Breadcrumb
-            items={[{ label: 'Detection rules', onClick: backToRules }, { label: selected.name }]}
-          />
-        )}
+        <Button emphasis="ghost" size="sm" leadingIcon={<ArrowLeft />} onClick={backToRules}>
+          Detection rules
+        </Button>
         <div className="aegis-detections-detail-title">
-          <div>
+          <div className="aegis-detections-detail-heading">
             <h1 tabIndex={-1} ref={detailHeading}>
               {selected.name}
             </h1>
-            <p>{selected.id}</p>
+            <div className="aegis-detections-detail-identity">
+              <code>{selected.id}</code>
+              <CopyButton size="sm" text={selected.id} aria-label="Copy rule ID" />
+            </div>
           </div>
           <Button
             emphasis="tertiary"

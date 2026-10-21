@@ -113,13 +113,16 @@
   gap: var(--space-16);
   min-width: 0;
 }
-/* Transparent only in Overview; standalone chart cards retain their surface treatment. */
+.siem-overview-charts {
+  --overview-activity-blue: var(--color-chart-2);
+}
 .siem-overview .siem-overview-chart-card.aegis-card {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: var(--space-2) 0 0;
+  --color-chart-2: color-mix(
+    in srgb,
+    var(--overview-activity-blue) 85%,
+    light-dark(var(--color-text-primary), var(--color-bg-canvas))
+  );
+  padding: var(--space-6);
 }
 .siem-overview-queues {
   align-items: start;
@@ -196,6 +199,9 @@
   }
 }
 @media (max-width: 600px) {
+  .siem-overview .siem-overview-chart-card.aegis-card {
+    padding: var(--space-5);
+  }
   .siem-overview {
     gap: var(--space-6);
   }

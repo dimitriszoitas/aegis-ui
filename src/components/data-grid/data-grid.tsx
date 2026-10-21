@@ -961,6 +961,7 @@ export function DataGrid<T>({
         {
           '--grid-row-height': `var(--grid-row-${density})`,
           '--grid-expanded-inset': `${expandedInset}px`,
+          '--grid-empty-height': `calc(${typeof height === 'number' ? `${height}px` : height} - ${table.getHeaderGroups().length * 40}px)`,
         } as CSSProperties
       }
     >
@@ -1299,8 +1300,12 @@ export function DataGrid<T>({
                   </tr>
                 ))
               ) : error ? (
-                <tr role="row">
-                  <td role="gridcell" colSpan={visibleColumns.length}>
+                <tr role="row" className="aegis-grid-empty-row">
+                  <td
+                    role="gridcell"
+                    className="aegis-grid-empty-cell"
+                    colSpan={visibleColumns.length}
+                  >
                     <EmptyState
                       preset="error"
                       description={error}
@@ -1309,8 +1314,12 @@ export function DataGrid<T>({
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
-                <tr role="row">
-                  <td role="gridcell" colSpan={visibleColumns.length}>
+                <tr role="row" className="aegis-grid-empty-row">
+                  <td
+                    role="gridcell"
+                    className="aegis-grid-empty-cell"
+                    colSpan={visibleColumns.length}
+                  >
                     <EmptyState title={emptyTitle} description={emptyDescription} />
                   </td>
                 </tr>

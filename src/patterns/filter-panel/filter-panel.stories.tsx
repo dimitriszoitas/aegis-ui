@@ -104,6 +104,42 @@ export const Applied: Story = {
   },
 };
 export const FilterSearch: Story = { args: { defaultSearch: 'severity' } };
+export const LongOptionGroup: Story = {
+  args: {
+    defaultSearch: 'assignee',
+    analysts: Array.from({ length: 12 }, (_, index) => ({
+      id: `analyst-${index + 1}`,
+      name: `Analyst ${String(index + 1).padStart(2, '0')}`,
+      initials: `A${index + 1}`,
+      role: 'Security analyst',
+    })),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('checkbox')).toHaveLength(8);
+    const showAll = canvas.getByRole('button', { name: 'Show all 13 Assignee options' });
+    showAll.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(showAll).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getAllByRole('checkbox')).toHaveLength(13);
+    await userEvent.click(canvas.getByRole('checkbox', { name: /^Analyst 09/ }));
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Show first 8 of 13 Assignee options' }),
+    );
+    await expect(canvas.queryByRole('checkbox', { name: /^Analyst 09/ })).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Show all 13 Assignee options' }));
+    await expect(canvas.getByRole('checkbox', { name: /^Analyst 09/ })).toBeChecked();
+    const search = canvas.getByRole('searchbox', { name: 'Search filter options' });
+    await userEvent.clear(search);
+    await userEvent.type(search, 'Analyst 09');
+    await expect(canvas.getAllByRole('checkbox')).toHaveLength(1);
+    await expect(
+      canvas.queryByRole('button', { name: /Show all|Show first 8/ }),
+    ).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear all' }));
+    await expect(canvas.getByRole('checkbox', { name: /^Analyst 09/ })).not.toBeChecked();
+  },
+};
 export const NoOptions: Story = { args: { defaultSearch: 'unavailable-source' } };
 export const NoData: Story = { args: { alerts: [] } };
 export const Disabled: Story = {

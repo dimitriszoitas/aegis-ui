@@ -174,7 +174,7 @@
 [data-layout-theme='fundamental']
   .aegis-grid-table
   > :is(thead, tbody)
-  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer)
+  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer, .aegis-grid-empty-row)
   > :is(th, td):not(.aegis-grid-selection-column, .aegis-grid-expand-column) {
   padding-inline: var(--space-4);
 }
@@ -182,7 +182,7 @@
   .aegis-data-grid[data-density='compact']
   .aegis-grid-table
   > :is(thead, tbody)
-  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer)
+  > tr:not(.aegis-grid-expanded-row, .aegis-grid-spacer, .aegis-grid-empty-row)
   > :is(th, td):not(.aegis-grid-selection-column, .aegis-grid-expand-column) {
   padding-inline: var(--space-3);
 }

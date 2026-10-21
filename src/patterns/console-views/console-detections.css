@@ -60,15 +60,8 @@
   flex: 1 1 250px;
   max-width: 500px;
 }
-.aegis-detections-count {
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-  margin-inline-end: auto;
-}
-.aegis-detections-filter-fields {
-  display: grid;
-  gap: var(--space-4);
-  min-width: 0;
+.aegis-detections-create {
+  margin-inline-start: auto;
 }
 .aegis-detections-applied,
 .aegis-detections-tags {
@@ -107,6 +100,7 @@
 }
 .aegis-detections-detail-header > .aegis-button {
   justify-self: start;
+  margin-inline-start: -6px;
 }
 .aegis-detections-detail-title {
   display: flex;
@@ -116,18 +110,33 @@
 }
 .aegis-detections-detail-title > div {
   min-width: 0;
+  flex: 1;
+}
+.aegis-detections-detail-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
 }
 .aegis-detections-detail-title h1 {
-  margin: 0 0 var(--space-2);
+  margin: 0;
   font-size: var(--title-page-size);
-  font-weight: 600;
+  font-weight: var(--title-weight);
+  line-height: 1.3;
   overflow-wrap: anywhere;
 }
-.aegis-detections-detail-title p {
-  margin: 0;
+.aegis-detections-detail-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  max-width: 100%;
+  color: var(--color-text-secondary);
+}
+.aegis-detections-detail-identity > code {
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-text-secondary);
   overflow-wrap: anywhere;
 }
 .aegis-detections-detail-grid {
@@ -207,6 +216,12 @@
   }
   .aegis-detections-detail-title {
     flex-wrap: wrap;
+  }
+  .aegis-detections-detail-title > div {
+    flex-basis: 100%;
+  }
+  .aegis-detections-detail-title h1 {
+    font-size: var(--text-xl);
   }
   .aegis-detections-toolbar > .aegis-input {
     max-width: none;

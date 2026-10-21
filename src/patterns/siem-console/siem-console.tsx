@@ -254,7 +254,7 @@ export function SiemConsole({
   const detailRule =
     page === 'rules' ? rules.find((rule) => rule.id === selectedRuleId) : undefined;
   const [filters, setFilters] = useState(createDefaultFilters);
-  const [ruleFilter, setRuleFilter] = useState('all');
+  const [ruleFilter, setRuleFilter] = useState<string[]>([]);
   const [density, setDensity] = useState<GridDensity>('default');
   const [selected, setSelected] = useState<Alert[]>([]);
   const [selectedId, setSelectedId] = useState<string | undefined>(() =>
@@ -503,7 +503,7 @@ export function SiemConsole({
       onSelectionChange={setSelected}
       density={density}
       selectedRowIds={selected.map((alert) => alert.id)}
-      ruleId={ruleFilter}
+      ruleIds={ruleFilter}
       onRuleChange={(value) => {
         setRuleFilter(value);
         setSelected([]);
@@ -539,24 +539,29 @@ export function SiemConsole({
         >
           <header
             ref={headerRef}
-            hidden={detailOpen && !!selectedAlert}
+            hidden={(detailOpen && !!selectedAlert) || !!detailRule}
             className="aegis-console-header"
             data-pinned="false"
           >
             <div ref={headerContentRef} className="aegis-console-header-content">
-              <div className="aegis-console-breadcrumb-row">
-                <Breadcrumb
-                  items={[
-                    { label: 'Northstar', onClick: () => navigate('overview') },
-                    ...(detailRule
-                      ? [
-                          { label: 'Detection rules', onClick: () => setSelectedRuleId(undefined) },
-                          { label: detailRule.name },
-                        ]
-                      : [{ label: creatingRule ? 'Create detection rule' : pageLabels[page] }]),
-                  ]}
-                />
-              </div>
+              {page !== 'overview' && (
+                <div className="aegis-console-breadcrumb-row">
+                  <Breadcrumb
+                    items={[
+                      { label: 'Northstar', onClick: () => navigate('overview') },
+                      ...(detailRule
+                        ? [
+                            {
+                              label: 'Detection rules',
+                              onClick: () => setSelectedRuleId(undefined),
+                            },
+                            { label: detailRule.name },
+                          ]
+                        : [{ label: creatingRule ? 'Create detection rule' : pageLabels[page] }]),
+                    ]}
+                  />
+                </div>
+              )}
               <div className="aegis-console-title-row" hidden={!!detailRule}>
                 <div className="aegis-console-title-copy">
                   <h1 ref={headingRef} tabIndex={-1}>
@@ -648,7 +653,7 @@ export function SiemConsole({
                   alerts={alerts}
                   onOpenAlert={openAlert}
                   onShowAlerts={() => {
-                    setRuleFilter('all');
+                    setRuleFilter([]);
                     updateFilters({
                       ...createDefaultFilters(),
                       statuses: ['new', 'triaged', 'in-progress'],
@@ -680,7 +685,6 @@ export function SiemConsole({
                 <ConsoleDetections
                   selectedRuleId={selectedRuleId}
                   onSelectedRuleChange={setSelectedRuleId}
-                  showBreadcrumb={false}
                   rules={rules}
                   alerts={alerts}
                   onCreateRule={startRule}
