@@ -1,0 +1,258 @@
+.aegis-business-list {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-6);
+  container: business-list / inline-size;
+}
+.aegis-business-list-workspace {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+.aegis-business-facets {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+  transition:
+    flex-basis var(--motion-slide) var(--ease-out),
+    margin-inline-end var(--motion-slide) var(--ease-out);
+}
+.aegis-business-list-workspace[data-panel-open='true'] > .aegis-business-facets {
+  flex-basis: 300px;
+  margin-inline-end: var(--space-5);
+}
+.aegis-business-list-workspace > .aegis-business-facets > .aegis-business-filter-panel {
+  width: 300px;
+  max-width: none;
+  height: 100%;
+  max-height: 760px;
+  padding-block-start: var(--space-2);
+  border: 0;
+  border-inline-end: 1px solid var(--color-border-subtle);
+  border-radius: 0;
+  background: transparent;
+}
+.aegis-business-filter-panel .aegis-filter-panel-heading {
+  min-height: 34px;
+}
+.aegis-business-list-results {
+  flex: 1;
+  min-width: 0;
+}
+.aegis-business-list .aegis-business-list-results > .aegis-data-grid > .aegis-grid-toolbar {
+  display: block;
+  min-height: 0;
+  padding: 0;
+}
+.aegis-business-filter-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--grid-selection-width, 44px);
+  width: var(--grid-selection-width, 44px);
+}
+[data-layout-theme='fundamental-floating']
+  .aegis-business-list-workspace
+  > .aegis-business-facets
+  > .aegis-business-filter-panel {
+  padding-block-start: var(--space-4);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--chrome-radius);
+}
+.aegis-business-list-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.aegis-business-list-heading h1 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+.aegis-business-list-heading h1:focus {
+  outline: none;
+}
+.aegis-business-list-heading p {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-business-list-summary {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-align: right;
+  flex-shrink: 0;
+}
+.aegis-business-list-tools {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+}
+.aegis-business-list-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-2) 0 var(--space-4);
+  min-width: 0;
+}
+.aegis-business-list-toolbar > .aegis-input {
+  flex: 0 1 280px;
+  min-width: 160px;
+}
+.aegis-business-list-create {
+  display: flex;
+  margin-inline-start: auto;
+}
+.aegis-business-bulk {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  min-height: 34px;
+}
+.aegis-business-bulk strong {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding-inline: var(--space-2);
+}
+.aegis-business-name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.aegis-business-cell-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.aegis-business-cell-copy > span {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-business-record-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-weight: 500;
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  width: fit-content;
+}
+.aegis-business-record-link:hover {
+  color: var(--color-function-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.aegis-business-record-link:focus-visible,
+.aegis-business-person:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+.aegis-business-person {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--color-text-secondary);
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.aegis-business-person:hover {
+  color: var(--color-text-primary);
+}
+.aegis-business-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.aegis-business-progress > .aegis-progress {
+  flex: 1;
+  min-width: 40px;
+}
+.aegis-business-progress > span {
+  width: 4ch;
+  text-align: right;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-business-create-form {
+  display: grid;
+  gap: var(--space-5);
+}
+.aegis-business-form-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+.aegis-business-form-columns > * {
+  min-width: 0;
+}
+@media (max-width: 740px) {
+  .aegis-business-list-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .aegis-business-list-summary {
+    text-align: left;
+  }
+  .aegis-business-list-toolbar > .aegis-input {
+    flex: 1 1 160px;
+  }
+  .aegis-business-list-create {
+    margin-inline-start: 0;
+  }
+  .aegis-business-form-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@container business-list (max-width: 740px) {
+  .aegis-business-list-workspace {
+    flex-direction: column;
+  }
+  .aegis-business-list-workspace[data-panel-open='true'] > .aegis-business-facets {
+    flex-basis: auto;
+    margin: 0 0 var(--space-4);
+  }
+  .aegis-business-list-workspace[data-panel-open='false'] > .aegis-business-facets {
+    display: none;
+  }
+  .aegis-business-list-workspace > .aegis-business-facets > .aegis-business-filter-panel {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--color-border-subtle);
+  }
+  [data-layout-theme='fundamental-floating']
+    .aegis-business-list-workspace
+    > .aegis-business-facets
+    > .aegis-business-filter-panel {
+    border: 1px solid var(--color-border-subtle);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-business-facets {
+    transition: none;
+  }
+}

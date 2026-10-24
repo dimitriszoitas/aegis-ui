@@ -1,0 +1,65 @@
+.aegis-progress {
+  --progress-color: var(--color-function-bg);
+  min-width: 120px;
+  width: 100%;
+}
+.aegis-progress[data-intent='success'] {
+  --progress-color: var(--color-success-bg);
+}
+.aegis-progress[data-intent='warning'] {
+  --progress-color: var(--color-warning-bg);
+}
+.aegis-progress[data-intent='destroy'] {
+  --progress-color: var(--color-destroy-bg);
+}
+.aegis-progress[data-intent='ai'] {
+  --progress-color: var(--color-ai-bg);
+}
+.aegis-progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+.aegis-progress-track {
+  height: var(--space-2);
+  width: 100%;
+  background: var(--color-bg-selected);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.aegis-progress[data-size='sm'] .aegis-progress-track {
+  height: var(--space-1);
+}
+.aegis-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--progress-color);
+  transition: width var(--motion-base) var(--ease-out);
+}
+.aegis-progress[data-intent='ai'] .aegis-progress-fill {
+  background: var(--gradient-ai);
+}
+.aegis-progress-track[data-indeterminate='true'] .aegis-progress-fill {
+  animation: aegis-progress-sweep 1600ms ease-in-out infinite;
+}
+@keyframes aegis-progress-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(390%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-progress-fill {
+    transition: none;
+  }
+  .aegis-progress-track[data-indeterminate='true'] .aegis-progress-fill {
+    animation: none;
+    transform: translateX(90%);
+  }
+}

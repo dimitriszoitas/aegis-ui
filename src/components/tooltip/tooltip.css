@@ -1,0 +1,120 @@
+.aegis-tooltip {
+  --tooltip-bg: var(--color-bg-surface-raised);
+  --tooltip-fg: var(--color-text-primary);
+  --tooltip-secondary: var(--color-text-secondary);
+  --tooltip-border: var(--color-border-default);
+  z-index: var(--z-tooltip);
+  max-width: 300px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--tooltip-border);
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-fg);
+  box-shadow: var(--shadow-floating);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  animation: aegis-tooltip-enter var(--motion-fast) var(--ease-out);
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+}
+.aegis-tooltip[data-variant='inverted'] {
+  --tooltip-bg: var(--color-text-primary);
+  --tooltip-fg: var(--color-bg-surface-raised);
+  --tooltip-secondary: color-mix(in srgb, var(--tooltip-fg) 78%, var(--tooltip-bg));
+  --tooltip-border: var(--color-text-primary);
+}
+.aegis-tooltip-arrow {
+  fill: var(--tooltip-bg);
+  overflow: visible;
+  /* Overlap the surface border; only the two outer arrow edges receive a stroke. */
+  transform: translateY(-1px);
+}
+.aegis-tooltip-arrow-outline {
+  fill: none;
+  stroke: var(--tooltip-border);
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+.aegis-tooltip-rich {
+  max-width: 320px;
+  padding: var(--space-3);
+}
+.aegis-tooltip-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+.aegis-tooltip-heading kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--tooltip-secondary);
+}
+.aegis-tooltip-description {
+  color: var(--tooltip-secondary);
+}
+@keyframes aegis-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-tooltip {
+    animation: none;
+  }
+}
+
+.aegis-tooltip-demo-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.aegis-tooltip-demo-trigger:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+}
+.aegis-tooltip-demo-trigger:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+.aegis-tooltip-demo-trigger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.aegis-tooltip-arrow-matrix {
+  display: grid;
+  gap: calc(var(--space-16) * 2);
+  padding: var(--space-16) var(--space-20);
+}
+.aegis-tooltip-arrow-matrix-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-16) calc(var(--space-24) * 2);
+}
+
+@media (max-width: 600px) {
+  .aegis-tooltip-arrow-matrix {
+    padding-inline: 0;
+  }
+  .aegis-tooltip-arrow-matrix-row {
+    grid-template-columns: 1fr;
+    gap: calc(var(--space-16) * 2);
+  }
+}

@@ -1,0 +1,4993 @@
+{
+  "id": "components-forms-searchinput",
+  "name": "SearchInput",
+  "title": "Components/Forms/SearchInput",
+  "category": "Components/Forms",
+  "description": "Immediate input feedback with a cancelable debounced onSearch callback. The shortcut is a hint; the owning page handles the shortcut action. Native onChange and onValueChange remain immediate.",
+  "purpose": "Search large collections without firing work for every keystroke.",
+  "usage": "onValueChange updates immediately; onSearch is debounced. Superseded callbacks are canceled when text changes.",
+  "anatomy": [
+    "Search icon",
+    "Query input",
+    "Clear action",
+    "Optional shortcut"
+  ],
+  "sourceFiles": [
+    "src/components/field/field.css",
+    "src/components/field/field.tsx",
+    "src/components/field/index.ts",
+    "src/components/icon/index.tsx",
+    "src/components/search-input/search-input.css",
+    "src/components/search-input/search-input.stories.tsx",
+    "src/components/search-input/search-input.tsx",
+    "src/components/text-input/index.ts",
+    "src/components/text-input/text-input.css",
+    "src/components/text-input/text-input.tsx",
+    "src/lib/use-input-focus.ts",
+    "src/lib/utils.ts",
+    "src/package/styles.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/input-focus.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/theme.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "SearchInput"
+  ],
+  "imports": [
+    {
+      "name": "SearchInput",
+      "path": "@dimitriszoitas/aegis-ui/search-input"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-forms-searchinput--matrix",
+      "name": "Matrix",
+      "exportName": "Matrix",
+      "sourceFile": "src/components/search-input/search-input.stories.tsx"
+    },
+    {
+      "id": "components-forms-searchinput--debounced-search",
+      "name": "Debounced Search",
+      "exportName": "DebouncedSearch",
+      "sourceFile": "src/components/search-input/search-input.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "SearchInput",
+      "name": "debounceMs",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "250",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSearch",
+      "type": "((query: string) => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "SearchInput",
+      "name": "shortcut",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "SearchInput",
+      "name": "about",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "accept",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "accessKey",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "alt",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-activedescendant",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-atomic",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-autocomplete",
+      "type": "\"none\" | \"list\" | \"inline\" | \"both\" | undefined",
+      "required": false,
+      "description": "Indicates whether inputting text could trigger display of one or more predictions of the user's intended value for an input and specifies how predictions would be\npresented if they are made.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-braillelabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-brailleroledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized abbreviated description for the role of an element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-busy",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-checked",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"checked\" state of checkboxes, radio buttons, and other widgets.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-colcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of columns in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-colindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's column index or position with respect to the total number of columns within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-colindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-colindex.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-colspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-controls",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) whose contents or presence are controlled by the current element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-current",
+      "type": "boolean | \"time\" | \"true\" | \"false\" | \"page\" | \"step\" | \"location\" | \"date\" | undefined",
+      "required": false,
+      "description": "Indicates the element that represents the current item within a container or set of related elements.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-describedby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that describes the object.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-description",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that describes or annotates the current element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-details",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides a detailed, extended description for the object.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-disabled",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-dropeffect",
+      "type": "\"link\" | \"none\" | \"copy\" | \"execute\" | \"move\" | \"popup\" | undefined",
+      "required": false,
+      "description": "Indicates what functions can be performed when a dragged object is released on the drop target.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-errormessage",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides an error message for the object.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-expanded",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-flowto",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the next element (or elements) in an alternate reading order of content which, at the user's discretion,\nallows assistive technology to override the general default of reading in document source order.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-grabbed",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates an element's \"grabbed\" state in a drag-and-drop operation.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-haspopup",
+      "type": "boolean | \"dialog\" | \"menu\" | \"true\" | \"false\" | \"grid\" | \"listbox\" | \"tree\" | undefined",
+      "required": false,
+      "description": "Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-hidden",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element is exposed to an accessibility API.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\" | \"grammar\" | \"spelling\" | undefined",
+      "required": false,
+      "description": "Indicates the entered value does not conform to the format expected by the application.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-keyshortcuts",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-labelledby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-level",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the hierarchical level of an element within a structure.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-live",
+      "type": "\"off\" | \"assertive\" | \"polite\" | undefined",
+      "required": false,
+      "description": "Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live region.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-modal",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether an element is modal when displayed.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-multiline",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether a text box accepts multiple lines of input or only a single line.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-multiselectable",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the user may select more than one item from the current selectable descendants.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Indicates whether the element's orientation is horizontal, vertical, or unknown/ambiguous.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-owns",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies an element (or elements) in order to define a visual, functional, or contextual parent/child relationship\nbetween DOM elements where the DOM hierarchy cannot be used to represent the relationship.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-placeholder",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a short hint (a word or short phrase) intended to aid the user with data entry when the control has no value.\nA hint could be a sample value or a brief description of the expected format.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-posinset",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's number or position in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-pressed",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"pressed\" state of toggle buttons.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-readonly",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is not editable, but is otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-relevant",
+      "type": "\"text\" | \"additions\" | \"additions removals\" | \"additions text\" | \"all\" | \"removals\" | \"removals additions\" | \"removals text\" | \"text additions\" | \"text removals\" | undefined",
+      "required": false,
+      "description": "Indicates what notifications the user agent will trigger when the accessibility tree within a live region is modified.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-required",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that user input is required on the element before a form may be submitted.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-roledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized description for the role of an element.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-rowcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of rows in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-rowindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's row index or position with respect to the total number of rows within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-rowindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-rowindex.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-rowspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-selected",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates the current \"selected\" state of various widgets.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-setsize",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of items in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-sort",
+      "type": "\"none\" | \"ascending\" | \"descending\" | \"other\" | undefined",
+      "required": false,
+      "description": "Indicates if items in a table or grid are sorted in ascending or descending order.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-valuemax",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the maximum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-valuemin",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the minimum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-valuenow",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the current value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "aria-valuetext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines the human readable text alternative of aria-valuenow for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "autoCapitalize",
+      "type": "\"off\" | \"none\" | \"on\" | \"sentences\" | \"words\" | \"characters\" | (string & {}) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "autoComplete",
+      "type": "HTMLInputAutoCompleteAttribute | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "autoCorrect",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "autoFocus",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "autoSave",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "capture",
+      "type": "boolean | \"user\" | \"environment\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "checked",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "clearable",
+      "type": "boolean | undefined",
+      "required": false,
+      "defaultValue": "true",
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "clearLabel",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"Clear search\"",
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "color",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "content",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "contentEditable",
+      "type": "Booleanish | \"inherit\" | \"plaintext-only\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "contextMenu",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "dangerouslySetInnerHTML",
+      "type": "{ __html: string | TrustedHTML; } | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "datatype",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "defaultChecked",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "defaultValue",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"\"",
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "dir",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "disabled",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "draggable",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "enterKeyHint",
+      "type": "\"search\" | \"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"send\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "exportparts",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "form",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "formAction",
+      "type": "string | ((formData: FormData) => void | Promise<void>) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "formEncType",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "formMethod",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "formNoValidate",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "formTarget",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "height",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "hidden",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "id",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "inert",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "inlist",
+      "type": "any",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "inputClassName",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "inputMode",
+      "type": "\"search\" | \"text\" | \"none\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | undefined",
+      "required": false,
+      "description": "Hints at the type of data that might be entered by the user while editing the element or its contents",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "invalid",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "is",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Specify that a standard HTML element should behave like a defined custom built-in element",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "itemID",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "itemProp",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "itemRef",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "itemScope",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "itemType",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "key",
+      "type": "Key | null | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "label",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Visible standalone label. Inside Field, its label is used automatically.",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "lang",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "list",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "max",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "maxLength",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "min",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "minLength",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "multiple",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "name",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "nonce",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAbort",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAbortCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationEnd",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationEndCapture",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationIteration",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationIterationCapture",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationStart",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAnimationStartCapture",
+      "type": "AnimationEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAuxClick",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onAuxClickCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onBeforeInput",
+      "type": "InputEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onBeforeInputCapture",
+      "type": "InputEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onBeforeToggle",
+      "type": "ToggleEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onBlur",
+      "type": "FocusEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onBlurCapture",
+      "type": "FocusEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCanPlay",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCanPlayCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCanPlayThrough",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCanPlayThroughCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLInputElement, HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onChangeCapture",
+      "type": "ChangeEventHandler<HTMLInputElement, Element> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onClear",
+      "type": "(() => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onClick",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onClickCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionEnd",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionEndCapture",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionStart",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionStartCapture",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionUpdate",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCompositionUpdateCapture",
+      "type": "CompositionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onContextMenu",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onContextMenuCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCopy",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCopyCapture",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCut",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onCutCapture",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDoubleClick",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDoubleClickCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDrag",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragEnd",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragEndCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragEnter",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragEnterCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragExit",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragExitCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragLeave",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragLeaveCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragOver",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragOverCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragStart",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDragStartCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDrop",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDropCapture",
+      "type": "DragEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDurationChange",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onDurationChangeCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEmptied",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEmptiedCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEncrypted",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEncryptedCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEnded",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onEndedCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onError",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onErrorCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onFocus",
+      "type": "FocusEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onFocusCapture",
+      "type": "FocusEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onGotPointerCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onGotPointerCaptureCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onInput",
+      "type": "InputEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onInputCapture",
+      "type": "InputEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onInvalid",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onInvalidCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyDown",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyDownCapture",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyPress",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyPressCapture",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyUp",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onKeyUpCapture",
+      "type": "KeyboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoad",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadedData",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadedDataCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadedMetadata",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadedMetadataCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadStart",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLoadStartCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLostPointerCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onLostPointerCaptureCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseDown",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseDownCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseEnter",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseLeave",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseMove",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseMoveCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseOut",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseOutCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseOver",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseOverCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseUp",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onMouseUpCapture",
+      "type": "MouseEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPaste",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPasteCapture",
+      "type": "ClipboardEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPause",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPauseCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPlay",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPlayCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPlaying",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPlayingCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerCancel",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerCancelCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerDown",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerDownCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerEnter",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerLeave",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerMove",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerMoveCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerOut",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerOutCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerOver",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerOverCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerUp",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onPointerUpCapture",
+      "type": "PointerEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onProgress",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onProgressCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onRateChange",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onRateChangeCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onReset",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onResetCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onScroll",
+      "type": "UIEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onScrollCapture",
+      "type": "UIEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onScrollEnd",
+      "type": "UIEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onScrollEndCapture",
+      "type": "UIEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSeeked",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSeekedCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSeeking",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSeekingCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSelect",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSelectCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onStalled",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onStalledCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSubmit",
+      "type": "SubmitEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSubmitCapture",
+      "type": "SubmitEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSuspend",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onSuspendCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTimeUpdate",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTimeUpdateCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onToggle",
+      "type": "ToggleEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchCancel",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchCancelCapture",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchEnd",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchEndCapture",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchMove",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchMoveCapture",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchStart",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTouchStartCapture",
+      "type": "TouchEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionCancel",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionCancelCapture",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionEnd",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionEndCapture",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionRun",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionRunCapture",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionStart",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onTransitionStartCapture",
+      "type": "TransitionEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onValueChange",
+      "type": "((value: string) => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onVolumeChange",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onVolumeChangeCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onWaiting",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onWaitingCapture",
+      "type": "ReactEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onWheel",
+      "type": "WheelEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "onWheelCapture",
+      "type": "WheelEventHandler<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "part",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "pattern",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "placeholder",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "popover",
+      "type": "\"\" | \"auto\" | \"manual\" | \"hint\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "popoverTarget",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "popoverTargetAction",
+      "type": "\"toggle\" | \"show\" | \"hide\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "property",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "radioGroup",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "readOnly",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "ref",
+      "type": "Ref<HTMLInputElement> | undefined",
+      "required": false,
+      "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "rel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "required",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "resource",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "results",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "rev",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "role",
+      "type": "AriaRole | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "security",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "size",
+      "type": "TextInputSize | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "slot",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "spellCheck",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "src",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "step",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "style",
+      "type": "CSSProperties | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "suppressContentEditableWarning",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "suppressHydrationWarning",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "tabIndex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "title",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "translate",
+      "type": "\"yes\" | \"no\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "typeof",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "unselectable",
+      "type": "\"off\" | \"on\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "value",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "vocab",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "SearchInput",
+      "name": "width",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field",
+      "conditions": [],
+      "property": "flex-direction",
+      "value": "column",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "align-items",
+      "value": "baseline",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "width",
+      "value": "fit-content",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-label",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.4",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-optional",
+      "conditions": [],
+      "property": "margin-left",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-optional",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-optional",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-optional",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "400",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-marker, .aegis-field-error",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-help, .aegis-field-error",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-help, .aegis-field-error",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field-help",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/field/field.css",
+      "selector": ".aegis-field[data-disabled] > .aegis-field-label",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "padding",
+      "value": "2px var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/search-input/search-input.css",
+      "selector": ".aegis-search-shortcut",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input",
+      "conditions": [],
+      "property": "flex-direction",
+      "value": "column",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "height",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-md)",
+      "tokens": [
+        "--radius-md"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "transition",
+      "value": "border-color var(--motion-fast) var(--ease-out),\n    background var(--motion-fast) var(--ease-out)",
+      "tokens": [
+        "--ease-out",
+        "--motion-fast"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='sm']",
+      "conditions": [],
+      "property": "height",
+      "value": "28px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='sm']",
+      "conditions": [],
+      "property": "padding-inline",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='sm']",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='lg']",
+      "conditions": [],
+      "property": "height",
+      "value": "40px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell:hover:not([data-disabled]):not([data-readonly])",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell:focus-within",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell:focus-within",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell:focus-within",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-invalid]",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-readonly]",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-disabled]",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0.55",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-disabled]",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-disabled]",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "color",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "height",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native:focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native:disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native::placeholder",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native::placeholder",
+      "conditions": [],
+      "property": "opacity",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-native::-webkit-search-cancel-button,\n.aegis-input-native::-webkit-search-decoration",
+      "conditions": [],
+      "property": "-webkit-appearance",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "flex",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-prefix,\n.aegis-input-suffix",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "flex",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "width",
+      "value": "22px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "height",
+      "value": "22px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear:hover",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-clear:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-md)",
+      "tokens": [
+        "--control-radius-md"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='sm']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-sm)",
+      "tokens": [
+        "--control-radius-sm"
+      ]
+    },
+    {
+      "file": "src/components/text-input/text-input.css",
+      "selector": ".aegis-input-shell[data-size='lg']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-lg)",
+      "tokens": [
+        "--control-radius-lg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-diff-host .cm-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt\n  ):focus-within,\n:root\n  :is(\n    .aegis-input-native,\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-multi-search input,\n    .aegis-prompt-menu [cmdk-input],\n    .aegis-pagination-size select,\n    .aegis-json-fallback textarea,\n    .time-range-clock input,\n    .aegis-code-editor .cm-panels input,\n    .cm-editor .cm-content\n  ):focus",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-diff-host .cm-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt\n  ):focus-within,\n:root\n  :is(\n    .aegis-input-native,\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-multi-search input,\n    .aegis-prompt-menu [cmdk-input],\n    .aegis-pagination-size select,\n    .aegis-json-fallback textarea,\n    .time-range-clock input,\n    .aegis-code-editor .cm-panels input,\n    .cm-editor .cm-content\n  ):focus",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-input-shell,\n.aegis-textarea-native",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-input-shell,\n.aegis-textarea-native",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-multi-shell",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-multi-shell",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-select-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-select-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-code-editor,\n.aegis-yaml-presenter,\n.aegis-prompt,\n.aegis-pagination-size select,\n.time-range-clock input",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-code-editor,\n.aegis-yaml-presenter,\n.aegis-prompt,\n.aegis-pagination-size select,\n.time-range-clock input",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-date-picker-trigger,\n.aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-date-picker-trigger,\n.aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(.aegis-input-shell, .aegis-multi-shell, .aegis-select-trigger, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(.aegis-input-shell, .aegis-multi-shell, .aegis-select-trigger, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--minimal-interaction-border)",
+      "tokens": [
+        "--minimal-interaction-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--minimal-interaction-border)",
+      "tokens": [
+        "--minimal-interaction-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--v0-field-border)",
+      "tokens": [
+        "--v0-field-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-input-shell[data-readonly], .aegis-textarea-native[readonly])",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--v0-field-readonly-border)",
+      "tokens": [
+        "--v0-field-readonly-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='fundamental']\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-select-trigger,\n    .aegis-textarea-native,\n    .aegis-date-picker-trigger,\n    .aegis-code-editor,\n    .aegis-prompt,\n    .aegis-pagination-size select,\n    .time-range-clock input\n  )",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--fundamental-control-border)",
+      "tokens": [
+        "--fundamental-control-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='fundamental']\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-select-trigger,\n    .aegis-textarea-native,\n    .aegis-date-picker-trigger\n  )",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--fundamental-control-border-hover)",
+      "tokens": [
+        "--fundamental-control-border-hover"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-pagination-size select,\n    .time-range-clock input\n  ):is(:focus-within, [data-state='open']):not([data-invalid], [aria-invalid='true'])",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger\n  ):is(:focus-within, [data-state='open']):hover:not(\n    [data-invalid],\n    [aria-invalid='true'],\n    [data-disabled],\n    :disabled,\n    [data-readonly],\n    [readonly]\n  )",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--aegis-field-hover-border)",
+      "tokens": [
+        "--aegis-field-hover-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within,\n:root\n  [data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within",
+      "conditions": [],
+      "property": "--v0-text-field-border-extra",
+      "value": "0px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within,\n:root\n  [data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within",
+      "conditions": [],
+      "property": "border-width",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root :is(.aegis-input-shell, .aegis-multi-shell)[data-invalid]:is(:hover, :focus-within),\n:root\n  :is(\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger\n  )[aria-invalid='true']:is(:hover, :focus)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root .aegis-time-range-trigger[aria-invalid='true']:focus",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 1px var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-aegis-input-focus='pointer']\n  :is(.rdp-day_button, .rdp-button_previous, .rdp-button_next):focus,\n:root[data-aegis-input-focus='pointer']\n  :is(.aegis-select-option[data-highlighted], .aegis-multi-option[data-active])",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-aegis-input-focus='pointer']\n  :is(.rdp-day_button, .rdp-button_previous, .rdp-button_next):focus,\n:root[data-aegis-input-focus='pointer']\n  :is(.aegis-select-option[data-highlighted], .aegis-multi-option[data-active])",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-code",
+      "value": "'JetBrains Mono', ui-monospace, monospace",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171718)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "color-mix(in srgb, var(--color-text-primary) 4%, var(--color-bg-canvas))",
+      "tokens": [
+        "--color-bg-canvas",
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#202124, #f2f3f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#626670, #a6aab3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#6a6e77, #9399a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#e3e5e9, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--fundamental-control-border",
+      "value": "light-dark(#eaebee, #2c2d2f)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--fundamental-control-border-hover",
+      "value": "light-dark(#d8dae0, #38393c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#7d828c, #727986)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #1b1b1b)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#171717, #f2f2f2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#6b6b6b, #a3a3a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#cdcdcd, #2d2d2d)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#777777, #8a8a8a)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#262626, #e5e5e5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--minimal-interaction-border",
+      "value": "color-mix(\n    in srgb,\n    var(--minimal-interaction-bg) 40%,\n    var(--color-border-default)\n  )",
+      "tokens": [
+        "--color-border-default",
+        "--minimal-interaction-bg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-md",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--minimal-status-new-fg)",
+      "tokens": [
+        "--minimal-status-new-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-md",
+      "value": "7px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-1",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-2",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-3",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "7px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-code",
+      "value": "'JetBrains Mono', monospace",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--motion-fast",
+      "value": "120ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ease-out",
+      "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-md",
+      "value": "var(--radius-md)",
+      "tokens": [
+        "--radius-md"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-lg",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#f1f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#171a20",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#5b6271",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "#d6dae3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "#8590a3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "#4565ed",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#3250cc",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#be2730",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#17181d",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#22242b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#f2f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#a7acb9",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#959cab",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "rgba(255, 255, 255, 0.1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "#6b8bff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#a6b7ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#ff9599",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "--motion-fast",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "light-dark(#fafafa, #262626)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#161616, #e8ecf0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#686868, #92a4b3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#686868, #8396a5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#737373, #8a8a8a)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--v0-field-border",
+      "value": "light-dark(#949494, #646464)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--v0-field-readonly-border",
+      "value": "light-dark(#b5b5b5, #565656)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#495da8, #a0b4f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-md",
+      "value": "var(--radius-md)",
+      "tokens": [
+        "--radius-md"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-lg",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-code",
+      "value": "'JetBrains Mono', monospace",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--color-border-strong",
+      "value": "ButtonText",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    }
+  ],
+  "variants": [
+    {
+      "name": "size",
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    }
+  ],
+  "cssClasses": [
+    "aegis-search-shortcut"
+  ],
+  "relatedComponents": [
+    "@/components/field",
+    "@/components/icon",
+    "@/components/text-input"
+  ],
+  "accessibility": {
+    "roles": [],
+    "ariaAttributes": [
+      "aria-hidden"
+    ],
+    "nativeElements": [
+      "kbd"
+    ],
+    "keyboardKeys": [],
+    "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "clsx",
+      "react",
+      "tailwind-merge"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+.aegis-streaming-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  width: 100%;
+}
+.aegis-streaming-skeleton[data-variant='card'] {
+  padding: var(--space-5);
+  border: 1px solid var(--color-ai-border);
+  border-radius: var(--radius-lg);
+  background: var(--gradient-ai-surface);
+}
+.aegis-streaming-line {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-ai-soft);
+  position: relative;
+  overflow: hidden;
+}
+.aegis-streaming-line:last-child {
+  width: 64%;
+}
+.aegis-streaming-line:nth-child(3n) {
+  width: 86%;
+}
+.aegis-streaming-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-ai-text);
+  opacity: 0.12;
+  transform: translateX(-100%);
+  animation: aegis-stream-shimmer 1.8s ease-in-out infinite;
+}
+@keyframes aegis-stream-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-streaming-line::after {
+    animation: none;
+    transform: none;
+    opacity: 0.04;
+  }
+}

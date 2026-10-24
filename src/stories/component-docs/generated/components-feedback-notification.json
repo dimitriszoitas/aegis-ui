@@ -1,0 +1,5244 @@
+{
+  "id": "components-feedback-notification",
+  "name": "Notification",
+  "title": "Components/Feedback/Notification",
+  "category": "Components/Feedback",
+  "description": "One notification family for inline feedback and floating messages. Inline notifications use a semantic outline with no background fill; floating notifications use a neutral surface. Use `action` for a labeled callback, `actions` for custom controls, and `onDismiss` for a dismiss button. The floating variant styles the message; `NotificationViewport` and `showNotification` place it above the application.\n\nMount one `NotificationViewport` per application shell, then call `showNotification`. Its action callback also dismisses that message. Loading notifications stay visible until replaced or dismissed; other notifications default to 5 seconds. `Banner`/`Callout` and `Toast`/`Toaster`/`showToast` remain compatibility APIs for the same family.\n\n| NotificationViewport prop | Type | Default / behavior |\n| --- | --- | --- |\n| position | top-left, top-center, top-right, bottom-left, bottom-center, bottom-right | bottom-right |\n| offset | number, string, or side-offset object | 12 |\n| gap | number | 12 |\n| visibleToasts | number | 4 |\n| duration | number | Sonner host timeout in milliseconds; individual calls may override it |\n| theme | light, dark, system | Optional host appearance; message content uses Aegis theme tokens |\n| expand / closeButton | boolean | Expand the stack / show a host close control |\n| hotkey | string[] | Keyboard shortcut that focuses the notification region |\n| containerAriaLabel | string | Accessible name for the notification region |\n| toastOptions | ToastOptions | Shared host settings; Aegis unstyled content remains enabled |\n| className / style | string / CSSProperties | Host presentation props |",
+  "purpose": "Deliver inline feedback or a floating notification with one component.",
+  "usage": "Use the inline variant for persistent context: transparent with a semantic border. Use the floating variant for transient feedback; mount NotificationViewport once and call showNotification. Both support actions and dismissal.",
+  "anatomy": [
+    "Intent icon",
+    "Title",
+    "Message",
+    "Optional action",
+    "Dismiss control"
+  ],
+  "sourceFiles": [
+    "src/components/icon/index.tsx",
+    "src/components/notification/notification.css",
+    "src/components/notification/notification.stories.tsx",
+    "src/components/notification/notification.tsx",
+    "src/lib/utils.ts",
+    "src/package/styles.css",
+    "src/styles/fundamental-overlays.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/layout-theme.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/theme.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "Notification",
+    "NotificationViewport"
+  ],
+  "imports": [
+    {
+      "name": "Notification",
+      "path": "@dimitriszoitas/aegis-ui/notification"
+    },
+    {
+      "name": "NotificationViewport",
+      "path": "@dimitriszoitas/aegis-ui/notification"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-feedback-notification--inline",
+      "name": "Inline",
+      "exportName": "Inline",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--inline-intents",
+      "name": "Inline Intents",
+      "exportName": "InlineIntents",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--with-actions-and-dismiss",
+      "name": "With Actions And Dismiss",
+      "exportName": "WithActionsAndDismiss",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--inline-callout",
+      "name": "Inline Callout",
+      "exportName": "InlineCallout",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--floating",
+      "name": "Floating",
+      "exportName": "Floating",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--floating-intents",
+      "name": "Floating Intents",
+      "exportName": "FloatingIntents",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--live-floating",
+      "name": "Live Floating",
+      "exportName": "LiveFloating",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    },
+    {
+      "id": "components-feedback-notification--floating-with-action",
+      "name": "Floating With Action",
+      "exportName": "FloatingWithAction",
+      "sourceFile": "src/components/notification/notification.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "Notification",
+      "name": "action",
+      "type": "NotificationAction | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "actions",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Custom or multiple action controls.",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "dismissLabel",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"Dismiss notification\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Set null to omit the leading icon.",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "intent",
+      "type": "NotificationIntent | undefined",
+      "required": false,
+      "defaultValue": "\"info\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "onDismiss",
+      "type": "(() => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "variant",
+      "type": "\"inline\" | \"floating\" | undefined",
+      "required": false,
+      "defaultValue": "\"inline\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Notification",
+      "name": "about",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "accessKey",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-activedescendant",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-atomic",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-autocomplete",
+      "type": "\"none\" | \"list\" | \"inline\" | \"both\" | undefined",
+      "required": false,
+      "description": "Indicates whether inputting text could trigger display of one or more predictions of the user's intended value for an input and specifies how predictions would be\npresented if they are made.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-braillelabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-brailleroledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized abbreviated description for the role of an element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-busy",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-checked",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"checked\" state of checkboxes, radio buttons, and other widgets.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-colcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of columns in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-colindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's column index or position with respect to the total number of columns within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-colindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-colindex.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-colspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-controls",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) whose contents or presence are controlled by the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-current",
+      "type": "boolean | \"time\" | \"true\" | \"false\" | \"page\" | \"step\" | \"location\" | \"date\" | undefined",
+      "required": false,
+      "description": "Indicates the element that represents the current item within a container or set of related elements.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-describedby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that describes the object.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-description",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that describes or annotates the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-details",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides a detailed, extended description for the object.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-disabled",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-dropeffect",
+      "type": "\"link\" | \"none\" | \"copy\" | \"execute\" | \"move\" | \"popup\" | undefined",
+      "required": false,
+      "description": "Indicates what functions can be performed when a dragged object is released on the drop target.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-errormessage",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides an error message for the object.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-expanded",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-flowto",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the next element (or elements) in an alternate reading order of content which, at the user's discretion,\nallows assistive technology to override the general default of reading in document source order.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-grabbed",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates an element's \"grabbed\" state in a drag-and-drop operation.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-haspopup",
+      "type": "boolean | \"dialog\" | \"menu\" | \"true\" | \"false\" | \"grid\" | \"listbox\" | \"tree\" | undefined",
+      "required": false,
+      "description": "Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-hidden",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element is exposed to an accessibility API.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\" | \"grammar\" | \"spelling\" | undefined",
+      "required": false,
+      "description": "Indicates the entered value does not conform to the format expected by the application.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-keyshortcuts",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-labelledby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-level",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the hierarchical level of an element within a structure.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-live",
+      "type": "\"off\" | \"assertive\" | \"polite\" | undefined",
+      "required": false,
+      "description": "Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live region.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-modal",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether an element is modal when displayed.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-multiline",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether a text box accepts multiple lines of input or only a single line.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-multiselectable",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the user may select more than one item from the current selectable descendants.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Indicates whether the element's orientation is horizontal, vertical, or unknown/ambiguous.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-owns",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies an element (or elements) in order to define a visual, functional, or contextual parent/child relationship\nbetween DOM elements where the DOM hierarchy cannot be used to represent the relationship.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-placeholder",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a short hint (a word or short phrase) intended to aid the user with data entry when the control has no value.\nA hint could be a sample value or a brief description of the expected format.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-posinset",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's number or position in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-pressed",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"pressed\" state of toggle buttons.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-readonly",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is not editable, but is otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-relevant",
+      "type": "\"text\" | \"additions\" | \"additions removals\" | \"additions text\" | \"all\" | \"removals\" | \"removals additions\" | \"removals text\" | \"text additions\" | \"text removals\" | undefined",
+      "required": false,
+      "description": "Indicates what notifications the user agent will trigger when the accessibility tree within a live region is modified.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-required",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that user input is required on the element before a form may be submitted.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-roledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized description for the role of an element.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-rowcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of rows in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-rowindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's row index or position with respect to the total number of rows within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-rowindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-rowindex.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-rowspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-selected",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates the current \"selected\" state of various widgets.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-setsize",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of items in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-sort",
+      "type": "\"none\" | \"ascending\" | \"descending\" | \"other\" | undefined",
+      "required": false,
+      "description": "Indicates if items in a table or grid are sorted in ascending or descending order.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-valuemax",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the maximum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-valuemin",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the minimum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-valuenow",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the current value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "aria-valuetext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines the human readable text alternative of aria-valuenow for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "autoCapitalize",
+      "type": "\"off\" | \"none\" | \"on\" | \"sentences\" | \"words\" | \"characters\" | (string & {}) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "autoCorrect",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "autoFocus",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "autoSave",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "color",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "content",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "contentEditable",
+      "type": "Booleanish | \"inherit\" | \"plaintext-only\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "contextMenu",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "dangerouslySetInnerHTML",
+      "type": "{ __html: string | TrustedHTML; } | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "datatype",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "defaultChecked",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "defaultValue",
+      "type": "string | number | readonly string[] | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "dir",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "draggable",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "enterKeyHint",
+      "type": "\"search\" | \"enter\" | \"done\" | \"go\" | \"next\" | \"previous\" | \"send\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "exportparts",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "hidden",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "id",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "inert",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "inlist",
+      "type": "any",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "inputMode",
+      "type": "\"search\" | \"text\" | \"none\" | \"tel\" | \"url\" | \"email\" | \"numeric\" | \"decimal\" | undefined",
+      "required": false,
+      "description": "Hints at the type of data that might be entered by the user while editing the element or its contents",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "is",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Specify that a standard HTML element should behave like a defined custom built-in element",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "itemID",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "itemProp",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "itemRef",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "itemScope",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "itemType",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "key",
+      "type": "Key | null | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "lang",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "nonce",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAbort",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAbortCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationEnd",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationEndCapture",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationIteration",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationIterationCapture",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationStart",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAnimationStartCapture",
+      "type": "AnimationEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAuxClick",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onAuxClickCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onBeforeInput",
+      "type": "InputEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onBeforeInputCapture",
+      "type": "InputEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onBeforeToggle",
+      "type": "ToggleEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onBlur",
+      "type": "FocusEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onBlurCapture",
+      "type": "FocusEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCanPlay",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCanPlayCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCanPlayThrough",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCanPlayThroughCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onChange",
+      "type": "ChangeEventHandler<HTMLDivElement, Element> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onChangeCapture",
+      "type": "ChangeEventHandler<HTMLDivElement, Element> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onClick",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onClickCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionEnd",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionEndCapture",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionStart",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionStartCapture",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionUpdate",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCompositionUpdateCapture",
+      "type": "CompositionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onContextMenu",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onContextMenuCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCopy",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCopyCapture",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCut",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onCutCapture",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDoubleClick",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDoubleClickCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDrag",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragEnd",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragEndCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragEnter",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragEnterCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragExit",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragExitCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragLeave",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragLeaveCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragOver",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragOverCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragStart",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDragStartCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDrop",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDropCapture",
+      "type": "DragEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDurationChange",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onDurationChangeCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEmptied",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEmptiedCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEncrypted",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEncryptedCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEnded",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onEndedCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onError",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onErrorCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onFocus",
+      "type": "FocusEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onFocusCapture",
+      "type": "FocusEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onGotPointerCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onGotPointerCaptureCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onInput",
+      "type": "InputEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onInputCapture",
+      "type": "InputEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onInvalid",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onInvalidCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyDown",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyDownCapture",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyPress",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyPressCapture",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyUp",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onKeyUpCapture",
+      "type": "KeyboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoad",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadedData",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadedDataCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadedMetadata",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadedMetadataCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadStart",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLoadStartCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLostPointerCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onLostPointerCaptureCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseDown",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseDownCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseEnter",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseLeave",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseMove",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseMoveCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseOut",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseOutCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseOver",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseOverCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseUp",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onMouseUpCapture",
+      "type": "MouseEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPaste",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPasteCapture",
+      "type": "ClipboardEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPause",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPauseCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPlay",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPlayCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPlaying",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPlayingCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerCancel",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerCancelCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerDown",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerDownCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerEnter",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerLeave",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerMove",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerMoveCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerOut",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerOutCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerOver",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerOverCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerUp",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onPointerUpCapture",
+      "type": "PointerEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onProgress",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onProgressCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onRateChange",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onRateChangeCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onReset",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onResetCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onScroll",
+      "type": "UIEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onScrollCapture",
+      "type": "UIEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onScrollEnd",
+      "type": "UIEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onScrollEndCapture",
+      "type": "UIEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSeeked",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSeekedCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSeeking",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSeekingCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSelect",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSelectCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onStalled",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onStalledCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSubmit",
+      "type": "SubmitEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSubmitCapture",
+      "type": "SubmitEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSuspend",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onSuspendCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTimeUpdate",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTimeUpdateCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onToggle",
+      "type": "ToggleEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchCancel",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchCancelCapture",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchEnd",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchEndCapture",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchMove",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchMoveCapture",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchStart",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTouchStartCapture",
+      "type": "TouchEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionCancel",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionCancelCapture",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionEnd",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionEndCapture",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionRun",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionRunCapture",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionStart",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onTransitionStartCapture",
+      "type": "TransitionEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onVolumeChange",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onVolumeChangeCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onWaiting",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onWaitingCapture",
+      "type": "ReactEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onWheel",
+      "type": "WheelEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "onWheelCapture",
+      "type": "WheelEventHandler<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "part",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "popover",
+      "type": "\"\" | \"auto\" | \"manual\" | \"hint\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "popoverTarget",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "popoverTargetAction",
+      "type": "\"toggle\" | \"show\" | \"hide\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "prefix",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "property",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "radioGroup",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "ref",
+      "type": "Ref<HTMLDivElement> | undefined",
+      "required": false,
+      "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "rel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "resource",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "results",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "rev",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "role",
+      "type": "AriaRole | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "security",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "slot",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "spellCheck",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "style",
+      "type": "CSSProperties | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "suppressContentEditableWarning",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "suppressHydrationWarning",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "tabIndex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "translate",
+      "type": "\"yes\" | \"no\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "typeof",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "unselectable",
+      "type": "\"off\" | \"on\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Notification",
+      "name": "vocab",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "closeButton",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "containerAriaLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "customAriaLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "dir",
+      "type": "\"auto\" | \"ltr\" | \"rtl\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "duration",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "expand",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "gap",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "hotkey",
+      "type": "string[] | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "icons",
+      "type": "ToastIcons | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "id",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "invert",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "mobileOffset",
+      "type": "Offset | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "offset",
+      "type": "Offset | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "position",
+      "type": "Position | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "richColors",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "style",
+      "type": "React.CSSProperties | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "swipeDirections",
+      "type": "SwipeDirection[] | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "theme",
+      "type": "\"light\" | \"dark\" | \"system\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "toastOptions",
+      "type": "ToastOptions | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "NotificationViewport",
+      "name": "visibleToasts",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "display",
+      "value": "grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "grid-template-columns",
+      "value": "minmax(0, 1fr) auto auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "align-items",
+      "value": "start",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "column-gap",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "row-gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-4)",
+      "tokens": [
+        "--space-4"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--notification-accent)",
+      "tokens": [
+        "--notification-accent"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--surface-corner-radius, var(--surface-radius))",
+      "tokens": [
+        "--surface-corner-radius",
+        "--surface-radius"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-has-icon]",
+      "conditions": [],
+      "property": "grid-template-columns",
+      "value": "auto minmax(0, 1fr) auto auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='success']",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-success-fg)",
+      "tokens": [
+        "--color-success-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='warning']",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='destroy']",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai']",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='loading']",
+      "conditions": [],
+      "property": "--notification-accent",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline']",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline']",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--notification-accent)",
+      "tokens": [
+        "--notification-accent"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline']",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "grid-template-columns",
+      "value": "minmax(0, 1fr) auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface-raised)",
+      "tokens": [
+        "--color-bg-surface-raised"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "var(--shadow-floating)",
+      "tokens": [
+        "--shadow-floating"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'][data-has-icon]",
+      "conditions": [],
+      "property": "grid-template-columns",
+      "value": "auto minmax(0, 1fr) auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-icon",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-icon",
+      "conditions": [],
+      "property": "grid-row",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-icon",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-icon",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--notification-accent)",
+      "tokens": [
+        "--notification-accent"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-content",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-content",
+      "conditions": [],
+      "property": "grid-row",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-title",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-title",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "600",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-title",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-description",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-description",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-description",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.6",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-description",
+      "conditions": [],
+      "property": "overflow-wrap",
+      "value": "anywhere",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-title + .aegis-notification-description,\n.aegis-notification-description + .aegis-notification-description",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-description p:last-child",
+      "conditions": [],
+      "property": "margin-bottom",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'] .aegis-notification-description",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'] .aegis-notification-description",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--gradient-ai-text)",
+      "tokens": [
+        "--gradient-ai-text"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [],
+      "property": "background-clip",
+      "value": "text",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [],
+      "property": "-webkit-background-clip",
+      "value": "text",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [],
+      "property": "color",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-actions",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-actions",
+      "conditions": [],
+      "property": "flex-wrap",
+      "value": "wrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-actions",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-actions",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-actions",
+      "conditions": [],
+      "property": "grid-row",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'] .aegis-notification-actions",
+      "conditions": [],
+      "property": "grid-column",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'] .aegis-notification-actions",
+      "conditions": [],
+      "property": "grid-row",
+      "value": "2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='floating'][data-has-icon] .aegis-notification-actions",
+      "conditions": [],
+      "property": "grid-column",
+      "value": "2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-1) var(--space-2)",
+      "tokens": [
+        "--space-1",
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-function-border)",
+      "tokens": [
+        "--color-function-border"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-xs)",
+      "tokens": [
+        "--control-radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "display",
+      "value": "grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "place-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "grid-column",
+      "value": "-2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "grid-row",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "width",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-xs)",
+      "tokens": [
+        "--control-radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-dismiss:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action:focus-visible,\n.aegis-notification-dismiss:focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-action:focus-visible,\n.aegis-notification-dismiss:focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-viewport",
+      "conditions": [],
+      "property": "--width",
+      "value": "380px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-viewport",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-viewport",
+      "conditions": [],
+      "property": "z-index",
+      "value": "var(--z-toast)",
+      "tokens": [
+        "--z-toast"
+      ]
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-sonner-toast",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-spinning",
+      "conditions": [],
+      "property": "animation",
+      "value": "aegis-notification-spin 1s linear infinite",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": "to",
+      "conditions": [
+        "@keyframes aegis-notification-spin"
+      ],
+      "property": "transform",
+      "value": "rotate(360deg)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline']",
+      "conditions": [
+        "@media (max-width: 540px)"
+      ],
+      "property": "grid-template-columns",
+      "value": "minmax(0, 1fr) auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline'][data-has-icon]",
+      "conditions": [
+        "@media (max-width: 540px)"
+      ],
+      "property": "grid-template-columns",
+      "value": "auto minmax(0, 1fr) auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline'] .aegis-notification-actions",
+      "conditions": [
+        "@media (max-width: 540px)"
+      ],
+      "property": "grid-column",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline'] .aegis-notification-actions",
+      "conditions": [
+        "@media (max-width: 540px)"
+      ],
+      "property": "grid-row",
+      "value": "2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline'][data-has-icon] .aegis-notification-actions",
+      "conditions": [
+        "@media (max-width: 540px)"
+      ],
+      "property": "grid-column",
+      "value": "2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-spinning",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification-viewport [data-sonner-toast]",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-variant='inline']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "border-color",
+      "value": "CanvasText",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "background",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/notification/notification.css",
+      "selector": ".aegis-notification[data-intent='ai'] .aegis-notification-title",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "color",
+      "value": "CanvasText",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "--fundamental-grid-surface",
+      "value": "var(--fundamental-overlay-surface)",
+      "tokens": [
+        "--fundamental-overlay-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--fundamental-overlay-surface)",
+      "tokens": [
+        "--fundamental-overlay-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "0 3px 8px color-mix(in srgb, var(--color-scrim) 40%, transparent),\n    0 12px 36px color-mix(in srgb, var(--color-scrim) 55%, transparent)",
+      "tokens": [
+        "--color-scrim"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-4)",
+      "tokens": [
+        "--space-4"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "column-gap",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']",
+      "conditions": [],
+      "property": "row-gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-icon\n  > svg",
+      "conditions": [],
+      "property": "width",
+      "value": "var(--space-5)",
+      "tokens": [
+        "--space-5"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-icon\n  > svg",
+      "conditions": [],
+      "property": "height",
+      "value": "var(--space-5)",
+      "tokens": [
+        "--space-5"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-title",
+      "conditions": [],
+      "property": "overflow-wrap",
+      "value": "anywhere",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--space-6)",
+      "tokens": [
+        "--space-6"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "max-width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "text-decoration",
+      "value": "underline",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "text-underline-offset",
+      "value": "3px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "text-align",
+      "value": "start",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action",
+      "conditions": [],
+      "property": "overflow-wrap",
+      "value": "anywhere",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-notification[data-variant='floating']\n  .aegis-notification-action:hover",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n    :is(\n      .aegis-popover,\n      .aegis-menu-content,\n      .aegis-context-content,\n      .aegis-select-content,\n      .aegis-multi-popover,\n      .aegis-tooltip,\n      .aegis-notification[data-variant='floating'],\n      .aegis-modal.aegis-modal,\n      .command-dialog,\n      .aegis-sheet:not(.aegis-sheet-docked)\n    )",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "border",
+      "value": "1px solid CanvasText",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n    :is(\n      .aegis-popover,\n      .aegis-menu-content,\n      .aegis-context-content,\n      .aegis-select-content,\n      .aegis-multi-popover,\n      .aegis-tooltip,\n      .aegis-notification[data-variant='floating'],\n      .aegis-modal.aegis-modal,\n      .command-dialog,\n      .aegis-sheet:not(.aegis-sheet-docked)\n    )",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "color-mix(in srgb, var(--color-text-primary) 4%, var(--color-bg-canvas))",
+      "tokens": [
+        "--color-bg-canvas",
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#202124, #f2f3f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#626670, #a6aab3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#eceef1, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-fg) 8%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-border",
+      "value": "color-mix(\n    in srgb,\n    var(--color-function-fg) 24%,\n    var(--color-bg-surface)\n  )",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "var(--color-success-bg)",
+      "tokens": [
+        "--color-success-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-warning-bg)",
+      "tokens": [
+        "--color-warning-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(115deg, var(--color-ai-pink-fg), var(--color-ai-blue-fg))",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--surface-radius",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .surface,\n    .floating,\n    .aegis-card,\n    .aegis-chart-container,\n    .aegis-chart-tooltip,\n    .aegis-ai-card,\n    .aegis-ai-highlight,\n    .aegis-wizard-panel,\n    .aegis-wizard-progress,\n    .aegis-filter-panel,\n    .aegis-tree,\n    .aegis-accordion-contained,\n    .aegis-json-viewer,\n    .aegis-yaml-presenter,\n    .aegis-diff-view,\n    .aegis-modal,\n    .aegis-sheet,\n    .aegis-bottom-sheet,\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .command-dialog,\n    .aegis-tooltip,\n    .aegis-tooltip-rich,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.aegis-wizard-step-content, .aegis-modal-body, .aegis-sheet-body)\n  > .stack",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--layout-card-padding)",
+      "tokens": [
+        "--layout-card-padding"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".muted",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "flex-direction",
+      "value": "column",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "flex-wrap",
+      "value": "wrap",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/layout-theme.css",
+      "selector": ":where(\n    .surface,\n    .aegis-card,\n    .aegis-chart-container,\n    .aegis-ai-card,\n    .aegis-ai-highlight,\n    .aegis-wizard-panel,\n    .aegis-wizard-progress,\n    .aegis-modal\n  )\n  :is(\n    .surface,\n    .aegis-card,\n    .aegis-chart-container,\n    .aegis-ai-card,\n    .aegis-ai-highlight,\n    .aegis-wizard-panel,\n    .aegis-wizard-progress,\n    .aegis-data-grid\n  )",
+      "conditions": [],
+      "property": "--surface-corner-radius",
+      "value": "var(--surface-radius-nested)",
+      "tokens": [
+        "--surface-radius-nested"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#171717, #f2f2f2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#6b6b6b, #a3a3a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#dedede, #252525)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "light-dark(#9f1fba, #e99df7)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "var(--gradient-ai-border)",
+      "tokens": [
+        "--gradient-ai-border"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--surface-radius",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--minimal-status-new-fg)",
+      "tokens": [
+        "--minimal-status-new-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--minimal-status-progress-fg)",
+      "tokens": [
+        "--minimal-status-progress-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "var(--minimal-status-resolved-fg)",
+      "tokens": [
+        "--minimal-status-resolved-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--minimal-status-new-soft)",
+      "tokens": [
+        "--minimal-status-new-soft"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-1",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-2",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-3",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-4",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--surface-radius",
+      "value": "10px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--z-toast",
+      "value": "90",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#f1f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#edf0f5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#171a20",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#5b6271",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "#e6e8ee",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#3250cc",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-border",
+      "value": "color-mix(\n    in srgb,\n    var(--color-function-bg) 28%,\n    var(--color-border-subtle)\n  )",
+      "tokens": [
+        "--color-border-subtle",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "#9f1fba",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#be2730",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "#267334",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "#8c6100",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#1c1e24",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#22242b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#262933",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#f2f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#a7acb9",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "rgba(255, 255, 255, 0.06)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#a6b7ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-border",
+      "value": "color-mix(\n    in srgb,\n    var(--color-function-bg) 28%,\n    var(--color-border-subtle)\n  )",
+      "tokens": [
+        "--color-border-subtle",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "#e99df7",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#ff9599",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "#92dc9c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "#ffd16b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "light-dark(#fafafa, #262626)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "light-dark(#eef1fc, #222940)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#161616, #e8ecf0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#686868, #92a4b3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#e5e5e5, #404040)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-border",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-warning-bg)",
+      "tokens": [
+        "--color-warning-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "var(--color-success-bg)",
+      "tokens": [
+        "--color-success-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(var(--color-ai-fg), var(--color-ai-fg))",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--surface-radius",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-success-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".muted",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".row",
+      "conditions": [],
+      "property": "flex-wrap",
+      "value": "wrap",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "flex-direction",
+      "value": "column",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".stack",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    }
+  ],
+  "variants": [
+    {
+      "name": "variant",
+      "values": [
+        "inline",
+        "floating"
+      ],
+      "default": "inline"
+    },
+    {
+      "name": "intent",
+      "values": [
+        "info",
+        "success",
+        "warning",
+        "destroy",
+        "ai",
+        "loading"
+      ],
+      "default": "info"
+    }
+  ],
+  "cssClasses": [
+    "aegis-banner",
+    "aegis-banner-action",
+    "aegis-banner-content",
+    "aegis-notification",
+    "aegis-notification-action",
+    "aegis-notification-actions",
+    "aegis-notification-content",
+    "aegis-notification-description",
+    "aegis-notification-dismiss",
+    "aegis-notification-icon",
+    "aegis-notification-spinning",
+    "aegis-notification-title",
+    "aegis-toast",
+    "aegis-toast-action",
+    "aegis-toast-body",
+    "loading",
+    "muted",
+    "row",
+    "stack"
+  ],
+  "relatedComponents": [
+    "@/components/icon"
+  ],
+  "accessibility": {
+    "roles": [
+      "status"
+    ],
+    "ariaAttributes": [
+      "aria-describedby",
+      "aria-hidden",
+      "aria-label",
+      "aria-labelledby",
+      "aria-live"
+    ],
+    "nativeElements": [
+      "button",
+      "div",
+      "p",
+      "span"
+    ],
+    "keyboardKeys": [],
+    "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "clsx",
+      "react",
+      "tailwind-merge"
+    ]
+  }
+}

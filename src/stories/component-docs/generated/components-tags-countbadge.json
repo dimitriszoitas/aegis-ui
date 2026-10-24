@@ -1,0 +1,1866 @@
+{
+  "id": "components-tags-countbadge",
+  "name": "CountBadge",
+  "title": "Components/Tags/CountBadge",
+  "category": "Components/Tags",
+  "description": "Show a bounded count beside a tab, queue, or navigation item.",
+  "purpose": "Show a bounded count beside a tab, queue, or navigation item.",
+  "usage": "Use label to explain the count to assistive technology. Values above max display as an overflow count.",
+  "anatomy": [
+    "Numeric value",
+    "Optional overflow suffix",
+    "Accessible count description"
+  ],
+  "sourceFiles": [
+    "src/components/count-badge/count-badge.css",
+    "src/components/count-badge/count-badge.stories.tsx",
+    "src/components/count-badge/count-badge.tsx",
+    "src/components/tag/tag.css",
+    "src/package/styles.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "CountBadge"
+  ],
+  "imports": [
+    {
+      "name": "CountBadge",
+      "path": "@dimitriszoitas/aegis-ui/count-badge"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-tags-countbadge--matrix",
+      "name": "Matrix",
+      "exportName": "Matrix",
+      "sourceFile": "src/components/count-badge/count-badge.stories.tsx"
+    },
+    {
+      "id": "components-tags-countbadge--inverted",
+      "name": "Inverted",
+      "exportName": "Inverted",
+      "sourceFile": "src/components/count-badge/count-badge.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "CountBadge",
+      "name": "count",
+      "type": "number",
+      "required": true,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "CountBadge",
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "CountBadge",
+      "name": "max",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "99",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "CountBadge",
+      "name": "variant",
+      "type": "\"default\" | \"inverted\" | undefined",
+      "required": false,
+      "defaultValue": "\"default\"",
+      "description": "",
+      "inherited": false
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/count-badge/count-badge.css",
+      "selector": ".count-badge[data-variant='inverted']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/count-badge/count-badge.css",
+      "selector": ".count-badge[data-variant='inverted']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-bg-surface-raised)",
+      "tokens": [
+        "--color-bg-surface-raised"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "--tag-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "gap",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid\n    color-mix(in srgb, var(--tag-fg) var(--badge-border-strength), var(--color-bg-surface))",
+      "tokens": [
+        "--badge-border-strength",
+        "--color-bg-surface",
+        "--tag-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--chip-radius)",
+      "tokens": [
+        "--chip-radius"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-size='sm']",
+      "conditions": [],
+      "property": "height",
+      "value": "20px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-size='sm']",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 7px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-size='sm']",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": "button.tag:hover:not(:disabled)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--tag-fg)",
+      "tokens": [
+        "--tag-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": "button.tag:hover:not(:disabled)",
+      "conditions": [],
+      "property": "text-decoration",
+      "value": "underline",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": "button.tag:hover:not(:disabled)",
+      "conditions": [],
+      "property": "text-underline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-selected='true']",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--tag-fg)",
+      "tokens": [
+        "--tag-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-selected='true']",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "600",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-intent='default'][data-selected='true']",
+      "conditions": [],
+      "property": "--tag-fg",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-dot",
+      "conditions": [],
+      "property": "width",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-dot",
+      "conditions": [],
+      "property": "height",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-dot",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "50%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-dot",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--tag-fg)",
+      "tokens": [
+        "--tag-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-dot",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-count",
+      "conditions": [],
+      "property": "border-inline-start",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-count",
+      "conditions": [],
+      "property": "padding-inline-start",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-count",
+      "conditions": [],
+      "property": "font-variant-numeric",
+      "value": "tabular-nums",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "color",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "display",
+      "value": "grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "place-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-xs)",
+      "tokens": [
+        "--control-radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "width",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove",
+      "conditions": [],
+      "property": "height",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove:hover",
+      "conditions": [],
+      "property": "outline",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag-remove:hover",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "gap",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--chip-radius)",
+      "tokens": [
+        "--chip-radius"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "padding",
+      "value": "3px 8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--severity-border)",
+      "tokens": [
+        "--severity-border"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "width",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "height",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-block",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-full)",
+      "tokens": [
+        "--radius-full"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "background",
+      "value": "currentColor",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot,\n.status-dot",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge[data-compact='true']",
+      "conditions": [],
+      "property": "padding",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge:not([data-compact='true'])",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge:not([data-compact='true'])",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge:not([data-compact='true'])",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-badge:not([data-compact='true'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.2",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".severity-dot",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--severity-fg)",
+      "tokens": [
+        "--severity-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "gap",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "background",
+      "value": "color-mix(in srgb, var(--status-fg) 8%, transparent)",
+      "tokens": [
+        "--status-fg"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-full)",
+      "tokens": [
+        "--radius-full"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".status-badge",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-variant='status'][data-size='sm']",
+      "conditions": [],
+      "property": "height",
+      "value": "20px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-variant='status'][data-size='sm']",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 7px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".tag[data-variant='status'][data-size='sm']",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "min-width",
+      "value": "20px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "height",
+      "value": "20px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--chip-radius)",
+      "tokens": [
+        "--chip-radius"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "600",
+      "tokens": []
+    },
+    {
+      "file": "src/components/tag/tag.css",
+      "selector": ".count-badge",
+      "conditions": [],
+      "property": "font-variant-numeric",
+      "value": "tabular-nums",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171718)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#202124, #f2f3f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#626670, #a6aab3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#e3e5e9, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--badge-border-strength",
+      "value": "45%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "999px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--chip-radius",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "width",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "height",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "margin",
+      "value": "-1px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "clip",
+      "value": "rect(0, 0, 0, 0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #1b1b1b)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#171717, #f2f2f2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#6b6b6b, #a3a3a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#cdcdcd, #2d2d2d)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--chip-radius",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--badge-border-strength",
+      "value": "70%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--minimal-status-new-fg)",
+      "tokens": [
+        "--minimal-status-new-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--badge-border-strength",
+      "value": "40%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--chip-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#edf0f5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#171a20",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#5b6271",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "#d6dae3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#3250cc",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--badge-border-strength",
+      "value": "48%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#17181d",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#1c1e24",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#262933",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#f2f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#a7acb9",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "rgba(255, 255, 255, 0.1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#a6b7ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "light-dark(#eef1fc, #222940)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#161616, #e8ecf0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#686868, #92a4b3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--badge-border-strength",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--chip-radius",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "width",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "height",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "margin",
+      "value": "-1px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "clip",
+      "value": "rect(0, 0, 0, 0)",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ".sr-only",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    }
+  ],
+  "variants": [
+    {
+      "name": "variant",
+      "values": [
+        "default",
+        "inverted"
+      ],
+      "default": "default"
+    }
+  ],
+  "cssClasses": [
+    "count-badge",
+    "sr-only"
+  ],
+  "relatedComponents": [
+    "@/components/tag"
+  ],
+  "accessibility": {
+    "roles": [],
+    "ariaAttributes": [
+      "aria-hidden"
+    ],
+    "nativeElements": [
+      "span"
+    ],
+    "keyboardKeys": [],
+    "dependencies": []
+  }
+}

@@ -1,0 +1,60 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { ColorSwatches, IntentExamples, SeverityExamples } from './foundation-examples';
+
+<Meta title="Foundations/Colors" />
+
+# Color and intent
+
+Components consume semantic CSS variables. Fundamental and Fundamental Floating share one palette, with independent light and dark values. The paired swatches read those canonical declarations directly from the token source.
+
+## Backgrounds
+
+Canvas establishes the workspace, and surface holds content. Raised surface roles share the card fill. Hover and selected describe interaction states rather than extra elevation levels. Borderless cards, subtle table dividers, and text hierarchy keep data-rich layouts readable. Navigation and transient overlays have their own surface roles; contained floating panels retain the same palette.
+
+<ColorSwatches prefix="--color-bg-" />
+
+## Text
+
+Primary text carries decisions and data. Secondary text carries descriptions and supporting context. Tertiary text is reserved for nonessential detail; verify contrast at the actual text size and surface. Dense tables can keep the first data column primary and use a quieter supporting text treatment for the remaining columns while preserving link and action intent.
+
+<ColorSwatches prefix="--color-text-" />
+
+## Borders
+
+Subtle borders separate content without visual noise. Default borders clarify table dividers. Controls use dedicated boundaries where needed, including a stronger resting checkbox border in light mode. Structural containers remain borderless; feedback and semantic indicators retain the outlines that communicate their roles.
+
+<ColorSwatches prefix="--color-border-" />
+
+## Action intents
+
+Each intent provides a fill, foreground, and soft surface. Function blue identifies ordinary actions, AI identifies generated assistance, destroy marks consequential removal, success confirms completion, and warning calls for attention. Neutral remains available for quieter controls.
+
+AI uses a muted teal-to-blue palette in both themes. Primary buttons use `--gradient-ai`; secondary buttons use `--gradient-ai-soft`; tertiary buttons use `--gradient-ai-border`; text and icons use `--gradient-ai-text`. Generated-content surfaces remain quiet through `--gradient-ai-surface`. Dedicated AI roles keep this treatment independent from function blue. A visible label and recognizable marker identify AI beyond color.
+
+<IntentExamples />
+
+Generic tags and severity badges use transparent backgrounds and primary theme text. Tags can carry semantic color in outlines and dots. Labeled severity badges use an outline without a dot; the explicit compact variant retains its dot. Workflow status, severity, and quantity remain distinct component roles. Destructive, success, warning, syntax, and added or removed code retain their meaning across both color modes.
+
+## Severity
+
+Severity communicates ordered urgency: critical, high, medium, low, and informational. Use this scale for issues or records where ordered urgency is meaningful. Do not substitute severity for workflow status or confidence.
+
+<SeverityExamples />
+
+## Data visualization
+
+Charts consume dedicated plot roles rather than relying on text colors as a universal palette. Match chart segments and legend markers, keep labels readable, and use semantic color only where it carries meaning. A neutral activity series and a severity distribution serve different purposes.
+
+<ColorSwatches prefix="--color-chart-" />
+
+## Shared palette, different containment
+
+Both themes use `--color-bg-canvas` for the workspace and `--color-bg-surface` for borderless cards. Fundamental navigation uses `--fundamental-nav-surface`; Fundamental Floating contains it on the shared card surface. Inputs use their control fill and border roles. Transient overlays use `--fundamental-overlay-surface` with a soft shadow, and modal tasks add a backdrop. Fundamental Floating changes navigation and assistant containment, not color semantics.
+
+## Three token tiers
+
+1. Primitives define reusable ramps and scales for color, spacing, type, radii, and motion.
+2. Semantic tokens express purpose, such as `--color-bg-surface` and `--color-function-fg`, and adapt to light and dark. Some use explicit theme values and others alias shared roles.
+3. Component tokens cover needs such as control corners, grid row heights, panel padding, and navigation dimensions.
+
+Use mapped utilities or semantic variables in components and stories. Raw colors belong in token sources. The `.dark` class on the document root selects dark semantics, and `data-theme` mirrors the active color mode. `data-layout-theme` selects `fundamental` or `fundamental-floating`; Fundamental is the default. Apply these at the document root so portaled overlays remain consistent.

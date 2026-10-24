@@ -1,0 +1,115 @@
+/* Floating panels use the overlay surface and a soft shadow. These narrowly
+   scoped exceptions leave ordinary containers and inline notices shadow-free. */
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  :is(
+    .aegis-popover,
+    .aegis-menu-content,
+    .aegis-context-content,
+    .aegis-select-content,
+    .aegis-multi-popover,
+    .aegis-tooltip,
+    .aegis-notification[data-variant='floating']
+  ) {
+  --fundamental-grid-surface: var(--fundamental-overlay-surface);
+  background: var(--fundamental-overlay-surface);
+  border-width: 0;
+  box-shadow:
+    0 3px 8px color-mix(in srgb, var(--color-scrim) 40%, transparent),
+    0 12px 36px color-mix(in srgb, var(--color-scrim) 55%, transparent) !important;
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  :is(.aegis-modal.aegis-modal, .command-dialog, .aegis-sheet:not(.aegis-sheet-docked)) {
+  --fundamental-grid-surface: var(--fundamental-overlay-surface);
+  background: var(--fundamental-overlay-surface);
+  border-width: 0;
+  box-shadow:
+    0 3px 12px color-mix(in srgb, var(--color-scrim) 40%, transparent),
+    0 20px 64px color-mix(in srgb, var(--color-scrim) 55%, transparent) !important;
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  :is(.aegis-modal-footer, .aegis-sheet:not(.aegis-sheet-docked) .aegis-sheet-footer) {
+  background: var(--fundamental-overlay-surface);
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-tooltip[data-variant='default'] {
+  --tooltip-bg: var(--fundamental-overlay-surface);
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-tooltip[data-variant='inverted'] {
+  background: var(--tooltip-bg);
+}
+/* Toasts keep a quiet edge and a text action below the message. */
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-notification[data-variant='floating'] {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--space-3);
+  column-gap: var(--space-3);
+  row-gap: var(--space-2);
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-notification[data-variant='floating']
+  .aegis-notification-icon
+  > svg {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-notification[data-variant='floating']
+  .aegis-notification-title {
+  overflow-wrap: anywhere;
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-notification[data-variant='floating']
+  .aegis-notification-action {
+  min-height: var(--space-6);
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-notification[data-variant='floating']
+  .aegis-notification-action:hover {
+  color: var(--color-function-fg);
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  :is(.aegis-modal-overlay, .command-scrim, .aegis-sheet-overlay) {
+  background: color-mix(in srgb, var(--color-scrim) 70%, transparent);
+  backdrop-filter: blur(2px);
+}
+/* Sheet is the contained/resizable component, distinct from portaled SideSheet. */
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-contained-sheet
+  .aegis-contained-sheet-panel.aegis-contained-sheet-panel {
+  border-width: 0;
+}
+:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+  .aegis-tooltip-arrow-outline {
+  stroke: none;
+}
+@media (forced-colors: active) {
+  :is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])
+    :is(
+      .aegis-popover,
+      .aegis-menu-content,
+      .aegis-context-content,
+      .aegis-select-content,
+      .aegis-multi-popover,
+      .aegis-tooltip,
+      .aegis-notification[data-variant='floating'],
+      .aegis-modal.aegis-modal,
+      .command-dialog,
+      .aegis-sheet:not(.aegis-sheet-docked)
+    ) {
+    border: 1px solid CanvasText;
+    box-shadow: none !important;
+  }
+}

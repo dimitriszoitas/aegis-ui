@@ -1,0 +1,5401 @@
+{
+  "id": "components-data-jsonviewer",
+  "name": "JsonViewer",
+  "title": "Components/Data/JsonViewer",
+  "category": "Components/Data",
+  "description": "Inspect structured event data without flattening its hierarchy.",
+  "purpose": "Inspect structured event data without flattening its hierarchy.",
+  "usage": "Accepts any JSON-like value. Expand nested paths, search content, and copy values or paths without editing the source.",
+  "anatomy": [
+    "Search toolbar",
+    "Tree disclosure",
+    "Key",
+    "Typed value",
+    "Copy actions"
+  ],
+  "sourceFiles": [
+    "src/components/button/button.css",
+    "src/components/button/button.tsx",
+    "src/components/button/index.ts",
+    "src/components/icon/index.tsx",
+    "src/components/json-viewer/json-viewer.css",
+    "src/components/json-viewer/json-viewer.stories.tsx",
+    "src/components/json-viewer/json-viewer.tsx",
+    "src/lib/use-input-focus.ts",
+    "src/lib/utils.ts",
+    "src/package/styles.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/input-focus.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/theme.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "JsonViewer"
+  ],
+  "imports": [
+    {
+      "name": "JsonViewer",
+      "path": "@dimitriszoitas/aegis-ui/json-viewer"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-data-jsonviewer--nested-event",
+      "name": "Nested Event",
+      "exportName": "NestedEvent",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    },
+    {
+      "id": "components-data-jsonviewer--arrays-and-nulls",
+      "name": "Arrays And Nulls",
+      "exportName": "ArraysAndNulls",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    },
+    {
+      "id": "components-data-jsonviewer--primitive-values",
+      "name": "Primitive Values",
+      "exportName": "PrimitiveValues",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    },
+    {
+      "id": "components-data-jsonviewer--large-payload",
+      "name": "Large Payload",
+      "exportName": "LargePayload",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    },
+    {
+      "id": "components-data-jsonviewer--complex-paths",
+      "name": "Complex Paths",
+      "exportName": "ComplexPaths",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    },
+    {
+      "id": "components-data-jsonviewer--collapsed",
+      "name": "Collapsed",
+      "exportName": "Collapsed",
+      "sourceFile": "src/components/json-viewer/json-viewer.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "JsonViewer",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "defaultExpandedDepth",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "1",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"Event payload\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "maxHeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "defaultValue": "480",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "maxVisibleItems",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "100",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "onCopy",
+      "type": "((kind: JsonCopyKind, path: string) => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "rootName",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"event\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "JsonViewer",
+      "name": "value",
+      "type": "unknown",
+      "required": true,
+      "description": "A JSON-compatible payload. Unsupported values are identified in the tree.",
+      "inherited": false
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--intent-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--button-radius",
+      "value": "var(--button-radius-md, 5px)",
+      "tokens": [
+        "--button-radius-md"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--button-text-padding",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "--button-icon-padding",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "position",
+      "value": "relative",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "height",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "padding",
+      "value": "0 var(--button-text-padding)",
+      "tokens": [
+        "--button-text-padding"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--button-radius)",
+      "tokens": [
+        "--button-radius"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "transition",
+      "value": "background var(--motion-fast),\n    box-shadow var(--motion-fast),\n    transform var(--motion-fast)",
+      "tokens": [
+        "--motion-fast"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--intent-bg)",
+      "tokens": [
+        "--intent-bg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--intent-on)",
+      "tokens": [
+        "--intent-on"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='function']",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='function']",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='function']",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='function']",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-on-intent)",
+      "tokens": [
+        "--color-on-intent"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='function']",
+      "conditions": [],
+      "property": "--intent-border",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='destroy']",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='destroy']",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='destroy']",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-destroy-soft)",
+      "tokens": [
+        "--color-destroy-soft"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='destroy']",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-on-intent)",
+      "tokens": [
+        "--color-on-intent"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='destroy']",
+      "conditions": [],
+      "property": "--intent-border",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-ai-soft)",
+      "tokens": [
+        "--color-ai-soft"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-on-intent)",
+      "tokens": [
+        "--color-on-intent"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='primary']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--gradient-ai)",
+      "tokens": [
+        "--gradient-ai"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='sm']",
+      "conditions": [],
+      "property": "height",
+      "value": "28px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='sm']",
+      "conditions": [],
+      "property": "--button-radius",
+      "value": "var(--button-radius-sm, 4px)",
+      "tokens": [
+        "--button-radius-sm"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='sm']",
+      "conditions": [],
+      "property": "--button-text-padding",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='sm']",
+      "conditions": [],
+      "property": "--button-icon-padding",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='sm']",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='lg']",
+      "conditions": [],
+      "property": "height",
+      "value": "40px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='lg']",
+      "conditions": [],
+      "property": "--button-radius",
+      "value": "var(--button-radius-lg, 6px)",
+      "tokens": [
+        "--button-radius-lg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='lg']",
+      "conditions": [],
+      "property": "--button-text-padding",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='lg']",
+      "conditions": [],
+      "property": "--button-icon-padding",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-size='lg']",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-leading-icon]",
+      "conditions": [],
+      "property": "padding-inline-start",
+      "value": "var(--button-icon-padding)",
+      "tokens": [
+        "--button-icon-padding"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-trailing-icon]",
+      "conditions": [],
+      "property": "padding-inline-end",
+      "value": "var(--button-icon-padding)",
+      "tokens": [
+        "--button-icon-padding"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-emphasis='secondary']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--intent-soft)",
+      "tokens": [
+        "--intent-soft"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-emphasis='secondary']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--intent-fg)",
+      "tokens": [
+        "--intent-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-emphasis='tertiary'],\n.aegis-button[data-emphasis='ghost']",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-emphasis='tertiary'],\n.aegis-button[data-emphasis='ghost']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--intent-fg)",
+      "tokens": [
+        "--intent-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-emphasis='tertiary']",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--intent-border)",
+      "tokens": [
+        "--intent-border"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']",
+      "conditions": [],
+      "property": "border-color",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "content",
+      "value": "''",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "inset",
+      "value": "-1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "padding",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "pointer-events",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--gradient-ai-border, var(--gradient-ai-text))",
+      "tokens": [
+        "--gradient-ai-border",
+        "--gradient-ai-text"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "mask",
+      "value": "linear-gradient(var(--color-text-primary) 0 0) content-box,\n    linear-gradient(var(--color-text-primary) 0 0)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [],
+      "property": "mask-composite",
+      "value": "exclude",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button:hover:not(:disabled)",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 8%, transparent)",
+      "tokens": [
+        "--intent-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button:active:not(:disabled)",
+      "conditions": [],
+      "property": "transform",
+      "value": "translateY(1px)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button:active:not(:disabled)",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 13%, transparent)",
+      "tokens": [
+        "--intent-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button:disabled",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0.45",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-icon",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-icon",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-icon",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-icon svg",
+      "conditions": [],
+      "property": "width",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-icon svg",
+      "conditions": [],
+      "property": "height",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-spinner",
+      "conditions": [],
+      "property": "animation",
+      "value": "button-spin 900ms linear infinite",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-loading",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-loading",
+      "conditions": [],
+      "property": "inset",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-loading",
+      "conditions": [],
+      "property": "display",
+      "value": "grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-loading",
+      "conditions": [],
+      "property": "place-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-label-loading",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button",
+      "conditions": [],
+      "property": "width",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button[data-size='sm']",
+      "conditions": [],
+      "property": "width",
+      "value": "28px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button[data-size='sm']",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button[data-size='lg']",
+      "conditions": [],
+      "property": "width",
+      "value": "40px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button[data-size='lg']",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-icon-button .button-label",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group",
+      "conditions": [],
+      "property": "isolation",
+      "value": "isolate",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:not(:last-child)",
+      "conditions": [],
+      "property": "border-inline-end",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:first-child",
+      "conditions": [],
+      "property": "border-start-start-radius",
+      "value": "var(--button-radius)",
+      "tokens": [
+        "--button-radius"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:first-child",
+      "conditions": [],
+      "property": "border-end-start-radius",
+      "value": "var(--button-radius)",
+      "tokens": [
+        "--button-radius"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:last-child",
+      "conditions": [],
+      "property": "border-start-end-radius",
+      "value": "var(--button-radius)",
+      "tokens": [
+        "--button-radius"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:last-child",
+      "conditions": [],
+      "property": "border-end-end-radius",
+      "value": "var(--button-radius)",
+      "tokens": [
+        "--button-radius"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-group > .aegis-button:focus-visible",
+      "conditions": [],
+      "property": "z-index",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": "to",
+      "conditions": [
+        "@keyframes button-spin"
+      ],
+      "property": "transform",
+      "value": "rotate(360deg)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-gradient-defs",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-gradient-defs",
+      "conditions": [],
+      "property": "width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-gradient-defs",
+      "conditions": [],
+      "property": "height",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".button-gradient-defs",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='secondary']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--gradient-ai-soft)",
+      "tokens": [
+        "--gradient-ai-soft"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='secondary']:hover:not(:disabled)",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 8%, transparent)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='secondary']:active:not(:disabled)",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 13%, transparent)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [],
+      "property": "background-image",
+      "value": "var(--gradient-ai-text)",
+      "tokens": [
+        "--gradient-ai-text"
+      ]
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [],
+      "property": "background-clip",
+      "value": "text",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [],
+      "property": "-webkit-background-clip",
+      "value": "text",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [],
+      "property": "color",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "border-color",
+      "value": "ButtonText",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai'][data-emphasis='tertiary']::before",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "display",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "background",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.css",
+      "selector": ".aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "color",
+      "value": "ButtonText",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "min-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-viewer",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "space-between",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "flex-wrap",
+      "value": "wrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2) var(--space-3)",
+      "tokens": [
+        "--space-2",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "border-bottom",
+      "value": "1px solid var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface-raised)",
+      "tokens": [
+        "--color-bg-surface-raised"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header > span,\n.aegis-json-header > div",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header > span,\n.aegis-json-header > div",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header > span,\n.aegis-json-header > div",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header strong",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header strong",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "500",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-header > span > svg",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-format",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-mono)",
+      "tokens": [
+        "--font-mono"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-format",
+      "conditions": [],
+      "property": "font-size",
+      "value": "10px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-format",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-scroll",
+      "conditions": [],
+      "property": "overflow",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-scroll",
+      "conditions": [],
+      "property": "padding-block",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-tree,\n.aegis-json-group",
+      "conditions": [],
+      "property": "list-style",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-tree,\n.aegis-json-group",
+      "conditions": [],
+      "property": "margin",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-tree,\n.aegis-json-group",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-tree,\n.aegis-json-group",
+      "conditions": [],
+      "property": "min-width",
+      "value": "max-content",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-node",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "min-height",
+      "value": "30px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "padding",
+      "value": "2px var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "padding-left",
+      "value": "calc(var(--space-3) + var(--json-depth) * var(--nested-inset))",
+      "tokens": [
+        "--json-depth",
+        "--nested-inset",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-mono)",
+      "tokens": [
+        "--font-mono"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row",
+      "conditions": [],
+      "property": "cursor",
+      "value": "default",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-node:focus-visible > .aegis-json-row",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-node:focus-visible > .aegis-json-row",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "-2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-node:focus-visible > .aegis-json-row",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand,\n.aegis-json-expand-spacer",
+      "conditions": [],
+      "property": "width",
+      "value": "20px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand,\n.aegis-json-expand-spacer",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand,\n.aegis-json-expand-spacer",
+      "conditions": [],
+      "property": "flex",
+      "value": "0 0 auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "place-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-sm, var(--radius-xs))",
+      "tokens": [
+        "--control-radius-sm",
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand:hover",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand svg",
+      "conditions": [],
+      "property": "transition",
+      "value": "transform var(--motion-fast) var(--ease-out)",
+      "tokens": [
+        "--ease-out",
+        "--motion-fast"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand svg[data-expanded='true']",
+      "conditions": [],
+      "property": "transform",
+      "value": "rotate(90deg)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-key",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-syntax-key)",
+      "tokens": [
+        "--color-syntax-key"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-key",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-colon",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value",
+      "conditions": [],
+      "property": "max-width",
+      "value": "64ch",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value",
+      "conditions": [],
+      "property": "text-overflow",
+      "value": "ellipsis",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value[data-kind='string']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-syntax-string)",
+      "tokens": [
+        "--color-syntax-string"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value[data-kind='number']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-syntax-number)",
+      "tokens": [
+        "--color-syntax-number"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value[data-kind='boolean'],\n.aegis-json-value[data-kind='null']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-syntax-keyword)",
+      "tokens": [
+        "--color-syntax-keyword"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value[data-kind='object'],\n.aegis-json-value[data-kind='array']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-value[data-kind='unsupported'],\n.aegis-json-value[data-kind='circular']",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [],
+      "property": "margin-left",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [],
+      "property": "padding-left",
+      "value": "var(--space-4)",
+      "tokens": [
+        "--space-4"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [],
+      "property": "gap",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-row:hover > .aegis-json-actions,\n.aegis-json-node:focus-within > .aegis-json-row > .aegis-json-actions",
+      "conditions": [],
+      "property": "opacity",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-grid",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "place-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "width",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "height",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--control-radius-sm, var(--radius-xs))",
+      "tokens": [
+        "--control-radius-sm",
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "background",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:hover",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:hover",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:disabled",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0.45",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:focus-visible,\n.aegis-json-expand:focus-visible,\n.aegis-json-more button:focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-copy:focus-visible,\n.aegis-json-expand:focus-visible,\n.aegis-json-more button:focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more",
+      "conditions": [],
+      "property": "padding-block",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-1) var(--space-2)",
+      "tokens": [
+        "--space-1",
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-more button",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "space-between",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "flex-wrap",
+      "value": "wrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2) var(--space-3)",
+      "tokens": [
+        "--space-2",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "border-top",
+      "value": "1px solid var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer code",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-mono)",
+      "tokens": [
+        "--font-mono"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer code",
+      "conditions": [],
+      "property": "max-width",
+      "value": "60%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer code",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer code",
+      "conditions": [],
+      "property": "text-overflow",
+      "value": "ellipsis",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-footer code",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-status",
+      "conditions": [],
+      "property": "margin-left",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback",
+      "conditions": [],
+      "property": "flex-direction",
+      "value": "column",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "min-height",
+      "value": "100px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-sm)",
+      "tokens": [
+        "--radius-sm"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-mono)",
+      "tokens": [
+        "--font-mono"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-xs)",
+      "tokens": [
+        "--text-xs"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea:focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-fallback textarea:focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "width",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "height",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "padding",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "margin",
+      "value": "-1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "clip",
+      "value": "rect(0, 0, 0, 0)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "white-space",
+      "value": "nowrap",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-sr-only",
+      "conditions": [],
+      "property": "border",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-actions",
+      "conditions": [
+        "@media (hover: none)"
+      ],
+      "property": "opacity",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.css",
+      "selector": ".aegis-json-expand svg",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-diff-host .cm-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt\n  ):focus-within,\n:root\n  :is(\n    .aegis-input-native,\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-multi-search input,\n    .aegis-prompt-menu [cmdk-input],\n    .aegis-pagination-size select,\n    .aegis-json-fallback textarea,\n    .time-range-clock input,\n    .aegis-code-editor .cm-panels input,\n    .cm-editor .cm-content\n  ):focus",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-diff-host .cm-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt\n  ):focus-within,\n:root\n  :is(\n    .aegis-input-native,\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-multi-search input,\n    .aegis-prompt-menu [cmdk-input],\n    .aegis-pagination-size select,\n    .aegis-json-fallback textarea,\n    .time-range-clock input,\n    .aegis-code-editor .cm-panels input,\n    .cm-editor .cm-content\n  ):focus",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-input-shell,\n.aegis-textarea-native",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-input-shell,\n.aegis-textarea-native",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-multi-shell",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-multi-shell",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-select-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-select-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-code-editor,\n.aegis-yaml-presenter,\n.aegis-prompt,\n.aegis-pagination-size select,\n.time-range-clock input",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-code-editor,\n.aegis-yaml-presenter,\n.aegis-prompt,\n.aegis-pagination-size select,\n.time-range-clock input",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-date-picker-trigger,\n.aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "transparent",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ".aegis-date-picker-trigger,\n.aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(.aegis-input-shell, .aegis-multi-shell, .aegis-select-trigger, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(.aegis-input-shell, .aegis-multi-shell, .aegis-select-trigger, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--minimal-interaction-border)",
+      "tokens": [
+        "--minimal-interaction-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-time-range-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--minimal-interaction-border)",
+      "tokens": [
+        "--minimal-interaction-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] .aegis-date-picker-trigger",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--v0-field-border)",
+      "tokens": [
+        "--v0-field-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.aegis-input-shell, .aegis-textarea-native)",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--color-border-strong)",
+      "tokens": [
+        "--color-border-strong"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-input-shell[data-readonly], .aegis-textarea-native[readonly])",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--v0-field-readonly-border)",
+      "tokens": [
+        "--v0-field-readonly-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='fundamental']\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-select-trigger,\n    .aegis-textarea-native,\n    .aegis-date-picker-trigger,\n    .aegis-code-editor,\n    .aegis-prompt,\n    .aegis-pagination-size select,\n    .time-range-clock input\n  )",
+      "conditions": [],
+      "property": "--aegis-field-rest-border",
+      "value": "var(--fundamental-control-border)",
+      "tokens": [
+        "--fundamental-control-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": "[data-layout-theme='fundamental']\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-select-trigger,\n    .aegis-textarea-native,\n    .aegis-date-picker-trigger\n  )",
+      "conditions": [],
+      "property": "--aegis-field-hover-border",
+      "value": "var(--fundamental-control-border-hover)",
+      "tokens": [
+        "--fundamental-control-border-hover"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-code-editor,\n    .aegis-yaml-presenter,\n    .aegis-prompt,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger,\n    .aegis-pagination-size select,\n    .time-range-clock input\n  ):is(:focus-within, [data-state='open']):not([data-invalid], [aria-invalid='true'])",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--aegis-field-rest-border)",
+      "tokens": [
+        "--aegis-field-rest-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root\n  :is(\n    .aegis-input-shell,\n    .aegis-multi-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native),\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger,\n    .aegis-time-range-trigger\n  ):is(:focus-within, [data-state='open']):hover:not(\n    [data-invalid],\n    [aria-invalid='true'],\n    [data-disabled],\n    :disabled,\n    [data-readonly],\n    [readonly]\n  )",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--aegis-field-hover-border)",
+      "tokens": [
+        "--aegis-field-hover-border"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within,\n:root\n  [data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within",
+      "conditions": [],
+      "property": "--v0-text-field-border-extra",
+      "value": "0px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within,\n:root\n  [data-layout-theme='v0-simple']\n  :is(\n    .aegis-input-shell,\n    .aegis-textarea-native:not(.aegis-prompt .aegis-textarea-native)\n  ):focus-within",
+      "conditions": [],
+      "property": "border-width",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root :is(.aegis-input-shell, .aegis-multi-shell)[data-invalid]:is(:hover, :focus-within),\n:root\n  :is(\n    .aegis-textarea-native,\n    .aegis-select-trigger,\n    .aegis-date-picker-trigger\n  )[aria-invalid='true']:is(:hover, :focus)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root .aegis-time-range-trigger[aria-invalid='true']:focus",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 1px var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-aegis-input-focus='pointer']\n  :is(.rdp-day_button, .rdp-button_previous, .rdp-button_next):focus,\n:root[data-aegis-input-focus='pointer']\n  :is(.aegis-select-option[data-highlighted], .aegis-multi-option[data-active])",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/input-focus.css",
+      "selector": ":root[data-aegis-input-focus='pointer']\n  :is(.rdp-day_button, .rdp-button_previous, .rdp-button_next):focus,\n:root[data-aegis-input-focus='pointer']\n  :is(.aegis-select-option[data-highlighted], .aegis-multi-option[data-active])",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-canvas",
+      "value": "light-dark(#f6f7f8, #0d0d0e)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171718)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "color-mix(in srgb, var(--color-text-primary) 4%, var(--color-bg-canvas))",
+      "tokens": [
+        "--color-bg-canvas",
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#202124, #f2f3f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#626670, #a6aab3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#6a6e77, #9399a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#eceef1, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#e3e5e9, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--fundamental-control-border",
+      "value": "light-dark(#eaebee, #2c2d2f)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--fundamental-control-border-hover",
+      "value": "light-dark(#d8dae0, #38393c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#7d828c, #727986)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-on-intent",
+      "value": "light-dark(#ffffff, #08090a)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-fg) 8%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-bg",
+      "value": "light-dark(#c72b2b, #ff4d4f)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-warning-bg)",
+      "tokens": [
+        "--color-warning-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "light-dark(#176f73, #4b9f9c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-fg",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-fg",
+      "value": "var(--color-ai-blue-bg)",
+      "tokens": [
+        "--color-ai-blue-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-fg) 7%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "color-mix(in srgb, var(--color-ai-fg) 5%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-ai-fg",
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai",
+      "value": "linear-gradient(115deg, var(--color-ai-pink-bg), var(--color-ai-blue-bg))",
+      "tokens": [
+        "--color-ai-blue-bg",
+        "--color-ai-pink-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(115deg, var(--color-ai-pink-fg), var(--color-ai-blue-fg))",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-border",
+      "value": "var(--gradient-ai-text)",
+      "tokens": [
+        "--gradient-ai-text"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-soft",
+      "value": "linear-gradient(115deg, var(--color-ai-pink-soft), var(--color-ai-blue-soft))",
+      "tokens": [
+        "--color-ai-blue-soft",
+        "--color-ai-pink-soft"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-key",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-keyword",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-string",
+      "value": "var(--color-success-fg)",
+      "tokens": [
+        "--color-success-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-number",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-sm",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-sm",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .surface,\n    .floating,\n    .aegis-card,\n    .aegis-chart-container,\n    .aegis-chart-tooltip,\n    .aegis-ai-card,\n    .aegis-ai-highlight,\n    .aegis-wizard-panel,\n    .aegis-wizard-progress,\n    .aegis-filter-panel,\n    .aegis-tree,\n    .aegis-accordion-contained,\n    .aegis-json-viewer,\n    .aegis-yaml-presenter,\n    .aegis-diff-view,\n    .aegis-modal,\n    .aegis-sheet,\n    .aegis-bottom-sheet,\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .command-dialog,\n    .aegis-tooltip,\n    .aegis-tooltip-rich,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-button:not([data-intent='ai'], [data-intent='destroy'])",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-button:not([data-intent='ai'], [data-intent='destroy'])",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-button:not([data-intent='ai'], [data-intent='destroy'])",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-button:not([data-intent='ai'], [data-intent='destroy'])",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-on-intent)",
+      "tokens": [
+        "--color-on-intent"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  .aegis-button:not([data-intent='ai'], [data-intent='destroy'])",
+      "conditions": [],
+      "property": "--intent-border",
+      "value": "color-mix(in srgb, var(--color-function-fg) 55%, var(--color-bg-canvas))",
+      "tokens": [
+        "--color-bg-canvas",
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-canvas",
+      "value": "light-dark(#f5f5f5, #111111)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #1b1b1b)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#171717, #f2f2f2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#6b6b6b, #a3a3a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#dedede, #252525)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#cdcdcd, #2d2d2d)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#777777, #8a8a8a)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-on-intent",
+      "value": "light-dark(#ffffff, #111111)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#262626, #e5e5e5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--minimal-interaction-border",
+      "value": "color-mix(\n    in srgb,\n    var(--minimal-interaction-bg) 40%,\n    var(--color-border-default)\n  )",
+      "tokens": [
+        "--color-border-default",
+        "--minimal-interaction-bg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "light-dark(#b32acb, #df7cf2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "light-dark(#9f1fba, #e99df7)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-fg",
+      "value": "light-dark(#b21863, #ffa7cb)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-fg",
+      "value": "light-dark(#214bc0, #a0baff)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-bg) 0%,\n    var(--color-ai-pink-bg) 50%,\n    var(--color-ai-blue-bg) 100%\n  )",
+      "tokens": [
+        "--color-ai-bg",
+        "--color-ai-blue-bg",
+        "--color-ai-pink-bg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-border",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "var(--gradient-ai-border)",
+      "tokens": [
+        "--gradient-ai-border"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-soft",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-md",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-key",
+      "value": "light-dark(#3250cc, #a6b7ff)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-keyword",
+      "value": "light-dark(#9f1fba, #e99df7)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-string",
+      "value": "var(--color-success-fg)",
+      "tokens": [
+        "--color-success-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-number",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-button:not([data-intent='destroy'], [data-intent='ai'])",
+      "conditions": [],
+      "property": "--intent-bg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-button:not([data-intent='destroy'], [data-intent='ai'])",
+      "conditions": [],
+      "property": "--intent-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-button:not([data-intent='destroy'], [data-intent='ai'])",
+      "conditions": [],
+      "property": "--intent-soft",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-button:not([data-intent='destroy'], [data-intent='ai'])",
+      "conditions": [],
+      "property": "--intent-on",
+      "value": "var(--color-on-intent)",
+      "tokens": [
+        "--color-on-intent"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] .aegis-button:not([data-intent='destroy'], [data-intent='ai'])",
+      "conditions": [],
+      "property": "--intent-border",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--minimal-status-new-fg)",
+      "tokens": [
+        "--minimal-status-new-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--minimal-status-progress-fg)",
+      "tokens": [
+        "--minimal-status-progress-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--minimal-status-new-soft)",
+      "tokens": [
+        "--minimal-status-new-soft"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "var(--minimal-status-review-soft)",
+      "tokens": [
+        "--minimal-status-review-soft"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-sm",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-1",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-2",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-3",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-4",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-sm",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--motion-fast",
+      "value": "120ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ease-out",
+      "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--button-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--button-radius-md",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--button-radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--nested-inset",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-canvas",
+      "value": "#f4f5f8",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#f1f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#edf0f5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#171a20",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#5b6271",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "#e6e8ee",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "#d6dae3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "#8590a3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-on-intent",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "#4565ed",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#3250cc",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "#b32acb",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "#9f1fba",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-pink-fg",
+      "value": "#b21863",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-blue-fg",
+      "value": "#214bc0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "color-mix(in srgb, var(--color-ai-bg) 18%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-ai-bg",
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-bg",
+      "value": "#ce343b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#be2730",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "#8c6100",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--gradient-ai",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-bg) 0%,\n    var(--color-ai-pink-bg) 50%,\n    var(--color-ai-blue-bg) 100%\n  )",
+      "tokens": [
+        "--color-ai-bg",
+        "--color-ai-blue-bg",
+        "--color-ai-pink-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--gradient-ai-border",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--gradient-ai-soft",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-soft) 0%,\n    var(--color-ai-pink-soft) 50%,\n    var(--color-ai-blue-soft) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-soft",
+        "--color-ai-pink-soft",
+        "--color-ai-soft"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-syntax-key",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-syntax-string",
+      "value": "var(--color-success-fg)",
+      "tokens": [
+        "--color-success-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-syntax-number",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-syntax-keyword",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-canvas",
+      "value": "#0d0e12",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#17181d",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#1c1e24",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#22242b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#262933",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#f2f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#a7acb9",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#959cab",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "rgba(255, 255, 255, 0.06)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "rgba(255, 255, 255, 0.1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-on-intent",
+      "value": "#101116",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "#6b8bff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#a6b7ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "color-mix(in srgb, var(--color-function-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "#df7cf2",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "#e99df7",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-pink-fg",
+      "value": "#ffa7cb",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-blue-fg",
+      "value": "#a0baff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "color-mix(in srgb, var(--color-ai-bg) 18%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-ai-bg",
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-bg",
+      "value": "#ff6369",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#ff9599",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "#ffd16b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--gradient-ai",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-bg) 0%,\n    var(--color-ai-pink-bg) 50%,\n    var(--color-ai-blue-bg) 100%\n  )",
+      "tokens": [
+        "--color-ai-bg",
+        "--color-ai-blue-bg",
+        "--color-ai-pink-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--gradient-ai-border",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(\n    110deg,\n    var(--color-ai-fg) 0%,\n    var(--color-ai-pink-fg) 50%,\n    var(--color-ai-blue-fg) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-fg",
+        "--color-ai-fg",
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--gradient-ai-soft",
+      "value": "linear-gradient(\n    135deg,\n    var(--color-ai-soft) 0%,\n    var(--color-ai-pink-soft) 50%,\n    var(--color-ai-blue-soft) 100%\n  )",
+      "tokens": [
+        "--color-ai-blue-soft",
+        "--color-ai-pink-soft",
+        "--color-ai-soft"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-syntax-key",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-syntax-string",
+      "value": "var(--color-success-fg)",
+      "tokens": [
+        "--color-success-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-syntax-number",
+      "value": "var(--color-warning-fg)",
+      "tokens": [
+        "--color-warning-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-syntax-keyword",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "--motion-fast",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-canvas",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "light-dark(#fafafa, #262626)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "light-dark(#eef1fc, #222940)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#161616, #e8ecf0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#686868, #92a4b3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#686868, #8396a5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#e5e5e5, #404040)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-strong",
+      "value": "light-dark(#737373, #8a8a8a)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-on-intent",
+      "value": "light-dark(#ffffff, #11171c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--v0-field-border",
+      "value": "light-dark(#949494, #646464)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--v0-field-readonly-border",
+      "value": "light-dark(#b5b5b5, #565656)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-bg",
+      "value": "light-dark(#495da8, #a0b4f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-soft",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-bg",
+      "value": "light-dark(#982222, #ff8c8c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "light-dark(#fef3f2, #3b1815)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-warning-bg)",
+      "tokens": [
+        "--color-warning-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-soft",
+      "value": "var(--color-function-soft)",
+      "tokens": [
+        "--color-function-soft"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-fg",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-fg",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai",
+      "value": "linear-gradient(var(--color-ai-bg), var(--color-ai-bg))",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-text",
+      "value": "linear-gradient(var(--color-ai-fg), var(--color-ai-fg))",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-border",
+      "value": "var(--gradient-ai-text)",
+      "tokens": [
+        "--gradient-ai-text"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--gradient-ai-soft",
+      "value": "linear-gradient(var(--color-ai-soft), var(--color-ai-soft))",
+      "tokens": [
+        "--color-ai-soft"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-keyword",
+      "value": "light-dark(#6d28d9, #c4b5fd)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-string",
+      "value": "light-dark(#166534, #86efac)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-number",
+      "value": "light-dark(#92400e, #fcd34d)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-syntax-key",
+      "value": "var(--color-syntax-property)",
+      "tokens": [
+        "--color-syntax-property"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-md",
+      "value": "var(--radius-md)",
+      "tokens": [
+        "--radius-md"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--button-radius-lg",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--control-radius-sm",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-xs",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-base",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-warning-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-ai-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--color-border-strong",
+      "value": "ButtonText",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/button/button.tsx",
+      "selector": "[src/components/button/button.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-fg)",
+      "tokens": [
+        "--color-ai-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.tsx",
+      "selector": "[src/components/button/button.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-pink-fg)",
+      "tokens": [
+        "--color-ai-pink-fg"
+      ]
+    },
+    {
+      "file": "src/components/button/button.tsx",
+      "selector": "[src/components/button/button.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-blue-fg)",
+      "tokens": [
+        "--color-ai-blue-fg"
+      ]
+    },
+    {
+      "file": "src/components/json-viewer/json-viewer.tsx",
+      "selector": "[src/components/json-viewer/json-viewer.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "`calc(var(--space-3) + ${node.depth + 1} * var(--nested-inset))`",
+      "tokens": [
+        "--nested-inset",
+        "--space-3"
+      ]
+    }
+  ],
+  "variants": [],
+  "cssClasses": [
+    "aegis-json-actions",
+    "aegis-json-colon",
+    "aegis-json-copy",
+    "aegis-json-expand",
+    "aegis-json-expand-spacer",
+    "aegis-json-fallback",
+    "aegis-json-footer",
+    "aegis-json-format",
+    "aegis-json-group",
+    "aegis-json-header",
+    "aegis-json-key",
+    "aegis-json-more",
+    "aegis-json-node",
+    "aegis-json-row",
+    "aegis-json-scroll",
+    "aegis-json-sr-only",
+    "aegis-json-status",
+    "aegis-json-tree",
+    "aegis-json-value",
+    "aegis-json-viewer"
+  ],
+  "relatedComponents": [
+    "@/components/icon"
+  ],
+  "accessibility": {
+    "roles": [
+      "group",
+      "none",
+      "status",
+      "tree",
+      "treeitem"
+    ],
+    "ariaAttributes": [
+      "aria-describedby",
+      "aria-expanded",
+      "aria-hidden",
+      "aria-label",
+      "aria-labelledby",
+      "aria-level",
+      "aria-posinset",
+      "aria-setsize"
+    ],
+    "nativeElements": [
+      "button",
+      "code",
+      "div",
+      "header",
+      "label",
+      "li",
+      "p",
+      "section",
+      "span",
+      "strong",
+      "textarea",
+      "ul"
+    ],
+    "keyboardKeys": [
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "End",
+      "Enter",
+      "Home",
+      "Space"
+    ],
+    "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "clsx",
+      "react",
+      "tailwind-merge"
+    ]
+  }
+}

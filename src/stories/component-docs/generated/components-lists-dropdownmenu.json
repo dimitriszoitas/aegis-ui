@@ -1,0 +1,2300 @@
+{
+  "id": "components-lists-dropdownmenu",
+  "name": "DropdownMenu",
+  "title": "Components/Lists/DropdownMenu",
+  "category": "Components/Lists",
+  "description": "Group secondary actions behind a predictable menu trigger.",
+  "purpose": "Group secondary actions behind a predictable menu trigger.",
+  "usage": "Entries support actions, checkboxes, radio groups, nested groups, and submenus. Radix supplies roving focus and dismissal behavior.",
+  "anatomy": [
+    "Trigger",
+    "Menu surface",
+    "Labeled groups",
+    "Menu items",
+    "Submenu",
+    "Shortcut hints"
+  ],
+  "sourceFiles": [
+    "src/components/dropdown-menu/dropdown-menu.css",
+    "src/components/dropdown-menu/dropdown-menu.stories.tsx",
+    "src/components/dropdown-menu/dropdown-menu.tsx",
+    "src/components/icon/index.tsx",
+    "src/lib/utils.ts",
+    "src/package/styles.css",
+    "src/styles/fundamental-overlays.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/theme.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "DropdownMenu"
+  ],
+  "imports": [
+    {
+      "name": "DropdownMenu",
+      "path": "@dimitriszoitas/aegis-ui/dropdown-menu"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-lists-dropdownmenu--actions-and-submenus",
+      "name": "Actions And Submenus",
+      "exportName": "ActionsAndSubmenus",
+      "sourceFile": "src/components/dropdown-menu/dropdown-menu.stories.tsx"
+    },
+    {
+      "id": "components-lists-dropdownmenu--open-actions",
+      "name": "Open Actions",
+      "exportName": "OpenActions",
+      "sourceFile": "src/components/dropdown-menu/dropdown-menu.stories.tsx"
+    },
+    {
+      "id": "components-lists-dropdownmenu--checkbox-and-radio",
+      "name": "Checkbox And Radio",
+      "exportName": "CheckboxAndRadio",
+      "sourceFile": "src/components/dropdown-menu/dropdown-menu.stories.tsx"
+    },
+    {
+      "id": "components-lists-dropdownmenu--open-checkbox-and-radio",
+      "name": "Open Checkbox And Radio",
+      "exportName": "OpenCheckboxAndRadio",
+      "sourceFile": "src/components/dropdown-menu/dropdown-menu.stories.tsx"
+    },
+    {
+      "id": "components-lists-dropdownmenu--interactive-actions",
+      "name": "Interactive Actions",
+      "exportName": "InteractiveActions",
+      "sourceFile": "src/components/dropdown-menu/dropdown-menu.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "DropdownMenu",
+      "name": "align",
+      "type": "\"center\" | \"start\" | \"end\" | undefined",
+      "required": false,
+      "defaultValue": "\"end\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "items",
+      "type": "DropdownMenuEntry[]",
+      "required": true,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "defaultValue": "\"Actions\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "side",
+      "type": "\"top\" | \"right\" | \"bottom\" | \"left\" | undefined",
+      "required": false,
+      "defaultValue": "\"bottom\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "trigger",
+      "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+      "required": true,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "defaultOpen",
+      "type": "boolean | undefined",
+      "required": false,
+      "defaultValue": "false",
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "dir",
+      "type": "Direction | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "modal",
+      "type": "boolean | undefined",
+      "required": false,
+      "defaultValue": "false",
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "onOpenChange",
+      "type": "((open: boolean) => void) | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "DropdownMenu",
+      "name": "open",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "z-index",
+      "value": "var(--z-dropdown)",
+      "tokens": [
+        "--z-dropdown"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "min-width",
+      "value": "220px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "max-height",
+      "value": "var(--radix-dropdown-menu-content-available-height)",
+      "tokens": [
+        "--radix-dropdown-menu-content-available-height"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "max-width",
+      "value": "calc(100vw - var(--space-6))",
+      "tokens": [
+        "--space-6"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "overflow",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface-raised)",
+      "tokens": [
+        "--color-bg-surface-raised"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "var(--shadow-floating)",
+      "tokens": [
+        "--shadow-floating"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "animation",
+      "value": "aegis-menu-enter var(--motion-fast) var(--ease-out)",
+      "tokens": [
+        "--ease-out",
+        "--motion-fast"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [],
+      "property": "transform-origin",
+      "value": "var(--radix-dropdown-menu-content-transform-origin)",
+      "tokens": [
+        "--radix-dropdown-menu-content-transform-origin"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "position",
+      "value": "relative",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "min-height",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2) var(--space-3)",
+      "tokens": [
+        "--space-2",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "cursor",
+      "value": "default",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item",
+      "conditions": [],
+      "property": "user-select",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item[data-highlighted],\n.aegis-menu-item[data-state='open']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item[data-highlighted]",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "inset 0 0 0 2px var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item[data-disabled]",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item[data-disabled]",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0.55",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item[data-disabled]",
+      "conditions": [],
+      "property": "pointer-events",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item-label",
+      "conditions": [],
+      "property": "flex",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-icon",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-icon",
+      "conditions": [],
+      "property": "flex",
+      "value": "0 0 auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-icon",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-icon svg",
+      "conditions": [],
+      "property": "width",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-icon svg",
+      "conditions": [],
+      "property": "height",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item kbd",
+      "conditions": [],
+      "property": "margin-left",
+      "value": "var(--space-6)",
+      "tokens": [
+        "--space-6"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item kbd",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-mono)",
+      "tokens": [
+        "--font-mono"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item kbd",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item kbd",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-sub-arrow",
+      "conditions": [],
+      "property": "margin-left",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-sub-arrow",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item-destroy,\n.aegis-menu-item-destroy .aegis-menu-icon",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-destroy-fg)",
+      "tokens": [
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-item-destroy[data-highlighted]",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-destroy-soft)",
+      "tokens": [
+        "--color-destroy-soft"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-checkable",
+      "conditions": [],
+      "property": "padding-inline-end",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "inset-inline-end",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "width",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-indicator",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-label",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-label",
+      "conditions": [],
+      "property": "font-size",
+      "value": "11px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-label",
+      "conditions": [],
+      "property": "font-weight",
+      "value": "600",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-label",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2) var(--space-3) var(--space-1)",
+      "tokens": [
+        "--space-1",
+        "--space-2",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-separator",
+      "conditions": [],
+      "property": "height",
+      "value": "1px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-separator",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-separator",
+      "conditions": [],
+      "property": "margin",
+      "value": "var(--space-1)",
+      "tokens": [
+        "--space-1"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": "from",
+      "conditions": [
+        "@keyframes aegis-menu-enter"
+      ],
+      "property": "opacity",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": "from",
+      "conditions": [
+        "@keyframes aegis-menu-enter"
+      ],
+      "property": "transform",
+      "value": "translateY(-3px)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": "to",
+      "conditions": [
+        "@keyframes aegis-menu-enter"
+      ],
+      "property": "opacity",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": "to",
+      "conditions": [
+        "@keyframes aegis-menu-enter"
+      ],
+      "property": "transform",
+      "value": "translateY(0)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-content",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-2)",
+      "tokens": [
+        "--space-2"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "min-height",
+      "value": "34px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-2) var(--space-3)",
+      "tokens": [
+        "--space-2",
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "border",
+      "value": "1px solid var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-md)",
+      "tokens": [
+        "--radius-md"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger:hover:not(:disabled)",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-hover)",
+      "tokens": [
+        "--color-bg-hover"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger:focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger:focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger:disabled",
+      "conditions": [],
+      "property": "opacity",
+      "value": "0.45",
+      "tokens": []
+    },
+    {
+      "file": "src/components/dropdown-menu/dropdown-menu.css",
+      "selector": ".aegis-menu-demo-trigger:disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "--fundamental-grid-surface",
+      "value": "var(--fundamental-overlay-surface)",
+      "tokens": [
+        "--fundamental-overlay-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--fundamental-overlay-surface)",
+      "tokens": [
+        "--fundamental-overlay-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .aegis-tooltip,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "0 3px 8px color-mix(in srgb, var(--color-scrim) 40%, transparent),\n    0 12px 36px color-mix(in srgb, var(--color-scrim) 55%, transparent)",
+      "tokens": [
+        "--color-scrim"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n    :is(\n      .aegis-popover,\n      .aegis-menu-content,\n      .aegis-context-content,\n      .aegis-select-content,\n      .aegis-multi-popover,\n      .aegis-tooltip,\n      .aegis-notification[data-variant='floating'],\n      .aegis-modal.aegis-modal,\n      .command-dialog,\n      .aegis-sheet:not(.aegis-sheet-docked)\n    )",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "border",
+      "value": "1px solid CanvasText",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-overlays.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n    :is(\n      .aegis-popover,\n      .aegis-menu-content,\n      .aegis-context-content,\n      .aegis-select-content,\n      .aegis-multi-popover,\n      .aegis-tooltip,\n      .aegis-notification[data-variant='floating'],\n      .aegis-modal.aegis-modal,\n      .command-dialog,\n      .aegis-sheet:not(.aegis-sheet-docked)\n    )",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171718)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "color-mix(in srgb, var(--color-text-primary) 4%, var(--color-bg-canvas))",
+      "tokens": [
+        "--color-bg-canvas",
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#202124, #f2f3f5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#626670, #a6aab3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#6a6e77, #9399a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#eceef1, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#e3e5e9, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "light-dark(#356ac3, #7ba5ed)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-fg) 7%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-fg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .surface,\n    .floating,\n    .aegis-card,\n    .aegis-chart-container,\n    .aegis-chart-tooltip,\n    .aegis-ai-card,\n    .aegis-ai-highlight,\n    .aegis-wizard-panel,\n    .aegis-wizard-progress,\n    .aegis-filter-panel,\n    .aegis-tree,\n    .aegis-accordion-contained,\n    .aegis-json-viewer,\n    .aegis-yaml-presenter,\n    .aegis-diff-view,\n    .aegis-modal,\n    .aegis-sheet,\n    .aegis-bottom-sheet,\n    .aegis-popover,\n    .aegis-menu-content,\n    .aegis-context-content,\n    .aegis-select-content,\n    .aegis-multi-popover,\n    .command-dialog,\n    .aegis-tooltip,\n    .aegis-tooltip-rich,\n    .aegis-notification[data-variant='floating']\n  )",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active]\n  )",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active]\n  )",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "-2px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #1b1b1b)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#171717, #f2f2f2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#6b6b6b, #a3a3a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#dedede, #252525)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "light-dark(#cdcdcd, #2d2d2d)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "5px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--minimal-status-new-fg)",
+      "tokens": [
+        "--minimal-status-new-fg"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active],\n    .aegis-diff-host .cm-editor:focus-within\n  )",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active],\n    .aegis-diff-host .cm-editor:focus-within\n  )",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "-2px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-md",
+      "value": "7px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-1",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-2",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-3",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-6",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "7px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--motion-fast",
+      "value": "120ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ease-out",
+      "value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--z-dropdown",
+      "value": "50",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#f1f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#171a20",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#5b6271",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "#e6e8ee",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "#d6dae3",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#3250cc",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#be2730",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#17181d",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "#1c1e24",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "#22242b",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "#f2f3f6",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "#a7acb9",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#959cab",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "rgba(255, 255, 255, 0.06)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "rgba(255, 255, 255, 0.1)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "#a6b7ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "#ff9599",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "color-mix(in srgb, var(--color-destroy-bg) 10%, var(--color-bg-surface))",
+      "tokens": [
+        "--color-bg-surface",
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "--motion-fast",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface-raised",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-hover",
+      "value": "light-dark(#fafafa, #262626)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-primary",
+      "value": "light-dark(#161616, #e8ecf0)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-secondary",
+      "value": "light-dark(#686868, #92a4b3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#686868, #8396a5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#e5e5e5, #404040)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-default",
+      "value": "var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--ring-focus",
+      "value": "var(--color-function-fg)",
+      "tokens": [
+        "--color-function-fg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-fg",
+      "value": "var(--color-destroy-bg)",
+      "tokens": [
+        "--color-destroy-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-destroy-soft",
+      "value": "light-dark(#fef3f2, #3b1815)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--shadow-floating",
+      "value": "var(--elevation-floating)",
+      "tokens": [
+        "--elevation-floating"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-md",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-ui",
+      "value": "Figtree, system-ui, sans-serif",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--font-mono",
+      "value": "var(--font-code)",
+      "tokens": [
+        "--font-code"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-menu-item, .aegis-context-item, .aegis-select-option, .aegis-multi-option)",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-function-fg",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-menu-item, .aegis-context-item, .aegis-select-option, .aegis-multi-option)",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "flex-start",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-menu-item, .aegis-context-item, .aegis-select-option, .aegis-multi-option)",
+      "conditions": [],
+      "property": "text-align",
+      "value": "start",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(.aegis-popover, .aegis-select-content, .aegis-multi-popover, .aegis-menu-content,\n      .aegis-context-content, .aegis-tooltip)",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "var(--shadow-floating)",
+      "tokens": [
+        "--shadow-floating"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active]\n  )",
+      "conditions": [],
+      "property": "outline",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active]\n  )",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--v0-interaction-hover)",
+      "tokens": [
+        "--v0-interaction-hover"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    .aegis-menu-item[data-highlighted],\n    .aegis-context-item[data-highlighted],\n    .aegis-select-option[data-highlighted],\n    .aegis-multi-option[data-active]\n  )",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']",
+      "conditions": [
+        "@media (forced-colors: active)"
+      ],
+      "property": "--ring-focus",
+      "value": "Highlight",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    }
+  ],
+  "variants": [
+    {
+      "name": "align",
+      "values": [
+        "center",
+        "end",
+        "start"
+      ],
+      "default": "end"
+    },
+    {
+      "name": "side",
+      "values": [
+        "bottom",
+        "left",
+        "right",
+        "top"
+      ],
+      "default": "bottom"
+    }
+  ],
+  "cssClasses": [
+    "aegis-menu-checkable",
+    "aegis-menu-content",
+    "aegis-menu-icon",
+    "aegis-menu-indicator",
+    "aegis-menu-item",
+    "aegis-menu-item-destroy",
+    "aegis-menu-item-label",
+    "aegis-menu-label",
+    "aegis-menu-separator",
+    "aegis-menu-sub-arrow",
+    "destroy"
+  ],
+  "relatedComponents": [
+    "@/components/icon"
+  ],
+  "accessibility": {
+    "roles": [],
+    "ariaAttributes": [
+      "aria-hidden",
+      "aria-label"
+    ],
+    "nativeElements": [
+      "kbd",
+      "span"
+    ],
+    "keyboardKeys": [
+      "Tab"
+    ],
+    "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "clsx",
+      "radix-ui",
+      "react",
+      "react-dom",
+      "tailwind-merge"
+    ]
+  }
+}

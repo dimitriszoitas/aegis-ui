@@ -1,0 +1,206 @@
+.aegis-button {
+  --intent-bg: var(--color-bg-selected);
+  --intent-fg: var(--color-text-primary);
+  --intent-soft: var(--color-bg-hover);
+  --intent-on: var(--color-text-primary);
+  --intent-border: var(--color-border-strong);
+  --button-radius: var(--button-radius-md, 5px);
+  --button-text-padding: 12px;
+  --button-icon-padding: 8px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 34px;
+  padding: 0 var(--button-text-padding);
+  border: 1px solid transparent;
+  border-radius: var(--button-radius);
+  font-size: var(--text-sm);
+  line-height: 1;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast);
+  background: var(--intent-bg);
+  color: var(--intent-on);
+}
+.aegis-button[data-intent='function'] {
+  --intent-bg: var(--color-function-bg);
+  --intent-fg: var(--color-function-fg);
+  --intent-soft: var(--color-function-soft);
+  --intent-on: var(--color-on-intent);
+  --intent-border: var(--color-function-fg);
+}
+.aegis-button[data-intent='destroy'] {
+  --intent-bg: var(--color-destroy-bg);
+  --intent-fg: var(--color-destroy-fg);
+  --intent-soft: var(--color-destroy-soft);
+  --intent-on: var(--color-on-intent);
+  --intent-border: var(--color-destroy-fg);
+}
+.aegis-button[data-intent='ai'] {
+  --intent-bg: var(--color-ai-bg);
+  --intent-fg: var(--color-ai-fg);
+  --intent-soft: var(--color-ai-soft);
+  --intent-on: var(--color-on-intent);
+}
+.aegis-button[data-intent='ai'][data-emphasis='primary'] {
+  background: var(--gradient-ai);
+}
+.aegis-button[data-size='sm'] {
+  height: 28px;
+  --button-radius: var(--button-radius-sm, 4px);
+  --button-text-padding: 8px;
+  --button-icon-padding: 6px;
+  font-size: var(--text-xs);
+}
+.aegis-button[data-size='lg'] {
+  height: 40px;
+  --button-radius: var(--button-radius-lg, 6px);
+  --button-text-padding: 16px;
+  --button-icon-padding: 12px;
+  font-size: var(--text-base);
+}
+.aegis-button[data-leading-icon] {
+  padding-inline-start: var(--button-icon-padding);
+}
+.aegis-button[data-trailing-icon] {
+  padding-inline-end: var(--button-icon-padding);
+}
+.aegis-button[data-emphasis='secondary'] {
+  background: var(--intent-soft);
+  color: var(--intent-fg);
+}
+.aegis-button[data-emphasis='tertiary'],
+.aegis-button[data-emphasis='ghost'] {
+  background: transparent;
+  color: var(--intent-fg);
+}
+.aegis-button[data-emphasis='tertiary'] {
+  border-color: var(--intent-border);
+}
+.aegis-button[data-intent='ai'][data-emphasis='tertiary'] {
+  border-color: transparent;
+}
+.aegis-button[data-intent='ai'][data-emphasis='tertiary']::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--gradient-ai-border, var(--gradient-ai-text));
+  mask:
+    linear-gradient(var(--color-text-primary) 0 0) content-box,
+    linear-gradient(var(--color-text-primary) 0 0);
+  mask-composite: exclude;
+}
+.aegis-button:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 8%, transparent);
+}
+.aegis-button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 13%, transparent);
+}
+.aegis-button:disabled {
+  opacity: 0.45;
+}
+.button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.button-spinner {
+  animation: button-spin 900ms linear infinite;
+}
+.button-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.button-label-loading {
+  opacity: 0;
+}
+.aegis-icon-button {
+  width: 34px;
+  padding: 0;
+}
+.aegis-icon-button[data-size='sm'] {
+  width: 28px;
+  padding: 0;
+}
+.aegis-icon-button[data-size='lg'] {
+  width: 40px;
+  padding: 0;
+}
+.aegis-icon-button .button-label {
+  display: flex;
+}
+.button-group {
+  display: inline-flex;
+  isolation: isolate;
+}
+.button-group > .aegis-button {
+  border-radius: 0;
+}
+.button-group > .aegis-button:not(:last-child) {
+  border-inline-end: 1px solid var(--color-border-default);
+}
+.button-group > .aegis-button:first-child {
+  border-start-start-radius: var(--button-radius);
+  border-end-start-radius: var(--button-radius);
+}
+.button-group > .aegis-button:last-child {
+  border-start-end-radius: var(--button-radius);
+  border-end-end-radius: var(--button-radius);
+}
+.button-group > .aegis-button:focus-visible {
+  z-index: 1;
+}
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button-gradient-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.aegis-button[data-intent='ai'][data-emphasis='secondary'] {
+  background: var(--gradient-ai-soft);
+}
+.aegis-button[data-intent='ai'][data-emphasis='secondary']:hover:not(:disabled) {
+  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 8%, transparent);
+}
+.aegis-button[data-intent='ai'][data-emphasis='secondary']:active:not(:disabled) {
+  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 13%, transparent);
+}
+.aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label {
+  background-image: var(--gradient-ai-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+@media (forced-colors: active) {
+  .aegis-button[data-intent='ai'][data-emphasis='tertiary'] {
+    border-color: ButtonText;
+  }
+  .aegis-button[data-intent='ai'][data-emphasis='tertiary']::before {
+    display: none;
+  }
+  .aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label {
+    background: none;
+    color: ButtonText;
+  }
+}

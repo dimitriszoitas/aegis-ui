@@ -1,0 +1,47 @@
+.aegis-yaml-presenter {
+  min-width: 0;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg-surface);
+}
+.aegis-yaml-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-canvas);
+}
+.aegis-yaml-filename {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.aegis-yaml-filename > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-yaml-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.aegis-yaml-presenter .aegis-code-editor {
+  border: 0;
+  border-radius: 0;
+}
+.aegis-yaml-presenter:focus-within {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}

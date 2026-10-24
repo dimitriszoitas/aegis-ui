@@ -1,0 +1,33 @@
+.aegis-spinner {
+  display: inline-flex;
+  flex-shrink: 0;
+  vertical-align: middle;
+  color: inherit;
+}
+.aegis-spinner[data-size='sm'] {
+  width: 14px;
+  height: 14px;
+}
+.aegis-spinner[data-size='md'] {
+  width: 20px;
+  height: 20px;
+}
+.aegis-spinner[data-size='lg'] {
+  width: 28px;
+  height: 28px;
+}
+.aegis-spinner svg {
+  width: 100%;
+  height: 100%;
+  animation: aegis-spin 900ms linear infinite;
+}
+@keyframes aegis-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aegis-spinner svg {
+    animation: none;
+  }
+}

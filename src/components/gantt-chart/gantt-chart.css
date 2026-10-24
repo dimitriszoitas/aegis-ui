@@ -1,0 +1,237 @@
+.aegis-gantt {
+  min-width: 0;
+  color: var(--color-text-primary);
+}
+.aegis-gantt-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.aegis-gantt-header h3 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+.aegis-gantt-header p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-gantt-scroll {
+  overflow: auto;
+  max-height: 620px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-canvas);
+}
+.aegis-gantt-canvas {
+  display: grid;
+  grid-template-columns: 200px var(--gantt-width);
+  width: max-content;
+}
+.aegis-gantt-column-heading,
+.aegis-gantt-axis {
+  position: sticky;
+  top: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  z-index: 3;
+}
+.aegis-gantt-column-heading {
+  left: 0;
+  z-index: 5;
+  padding-inline: var(--space-4);
+  border-inline-end: 1px solid var(--color-border-subtle);
+}
+.aegis-gantt-axis > span {
+  flex-shrink: 0;
+  padding-inline: var(--space-2);
+  text-align: center;
+}
+.aegis-gantt-labels {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: var(--color-bg-canvas);
+  border-inline-end: 1px solid var(--color-border-subtle);
+}
+.aegis-gantt-labels > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  height: 48px;
+  padding-inline: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-gantt-labels :is(strong, small) {
+  min-width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aegis-gantt-labels strong {
+  font-size: var(--text-sm);
+  font-weight: var(--title-weight);
+}
+.aegis-gantt-labels small {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-gantt-plot {
+  position: relative;
+}
+.aegis-gantt-grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+.aegis-gantt-grid > span {
+  flex-shrink: 0;
+  border-inline-end: 1px solid var(--color-border-subtle);
+}
+.aegis-gantt-row {
+  position: relative;
+  height: 48px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-gantt-bar {
+  --gantt-color: var(--color-function-fg);
+  position: absolute;
+  top: 10px;
+  height: 28px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gantt-color);
+  padding: 0;
+  background: color-mix(in srgb, var(--gantt-color) 16%, var(--color-bg-canvas));
+  color: var(--color-text-primary);
+}
+.aegis-gantt-bar[data-intent='success'] {
+  --gantt-color: var(--color-success-fg);
+}
+.aegis-gantt-bar[data-intent='warning'] {
+  --gantt-color: var(--color-warning-fg);
+}
+.aegis-gantt-bar[data-intent='ai'] {
+  --gantt-color: var(--color-ai-fg);
+}
+.aegis-gantt-bar[data-selected] {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 2px;
+}
+.aegis-gantt-progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--gantt-color) 25%, transparent);
+}
+.aegis-gantt-bar-label {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-inline: var(--space-2);
+  font-size: var(--text-xs);
+  text-align: start;
+}
+.aegis-gantt-bar[data-milestone] {
+  top: 16px;
+  width: 16px !important;
+  height: 16px;
+  transform: translateX(4px) rotate(45deg);
+  background: var(--gantt-color);
+}
+.aegis-gantt-dependencies {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.aegis-gantt-dependencies > path {
+  stroke: var(--color-text-tertiary);
+  fill: none;
+  stroke-width: 1.5;
+}
+.aegis-gantt-dependencies marker path {
+  fill: var(--color-text-tertiary);
+}
+.aegis-gantt-today {
+  position: absolute;
+  inset-block: 0;
+  z-index: 2;
+  border-inline-start: 1px dashed var(--color-destroy-fg);
+  pointer-events: none;
+}
+.aegis-gantt-today > span {
+  position: absolute;
+  top: 0;
+  padding: 2px 4px;
+  color: var(--color-destroy-fg);
+  background: var(--color-bg-canvas);
+  font-size: 10px;
+}
+.aegis-gantt-data {
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.aegis-gantt-data summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.aegis-gantt-table-scroll {
+  max-width: 100%;
+  overflow: auto;
+}
+.aegis-gantt-data table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-block: var(--space-3);
+  color: var(--color-text-primary);
+}
+.aegis-gantt-data :is(th, td) {
+  padding: var(--space-2);
+  text-align: start;
+  border-bottom: 1px solid var(--color-border-subtle);
+  white-space: nowrap;
+}
+.aegis-gantt-empty {
+  padding: var(--space-7);
+  background: var(--color-bg-surface);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.aegis-gantt-notice {
+  color: var(--color-warning-fg);
+  font-size: var(--text-sm);
+}
+@media (max-width: 600px) {
+  .aegis-gantt-canvas {
+    grid-template-columns: 140px var(--gantt-width);
+  }
+  .aegis-gantt-labels > div {
+    padding-inline: var(--space-2);
+  }
+}
+@media (forced-colors: active) {
+  .aegis-gantt-bar {
+    border-color: Highlight;
+  }
+  .aegis-gantt-bar[data-milestone],
+  .aegis-gantt-progress {
+    background: Highlight;
+  }
+  .aegis-gantt-dependencies > path {
+    stroke: CanvasText;
+  }
+}

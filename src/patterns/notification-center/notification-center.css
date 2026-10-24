@@ -1,0 +1,123 @@
+.aegis-notification-center {
+  max-width: calc(100vw - var(--space-6));
+}
+.aegis-notification-center-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+  pointer-events: none;
+}
+.aegis-notification-center-body {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.aegis-notification-center-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+.aegis-notification-center .aegis-tabs-content {
+  padding: var(--space-2) 0 0;
+}
+.aegis-notification-center-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.aegis-notification-center-list > li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.aegis-notification-center-list > li:last-child {
+  border-bottom: 0;
+}
+.aegis-notification-center-icon {
+  display: flex;
+  flex: none;
+  color: var(--color-info-fg);
+  padding-top: var(--space-1);
+}
+.aegis-notification-center-list > li[data-intent='success'] .aegis-notification-center-icon {
+  color: var(--color-success-fg);
+}
+.aegis-notification-center-list > li[data-intent='warning'] .aegis-notification-center-icon {
+  color: var(--color-warning-fg);
+}
+.aegis-notification-center-list > li[data-intent='destroy'] .aegis-notification-center-icon {
+  color: var(--color-destroy-fg);
+}
+.aegis-notification-center-list > li[data-intent='ai'] .aegis-notification-center-icon {
+  color: var(--color-ai-fg);
+}
+.aegis-notification-center-copy {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: var(--space-1);
+}
+.aegis-notification-center-title,
+.aegis-notification-center-copy > strong {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.aegis-notification-center-title {
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.aegis-notification-center-title:hover {
+  color: var(--color-function-fg);
+}
+.aegis-notification-center-title:focus-visible {
+  outline: 2px solid var(--color-function-fg);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+.aegis-notification-center-title:disabled {
+  cursor: wait;
+}
+.aegis-notification-center-list
+  > li[data-unread='true']
+  .aegis-notification-center-copy
+  > :first-child {
+  font-weight: 600;
+}
+.aegis-notification-center-copy p {
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.aegis-notification-center-copy time {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+.aegis-notification-center .aegis-notification-center-read {
+  margin-left: calc(-1 * var(--space-2));
+  margin-top: var(--space-1);
+}
+.aegis-notification-center-loading {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+}
+.aegis-notification-center-loading > div {
+  display: grid;
+  gap: var(--space-2);
+}

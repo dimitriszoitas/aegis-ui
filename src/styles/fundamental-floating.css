@@ -1,0 +1,94 @@
+/* Fundamental Floating shares the Fundamental palette and controls. Only
+   workspace chrome becomes inset, rounded containers. */
+[data-layout-theme='fundamental-floating'],
+[data-layout-theme='fundamental-floating'] :is(.dark, .aegis-theme-light) {
+  --chrome-inset: var(--space-3);
+  --chrome-gap: var(--space-3);
+  --chrome-radius: 12px;
+  --chrome-nav-border-width: 1px;
+  --chrome-sheet-border-width: 1px;
+  --sidebar-radius-expanded: var(--chrome-radius);
+  --sidebar-radius-collapsed: var(--radius-lg);
+  --fundamental-nav-surface: var(--color-bg-surface);
+  --chrome-shadow:
+    0 1px 2px color-mix(in srgb, var(--color-scrim) 12%, transparent),
+    0 4px 12px color-mix(in srgb, var(--color-scrim) 12%, transparent);
+}
+
+[data-layout-theme='fundamental-floating'] .side-nav {
+  --side-nav-inset: var(--chrome-inset);
+  margin: var(--chrome-inset);
+  margin-inline-end: 0;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--sidebar-radius-expanded);
+  box-shadow: var(--chrome-shadow) !important;
+}
+[data-layout-theme='fundamental-floating'] .side-nav[data-collapsed='true'] {
+  border-radius: var(--sidebar-radius-collapsed);
+}
+[data-layout-theme='fundamental-floating'] .nav-item:hover:not(.is-active) {
+  background: color-mix(in srgb, var(--color-text-primary) 4%, var(--color-bg-surface));
+}
+
+[data-layout-theme='fundamental-floating']
+  :is(.aegis-sheet-docked, .aegis-bottom-sheet, .aegis-filter-panel, .aegis-resizable-panel) {
+  --fundamental-grid-surface: var(--color-bg-surface);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--chrome-radius);
+  box-shadow: var(--chrome-shadow) !important;
+}
+[data-layout-theme='fundamental-floating'] .aegis-sheet.aegis-ai-panel.aegis-ai-panel {
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* The generic contained sheet retains its measured panel size. Reserve the
+   padding and gap in its bounds calculation so resizing cannot hide content. */
+[data-layout-theme='fundamental-floating'] .aegis-contained-sheet {
+  padding: var(--chrome-inset);
+  gap: var(--chrome-gap);
+}
+[data-layout-theme='fundamental-floating']
+  .aegis-contained-sheet
+  .aegis-contained-sheet-panel.aegis-contained-sheet-panel {
+  --fundamental-grid-surface: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--chrome-radius);
+  background: var(--color-bg-surface);
+  box-shadow: var(--chrome-shadow) !important;
+}
+[data-layout-theme='fundamental-floating'] .aegis-contained-sheet-header {
+  border-start-start-radius: var(--chrome-radius);
+  border-start-end-radius: var(--chrome-radius);
+}
+[data-layout-theme='fundamental-floating'] .aegis-contained-sheet-footer {
+  border-end-start-radius: var(--chrome-radius);
+  border-end-end-radius: var(--chrome-radius);
+}
+
+@media (max-width: 1000px) {
+  [data-layout-theme='fundamental-floating'] .aegis-console .side-nav + .aegis-console-workspace {
+    margin-inline-start: calc(var(--sidebar-collapsed) + var(--chrome-inset));
+  }
+}
+@media (max-width: 640px) {
+  [data-layout-theme='fundamental-floating'],
+  [data-layout-theme='fundamental-floating'] :is(.dark, .aegis-theme-light) {
+    --chrome-inset: var(--space-2);
+    --chrome-gap: var(--space-2);
+  }
+}
+@media (forced-colors: active) {
+  [data-layout-theme='fundamental-floating']
+    :is(
+      .side-nav,
+      .aegis-sheet-docked,
+      .aegis-bottom-sheet,
+      .aegis-filter-panel,
+      .aegis-resizable-panel,
+      .aegis-contained-sheet-panel
+    ) {
+    border: 1px solid CanvasText;
+    box-shadow: none !important;
+  }
+}

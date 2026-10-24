@@ -1,0 +1,12 @@
+.aegis-sparkline {
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
+.aegis-sparkline-empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}

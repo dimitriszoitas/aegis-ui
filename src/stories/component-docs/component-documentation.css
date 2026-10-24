@@ -1,0 +1,253 @@
+.component-docs {
+  color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  max-width: 1180px;
+  margin-inline: auto;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  min-width: 0;
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+.component-docs-heading {
+  padding-bottom: var(--space-6);
+  margin-bottom: var(--space-7);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.component-docs-heading > p {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.component-docs .component-docs-heading h1 {
+  font-size: 32px;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+}
+.component-docs-page-links {
+  display: flex;
+  gap: var(--space-5);
+}
+.component-docs h2 {
+  margin: var(--space-8) 0 var(--space-4);
+  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: var(--title-weight);
+  border: 0;
+}
+.component-docs p {
+  max-width: 85ch;
+}
+.component-docs-lead {
+  font-size: 18px;
+}
+.component-docs a,
+.component-docs-text-action {
+  color: var(--color-function-fg);
+}
+.component-docs-table-scroll {
+  overflow: auto;
+  margin-block: var(--space-4);
+  max-height: 680px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+  width: 100%;
+}
+.component-docs table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin: 0;
+}
+.component-docs table :is(th, td) {
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: start;
+  vertical-align: top;
+  min-width: 130px;
+  max-width: 440px;
+  overflow-wrap: anywhere;
+}
+.component-docs table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-bg-surface);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+.component-docs .component-docs-table-scroll table tbody tr,
+.component-docs .component-docs-table-scroll table tbody tr:nth-of-type(2n) {
+  background: var(--color-bg-canvas);
+}
+.component-docs table tbody th {
+  font-weight: 500;
+}
+.component-docs code,
+.component-docs li code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+}
+.component-docs small {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 400;
+}
+.component-docs summary {
+  cursor: pointer;
+  color: var(--color-function-fg);
+  margin-block: var(--space-2);
+}
+.component-docs-specimen {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-block: var(--space-5);
+  background: var(--color-bg-surface);
+}
+.component-docs-specimen-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs);
+}
+.component-docs-specimen-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.component-docs-specimen-toolbar select {
+  min-width: 0;
+  flex: 1;
+  text-overflow: ellipsis;
+}
+.component-docs-frame {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+  background: var(--color-bg-canvas);
+}
+.component-docs-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-5);
+  margin-block: var(--space-5);
+}
+.component-docs-controls label {
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.component-docs :is(select, input[type='search']) {
+  max-width: 100%;
+  padding: 7px 10px;
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font: inherit;
+}
+.component-docs input[type='search'] {
+  min-width: 240px;
+}
+.component-docs button {
+  font: inherit;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  color: var(--color-function-fg);
+  background: var(--color-bg-surface);
+  padding: 6px 10px;
+}
+.component-docs button:disabled {
+  opacity: 0.5;
+}
+.component-docs .component-docs-note {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.component-docs-link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+.component-docs-link-grid a {
+  display: block;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+}
+.component-docs-anatomy {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+}
+.component-docs-anatomy li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+}
+.component-docs-anatomy li > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-function-soft);
+  color: var(--color-function-fg);
+  font-size: var(--text-xs);
+}
+.component-docs-code-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.component-docs-selector-list {
+  max-height: 400px;
+  overflow: auto;
+}
+.component-docs-selector-list li {
+  margin-bottom: var(--space-3);
+}
+.component-docs-controls .component-docs-checkbox {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .component-docs input[type='search'] {
+    min-width: 0;
+    width: 100%;
+  }
+  .component-docs-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .component-docs-frame {
+    height: 380px;
+  }
+}

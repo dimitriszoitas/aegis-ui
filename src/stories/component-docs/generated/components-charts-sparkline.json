@@ -1,0 +1,5228 @@
+{
+  "id": "components-charts-sparkline",
+  "name": "Sparkline",
+  "title": "Components/Charts/Sparkline",
+  "category": "Components/Charts",
+  "description": "Show the shape of a small time series where a full chart would be too heavy.",
+  "purpose": "Show the shape of a small time series where a full chart would be too heavy.",
+  "usage": "Pass numeric data and an accessible label. This lightweight SVG primitive fits cards, rows, and compact summaries.",
+  "anatomy": [
+    "Trend path or bars",
+    "Optional area fill",
+    "Accessible label"
+  ],
+  "sourceFiles": [
+    "src/components/skeleton/index.ts",
+    "src/components/skeleton/skeleton.css",
+    "src/components/skeleton/skeleton.tsx",
+    "src/components/sparkline/sparkline.css",
+    "src/components/sparkline/sparkline.stories.tsx",
+    "src/components/sparkline/sparkline.tsx",
+    "src/lib/utils.ts",
+    "src/package/styles.css",
+    "src/styles/fundamental-tokens.css",
+    "src/styles/fundamental.css",
+    "src/styles/globals.css",
+    "src/styles/minimalistic-tokens.css",
+    "src/styles/minimalistic.css",
+    "src/styles/theme.css",
+    "src/styles/tokens.css",
+    "src/styles/v0-simple-tokens.css",
+    "src/styles/v0-simple.css"
+  ],
+  "exportNames": [
+    "Sparkline"
+  ],
+  "imports": [
+    {
+      "name": "Sparkline",
+      "path": "@dimitriszoitas/aegis-ui/sparkline"
+    }
+  ],
+  "stories": [
+    {
+      "id": "components-charts-sparkline--variants-and-intents",
+      "name": "Variants And Intents",
+      "exportName": "VariantsAndIntents",
+      "sourceFile": "src/components/sparkline/sparkline.stories.tsx"
+    },
+    {
+      "id": "components-charts-sparkline--states",
+      "name": "States",
+      "exportName": "States",
+      "sourceFile": "src/components/sparkline/sparkline.stories.tsx"
+    }
+  ],
+  "props": [
+    {
+      "component": "Sparkline",
+      "name": "data",
+      "type": "readonly number[]",
+      "required": true,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "height",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "28",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "intent",
+      "type": "\"function\" | \"destroy\" | \"ai\" | \"success\" | \"warning\" | undefined",
+      "required": false,
+      "defaultValue": "\"function\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "loading",
+      "type": "boolean | undefined",
+      "required": false,
+      "defaultValue": "false",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "variant",
+      "type": "\"area\" | \"line\" | \"bar\" | undefined",
+      "required": false,
+      "defaultValue": "\"line\"",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "width",
+      "type": "number | undefined",
+      "required": false,
+      "defaultValue": "100",
+      "description": "",
+      "inherited": false
+    },
+    {
+      "component": "Sparkline",
+      "name": "accentHeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "accumulate",
+      "type": "\"none\" | \"sum\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "additive",
+      "type": "\"sum\" | \"replace\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "alignmentBaseline",
+      "type": "\"inherit\" | \"auto\" | \"alphabetic\" | \"hanging\" | \"ideographic\" | \"mathematical\" | \"baseline\" | \"before-edge\" | \"text-before-edge\" | \"middle\" | \"central\" | \"after-edge\" | \"text-after-edge\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "allowReorder",
+      "type": "\"yes\" | \"no\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "alphabetic",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "amplitude",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "arabicForm",
+      "type": "\"initial\" | \"medial\" | \"terminal\" | \"isolated\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-activedescendant",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-atomic",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-autocomplete",
+      "type": "\"none\" | \"list\" | \"inline\" | \"both\" | undefined",
+      "required": false,
+      "description": "Indicates whether inputting text could trigger display of one or more predictions of the user's intended value for an input and specifies how predictions would be\npresented if they are made.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-braillelabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-brailleroledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized abbreviated description for the role of an element, which is intended to be converted into Braille.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-busy",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-checked",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"checked\" state of checkboxes, radio buttons, and other widgets.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-colcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of columns in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-colindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's column index or position with respect to the total number of columns within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-colindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-colindex.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-colspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-controls",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) whose contents or presence are controlled by the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-current",
+      "type": "boolean | \"time\" | \"true\" | \"false\" | \"page\" | \"step\" | \"location\" | \"date\" | undefined",
+      "required": false,
+      "description": "Indicates the element that represents the current item within a container or set of related elements.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-describedby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that describes the object.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-description",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that describes or annotates the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-details",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides a detailed, extended description for the object.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-disabled",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-dropeffect",
+      "type": "\"link\" | \"none\" | \"copy\" | \"execute\" | \"move\" | \"popup\" | undefined",
+      "required": false,
+      "description": "Indicates what functions can be performed when a dragged object is released on the drop target.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-errormessage",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element that provides an error message for the object.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-expanded",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-flowto",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the next element (or elements) in an alternate reading order of content which, at the user's discretion,\nallows assistive technology to override the general default of reading in document source order.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-grabbed",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates an element's \"grabbed\" state in a drag-and-drop operation.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-haspopup",
+      "type": "boolean | \"dialog\" | \"menu\" | \"true\" | \"false\" | \"grid\" | \"listbox\" | \"tree\" | undefined",
+      "required": false,
+      "description": "Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-hidden",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether the element is exposed to an accessibility API.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\" | \"grammar\" | \"spelling\" | undefined",
+      "required": false,
+      "description": "Indicates the entered value does not conform to the format expected by the application.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-keyshortcuts",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a string value that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-labelledby",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies the element (or elements) that labels the current element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-level",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the hierarchical level of an element within a structure.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-live",
+      "type": "\"off\" | \"assertive\" | \"polite\" | undefined",
+      "required": false,
+      "description": "Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live region.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-modal",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether an element is modal when displayed.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-multiline",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates whether a text box accepts multiple lines of input or only a single line.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-multiselectable",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the user may select more than one item from the current selectable descendants.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Indicates whether the element's orientation is horizontal, vertical, or unknown/ambiguous.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-owns",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Identifies an element (or elements) in order to define a visual, functional, or contextual parent/child relationship\nbetween DOM elements where the DOM hierarchy cannot be used to represent the relationship.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-placeholder",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a short hint (a word or short phrase) intended to aid the user with data entry when the control has no value.\nA hint could be a sample value or a brief description of the expected format.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-posinset",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's number or position in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-pressed",
+      "type": "boolean | \"true\" | \"false\" | \"mixed\" | undefined",
+      "required": false,
+      "description": "Indicates the current \"pressed\" state of toggle buttons.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-readonly",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that the element is not editable, but is otherwise operable.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-relevant",
+      "type": "\"text\" | \"additions\" | \"additions removals\" | \"additions text\" | \"all\" | \"removals\" | \"removals additions\" | \"removals text\" | \"text additions\" | \"text removals\" | undefined",
+      "required": false,
+      "description": "Indicates what notifications the user agent will trigger when the accessibility tree within a live region is modified.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-required",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates that user input is required on the element before a form may be submitted.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-roledescription",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human-readable, author-localized description for the role of an element.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-rowcount",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the total number of rows in a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-rowindex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines an element's row index or position with respect to the total number of rows within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-rowindextext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines a human readable text alternative of aria-rowindex.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-rowspan",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-selected",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "Indicates the current \"selected\" state of various widgets.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-setsize",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the number of items in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-sort",
+      "type": "\"none\" | \"ascending\" | \"descending\" | \"other\" | undefined",
+      "required": false,
+      "description": "Indicates if items in a table or grid are sorted in ascending or descending order.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-valuemax",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the maximum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-valuemin",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the minimum allowed value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-valuenow",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Defines the current value for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "aria-valuetext",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Defines the human readable text alternative of aria-valuenow for a range widget.",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "ascent",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "attributeName",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "attributeType",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "autoReverse",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "azimuth",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "baseFrequency",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "baselineShift",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "baseProfile",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "bbox",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "begin",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "bias",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "by",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "calcMode",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "capHeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "clip",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "clipPath",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "clipPathUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "clipRule",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "color",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "colorInterpolation",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "colorInterpolationFilters",
+      "type": "\"inherit\" | \"auto\" | \"sRGB\" | \"linearRGB\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "colorProfile",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "colorRendering",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "contentScriptType",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "contentStyleType",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "crossOrigin",
+      "type": "CrossOrigin",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "cursor",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "cx",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "cy",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "d",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "dangerouslySetInnerHTML",
+      "type": "{ __html: string | TrustedHTML; } | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "decelerate",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "descent",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "diffuseConstant",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "direction",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "display",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "divisor",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "dominantBaseline",
+      "type": "\"inherit\" | \"auto\" | \"alphabetic\" | \"hanging\" | \"ideographic\" | \"mathematical\" | \"text-before-edge\" | \"middle\" | \"central\" | \"text-after-edge\" | \"use-script\" | \"no-change\" | \"reset-size\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "dur",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "dx",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "dy",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "edgeMode",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "elevation",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "enableBackground",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "end",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "exponent",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "externalResourcesRequired",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fill",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fillOpacity",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fillRule",
+      "type": "\"inherit\" | \"nonzero\" | \"evenodd\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "filter",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "filterRes",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "filterUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "floodColor",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "floodOpacity",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "focusable",
+      "type": "Booleanish | \"auto\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontFamily",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontSize",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontSizeAdjust",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontStretch",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontStyle",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontVariant",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fontWeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "format",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fr",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "from",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fx",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "fy",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "g1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "g2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "glyphName",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "glyphOrientationHorizontal",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "glyphOrientationVertical",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "glyphRef",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "gradientTransform",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "gradientUnits",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "hanging",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "horizAdvX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "horizOriginX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "href",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "id",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "ideographic",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "imageRendering",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "in",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "in2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "intercept",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "k",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "k1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "k2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "k3",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "k4",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "kernelMatrix",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "kernelUnitLength",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "kerning",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "key",
+      "type": "Key | null | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "keyPoints",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "keySplines",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "keyTimes",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "lang",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "lengthAdjust",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "letterSpacing",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "lightingColor",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "limitingConeAngle",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "local",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerEnd",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerHeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerMid",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerStart",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "markerWidth",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "mask",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "maskContentUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "maskUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "mathematical",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "max",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "media",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "method",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "min",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "mode",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "name",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "nonce",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "numOctaves",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "offset",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAbort",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAbortCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationEnd",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationEndCapture",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationIteration",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationIterationCapture",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationStart",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAnimationStartCapture",
+      "type": "AnimationEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAuxClick",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onAuxClickCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onBeforeInput",
+      "type": "InputEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onBeforeInputCapture",
+      "type": "InputEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onBeforeToggle",
+      "type": "ToggleEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onBlur",
+      "type": "FocusEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onBlurCapture",
+      "type": "FocusEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCanPlay",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCanPlayCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCanPlayThrough",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCanPlayThroughCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onChange",
+      "type": "ChangeEventHandler<SVGSVGElement, Element> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onChangeCapture",
+      "type": "ChangeEventHandler<SVGSVGElement, Element> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onClick",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onClickCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionEnd",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionEndCapture",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionStart",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionStartCapture",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionUpdate",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCompositionUpdateCapture",
+      "type": "CompositionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onContextMenu",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onContextMenuCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCopy",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCopyCapture",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCut",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onCutCapture",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDoubleClick",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDoubleClickCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDrag",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragEnd",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragEndCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragEnter",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragEnterCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragExit",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragExitCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragLeave",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragLeaveCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragOver",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragOverCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragStart",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDragStartCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDrop",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDropCapture",
+      "type": "DragEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDurationChange",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onDurationChangeCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEmptied",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEmptiedCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEncrypted",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEncryptedCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEnded",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onEndedCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onError",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onErrorCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onFocus",
+      "type": "FocusEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onFocusCapture",
+      "type": "FocusEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onGotPointerCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onGotPointerCaptureCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onInput",
+      "type": "InputEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onInputCapture",
+      "type": "InputEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onInvalid",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onInvalidCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyDown",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyDownCapture",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyPress",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyPressCapture",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyUp",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onKeyUpCapture",
+      "type": "KeyboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoad",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadedData",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadedDataCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadedMetadata",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadedMetadataCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadStart",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLoadStartCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLostPointerCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onLostPointerCaptureCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseDown",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseDownCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseEnter",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseLeave",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseMove",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseMoveCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseOut",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseOutCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseOver",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseOverCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseUp",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onMouseUpCapture",
+      "type": "MouseEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPaste",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPasteCapture",
+      "type": "ClipboardEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPause",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPauseCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPlay",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPlayCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPlaying",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPlayingCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerCancel",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerCancelCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerDown",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerDownCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerEnter",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerLeave",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerMove",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerMoveCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerOut",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerOutCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerOver",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerOverCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerUp",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onPointerUpCapture",
+      "type": "PointerEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onProgress",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onProgressCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onRateChange",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onRateChangeCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onReset",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onResetCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onScroll",
+      "type": "UIEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onScrollCapture",
+      "type": "UIEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onScrollEnd",
+      "type": "UIEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onScrollEndCapture",
+      "type": "UIEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSeeked",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSeekedCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSeeking",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSeekingCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSelect",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSelectCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onStalled",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onStalledCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSubmit",
+      "type": "SubmitEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSubmitCapture",
+      "type": "SubmitEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSuspend",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onSuspendCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTimeUpdate",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTimeUpdateCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onToggle",
+      "type": "ToggleEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchCancel",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchCancelCapture",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchEnd",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchEndCapture",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchMove",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchMoveCapture",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchStart",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTouchStartCapture",
+      "type": "TouchEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionCancel",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionCancelCapture",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionEnd",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionEndCapture",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionRun",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionRunCapture",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionStart",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onTransitionStartCapture",
+      "type": "TransitionEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onVolumeChange",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onVolumeChangeCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onWaiting",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onWaitingCapture",
+      "type": "ReactEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onWheel",
+      "type": "WheelEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "onWheelCapture",
+      "type": "WheelEventHandler<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "opacity",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "operator",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "order",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "orient",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "orientation",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "origin",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "overflow",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "overlinePosition",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "overlineThickness",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "paintOrder",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "panose1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "part",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "path",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "pathLength",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "patternContentUnits",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "patternTransform",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "patternUnits",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "pointerEvents",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "points",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "pointsAtX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "pointsAtY",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "pointsAtZ",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "preserveAlpha",
+      "type": "Booleanish | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "preserveAspectRatio",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "primitiveUnits",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "r",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "radius",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "ref",
+      "type": "Ref<SVGSVGElement> | undefined",
+      "required": false,
+      "description": "Allows getting a ref to the component instance.\nOnce the component unmounts, React will set `ref.current` to `null`\n(or call the ref with `null` if you passed a callback ref).",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "refX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "refY",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "renderingIntent",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "repeatCount",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "repeatDur",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "requiredExtensions",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "requiredFeatures",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "restart",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "result",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "role",
+      "type": "AriaRole | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "rotate",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "rx",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "ry",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "scale",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "seed",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "shapeRendering",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "slope",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "slot",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "spacing",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "specularConstant",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "specularExponent",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "speed",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "spreadMethod",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "startOffset",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stdDeviation",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stemh",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stemv",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stitchTiles",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stopColor",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stopOpacity",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strikethroughPosition",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strikethroughThickness",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "string",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "stroke",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeDasharray",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeDashoffset",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeLinecap",
+      "type": "\"inherit\" | \"butt\" | \"round\" | \"square\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeLinejoin",
+      "type": "\"inherit\" | \"round\" | \"miter\" | \"bevel\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeMiterlimit",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeOpacity",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "strokeWidth",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "style",
+      "type": "CSSProperties | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "suppressHydrationWarning",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "surfaceScale",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "systemLanguage",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "tabIndex",
+      "type": "number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "tableValues",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "target",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "targetX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "targetY",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "textAnchor",
+      "type": "\"inherit\" | \"start\" | \"end\" | \"middle\" | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "textDecoration",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "textLength",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "textRendering",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "to",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "transform",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "type",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "u1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "u2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "underlinePosition",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "underlineThickness",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "unicode",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "unicodeBidi",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "unicodeRange",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "unitsPerEm",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vAlphabetic",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "values",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vectorEffect",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "version",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vertAdvY",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vertOriginX",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vertOriginY",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vHanging",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vIdeographic",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "viewBox",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "viewTarget",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "visibility",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "vMathematical",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "widths",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "wordSpacing",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "writingMode",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "x",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "x1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "x2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xChannelSelector",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xHeight",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkActuate",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkArcrole",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkHref",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkRole",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkShow",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkTitle",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xlinkType",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xmlBase",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xmlLang",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xmlns",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xmlnsXlink",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "xmlSpace",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "y",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "y1",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "y2",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "yChannelSelector",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "z",
+      "type": "string | number | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    },
+    {
+      "component": "Sparkline",
+      "name": "zoomAndPan",
+      "type": "string | undefined",
+      "required": false,
+      "description": "",
+      "inherited": true
+    }
+  ],
+  "css": [
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton",
+      "conditions": [],
+      "property": "position",
+      "value": "relative",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton",
+      "conditions": [],
+      "property": "overflow",
+      "value": "hidden",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='text']",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='text']",
+      "conditions": [],
+      "property": "height",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='block']",
+      "conditions": [],
+      "property": "width",
+      "value": "100%",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='block']",
+      "conditions": [],
+      "property": "height",
+      "value": "120px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='block']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-lg)",
+      "tokens": [
+        "--radius-lg"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='avatar']",
+      "conditions": [],
+      "property": "width",
+      "value": "var(--space-10)",
+      "tokens": [
+        "--space-10"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='avatar']",
+      "conditions": [],
+      "property": "height",
+      "value": "var(--space-10)",
+      "tokens": [
+        "--space-10"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='avatar']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-full)",
+      "tokens": [
+        "--radius-full"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='avatar']",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "display",
+      "value": "flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "gap",
+      "value": "var(--space-6)",
+      "tokens": [
+        "--space-6"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "padding",
+      "value": "var(--space-4)",
+      "tokens": [
+        "--space-4"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "height",
+      "value": "56px",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-surface)",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "border-bottom",
+      "value": "1px solid var(--color-border-subtle)",
+      "tokens": [
+        "--color-border-subtle"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-variant='table-row']",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton-cell",
+      "conditions": [],
+      "property": "height",
+      "value": "var(--space-3)",
+      "tokens": [
+        "--space-3"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton-cell",
+      "conditions": [],
+      "property": "background",
+      "value": "var(--color-bg-selected)",
+      "tokens": [
+        "--color-bg-selected"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton-cell",
+      "conditions": [],
+      "property": "border-radius",
+      "value": "var(--radius-xs)",
+      "tokens": [
+        "--radius-xs"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton-cell",
+      "conditions": [],
+      "property": "flex",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton-cell:nth-child(2)",
+      "conditions": [],
+      "property": "flex",
+      "value": "3",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "position",
+      "value": "absolute",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "inset",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "content",
+      "value": "''",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "transform",
+      "value": "translateX(-100%)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "background",
+      "value": "linear-gradient(\n    90deg,\n    transparent,\n    color-mix(in srgb, var(--color-bg-surface) 60%, transparent),\n    transparent\n  )",
+      "tokens": [
+        "--color-bg-surface"
+      ]
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [],
+      "property": "animation",
+      "value": "aegis-skeleton-shimmer 1600ms ease-in-out infinite",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": "to",
+      "conditions": [
+        "@keyframes aegis-skeleton-shimmer"
+      ],
+      "property": "transform",
+      "value": "translateX(100%)",
+      "tokens": []
+    },
+    {
+      "file": "src/components/skeleton/skeleton.css",
+      "selector": ".aegis-skeleton[data-animate='true']::after",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "display",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline",
+      "conditions": [],
+      "property": "display",
+      "value": "block",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline",
+      "conditions": [],
+      "property": "overflow",
+      "value": "visible",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline-empty",
+      "conditions": [],
+      "property": "display",
+      "value": "inline-flex",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline-empty",
+      "conditions": [],
+      "property": "align-items",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline-empty",
+      "conditions": [],
+      "property": "justify-content",
+      "value": "center",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline-empty",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-tertiary)",
+      "tokens": [
+        "--color-text-tertiary"
+      ]
+    },
+    {
+      "file": "src/components/sparkline/sparkline.css",
+      "selector": ".aegis-sparkline-empty",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-sm)",
+      "tokens": [
+        "--text-sm"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "14px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171718)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#6a6e77, #9399a3)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#eceef1, #212224)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "light-dark(#176f73, #4b9f9c)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-bg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-bg",
+      "value": "light-dark(#3f65ac, #6b91c9)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental-tokens.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating']),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "999px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])",
+      "conditions": [],
+      "property": "line-height",
+      "value": "1.5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/fundamental.css",
+      "selector": ":is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is(\n    [class^='aegis-'],\n    [class*=' aegis-'],\n    .surface,\n    .floating,\n    .side-nav,\n    .tag,\n    .status-badge,\n    .severity-badge\n  ),\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'], .side-nav)\n  *,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::before,\n:is([data-layout-theme='fundamental'], [data-layout-theme='fundamental-floating'])\n  :is([class^='aegis-'], [class*=' aegis-'])::after",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "*",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/styles/globals.css",
+      "selector": "html",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #1b1b1b)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "var(--color-bg-canvas)",
+      "tokens": [
+        "--color-bg-canvas"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#dedede, #252525)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "light-dark(#b32acb, #df7cf2)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-bg",
+      "value": "light-dark(#c92572, #ff83b4)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-bg",
+      "value": "light-dark(#315de5, #79a2ff)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic-tokens.css",
+      "selector": "[data-layout-theme='minimalistic'],\n[data-layout-theme='minimalistic'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "box-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "text-shadow",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/minimalistic.css",
+      "selector": "[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light),\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)::after,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::before,\n[data-layout-theme='minimalistic']\n  :is([class^='aegis-'], [class*=' aegis-']):not(.aegis-marketing, .aegis-theme-light)\n  *::after,\n[data-layout-theme='minimalistic']\n  :is(.surface, .floating, .side-nav, .tag, .status-badge, .severity-badge, .count-badge),\n[data-layout-theme='minimalistic'] .side-nav *",
+      "conditions": [],
+      "property": "backdrop-filter",
+      "value": "none",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/theme.css",
+      "selector": ":root",
+      "conditions": [
+        "@theme inline"
+      ],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-3",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-4",
+      "value": "16px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-6",
+      "value": "24px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--space-10",
+      "value": "40px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "13px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#ffffff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#edf0f5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#626b7c",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "#e6e8ee",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "#b32acb",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-pink-bg",
+      "value": "#c92572",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ":root,\n.aegis-theme-light",
+      "conditions": [],
+      "property": "--color-ai-blue-bg",
+      "value": "#315de5",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "#17181d",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "#262933",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "#959cab",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "rgba(255, 255, 255, 0.06)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "#df7cf2",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-pink-bg",
+      "value": "#ff83b4",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/tokens.css",
+      "selector": ".dark",
+      "conditions": [],
+      "property": "--color-ai-blue-bg",
+      "value": "#79a2ff",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-surface",
+      "value": "light-dark(#ffffff, #171717)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-bg-selected",
+      "value": "light-dark(#eef1fc, #222940)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "light-dark(#686868, #8396a5)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-border-subtle",
+      "value": "light-dark(#e5e5e5, #404040)",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-bg",
+      "value": "var(--color-function-bg)",
+      "tokens": [
+        "--color-function-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-pink-bg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--color-ai-blue-bg",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-xs",
+      "value": "4px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-lg",
+      "value": "8px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--radius-full",
+      "value": "6px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple-tokens.css",
+      "selector": "[data-layout-theme='v0-simple'],\n[data-layout-theme='v0-simple'] :is(.dark, .aegis-theme-light)",
+      "conditions": [],
+      "property": "--text-sm",
+      "value": "12px",
+      "tokens": []
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-width",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple']\n  :is(\n    button[class^='aegis-'],\n    button.tag,\n    .tag-remove,\n    .aegis-date-picker button,\n    [class^='aegis-'] > button,\n    [class*=' aegis-'] > button\n  )",
+      "conditions": [],
+      "property": "min-height",
+      "value": "var(--v0-control-min)",
+      "tokens": [
+        "--v0-control-min"
+      ]
+    },
+    {
+      "file": "src/styles/v0-simple.css",
+      "selector": "[data-layout-theme='v0-simple'] :is(.status-badge, .status-dot)",
+      "conditions": [],
+      "property": "--color-text-tertiary",
+      "value": "var(--color-text-secondary)",
+      "tokens": [
+        "--color-text-secondary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "box-sizing",
+      "value": "border-box",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-width",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-style",
+      "value": "solid",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n:where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [],
+      "property": "border-color",
+      "value": "var(--color-border-default)",
+      "tokens": [
+        "--color-border-default"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-family",
+      "value": "var(--font-ui)",
+      "tokens": [
+        "--font-ui"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "font-size",
+      "value": "var(--text-base)",
+      "tokens": [
+        "--text-base"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-'])",
+      "conditions": [],
+      "property": "color",
+      "value": "var(--color-text-primary)",
+      "tokens": [
+        "--color-text-primary"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(button, input, select, textarea)",
+      "conditions": [],
+      "property": "font",
+      "value": "inherit",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button)",
+      "conditions": [],
+      "property": "cursor",
+      "value": "pointer",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where(button[class^='aegis-'], [class^='aegis-'] button):disabled",
+      "conditions": [],
+      "property": "cursor",
+      "value": "not-allowed",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline",
+      "value": "2px solid var(--ring-focus)",
+      "tokens": [
+        "--ring-focus"
+      ]
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']):focus-visible,\n:where([class^='aegis-'], [class*=' aegis-']) :focus-visible",
+      "conditions": [],
+      "property": "outline-offset",
+      "value": "2px",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(h1, h2, h3, h4, p)",
+      "conditions": [],
+      "property": "margin-top",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']) :where(svg)",
+      "conditions": [],
+      "property": "flex-shrink",
+      "value": "0",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-duration",
+      "value": "0.01ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "animation-iteration-count",
+      "value": "1",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "transition-duration",
+      "value": "0ms",
+      "tokens": []
+    },
+    {
+      "file": "src/package/styles.css",
+      "selector": ":where([class^='aegis-'], [class*=' aegis-']),\n  :where([class^='aegis-'], [class*=' aegis-']) :where(*, *::before, *::after)",
+      "conditions": [
+        "@media (prefers-reduced-motion: reduce)"
+      ],
+      "property": "scroll-behavior",
+      "value": "auto",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.tsx",
+      "selector": "[src/components/sparkline/sparkline.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "`var(--color-chart-${intent})`",
+      "tokens": []
+    },
+    {
+      "file": "src/components/sparkline/sparkline.tsx",
+      "selector": "[src/components/sparkline/sparkline.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-bg)",
+      "tokens": [
+        "--color-ai-bg"
+      ]
+    },
+    {
+      "file": "src/components/sparkline/sparkline.tsx",
+      "selector": "[src/components/sparkline/sparkline.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-pink-bg)",
+      "tokens": [
+        "--color-ai-pink-bg"
+      ]
+    },
+    {
+      "file": "src/components/sparkline/sparkline.tsx",
+      "selector": "[src/components/sparkline/sparkline.tsx]",
+      "conditions": [],
+      "property": "runtime style",
+      "value": "var(--color-ai-blue-bg)",
+      "tokens": [
+        "--color-ai-blue-bg"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "name": "variant",
+      "values": [
+        "line",
+        "area",
+        "bar"
+      ],
+      "default": "line"
+    },
+    {
+      "name": "intent",
+      "values": [
+        "function",
+        "ai",
+        "success",
+        "warning",
+        "destroy"
+      ],
+      "default": "function"
+    }
+  ],
+  "cssClasses": [
+    "aegis-sparkline",
+    "aegis-sparkline-empty"
+  ],
+  "relatedComponents": [
+    "@/components/skeleton"
+  ],
+  "accessibility": {
+    "roles": [
+      "img",
+      "status"
+    ],
+    "ariaAttributes": [
+      "aria-label"
+    ],
+    "nativeElements": [
+      "circle",
+      "defs",
+      "path",
+      "rect",
+      "span",
+      "stop",
+      "svg"
+    ],
+    "keyboardKeys": [],
+    "dependencies": [
+      "clsx",
+      "react",
+      "tailwind-merge"
+    ]
+  }
+}

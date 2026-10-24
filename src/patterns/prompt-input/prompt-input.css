@@ -1,0 +1,123 @@
+.aegis-prompt {
+  min-width: 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+}
+.aegis-prompt:focus-within {
+  border-color: var(--color-ai-fg);
+  box-shadow: 0 0 0 2px var(--color-ai-soft);
+}
+.aegis-prompt[data-disabled] {
+  background: var(--color-bg-canvas);
+}
+.aegis-prompt .aegis-textarea-native {
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  padding: 4px 2px;
+  box-shadow: none;
+  font-size: 13px;
+}
+.aegis-prompt .aegis-textarea-native:focus-visible {
+  outline: none;
+}
+.aegis-prompt-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+  max-height: 96px;
+  overflow-y: auto;
+}
+.aegis-prompt-context .tag {
+  max-width: 100%;
+  height: auto;
+  min-height: 22px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.aegis-prompt-toolbar,
+.aegis-prompt-tools {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.aegis-prompt-toolbar {
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.aegis-prompt-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+.aegis-prompt-hint > span {
+  margin-inline: 2px;
+}
+.aegis-prompt-error {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--color-destroy-fg);
+}
+.aegis-prompt-menu {
+  z-index: var(--z-popover);
+  width: min(360px, calc(100vw - 24px));
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface-raised);
+  box-shadow: var(--shadow-floating);
+  padding: 6px;
+}
+.aegis-prompt-menu [cmdk-input] {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 10px;
+  color: var(--color-text-primary);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+.aegis-prompt-menu [cmdk-list] {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-top: 4px;
+}
+.aegis-prompt-menu [cmdk-item] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.aegis-prompt-menu [cmdk-item][data-selected='true'] {
+  background: var(--color-bg-selected);
+}
+.aegis-prompt-menu [cmdk-item] > span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.aegis-prompt-menu strong {
+  font-size: 13px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.aegis-prompt-menu small,
+.aegis-prompt-menu [cmdk-empty] {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+.aegis-prompt-menu [cmdk-empty] {
+  padding: 20px 8px;
+}

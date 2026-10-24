@@ -1,0 +1,50 @@
+.aegis-split-button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+  gap: var(--space-2);
+}
+.aegis-split-button-controls {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  isolation: isolate;
+}
+.aegis-split-button-controls > [data-split-action='primary'] {
+  min-width: 0;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+.aegis-split-button-controls > [data-split-action='primary'] .button-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aegis-split-button-controls > .aegis-split-button-menu {
+  flex: none;
+  width: 34px;
+  padding-inline: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  margin-inline-start: -1px;
+  border-inline-start-color: var(--color-border-default);
+}
+.aegis-split-button-controls > .aegis-split-button-menu[data-emphasis='primary'] {
+  border-inline-start-color: color-mix(in srgb, currentColor 28%, transparent);
+}
+.aegis-split-button[data-size='sm'] .aegis-split-button-menu {
+  width: 28px;
+}
+.aegis-split-button[data-size='lg'] .aegis-split-button-menu {
+  width: 40px;
+}
+.aegis-split-button-controls > .aegis-button:focus-visible {
+  z-index: 1;
+}
+.aegis-split-button-error {
+  max-width: 40ch;
+  margin: 0;
+  color: var(--color-destroy-fg);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}

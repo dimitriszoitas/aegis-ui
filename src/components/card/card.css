@@ -1,0 +1,46 @@
+.aegis-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--surface-corner-radius, var(--surface-radius));
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+.aegis-card[data-elevation='raised'] {
+  background: var(--color-bg-surface-raised);
+  box-shadow: var(--shadow-raised);
+}
+.aegis-card[data-elevation='floating'] {
+  background: var(--color-bg-surface-raised);
+  border-radius: var(--surface-corner-radius, var(--surface-radius-floating));
+  box-shadow: var(--shadow-floating);
+}
+.aegis-card-header,
+.aegis-card-content,
+.aegis-card-footer {
+  padding: var(--layout-card-padding);
+}
+.aegis-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.aegis-card-header + .aegis-card-content {
+  padding-top: 0;
+}
+.aegis-card-title {
+  margin: 0;
+  font-size: var(--title-section-size);
+  font-weight: var(--title-weight);
+}
+.aegis-card-description {
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.aegis-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}

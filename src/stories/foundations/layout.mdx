@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import {
+  SurfaceExamples,
+  RadiusExamples,
+  SurfaceRadiusExamples,
+  ControlRadiusExamples,
+  SeparatorExamples,
+  SpacingExamples,
+  DensityExamples,
+} from './foundation-examples';
+
+<Meta title="Foundations/Space and surfaces" />
+
+# Space and surfaces
+
+Use a measured rhythm from a compact control to a complete application workspace.
+
+## Two themes
+
+**Fundamental** is the default. Navigation and workspace panels follow the application edges. **Fundamental Floating** places the side navigation and assistant panels in containers with 12px corners and 12px exterior insets, reduced to 8px insets on narrow screens. Both use the same palette, typography, controls, spacing roles, and data densities. The distinction is how persistent navigation and assistant surfaces sit within the workspace.
+
+Light and dark color are independent of presentation, giving four combinations. Theme changes preserve content and interaction state. Use Storybook's theme and color controls to compare them; the business application exposes the same choices in Settings → Appearance.
+
+`data-layout-theme` accepts `fundamental` or `fundamental-floating`, independently from `.dark` and `data-theme`. Apply the document attribute so portaled overlays receive the same theme. Existing layout-theme API names and the storage key remain compatible.
+
+## Surface hierarchy
+
+Canvas establishes the workspace, and borderless cards group content. Raised surface roles share the card fill rather than creating another permanent layer. Inputs have a quiet fill and boundary; transient overlays use a distinct surface and soft shadow. Modal tasks add a backdrop. Tables blend with their parent surface and use subtle horizontal dividers.
+
+<SurfaceExamples />
+
+Component examples use transparent layout wrappers instead of automatic cards. Add a Card when the composition needs a distinct surface. Interactive catalogue tiles can gain a quiet fill on hover; passive groups remain transparent.
+
+## Radius
+
+Fundamental and Fundamental Floating share component corners. Buttons and fields use 5/6/6px radii at small/medium/large sizes. Checkboxes retain a 4px radius. Use button and control tokens for their respective components.
+
+| Size   | Height | Button radius | Input/select radius |
+| ------ | ------ | ------------- | ------------------- |
+| Small  | 28px   | 5px           | 5px                 |
+| Medium | 34px   | 6px           | 6px                 |
+| Large  | 40px   | 6px           | 6px                 |
+
+<ControlRadiusExamples />
+
+Cards use `--surface-radius` (8px); nested surfaces use `--surface-radius-nested` (6px). Tags and severity badges use `--chip-radius` (4px). Genuine circular markers retain their shape. Floating chrome has its own geometry and does not override nested controls.
+
+<SurfaceRadiusExamples />
+
+The primitive scale remains available for custom compositions. Prefer a component-specific role where one exists.
+
+<RadiusExamples />
+
+## Spacing
+
+Spacing uses a 4px base. Fundamental's layout roles provide 28px page padding, 24px section gaps, 20px card padding, and 24px panel padding. At narrow widths these adapt to 20px, 20px, 16px, and 20px respectively. Individual components can use tighter internal spacing to preserve their density and interaction targets. Fundamental Floating shares these interior roles and adds its exterior container insets.
+
+<SpacingExamples />
+
+Nested content advances by a small 12px step using `--nested-inset`. Use it for accordion bodies, navigation children, tree levels, JSON branches, and expanded table content so parent and child items remain easy to follow.
+
+## Data density
+
+Use the component row-height tokens: `--grid-row-compact` is 36px, `--grid-row-default` is 48px, and `--grid-row-comfortable` is 60px. Expanded content is measured separately, so changing density does not clip nested data. Truncate long primary labels within the row and expose the full value through a tooltip or accessible label.
+
+<DensityExamples />
+
+## Scrollbars
+
+Overflowing pages and nested regions share native scrollbar styling in both color modes. Where supported, an 8px transparent track contains a 6px thumb with a 1px inset and 4px corners. The optional activity helper reveals thumbs while scrolling or using keyboard focus. Browsers using the standards fallback render a thin scrollbar; forced-colors mode retains native styling. Keyboard, wheel, touch, and native scrolling behavior remain unchanged.
+
+## Separators
+
+Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens. Navigation groups use subtle horizontal dividers without visible group headings in both themes.
+
+<SeparatorExamples />
+
+## Workflow layout
+
+A wizard can separate progress and form content into top-aligned cards, with the progress navigation stacking above the form at narrow widths. Use a sticky footer to keep navigation and explicit approval within reach.
+
+Application stories fill the available width up to 2160px and remain centered on wider screens. Smaller previews use responsive layouts. Storybook's 1600px viewport preset is optional.
+
+## Layer order
+
+Sticky content sits at 40, dropdowns at 50, sheets at 60, modals at 70, popovers at 80, notifications at 90, and tooltips at 100. Consume the named z-index tokens so nested interactions remain predictable.

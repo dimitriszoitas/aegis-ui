@@ -1,0 +1,36 @@
+.aegis-description-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5) var(--space-6);
+  margin: 0;
+}
+.aegis-description-list[data-columns='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.aegis-description-list[data-columns='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.aegis-description-list > div {
+  min-width: 0;
+}
+.aegis-description-list dt {
+  margin-bottom: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+.aegis-description-list dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.aegis-description-list[data-orientation='horizontal'] > div {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(0, 2fr);
+  gap: var(--space-4);
+}
+@media (max-width: 640px) {
+  .aegis-description-list[data-columns] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
