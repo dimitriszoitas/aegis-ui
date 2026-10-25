@@ -64,6 +64,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const OpenSheet: Story = { args: { defaultOpen: true } };
 export const SizeMatrix: Story = {
+  argTypes: { size: { control: false }, trigger: { control: false } },
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
       {(['sm', 'md', 'lg'] as const).map((size) => (

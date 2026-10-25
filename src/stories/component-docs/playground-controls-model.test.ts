@@ -51,6 +51,18 @@ const meta: ComponentMetadata = {
 };
 
 describe('playground controls', () => {
+  it('preserves authored boolean controls when source variants contain string states', () => {
+    const result = playgroundControls(
+      { ...meta, variants: [{ name: 'loading', values: ['false', 'true'] }] },
+      { loading: { control: 'boolean' } },
+      { loading: false },
+    );
+    expect(result.find((control) => control.name === 'loading')).toMatchObject({
+      type: 'boolean',
+      defaultValue: false,
+    });
+    expect(result.find((control) => control.name === 'loading')?.options).toBeUndefined();
+  });
   it('exposes component variants and supported native state, not DOM wiring or React nodes', () => {
     const result = playgroundControls(
       meta,

@@ -10,6 +10,11 @@ const meta = {
 } satisfies Meta<typeof Sparkline>;
 export default meta;
 export const VariantsAndIntents: StoryObj<typeof meta> = {
+  argTypes: {
+    variant: { control: false },
+    intent: { control: false },
+    width: { control: false },
+  },
   render: (args) => (
     <div className="story-layout stack" style={{ maxWidth: 540 }}>
       {(['line', 'area', 'bar'] as const).map((variant) => (
@@ -24,6 +29,12 @@ export const VariantsAndIntents: StoryObj<typeof meta> = {
   ),
 };
 export const States: StoryObj<typeof meta> = {
+  argTypes: {
+    loading: { control: false },
+    data: { control: false },
+    variant: { control: false },
+    intent: { control: false },
+  },
   render: (args) => (
     <div className="story-layout row" style={{ gap: 'var(--space-6)' }}>
       <Sparkline {...args} loading />

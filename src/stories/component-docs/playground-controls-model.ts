@@ -88,7 +88,14 @@ export function playgroundControls(
           : prop?.description || undefined,
       defaultValue: value ?? defaultValue(prop?.defaultValue) ?? variant?.default,
     };
-    if (options.length && kind !== 'multi-select' && kind !== 'check' && kind !== 'inline-check') {
+    if (kind === 'boolean') {
+      control.type = 'boolean';
+    } else if (
+      options.length &&
+      kind !== 'multi-select' &&
+      kind !== 'check' &&
+      kind !== 'inline-check'
+    ) {
       control.type = 'select';
       const labels = isRecord(configuration.labels) ? configuration.labels : {};
       control.options = options.map((option) => ({
@@ -98,11 +105,7 @@ export function playgroundControls(
             ? (labels[String(option)] as string)
             : String(option),
       }));
-    } else if (
-      kind === 'boolean' ||
-      /^(?:boolean)(?:\s*\|\s*undefined)?$/.test(type) ||
-      typeof value === 'boolean'
-    ) {
+    } else if (/^(?:boolean)(?:\s*\|\s*undefined)?$/.test(type) || typeof value === 'boolean') {
       control.type = 'boolean';
     } else if (
       kind === 'number' ||

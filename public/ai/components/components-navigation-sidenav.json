@@ -314,6 +314,12 @@
       "name": "Expanded Keyboard",
       "url": "../../?path=/story/components-navigation-sidenav--expanded-keyboard",
       "sourceFile": "src/components/side-nav/side-nav.stories.tsx"
+    },
+    {
+      "id": "components-navigation-sidenav--playground",
+      "name": "Playground",
+      "url": "../../?path=/story/components-navigation-sidenav--playground",
+      "sourceFile": "src/components/side-nav/side-nav.stories.tsx"
     }
   ],
   "tokenRefs": [

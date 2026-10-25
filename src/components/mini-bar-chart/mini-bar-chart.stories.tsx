@@ -43,6 +43,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 export const Intents: Story = {
+  argTypes: { intent: { control: false } },
   render: (args) => (
     <div className="row" style={{ gap: 'var(--space-6)' }}>
       {(['function', 'ai', 'success', 'warning', 'destroy'] as const).map((intent) => (

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { useState } from 'react';
+import { useArgs } from 'storybook/preview-api';
 import {
   LayoutDashboard,
   Folder,
@@ -10,7 +11,7 @@ import {
   Settings,
   FileChartColumn,
 } from '@/components/icon';
-import { SideNav } from './side-nav';
+import { SideNav, type SideNavProps } from './side-nav';
 import { Avatar } from '@/components/avatar';
 export default {
   id: 'components-navigation-sidenav',
@@ -130,5 +131,125 @@ export const ExpandedKeyboard: StoryObj<typeof SideNav> = {
     ).not.toBeInTheDocument();
     await userEvent.tab();
     await expect(canvas.getByRole('button', { name: 'Reports' })).toHaveFocus();
+  },
+};
+
+type SideNavPlaygroundArgs = Omit<SideNavProps, 'brandIcon' | 'footer'> & {
+  showBrandIcon: boolean;
+  showFooter: boolean;
+};
+function SideNavPlaygroundFixture({
+  args,
+  updateArgs,
+}: {
+  args: SideNavPlaygroundArgs;
+  updateArgs: (patch: Partial<SideNavPlaygroundArgs>) => void;
+}) {
+  const [notice, setNotice] = useState('');
+  const { showBrandIcon, showFooter, ...navigation } = args;
+  return (
+    <>
+      <SideNav
+        {...navigation}
+        brandIcon={showBrandIcon ? undefined : null}
+        footer={
+          showFooter
+            ? (collapsed) => (
+                <div className="row">
+                  <Avatar name="Elena Vasquez" size="sm" />
+                  {!collapsed && <span>Elena Vasquez</span>}
+                </div>
+              )
+            : undefined
+        }
+        onCollapsedChange={(collapsed) => updateArgs({ collapsed })}
+        onNavigate={(activeId) => updateArgs({ activeId })}
+        onSearch={() => setNotice('Workspace search requested')}
+      />
+      <p className="sr-only" role="status">
+        {notice}
+      </p>
+    </>
+  );
+}
+export const Playground: StoryObj<SideNavPlaygroundArgs> = {
+  args: {
+    brandName: 'Northstar',
+    workspace: 'Product team',
+    collapsed: false,
+    activeId: 'projects',
+    showSearch: true,
+    showWorkspace: true,
+    showBrandIcon: true,
+    showFooter: true,
+    sections: [
+      {
+        label: 'Workspace',
+        items: [
+          { id: 'overview', label: 'Overview', icon: <LayoutDashboard /> },
+          { id: 'projects', label: 'Projects', icon: <Folder />, count: 8 },
+          { id: 'customers', label: 'Customers', icon: <Layers />, count: 12 },
+        ],
+      },
+      {
+        label: 'Manage',
+        items: [
+          {
+            id: 'workflows',
+            label: 'Workflows',
+            icon: <FileCode />,
+            children: [
+              { id: 'delivery', label: 'Project delivery', icon: <FileCode /> },
+              { id: 'onboarding', label: 'Customer onboarding', icon: <FileCode /> },
+            ],
+          },
+          { id: 'reports', label: 'Reports', icon: <FileChartColumn /> },
+          { id: 'settings', label: 'Settings', icon: <Settings /> },
+        ],
+      },
+    ],
+  },
+  argTypes: {
+    brandName: { control: 'text' },
+    workspace: { control: 'text' },
+    collapsed: { control: 'boolean' },
+    activeId: {
+      control: 'select',
+      options: [
+        'overview',
+        'projects',
+        'customers',
+        'delivery',
+        'onboarding',
+        'reports',
+        'settings',
+      ],
+    },
+    showSearch: { control: 'boolean' },
+    showWorkspace: { control: 'boolean' },
+    showBrandIcon: { control: 'boolean' },
+    showFooter: { control: 'boolean' },
+    sections: { control: false },
+  },
+  render: function Playground(args) {
+    const [, updateArgs] = useArgs<SideNavPlaygroundArgs>();
+    return <SideNavPlaygroundFixture args={args} updateArgs={updateArgs} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Collapse navigation' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Expand navigation' })).toBeVisible(),
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Expand navigation' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Overview' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Overview' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      ),
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Search workspace' }));
+    await expect(canvas.getByRole('status')).toHaveTextContent('Workspace search requested');
   },
 };

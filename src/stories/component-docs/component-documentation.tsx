@@ -6,8 +6,10 @@ import { AnatomyDocumentation } from './anatomy/anatomy-documentation';
 import { authoredGuidance } from './authored-guidance';
 import { TokenDocumentation } from './token-documentation';
 import { PlaygroundControls } from './playground-controls';
+import { ExamplePicker } from './example-picker';
 import { playgroundControls } from './playground-controls-model';
 import { useSpecimenArgs } from './use-specimen-args';
+import { hubNavigationMessage } from './hub-navigation';
 import type { SpecimenPresentation } from './specimen-args-protocol';
 import type { ComponentMetadata, DocumentationSection } from './types';
 import './component-documentation.css';
@@ -102,6 +104,9 @@ function updateHubUrl(tab: HubTab, anchor: GuidelineSection, example: string) {
   if (example) url.searchParams.set('docsExample', example);
   else url.searchParams.delete('docsExample');
   target.history.replaceState(target.history.state, '', url);
+  // Globals updates rebuild the URL from the manager's query store. Keep that
+  // store aligned without navigating or reloading the current docs preview.
+  if (target !== window) target.postMessage(hubNavigationMessage(url), url.origin);
 }
 function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
   return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
@@ -137,12 +142,14 @@ function Specimen({
   onStoryChange,
   showSelector = true,
   playground = false,
+  examples = false,
 }: {
   meta: ComponentMetadata;
   story: string;
   onStoryChange: (story: string) => void;
   showSelector?: boolean;
   playground?: boolean;
+  examples?: boolean;
   onInspect?: (document: Document) => void;
   onLoading?: () => void;
 }) {
@@ -155,10 +162,14 @@ function Specimen({
       : requestedStory;
   const exampleOptions =
     playground && interactiveStories.length ? interactiveStories : meta.stories;
+  const interactive = playground || examples;
+  const selectedExample = meta.stories.find((item) => item.id === story);
+  const customizationExample = preferredExample(meta);
+  const editable = Boolean(selectedExample?.supportsArgs);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
   const frame = useRef<HTMLIFrameElement>(null);
-  const specimen = useSpecimenArgs(frame, story, playground);
+  const specimen = useSpecimenArgs(frame, story, interactive);
   const callback = useRef(onInspect);
   callback.current = onInspect;
   const loadingCallback = useRef(onLoading);
@@ -192,10 +203,10 @@ function Specimen({
   }, []);
   const { updatePresentation } = specimen;
   useEffect(() => {
-    if (playground) updatePresentation(presentation);
-  }, [playground, presentation, story, updatePresentation]);
-  const framePresentation = playground ? initialPresentation.current : presentation;
-  const source = `iframe.html?id=${story}&viewMode=story&globals=theme:${framePresentation.theme};layoutTheme:${framePresentation.layoutTheme}${playground ? '&aegisPlayground=1&embed=true' : ''}`;
+    if (interactive) updatePresentation(presentation);
+  }, [interactive, presentation, story, updatePresentation]);
+  const framePresentation = interactive ? initialPresentation.current : presentation;
+  const source = `iframe.html?id=${story}&viewMode=story&globals=theme:${framePresentation.theme};layoutTheme:${framePresentation.layoutTheme}${interactive ? '&aegisPlayground=1&embed=true' : ''}`;
   useEffect(() => {
     let active = true;
     setReady(false);
@@ -239,11 +250,13 @@ function Specimen({
   return (
     <section
       className="component-docs-specimen"
-      data-playground={playground || undefined}
+      data-playground={interactive || undefined}
       aria-label={`${meta.name} live example`}
     >
       <div className="component-docs-specimen-toolbar">
-        {showSelector && exampleOptions.length <= 4 ? (
+        {examples ? (
+          <span className="component-docs-example-title">{selectedExample?.name}</span>
+        ) : showSelector && exampleOptions.length <= 4 ? (
           <SegmentedControl
             label="Component example"
             size="sm"
@@ -292,7 +305,7 @@ function Specimen({
           </button>
         )}
       </div>
-      <div className={playground ? 'component-docs-playground-layout' : undefined}>
+      <div className={interactive ? 'component-docs-playground-layout' : undefined}>
         <div className="component-docs-specimen-stage">
           <iframe
             ref={frame}
@@ -310,17 +323,55 @@ function Specimen({
             </p>
           )}
         </div>
-        {playground && (
-          <PlaygroundControls
-            key={story}
-            controls={playgroundControls(meta, specimen.argTypes, specimen.args)}
-            args={specimen.args}
-            onArgsChange={specimen.updateArgs}
-            onReset={() => specimen.resetArgs()}
-            loading={specimen.status === 'loading'}
-            disabled={specimen.status !== 'ready'}
-            error={specimen.error}
-          />
+        {interactive && (
+          <aside className="component-docs-playground-sidebar" aria-label="Example options">
+            {examples && (
+              <ExamplePicker
+                examples={exampleOptions}
+                value={story}
+                onChange={(value) => {
+                  setReady(false);
+                  onStoryChange(value);
+                }}
+              />
+            )}
+            {editable ? (
+              <PlaygroundControls
+                key={story}
+                controls={playgroundControls(meta, specimen.argTypes, specimen.args)}
+                args={specimen.args}
+                onArgsChange={specimen.updateArgs}
+                onReset={() => specimen.resetArgs()}
+                loading={specimen.status === 'loading'}
+                disabled={specimen.status !== 'ready'}
+                error={specimen.error}
+              />
+            ) : (
+              <div className="component-docs-preset-options">
+                <p>
+                  This example demonstrates preset states. Try them in the preview or customize the
+                  component in Playground.
+                </p>
+                {customizationExample && customizationExample.id !== story && (
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      const choice = event.currentTarget
+                        .closest('aside')
+                        ?.querySelector<HTMLInputElement>(
+                          `input[type="radio"][value="${customizationExample.id}"]`,
+                        );
+                      setReady(false);
+                      onStoryChange(customizationExample.id);
+                      choice?.focus();
+                    }}
+                  >
+                    Customize component
+                  </button>
+                )}
+              </div>
+            )}
+          </aside>
         )}
       </div>
     </section>
@@ -998,10 +1049,10 @@ function ComponentHub({
         <Tabs.Panel value="examples" className="component-docs-panel">
           <p>
             Explore {meta.stories.length}{' '}
-            {meta.stories.length === 1 ? 'working example' : 'working examples'}. Select a specimen
-            to try its behavior, or open the full canvas.
+            {meta.stories.length === 1 ? 'working example' : 'working examples'}. Choose an example
+            on the right, then try its behavior and available options.
           </p>
-          <Specimen meta={meta} story={state.example} onStoryChange={changeExample} />
+          <Specimen meta={meta} story={state.example} onStoryChange={changeExample} examples />
         </Tabs.Panel>
       </Tabs.Root>
     </article>

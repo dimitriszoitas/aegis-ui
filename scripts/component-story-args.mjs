@@ -1,6 +1,6 @@
 import ts from 'typescript';
 
-/** Source evidence of args consumption, not a claim that every prop is forwarded. */
+/** Source evidence of editable args consumption, not a claim that every prop is forwarded. */
 export function supportsStoryArgs(story, meta, checker) {
   const resolve = (input, seen = new Set()) => {
     let node = input;
@@ -51,18 +51,40 @@ export function supportsStoryArgs(story, meta, checker) {
   const parameter = render.parameters[0];
   if (!parameter || !render.body) return false;
   const symbols = new Set();
-  const bindings = (name) => {
+  const callback = (name) => /^on[A-Z]/.test(name);
+  const bindings = (name, propertyName) => {
+    if (propertyName && callback(propertyName)) return;
     if (ts.isIdentifier(name)) {
       const symbol = checker.getSymbolAtLocation(name);
       if (symbol) symbols.add(symbol);
     } else if (ts.isObjectBindingPattern(name) || ts.isArrayBindingPattern(name)) {
-      for (const element of name.elements) if (ts.isBindingElement(element)) bindings(element.name);
+      for (const element of name.elements)
+        if (ts.isBindingElement(element))
+          bindings(
+            element.name,
+            propertyName ??
+              (element.dotDotDotToken
+                ? undefined
+                : (element.propertyName ?? element.name).getText().replace(/^['"]|['"]$/g, '')),
+          );
     }
   };
   bindings(parameter.name);
   let used = false;
   const visit = (node) => {
-    if (ts.isIdentifier(node) && symbols.has(checker.getSymbolAtLocation(node))) used = true;
+    if (ts.isIdentifier(node) && symbols.has(checker.getSymbolAtLocation(node))) {
+      const parent = node.parent;
+      const accessed =
+        ts.isPropertyAccessExpression(parent) && parent.expression === node
+          ? parent.name.text
+          : ts.isElementAccessExpression(parent) &&
+              parent.expression === node &&
+              ts.isStringLiteralLike(parent.argumentExpression)
+            ? parent.argumentExpression.text
+            : undefined;
+      // Wiring only an action spy does not make the component's visual props editable.
+      if (!accessed || !callback(accessed)) used = true;
+    }
     if (!used) ts.forEachChild(node, visit);
   };
   visit(render.body);

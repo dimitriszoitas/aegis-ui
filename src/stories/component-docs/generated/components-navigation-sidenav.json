@@ -80,26 +80,33 @@
       "name": "Expanded",
       "exportName": "Expanded",
       "sourceFile": "src/components/side-nav/side-nav.stories.tsx",
-      "supportsArgs": true
+      "supportsArgs": false
     },
     {
       "id": "components-navigation-sidenav--collapsed",
       "name": "Collapsed",
       "exportName": "Collapsed",
       "sourceFile": "src/components/side-nav/side-nav.stories.tsx",
-      "supportsArgs": true
+      "supportsArgs": false
     },
     {
       "id": "components-navigation-sidenav--collapsed-keyboard",
       "name": "Collapsed Keyboard",
       "exportName": "CollapsedKeyboard",
       "sourceFile": "src/components/side-nav/side-nav.stories.tsx",
-      "supportsArgs": true
+      "supportsArgs": false
     },
     {
       "id": "components-navigation-sidenav--expanded-keyboard",
       "name": "Expanded Keyboard",
       "exportName": "ExpandedKeyboard",
+      "sourceFile": "src/components/side-nav/side-nav.stories.tsx",
+      "supportsArgs": false
+    },
+    {
+      "id": "components-navigation-sidenav--playground",
+      "name": "Playground",
+      "exportName": "Playground",
       "sourceFile": "src/components/side-nav/side-nav.stories.tsx",
       "supportsArgs": true
     }

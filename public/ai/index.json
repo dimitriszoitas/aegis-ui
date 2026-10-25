@@ -18,7 +18,7 @@
       "src/styles/primitive-color-tokens.css"
     ],
     "tokenManifest": "tokens/design-tokens.json",
-    "sourceDigest": "27d802a0f046b639c10cb98c19f064e30ac113b0c29845e30e01dfaf8fc54eff"
+    "sourceDigest": "21fd52bbc176b1e25594f296044b985d1204c39a53282b86ae21a666efef4382"
   },
   "description": "Task-based discovery of component APIs, usage guidance, examples and token references.",
   "limitations": [

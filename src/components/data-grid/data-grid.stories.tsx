@@ -390,6 +390,11 @@ export const HeaderControls: Story = {
   },
 };
 export const DensityMatrix: Story = {
+  argTypes: {
+    data: { control: false },
+    density: { control: false },
+    pagination: { control: false },
+  },
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-6)' }}>
       {(['compact', 'default', 'comfortable'] as GridDensity[]).map((density) => (

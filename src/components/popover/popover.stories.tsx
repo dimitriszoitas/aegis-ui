@@ -35,6 +35,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const OpenActivity: Story = { args: { defaultOpen: true } };
 export const PlacementMatrix: Story = {
+  argTypes: { side: { control: false }, trigger: { control: false } },
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
       {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
@@ -113,6 +114,12 @@ export const HeaderAndFooter: Story = {
   },
 };
 export const DensityMatrix: Story = {
+  argTypes: {
+    density: { control: false },
+    title: { control: false },
+    trigger: { control: false },
+    footer: { control: false },
+  },
   render: (args) => (
     <div className="row">
       {(['regular', 'tight'] as const).map((density) => (

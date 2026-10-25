@@ -42,6 +42,7 @@ export const StandardBar: Story = { args: { style: { maxWidth: 760 } } };
 export const AreaTrend: Story = { args: { variant: 'area', style: { maxWidth: 760 } } };
 export const CompactBar: Story = { args: { variant: 'compact', style: { maxWidth: 520 } } };
 export const CombinedShowcase: Story = {
+  argTypes: { variant: { control: false } },
   render: (args) => (
     <div className="aegis-chart-metric-showcase">
       {(['bar', 'area', 'compact'] as const).map((variant) => (

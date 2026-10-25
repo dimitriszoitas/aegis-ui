@@ -36,6 +36,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const VariantMatrix: Story = {
+  argTypes: { variant: { control: false } },
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
       <Tabs {...args} variant="line" />

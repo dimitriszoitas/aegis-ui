@@ -47,6 +47,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const OpenDialog: Story = { args: { defaultOpen: true } };
 export const Sizes: Story = {
+  argTypes: { size: { control: false }, trigger: { control: false } },
   render: (args) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
       {(['small', 'regular', 'large'] as const).map((size) => (

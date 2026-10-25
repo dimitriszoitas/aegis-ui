@@ -5,6 +5,7 @@ import { useGlobals, useStorybookApi, useStorybookState } from 'storybook/manage
 import { useTheme } from 'storybook/theming';
 import { version } from '../package.json';
 import { managerTheme } from './manager-theme';
+import { readHubNavigationUpdate } from '../src/stories/component-docs/hub-navigation';
 
 const mobileQuery = window.matchMedia('(max-width: 599px)');
 const railWidth = 64;
@@ -75,6 +76,20 @@ export function SidebarControls({ children }: PropsWithChildren) {
     '--manager-footer-control': theme.input.background,
     '--manager-footer-accent': theme.color.secondary,
   } as CSSProperties;
+
+  useLayoutEffect(() => {
+    const receive = (event: MessageEvent) => {
+      const preview = document.querySelector<HTMLIFrameElement>('#storybook-preview-iframe');
+      const query = readHubNavigationUpdate(
+        event,
+        preview?.contentWindow ?? null,
+        new URL(window.location.href),
+      );
+      if (query) api.setQueryParams(query);
+    };
+    window.addEventListener('message', receive);
+    return () => window.removeEventListener('message', receive);
+  }, [api]);
 
   useLayoutEffect(() => {
     // SET_CONFIG reapplies Storybook's initial persisted layout. The public API

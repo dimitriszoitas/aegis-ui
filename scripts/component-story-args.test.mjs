@@ -52,6 +52,29 @@ test('unused or shadowed args do not falsely enable controls', () => {
     false,
   );
 });
+test('callback-only fixtures do not advertise unrelated component controls', () => {
+  for (const render of [
+    '(args)=> <Navigation onSearch={args.onSearch}/>',
+    '(args)=> <Navigation onSearch={args["onSearch"]}/>',
+    '({onSearch})=> <Navigation onSearch={onSearch}/>',
+    '({onSearch: search})=> <Navigation onSearch={search}/>',
+  ])
+    assert.equal(
+      inspect(`const meta={component: Navigation}; const story={render:${render}};`),
+      false,
+    );
+});
+test('mixed callback and visual values or forwarded rest args remain editable', () => {
+  for (const render of [
+    '(args)=> <Navigation collapsed={args.collapsed} onSearch={args.onSearch}/>',
+    '({onSearch,collapsed})=> <Navigation collapsed={collapsed} onSearch={onSearch}/>',
+    '({onSearch,...args})=> <Navigation {...args} onSearch={onSearch}/>',
+  ])
+    assert.equal(
+      inspect(`const meta={component: Navigation}; const story={render:${render}};`),
+      true,
+    );
+});
 test('resolves inherited and named render functions', () => {
   assert.equal(
     inspect(
