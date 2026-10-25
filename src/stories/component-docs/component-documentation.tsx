@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ComponentProps,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 import { Tabs } from '@base-ui/react/tabs';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import { SegmentedControl } from '@/components/segmented-control';
 import { loadComponentMetadata } from './generated';
 import { AnatomyDocumentation } from './anatomy/anatomy-documentation';
@@ -110,6 +118,28 @@ function updateHubUrl(tab: HubTab, anchor: GuidelineSection, example: string) {
 }
 function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
   return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+function guidanceFor(meta: ComponentMetadata) {
+  return (
+    authoredGuidance[meta.name] ??
+    authoredGuidance[meta.title] ??
+    meta.exportNames?.map((name) => authoredGuidance[name]).find(Boolean)
+  );
+}
+function introductionFor(meta: ComponentMetadata) {
+  return guidanceFor(meta)?.overview || meta.purpose || meta.description.split(/\n\s*\n/)[0];
+}
+function DocumentationTable({ children, ...props }: ComponentProps<'table'>) {
+  return (
+    <div
+      className="component-docs-table-scroll"
+      role="region"
+      aria-label="Implementation reference table"
+      tabIndex={0}
+    >
+      <table {...props}>{children}</table>
+    </div>
+  );
 }
 function Table({ headers, children }: { headers: string[]; children: ReactNode }) {
   return (
@@ -435,7 +465,7 @@ function Guidelines({
   onExampleChange: (story: string) => void;
   onNavigate: (tab: HubTab, anchor?: GuidelineSection) => void;
 }) {
-  const guidance = authoredGuidance[meta.name] ?? authoredGuidance[meta.title];
+  const guidance = guidanceFor(meta);
   const notes = (items?: string[]) =>
     items?.length ? (
       <ul>
@@ -461,9 +491,6 @@ function Guidelines({
     case 'overview':
       return (
         <>
-          <p className="component-docs-lead">
-            {guidance?.overview || meta.purpose || meta.description}
-          </p>
           <Specimen meta={meta} story={example} onStoryChange={onExampleChange} playground />
           <h2>When to use it</h2>
           {notes(guidance?.usage)}
@@ -661,7 +688,7 @@ function Guidelines({
     case 'usage':
       return (
         <>
-          <p className="component-docs-lead">{meta.usage || meta.description}</p>
+          <p className="component-docs-lead">{meta.usage || introductionFor(meta)}</p>
           {notes(guidance?.usage)}
           <h3>Content contract</h3>
           <Table headers={['Content property', 'Purpose', 'Value shape']}>
@@ -760,7 +787,21 @@ function Guidelines({
         </>
       );
     case 'api':
-      return <ApiTable meta={meta} />;
+      return (
+        <>
+          {meta.description && meta.description !== introductionFor(meta) && (
+            <div className="component-docs-implementation-notes">
+              <h3>Implementation notes</h3>
+              <Markdown
+                options={{ disableParsingRawHTML: true, overrides: { table: DocumentationTable } }}
+              >
+                {meta.description}
+              </Markdown>
+            </div>
+          )}
+          <ApiTable meta={meta} />
+        </>
+      );
     case 'context':
       return (
         <>
@@ -979,7 +1020,7 @@ function ComponentHub({
       <header className="component-docs-heading">
         <p>{meta.category.replace(/^Components\//, '').replace(/^Patterns\//, '')}</p>
         <h1>{meta.name}</h1>
-        <p className="component-docs-description">{meta.description}</p>
+        <p className="component-docs-description">{introductionFor(meta)}</p>
         <div className="component-docs-page-links">
           <a href="./?path=/docs/foundations-component-directory--docs" target="_top">
             Directory
