@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 import './scroll-area.css';
@@ -7,7 +8,7 @@ export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
 }
 export function ScrollArea({
   children,
-  maxHeight = 360,
+  maxHeight = componentToken('scroll-area-max-height'),
   label = 'Scrollable content',
   className,
   style,

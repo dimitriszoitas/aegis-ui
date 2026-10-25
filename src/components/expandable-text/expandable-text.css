@@ -1,10 +1,10 @@
 .aegis-expandable-text {
   position: relative;
-  min-width: 0;
-  color: var(--color-text-primary);
-  font-family: var(--font-ui);
-  font-size: var(--text-base);
-  line-height: 1.6;
+  min-width: var(--group-data-display-expandable-text-number-0);
+  color: var(--group-data-display-expandable-text-color-content-primary);
+  font-family: var(--group-data-display-expandable-text-font-family-ui);
+  font-size: var(--group-data-display-expandable-text-font-size-body);
+  line-height: var(--group-data-display-expandable-text-font-leading-relaxed);
 }
 .aegis-expandable-text-copy {
   position: relative;
@@ -21,20 +21,23 @@
 }
 .aegis-expandable-text-measure {
   position: absolute;
-  top: 0;
-  inset-inline: 0;
+  top: var(--group-data-display-expandable-text-number-0);
+  inset-inline: var(--group-data-display-expandable-text-number-0);
   visibility: hidden;
   pointer-events: none;
 }
 .aegis-expandable-text-toggle {
-  margin-top: var(--space-1);
-  margin-inline-start: calc(-1 * var(--space-2));
+  margin-top: var(--group-data-display-expandable-text-space-margin-top-snug);
+  margin-inline-start: calc(
+    -1 * var(--group-data-display-expandable-text-space-margin-inline-start-compact)
+  );
 }
 .aegis-expandable-text-toggle :is(.button-label, .button-icon) {
-  color: var(--color-function-fg);
+  color: var(--group-data-display-expandable-text-color-action-foreground);
 }
 .aegis-expandable-text-content:focus-visible {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: 2px;
-  border-radius: var(--radius-xs);
+  outline: var(--group-data-display-expandable-text-border-width-regular) solid
+    var(--group-data-display-expandable-text-ring-focus);
+  outline-offset: var(--group-data-display-expandable-text-size-outline-offset-micro-compact);
+  border-radius: var(--group-data-display-expandable-text-radius-border-radius-soft);
 }

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NumberCell } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Number cell',
+  id: 'components-data-grid-number-cell',
+  title: 'Components/Data Display/Data grid/Number cell',
   component: NumberCell,
   tags: ['autodocs'],
   args: { value: 1284 },
@@ -27,4 +28,12 @@ export const Matrix: StoryObj<typeof NumberCell> = {
       </div>
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof NumberCell> = {
+  args: { value: 1284.5, locale: 'en-GB', format: { maximumFractionDigits: 1 } },
+  argTypes: {
+    format: { control: 'object' },
+    locale: { control: 'select', options: ['en-GB', 'en-US', 'de-DE', 'fr-FR'] },
+  },
 };

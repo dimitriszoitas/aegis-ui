@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   forwardRef,
   useCallback,
@@ -70,8 +71,8 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(function
     folding = true,
     wrapLines = false,
     height,
-    minHeight = 160,
-    maxHeight = 520,
+    minHeight = componentToken('code-min-height'),
+    maxHeight = componentToken('code-max-height'),
     placeholder,
     autoFocus = false,
     statusBar,

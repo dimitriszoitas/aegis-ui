@@ -1,12 +1,12 @@
 .aegis-sparkline {
   display: block;
-  flex-shrink: 0;
+  flex-shrink: var(--group-data-viz-chart-flex-none);
   overflow: visible;
 }
 .aegis-sparkline-empty {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-tertiary);
-  font-size: var(--text-sm);
+  color: var(--group-data-viz-chart-color-content-tertiary);
+  font-size: var(--group-data-viz-chart-font-size-body);
 }

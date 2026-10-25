@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, type ComponentProps, type ReactNode } from 'react';
 import {
   CircleAlert,
@@ -88,7 +89,17 @@ export function Notification({
           )}
           aria-hidden="true"
         >
-          {icon === undefined ? <Icon size={floating ? 18 : 19} /> : icon}
+          {icon === undefined ? (
+            <Icon
+              size={
+                floating
+                  ? componentToken('feedback.icon-lg')
+                  : componentToken('feedback.icon-notification')
+              }
+            />
+          ) : (
+            icon
+          )}
         </span>
       )}
       <div
@@ -134,7 +145,12 @@ export function Notification({
           aria-label={dismissLabel}
           onClick={onDismiss}
         >
-          <X size={floating ? 14 : 16} aria-hidden="true" />
+          <X
+            size={
+              floating ? componentToken('feedback.icon-sm') : componentToken('feedback.icon-md')
+            }
+            aria-hidden="true"
+          />
         </button>
       )}
     </div>

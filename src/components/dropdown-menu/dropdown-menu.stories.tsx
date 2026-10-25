@@ -38,7 +38,8 @@ const basicItems: DropdownMenuEntry[] = [
   { id: 'delete', label: 'Delete project note', icon: <Trash2 />, intent: 'destroy' },
 ];
 const meta = {
-  title: 'Components/Lists/DropdownMenu',
+  id: 'components-lists-dropdownmenu',
+  title: 'Components/Triggers/DropdownMenu',
   component: DropdownMenu,
   tags: ['autodocs'],
   parameters: { layout: 'centered', docs: { story: { inline: false, height: 460 } } },

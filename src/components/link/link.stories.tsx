@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -5,7 +6,8 @@ import { ArrowLeft, Folder } from '@/components/icon';
 import { Link } from './link';
 
 const meta = {
-  title: 'Components/Actions/Link',
+  id: 'components-actions-link',
+  title: 'Components/Triggers/Link',
   component: Link,
   tags: ['autodocs'],
   args: { href: '#project-details', children: 'View project' },
@@ -115,4 +117,37 @@ export const KeyboardNavigation: Story = {
     await userEvent.click(canvas.getByRole('link', { name: 'Archived project' }));
     await expect(canvas.getByRole('status')).toHaveTextContent('Project details selected');
   },
+};
+
+type PlaygroundArgs = ComponentProps<typeof Link> & { showIcon: boolean };
+export const Playground: StoryObj<PlaygroundArgs> = {
+  args: {
+    children: 'View project',
+    href: '#playground-project',
+    size: 'md',
+    intent: 'function',
+    underline: 'hover',
+    external: false,
+    disabled: false,
+    showIcon: false,
+  },
+  argTypes: {
+    children: { control: 'text', name: 'Label' },
+    href: { control: 'text', name: 'Destination' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    intent: { control: 'select', options: ['default', 'function'] },
+    underline: { control: 'select', options: ['always', 'hover', 'none'] },
+    external: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    showIcon: { control: 'boolean', name: 'Leading icon' },
+  },
+  render: ({ showIcon, ...args }) => (
+    <div className="stack">
+      <Link {...args} leadingIcon={showIcon ? <Folder /> : undefined} />
+      <section id="playground-project" tabIndex={-1}>
+        <h3>Project overview</h3>
+        <p className="muted">The link targets this section in the example.</p>
+      </section>
+    </div>
+  ),
 };

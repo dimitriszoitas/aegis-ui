@@ -1,10 +1,12 @@
+import { useArgs, useState as useStoryState } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { SearchInput } from './search-input';
 
 const meta = {
-  title: 'Components/Forms/SearchInput',
+  id: 'components-forms-searchinput',
+  title: 'Components/Inputs & Selection/SearchInput',
   component: SearchInput,
   tags: ['autodocs'],
   args: {
@@ -75,6 +77,53 @@ export const DebouncedSearch: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }));
     await waitFor(() =>
       expect(canvas.getByRole('status')).toHaveTextContent('3 matching projects'),
+    );
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Search projects',
+    value: '',
+    placeholder: 'Search by project name',
+    shortcut: '⌘ K',
+    size: 'md',
+    debounceMs: 250,
+    clearable: true,
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    value: { control: 'text' },
+    placeholder: { control: 'text' },
+    shortcut: { control: 'text' },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    debounceMs: { control: { type: 'number', min: 0, max: 2000, step: 50 } },
+    clearable: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+  },
+  render: function SearchPlayground(args) {
+    const [, updateArgs] = useArgs();
+    const [query, setQuery] = useStoryState(args.value ?? '');
+    const matches = records.filter((record) => record.toLowerCase().includes(query.toLowerCase()));
+    return (
+      <div className="stack">
+        <SearchInput
+          {...args}
+          onValueChange={(value) => updateArgs({ value })}
+          onSearch={setQuery}
+        />
+        <p role="status">{matches.length} matching projects</p>
+        <ul>
+          {matches.map((record) => (
+            <li key={record}>{record}</li>
+          ))}
+        </ul>
+      </div>
     );
   },
 };

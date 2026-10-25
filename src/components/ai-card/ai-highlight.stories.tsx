@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AiHighlight } from './ai-card';
 const meta = {
+  id: 'components-ai-aihighlight',
   title: 'Components/AI/AiHighlight',
   component: AiHighlight,
   tags: ['autodocs'],

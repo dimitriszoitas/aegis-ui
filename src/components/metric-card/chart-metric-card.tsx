@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId } from 'react';
 import { ArrowDownRight, ArrowUpRight, Minus } from '@/components/icon';
 import { Card, type CardProps } from '@/components/card';
@@ -56,6 +57,12 @@ export function ChartMetricCard({
   className,
   ...props
 }: ChartMetricCardProps) {
+  const tokens = useComponentTokenNumbers([
+    'data-viz.metric-chart-height',
+    'data-viz.metric-chart-compact-height',
+    'data-viz.metric-chart-min-height',
+    'data-viz.metric-chart-initial-width',
+  ]);
   const headingId = useId();
   const change = delta !== undefined && Number.isFinite(delta) ? delta : undefined;
   const trend =
@@ -67,10 +74,10 @@ export function ChartMetricCard({
   const Arrow = change === 0 ? Minus : (change ?? 0) < 0 ? ArrowDownRight : ArrowUpRight;
   const plotHeight =
     height !== undefined && Number.isFinite(height)
-      ? Math.max(48, height)
+      ? Math.max(tokens['data-viz.metric-chart-min-height'], height)
       : variant === 'compact'
-        ? 80
-        : 220;
+        ? tokens['data-viz.metric-chart-compact-height']
+        : tokens['data-viz.metric-chart-height'];
   const invalid = data.some(
     ({ value }) => !Number.isFinite(value) || (variant === 'compact' && value < 0),
   );
@@ -100,7 +107,7 @@ export function ChartMetricCard({
             <div className="aegis-chart-metric-comparison">
               {change !== undefined && (
                 <span className="aegis-chart-metric-delta" data-trend={trend}>
-                  <Arrow size={15} aria-hidden="true" />
+                  <Arrow size={componentToken('data-viz.icon-inline')} aria-hidden="true" />
                   <span>
                     {change > 0 ? '+' : ''}
                     {change.toLocaleString('en-GB', { maximumFractionDigits: 1 })}%
@@ -137,7 +144,7 @@ export function ChartMetricCard({
             <div className="aegis-chart-metric-mini">
               <MiniBarChart
                 data={data.map(({ value }) => value)}
-                width={480}
+                width={tokens['data-viz.metric-chart-initial-width']}
                 height={plotHeight}
                 preserveAspectRatio="none"
                 style={{ color: chartColor(color), height: plotHeight }}

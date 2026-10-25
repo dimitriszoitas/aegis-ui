@@ -2,11 +2,11 @@
 @media (forced-colors: none) {
   :where(*) {
     scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    scrollbar-color: var(--group-layout-surface-scrollbar-thumb) transparent;
   }
 
   :where(*):focus-visible {
-    scrollbar-color: var(--scrollbar-thumb-hover) transparent;
+    scrollbar-color: var(--group-layout-surface-scrollbar-thumb-hover) transparent;
   }
 
   :root[data-scrollbars='auto'],
@@ -17,7 +17,7 @@
   :root[data-scrollbars='auto'][data-scroll-active],
   :root[data-scrollbars='auto'] [data-scroll-active],
   :root[data-scrollbars='auto'] :focus-visible {
-    scrollbar-color: var(--scrollbar-thumb-hover) transparent;
+    scrollbar-color: var(--group-layout-surface-scrollbar-thumb-hover) transparent;
   }
 
   @supports selector(::-webkit-scrollbar) {
@@ -34,45 +34,45 @@
     }
 
     ::-webkit-scrollbar {
-      width: var(--scrollbar-size);
-      height: var(--scrollbar-size);
+      width: var(--group-layout-surface-scrollbar-size);
+      height: var(--group-layout-surface-scrollbar-size);
     }
 
     ::-webkit-scrollbar-track,
     ::-webkit-scrollbar-corner {
-      background: transparent;
+      background: var(--group-layout-surface-color-transparent);
     }
 
     ::-webkit-scrollbar-thumb {
-      min-width: 24px;
-      min-height: 24px;
-      border: var(--scrollbar-inset) solid transparent;
-      border-radius: var(--scrollbar-radius);
-      background: var(--scrollbar-thumb);
+      min-width: var(--group-layout-surface-control-min-width);
+      min-height: var(--group-layout-surface-control-min-height);
+      border: var(--group-layout-surface-scrollbar-inset) solid transparent;
+      border-radius: var(--group-layout-surface-scrollbar-radius);
+      background: var(--group-layout-surface-scrollbar-thumb);
       background-clip: padding-box;
     }
 
     :root[data-scrollbars='auto']::-webkit-scrollbar-thumb,
     :root[data-scrollbars='auto'] ::-webkit-scrollbar-thumb {
-      background-color: transparent;
+      background-color: var(--group-layout-surface-color-transparent);
     }
 
     :root[data-scrollbars='auto'][data-scroll-active]::-webkit-scrollbar-thumb,
     :root[data-scrollbars='auto'] [data-scroll-active]::-webkit-scrollbar-thumb,
     :root[data-scrollbars='auto'] :focus-visible::-webkit-scrollbar-thumb {
-      background-color: var(--scrollbar-thumb);
+      background-color: var(--group-layout-surface-scrollbar-thumb);
     }
 
     ::-webkit-scrollbar-thumb:hover,
     :root[data-scrollbars='auto']::-webkit-scrollbar-thumb:hover,
     :root[data-scrollbars='auto'] ::-webkit-scrollbar-thumb:hover {
-      background-color: var(--scrollbar-thumb-hover);
+      background-color: var(--group-layout-surface-scrollbar-thumb-hover);
     }
 
     ::-webkit-scrollbar-thumb:active,
     :root[data-scrollbars='auto']::-webkit-scrollbar-thumb:active,
     :root[data-scrollbars='auto'] ::-webkit-scrollbar-thumb:active {
-      background-color: var(--scrollbar-thumb-active);
+      background-color: var(--group-layout-surface-scrollbar-thumb-active);
     }
 
     ::-webkit-scrollbar-button {

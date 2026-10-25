@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Play, ShieldCheck } from '@/components/icon';
@@ -11,7 +12,8 @@ import { TextInput } from '@/components/text-input';
 import { Textarea } from '@/components/textarea';
 
 const meta = {
-  title: 'Patterns/Wizard/Project setup',
+  id: 'patterns-wizard-project-setup',
+  title: 'Patterns/Workflows/Project setup wizard',
   component: Wizard,
   tags: ['autodocs'],
 } satisfies Meta<typeof Wizard>;
@@ -266,4 +268,133 @@ export const ValidationAndDirtyGuard: StoryObj = {
       <ProjectSetup />
     </div>
   ),
+};
+
+interface WizardPlaygroundOptions {
+  title: string;
+  description: string;
+  orientation: 'horizontal' | 'vertical';
+  currentStep: number;
+  dirty: boolean;
+  projectName: string;
+  notifications: boolean;
+  validateName: boolean;
+  showStepDescriptions: boolean;
+  finishLabel: string;
+  cancelLabel: string;
+}
+function WizardPlaygroundExample({
+  onOptionsChange,
+  ...args
+}: WizardPlaygroundOptions & {
+  onOptionsChange: (options: Partial<WizardPlaygroundOptions>) => void;
+}) {
+  const [result, setResult] = useState('');
+  const steps: WizardStep[] = [
+    {
+      id: 'details',
+      title: 'Project details',
+      description: args.showStepDescriptions ? 'Name the project' : undefined,
+      validate: () =>
+        !args.validateName ||
+        args.projectName.trim().length >= 3 ||
+        'Use at least three characters for the project name.',
+      content: (
+        <Field label="Project name" required={args.validateName}>
+          <TextInput
+            value={args.projectName}
+            onValueChange={(projectName) => onOptionsChange({ projectName, dirty: true })}
+          />
+        </Field>
+      ),
+    },
+    {
+      id: 'updates',
+      title: 'Team updates',
+      description: args.showStepDescriptions ? 'Choose notifications' : undefined,
+      content: (
+        <Checkbox
+          label="Enable project notifications"
+          description="Send updates when milestones change."
+          checked={args.notifications}
+          onCheckedChange={(checked) =>
+            onOptionsChange({ notifications: checked === true, dirty: true })
+          }
+        />
+      ),
+    },
+    {
+      id: 'review',
+      title: 'Review',
+      description: args.showStepDescriptions ? 'Confirm the setup' : undefined,
+      content: (
+        <div className="stack">
+          <p>
+            <strong>{args.projectName || 'Unnamed project'}</strong>
+          </p>
+          <p className="muted">
+            Notifications {args.notifications ? 'enabled' : 'disabled'}. Completing this example
+            updates only the preview.
+          </p>
+        </div>
+      ),
+    },
+  ];
+  return (
+    <div className="stack" style={{ width: '100%', maxWidth: 1040 }}>
+      <Wizard
+        title={args.title}
+        description={args.description}
+        steps={steps}
+        currentStep={Math.max(0, Math.min(2, args.currentStep))}
+        onStepChange={(currentStep) => onOptionsChange({ currentStep })}
+        orientation={args.orientation}
+        dirty={args.dirty}
+        finishLabel={args.finishLabel}
+        cancelLabel={args.cancelLabel}
+        onFinish={() => {
+          onOptionsChange({ dirty: false });
+          setResult(`${args.projectName} created in this preview.`);
+        }}
+        onCancel={() => {
+          onOptionsChange({ dirty: false, currentStep: 0 });
+          setResult('Setup cancelled.');
+        }}
+      />
+      {result && <p role="status">{result}</p>}
+    </div>
+  );
+}
+
+export const Playground: StoryObj<WizardPlaygroundOptions> = {
+  args: {
+    title: 'Create project',
+    description: 'Set up a shared space for your team.',
+    orientation: 'vertical',
+    currentStep: 0,
+    dirty: false,
+    projectName: 'Customer portal',
+    notifications: true,
+    validateName: true,
+    showStepDescriptions: true,
+    finishLabel: 'Create project',
+    cancelLabel: 'Cancel',
+  },
+  argTypes: {
+    title: { control: 'text' },
+    description: { control: 'text' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    currentStep: { control: { type: 'range', min: 0, max: 2, step: 1 } },
+    dirty: { control: 'boolean' },
+    projectName: { control: 'text' },
+    notifications: { control: 'boolean' },
+    validateName: { control: 'boolean' },
+    showStepDescriptions: { control: 'boolean' },
+    finishLabel: { control: 'text' },
+    cancelLabel: { control: 'text' },
+  },
+  render: function WizardPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return <WizardPlaygroundExample {...args} onOptionsChange={updateArgs} />;
+  },
 };

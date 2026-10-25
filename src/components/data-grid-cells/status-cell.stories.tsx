@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StatusCell } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Status cell',
+  id: 'components-data-grid-status-cell',
+  title: 'Components/Data Display/Data grid/Status cell',
   component: StatusCell,
   tags: ['autodocs'],
   args: { status: 'new' },
@@ -14,4 +15,14 @@ export const Matrix: StoryObj<typeof StatusCell> = {
       ))}
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof StatusCell> = {
+  args: { status: 'new' },
+  argTypes: {
+    status: {
+      control: 'select',
+      options: ['new', 'in-review', 'in-progress', 'completed', 'cancelled'],
+    },
+  },
 };

@@ -3,13 +3,13 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  width: 100%;
-  font-size: var(--text-sm);
+  gap: var(--group-navigation-pagination-space-gap-regular);
+  width: var(--group-navigation-pagination-size-width-full);
+  font-size: var(--group-navigation-pagination-font-size-body);
 }
 .aegis-pagination-summary {
-  color: var(--color-text-secondary);
-  margin: 0;
+  color: var(--group-navigation-pagination-color-content-secondary);
+  margin: var(--group-navigation-pagination-number-0);
   font-variant-numeric: tabular-nums;
 }
 .aegis-pagination-controls,
@@ -21,59 +21,62 @@
 }
 .aegis-pagination-controls {
   flex-wrap: wrap;
-  gap: var(--space-5);
+  gap: var(--group-navigation-pagination-space-gap-5);
 }
 .aegis-pagination-size {
-  gap: var(--space-2);
-  color: var(--color-text-secondary);
+  gap: var(--group-navigation-pagination-space-gap-compact);
+  color: var(--group-navigation-pagination-color-content-secondary);
 }
 .aegis-pagination-size select {
-  border: 1px solid var(--color-border-default);
-  background: var(--color-bg-surface);
-  color: var(--color-text-primary);
-  border-radius: var(--radius-sm);
-  height: var(--space-8);
-  padding: 0 var(--space-2);
+  border: var(--group-navigation-pagination-border-width-hairline) solid
+    var(--group-navigation-pagination-color-border-default);
+  background: var(--group-navigation-pagination-color-surface-surface);
+  color: var(--group-navigation-pagination-color-content-primary);
+  border-radius: var(--group-navigation-pagination-radius-border-radius-bold);
+  height: var(--group-navigation-pagination-space-height-spacious);
+  padding: var(--group-navigation-pagination-number-0)
+    var(--group-navigation-pagination-space-padding-compact);
 }
 .aegis-pagination-pages {
-  gap: var(--space-1);
+  gap: var(--group-navigation-pagination-space-gap-snug);
 }
 .aegis-pagination-pages button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-8);
-  height: var(--space-8);
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  color: var(--color-text-secondary);
-  background: transparent;
+  width: var(--group-navigation-pagination-space-width-spacious);
+  height: var(--group-navigation-pagination-space-height-spacious);
+  padding: var(--group-navigation-pagination-number-0);
+  border: var(--group-navigation-pagination-border-width-hairline) solid transparent;
+  border-radius: var(--group-navigation-pagination-radius-border-radius-bold);
+  color: var(--group-navigation-pagination-color-content-secondary);
+  background: var(--group-navigation-pagination-color-transparent);
   font-variant-numeric: tabular-nums;
-  transition: background var(--motion-fast) var(--ease-out);
+  transition: background var(--group-navigation-pagination-motion-fast)
+    var(--group-navigation-pagination-ease-out);
 }
 .aegis-pagination-pages button:hover:not(:disabled) {
-  background: var(--color-bg-hover);
-  color: var(--color-text-primary);
+  background: var(--group-navigation-pagination-color-surface-hover);
+  color: var(--group-navigation-pagination-color-content-primary);
 }
 .aegis-pagination-pages button[aria-current='page'] {
-  border-color: var(--color-border-subtle);
-  background: var(--color-bg-surface-raised);
-  color: var(--color-text-primary);
-  box-shadow: var(--shadow-raised);
-  font-weight: 600;
+  border-color: var(--group-navigation-pagination-color-border-subtle);
+  background: var(--group-navigation-pagination-color-surface-surface-raised);
+  color: var(--group-navigation-pagination-color-content-primary);
+  box-shadow: var(--group-navigation-pagination-shadow-raised);
+  font-weight: var(--group-navigation-pagination-font-weight-semibold);
 }
 .aegis-pagination-pages button:disabled,
 .aegis-pagination-size select:disabled {
-  opacity: 0.5;
+  opacity: var(--group-navigation-pagination-opacity-strength-emphasized);
   cursor: not-allowed;
 }
 .aegis-pagination-ellipsis {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-8);
-  color: var(--color-text-tertiary);
+  width: var(--group-navigation-pagination-space-width-spacious);
+  color: var(--group-navigation-pagination-color-content-tertiary);
 }
 
 .aegis-pagination-select-wrap {
@@ -83,13 +86,14 @@
 }
 .aegis-pagination-select-wrap select {
   appearance: none;
-  padding-inline: var(--space-3) var(--space-8);
-  min-width: 68px;
-  border-radius: var(--control-radius-md);
+  padding-inline: var(--group-navigation-pagination-space-padding-inline-regular)
+    var(--group-navigation-pagination-space-padding-inline-spacious);
+  min-width: var(--group-navigation-pagination-size-min-width-content-comfortable);
+  border-radius: var(--group-navigation-pagination-radius-border-radius-bold);
 }
 .aegis-pagination-select-wrap svg {
   position: absolute;
-  right: var(--space-3);
+  right: var(--group-navigation-pagination-space-right-regular);
   pointer-events: none;
-  color: var(--color-text-secondary);
+  color: var(--group-navigation-pagination-color-content-secondary);
 }

@@ -18,7 +18,8 @@ const eventPayload = {
   review: { confidence: 0.94, requested: true, tags: ['delivery', 'handoff'] },
 };
 const meta = {
-  title: 'Components/Data/JsonViewer',
+  id: 'components-data-jsonviewer',
+  title: 'Components/Code/JsonViewer',
   component: JsonViewer,
   tags: ['autodocs'],
   args: { value: eventPayload, label: 'Project update payload', defaultExpandedDepth: 2 },

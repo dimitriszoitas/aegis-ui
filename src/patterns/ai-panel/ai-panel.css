@@ -1,105 +1,116 @@
 .aegis-sheet.aegis-ai-panel.aegis-ai-panel {
-  border-inline-start: 1px solid var(--color-border-subtle);
+  border-inline-start: var(--group-ai-assistance-ai-border-width-hairline) solid
+    var(--group-ai-assistance-ai-color-border-subtle);
 }
 .aegis-ai-panel .aegis-sheet-header {
-  padding: var(--layout-panel-padding);
+  padding: var(--group-ai-assistance-ai-space-padding-roomy);
 }
 .aegis-ai-panel .aegis-sheet-toolbar {
-  margin-bottom: 8px;
+  margin-bottom: var(--group-ai-assistance-ai-space-margin-bottom-compact);
 }
 .aegis-ai-panel-title {
   display: flex;
-  gap: 8px;
+  gap: var(--group-ai-assistance-ai-space-gap-compact);
   align-items: center;
 }
 .aegis-ai-panel-title svg {
-  color: var(--color-ai-fg);
+  color: var(--group-ai-assistance-ai-color-ai-foreground);
 }
 .aegis-ai-panel-scope {
   display: block;
-  margin-top: 2px;
-  font-size: 11px;
+  margin-top: var(--group-ai-assistance-ai-size-margin-top-micro-compact);
+  font-size: var(--group-ai-assistance-ai-font-size-annotation-s);
 }
 .aegis-ai-panel .aegis-sheet-body {
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: var(--group-ai-assistance-ai-number-0);
   overflow: hidden;
 }
 .aegis-ai-panel .aegis-sheet-footer {
   display: block;
-  padding: 12px;
+  padding: var(--group-ai-assistance-ai-space-padding-regular);
 }
 .aegis-ai-panel-context {
   flex: none;
-  padding: var(--space-3) var(--layout-panel-padding);
-  border-bottom: 1px solid var(--color-border-subtle);
+  padding: var(--group-ai-assistance-ai-space-padding-regular)
+    var(--group-ai-assistance-ai-space-padding-roomy);
+  border-bottom: var(--group-ai-assistance-ai-border-width-hairline) solid
+    var(--group-ai-assistance-ai-color-border-subtle);
 }
 .aegis-ai-panel-context > span {
   display: block;
-  margin-bottom: 6px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--color-text-secondary);
+  margin-bottom: var(--group-ai-assistance-ai-size-margin-bottom-micro-roomy);
+  font-size: var(--group-ai-assistance-ai-font-size-annotation-xs);
+  font-weight: var(--group-ai-assistance-ai-font-weight-semibold);
+  color: var(--group-ai-assistance-ai-color-content-secondary);
 }
 .aegis-ai-panel-context > div {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  max-height: 80px;
+  gap: var(--group-ai-assistance-ai-space-gap-snug);
+  max-height: var(--group-ai-assistance-ai-size-max-height-content-huge);
   overflow-y: auto;
 }
 .aegis-ai-panel-context .tag {
-  max-width: 100%;
+  max-width: var(--group-ai-assistance-ai-size-max-width-full);
   white-space: normal;
   height: auto;
-  min-height: 22px;
+  min-height: var(--group-ai-assistance-ai-size-min-height-control-snug);
   overflow-wrap: anywhere;
 }
 .aegis-ai-panel-no-context {
-  color: var(--color-text-secondary);
-  font-size: 12px;
+  color: var(--group-ai-assistance-ai-color-content-secondary);
+  font-size: var(--group-ai-assistance-ai-font-size-caption);
 }
 .aegis-ai-transcript {
-  flex: 1;
-  min-height: 0;
+  flex: var(--group-ai-assistance-ai-flex-fill);
+  min-height: var(--group-ai-assistance-ai-number-0);
   overflow: auto;
   overscroll-behavior: contain;
-  padding: var(--layout-panel-padding);
+  padding: var(--group-ai-assistance-ai-space-padding-roomy);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--group-ai-assistance-ai-space-gap-5);
 }
-.aegis-ai-transcript:focus-visible {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: -3px;
+:root[data-aegis-input-focus='keyboard'] .aegis-ai-transcript:focus-visible {
+  outline: var(--group-ai-assistance-ai-border-width-regular) solid
+    var(--group-ai-assistance-ai-ring-focus);
+  outline-offset: var(--group-ai-assistance-ai-size-outline-offset-negative-3);
 }
 .aegis-ai-panel-empty {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  min-height: 240px;
-  gap: 12px;
-  padding: 8px;
+  min-height: var(--group-ai-assistance-ai-size-min-height-wide-panel-roomy);
+  gap: var(--group-ai-assistance-ai-space-gap-regular);
+  padding: var(--group-ai-assistance-ai-space-padding-compact);
 }
 .aegis-ai-panel-empty > svg {
-  color: var(--color-ai-fg);
+  color: var(--group-ai-assistance-ai-color-ai-foreground);
 }
 .aegis-ai-panel-empty h3 {
-  font-size: var(--title-section-size);
-  font-weight: var(--title-weight);
-  margin: 0;
+  font-size: var(--group-ai-assistance-ai-font-size-subheading);
+  font-weight: var(--group-ai-assistance-ai-title-weight);
+  margin: var(--group-ai-assistance-ai-number-0);
 }
 .aegis-ai-panel-empty p {
-  color: var(--color-text-secondary);
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0 0 4px;
+  color: var(--group-ai-assistance-ai-color-content-secondary);
+  font-size: var(--group-ai-assistance-ai-font-size-label);
+  line-height: var(--group-ai-assistance-ai-font-leading-relaxed);
+  margin: var(--group-ai-assistance-ai-number-0) var(--group-ai-assistance-ai-number-0)
+    var(--group-ai-assistance-ai-space-margin-snug);
 }
 .aegis-ai-panel-disclaimer {
-  margin: 8px 2px 0;
-  font-size: 10px;
-  line-height: 1.5;
-  color: var(--color-text-secondary);
+  margin: var(--group-ai-assistance-ai-space-margin-compact)
+    var(--group-ai-assistance-ai-size-margin-micro-compact) var(--group-ai-assistance-ai-number-0);
+  font-size: var(--group-ai-assistance-ai-font-size-annotation-xs);
+  line-height: var(--group-ai-assistance-ai-font-leading-body);
+  color: var(--group-ai-assistance-ai-color-content-secondary);
+}
+
+:root:not([data-aegis-input-focus='keyboard'])
+  :is(.aegis-ai-transcript, .aegis-ai-panel-context > div):focus-visible {
+  outline: none;
 }

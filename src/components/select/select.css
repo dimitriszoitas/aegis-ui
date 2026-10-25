@@ -1,164 +1,177 @@
 .aegis-select-field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
+  gap: var(--group-input-field-gap-compact);
+  min-width: var(--group-input-field-number-0);
 }
 .aegis-select-trigger {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  height: 34px;
-  width: 100%;
-  min-width: 0;
-  flex-shrink: 0;
-  padding: 0 var(--space-3);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-surface);
-  color: var(--color-text-primary);
+  gap: var(--group-input-field-gap-compact);
+  height: var(--group-input-field-height-regular);
+  width: var(--group-input-field-width-available);
+  min-width: var(--group-input-field-number-0);
+  flex-shrink: var(--group-input-field-flex-none);
+  padding: var(--group-input-field-number-0) var(--group-input-field-padding-regular);
+  border: var(--group-input-field-border-width-hairline) solid
+    var(--group-input-field-color-border-strong);
+  border-radius: var(--group-input-field-radius-bold);
+  background: var(--group-input-field-color-surface-surface);
+  color: var(--group-input-field-color-content-primary);
   font: inherit;
   text-align: left;
 }
 .aegis-select-value {
-  flex: 1;
-  min-width: 0;
+  flex: var(--group-input-field-flex-fill);
+  min-width: var(--group-input-field-number-0);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .aegis-select-trigger[data-size='sm'] {
-  height: 28px;
-  font-size: var(--text-sm);
-  padding-inline: var(--space-2);
+  height: var(--group-input-field-height-compact);
+  font-size: var(--group-input-field-font-size-body);
+  padding-inline: var(--group-input-field-padding-compact);
 }
 .aegis-select-trigger[data-size='lg'] {
-  height: 40px;
+  height: var(--group-input-field-height-large);
 }
 .aegis-select-trigger[data-placeholder] {
-  color: var(--color-text-tertiary);
+  color: var(--group-input-field-color-content-tertiary);
 }
 .aegis-select-trigger:hover:not(:disabled) {
-  border-color: var(--color-function-fg);
+  border-color: var(--group-input-field-color-action-foreground);
 }
 .aegis-select-trigger[aria-invalid='true'] {
-  border-color: var(--color-destroy-fg);
+  border-color: var(--group-input-field-color-danger-foreground);
 }
 .aegis-select-trigger:disabled {
-  opacity: 0.55;
-  background: var(--color-bg-hover);
+  opacity: var(--group-input-field-opacity-disabled);
+  background: var(--group-input-field-color-surface-hover);
 }
 .aegis-select-chevron {
   display: flex;
   flex: none;
   margin-left: auto;
-  color: var(--color-text-secondary);
+  color: var(--group-input-field-color-content-secondary);
 }
 .aegis-select-icon {
   display: inline-flex;
   flex: none;
   align-items: center;
-  color: var(--color-text-secondary);
+  color: var(--group-input-field-color-content-secondary);
+}
+.aegis-select-positioner {
+  z-index: var(--group-input-field-z-popover);
 }
 .aegis-select-content {
-  z-index: var(--z-popover);
+  z-index: var(--group-input-field-z-popover);
   width: max-content;
-  min-width: var(--radix-select-trigger-width);
-  max-width: calc(100vw - var(--space-6));
-  max-height: min(360px, var(--radix-select-content-available-height));
+  min-width: var(--anchor-width);
+  max-width: calc(
+    var(--group-input-field-viewport-width) - var(--group-input-field-viewport-clearance)
+  );
+  max-height: min(var(--group-input-field-popup-max-height), var(--available-height));
   overflow: hidden;
-  background: var(--color-bg-surface-raised);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-overlay);
-  transform-origin: var(--radix-select-content-transform-origin);
-  animation: aegis-select-enter var(--motion-fast) var(--ease-out);
+  background: var(--group-input-field-color-surface-surface-raised);
+  color: var(--group-input-field-color-content-primary);
+  border: var(--group-input-field-border-width-hairline) solid
+    var(--group-input-field-color-border-subtle);
+  border-radius: var(--group-input-field-radius-strong);
+  box-shadow: var(--group-input-field-shadow-overlay);
+  transform-origin: var(--transform-origin);
+  animation: aegis-select-enter var(--group-input-field-motion-fast)
+    var(--group-input-field-ease-out);
 }
 .aegis-select-viewport {
-  padding: var(--space-1);
+  overflow-y: auto;
+  max-height: min(var(--group-input-field-popup-max-height), var(--available-height));
+  overscroll-behavior: contain;
+  padding: var(--group-input-field-padding-snug);
 }
 .aegis-select-option {
   display: flex;
   position: relative;
   align-items: flex-start;
-  gap: var(--space-2);
-  min-height: 34px;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-lg);
+  gap: var(--group-input-field-gap-compact);
+  min-height: var(--group-input-field-option-min-height);
+  padding: var(--group-input-field-padding-compact) var(--group-input-field-padding-regular);
+  border-radius: var(--group-input-field-radius-strong);
   cursor: pointer;
   user-select: none;
   outline: none;
 }
 .aegis-select-option[data-highlighted] {
-  background: var(--color-bg-hover);
-  box-shadow: inset 0 0 0 2px var(--ring-focus);
+  background: var(--group-input-field-color-surface-hover);
+  box-shadow: inset var(--group-input-field-number-0) var(--group-input-field-number-0)
+    var(--group-input-field-number-0) var(--group-input-field-focus-width)
+    var(--group-input-field-ring-focus);
 }
-.aegis-select-option[data-state='checked'] {
-  background: var(--color-function-soft);
+.aegis-select-option[data-selected] {
+  background: var(--group-input-field-color-action-soft);
 }
 .aegis-select-option[data-disabled] {
   cursor: not-allowed;
-  color: var(--color-text-tertiary);
+  color: var(--group-input-field-color-content-tertiary);
 }
 .aegis-select-option-copy {
-  min-width: 0;
+  min-width: var(--group-input-field-number-0);
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding-right: var(--space-5);
+  gap: var(--group-input-field-gap-tight);
+  padding-right: var(--group-input-field-option-indicator-clearance);
 }
 .aegis-select-option-description {
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  color: var(--group-input-field-color-content-secondary);
+  font-size: var(--group-input-field-font-size-label);
+  line-height: var(--group-input-field-font-leading-compact);
 }
 .aegis-select-check {
   margin-left: auto;
   display: flex;
-  color: var(--color-function-fg);
+  color: var(--group-input-field-color-action-foreground);
 }
 .aegis-select-group-label {
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
-  font-weight: 600;
+  padding: var(--group-input-field-padding-compact) var(--group-input-field-padding-regular);
+  color: var(--group-input-field-color-content-secondary);
+  font-size: var(--group-input-field-font-size-label);
+  font-weight: var(--group-input-field-font-weight-semibold);
 }
 .aegis-select-scroll {
   display: flex;
   justify-content: center;
-  padding: var(--space-1);
-  color: var(--color-text-secondary);
+  padding: var(--group-input-field-padding-snug);
+  color: var(--group-input-field-color-content-secondary);
 }
 .aegis-select-no-options {
-  padding: var(--space-4);
-  color: var(--color-text-secondary);
+  padding: var(--group-input-field-padding-comfortable);
+  color: var(--group-input-field-color-content-secondary);
 }
 @keyframes aegis-select-enter {
   from {
-    opacity: 0;
-    transform: translateY(-3px);
+    opacity: var(--group-input-field-opacity-hidden);
+    transform: translateY(var(--group-input-field-popup-enter-offset));
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: var(--group-input-field-opacity-visible);
+    transform: translateY(var(--group-input-field-number-0));
   }
 }
 
 .aegis-select-trigger {
-  border-radius: var(--control-radius-md);
+  border-radius: var(--group-input-field-radius-bold);
 }
 .aegis-select-trigger[data-size='sm'] {
-  border-radius: var(--control-radius-sm);
+  border-radius: var(--group-input-field-radius-rounded);
 }
 .aegis-select-trigger[data-size='lg'] {
-  border-radius: var(--control-radius-lg);
+  border-radius: var(--group-input-field-radius-bold);
 }
 
 .aegis-select-option > .aegis-select-icon,
 .aegis-select-option > .aegis-select-check {
-  min-height: 1lh;
-  margin-block-start: 0;
+  min-height: var(--group-input-field-line-min-height);
+  margin-block-start: var(--group-input-field-number-0);
   align-items: center;
 }

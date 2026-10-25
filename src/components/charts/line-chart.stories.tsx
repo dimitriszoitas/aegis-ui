@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LineChart } from './charts';
 import { timeSeries } from '@/sample-data';
 const meta = {
-  title: 'Components/Charts/Line chart',
+  id: 'components-charts-line-chart',
+  title: 'Components/Data Visualization/Line chart',
   component: LineChart,
   tags: ['autodocs'],
   args: {

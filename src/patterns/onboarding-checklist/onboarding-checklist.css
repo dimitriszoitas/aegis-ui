@@ -1,29 +1,32 @@
 .aegis-onboarding-checklist {
-  min-width: 0;
+  min-width: var(--group-workflow-onboarding-checklist-number-0);
   display: grid;
-  gap: var(--space-5);
-  padding: var(--space-5);
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--surface-radius);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-5);
+  padding: var(--group-workflow-onboarding-checklist-space-padding-5);
+  background: var(--group-workflow-onboarding-checklist-color-surface-surface);
+  border: var(--group-workflow-onboarding-checklist-border-width-hairline) solid
+    var(--group-workflow-onboarding-checklist-color-border-subtle);
+  border-radius: var(--group-workflow-onboarding-checklist-radius-border-radius-strong);
 }
 .aegis-onboarding-heading {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-regular);
 }
 .aegis-onboarding-heading h3 {
-  margin: 0;
-  font-size: var(--text-base);
-  font-weight: var(--title-weight);
-  line-height: 1.25;
+  margin: var(--group-workflow-onboarding-checklist-number-0);
+  font-size: var(--group-workflow-onboarding-checklist-font-size-body);
+  font-weight: var(--group-workflow-onboarding-checklist-title-weight);
+  line-height: var(--group-workflow-onboarding-checklist-font-leading-heading);
 }
 .aegis-onboarding-heading p {
-  margin: var(--space-2) 0 0;
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  margin: var(--group-workflow-onboarding-checklist-space-margin-compact)
+    var(--group-workflow-onboarding-checklist-number-0)
+    var(--group-workflow-onboarding-checklist-number-0);
+  color: var(--group-workflow-onboarding-checklist-color-content-secondary);
+  font-size: var(--group-workflow-onboarding-checklist-font-size-body);
+  line-height: var(--group-workflow-onboarding-checklist-font-leading-body);
 }
 .aegis-onboarding-header-actions {
   display: flex;
@@ -31,52 +34,54 @@
 }
 .aegis-onboarding-progress {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-compact);
 }
 .aegis-onboarding-progress > span {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-compact);
+  color: var(--group-workflow-onboarding-checklist-color-content-secondary);
+  font-size: var(--group-workflow-onboarding-checklist-font-size-label);
 }
 .aegis-onboarding-steps {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: var(--group-workflow-onboarding-checklist-number-0);
+  padding: var(--group-workflow-onboarding-checklist-number-0);
 }
 .aegis-onboarding-steps > li {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-4);
-  padding: var(--space-4) 0;
-  border-bottom: 1px solid var(--color-border-subtle);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-comfortable);
+  padding: var(--group-workflow-onboarding-checklist-space-padding-comfortable)
+    var(--group-workflow-onboarding-checklist-number-0);
+  border-bottom: var(--group-workflow-onboarding-checklist-border-width-hairline) solid
+    var(--group-workflow-onboarding-checklist-color-border-subtle);
 }
 .aegis-onboarding-steps > li:first-child {
-  padding-top: 0;
+  padding-top: var(--group-workflow-onboarding-checklist-number-0);
 }
 .aegis-onboarding-steps > li:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
+  padding-bottom: var(--group-workflow-onboarding-checklist-number-0);
+  border-bottom: var(--group-workflow-onboarding-checklist-number-0);
 }
 .aegis-onboarding-steps .aegis-checkbox-field {
-  flex: 1;
-  min-width: 0;
+  flex: var(--group-workflow-onboarding-checklist-flex-fill);
+  min-width: var(--group-workflow-onboarding-checklist-number-0);
 }
 .aegis-onboarding-steps .aegis-checkbox-label > span {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-compact);
 }
 .aegis-onboarding-steps .aegis-checkbox-label small {
-  font-size: var(--text-xs);
-  font-weight: 400;
-  color: var(--color-text-secondary);
+  font-size: var(--group-workflow-onboarding-checklist-font-size-label);
+  font-weight: var(--group-workflow-onboarding-checklist-font-weight-regular);
+  color: var(--group-workflow-onboarding-checklist-color-content-secondary);
 }
 .aegis-onboarding-steps > li[data-completed='true'] .aegis-checkbox-label {
-  color: var(--color-text-secondary);
+  color: var(--group-workflow-onboarding-checklist-color-content-secondary);
 }
 .aegis-onboarding-steps > li > .aegis-button {
   flex: none;
@@ -86,36 +91,40 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border-subtle);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-regular);
+  margin-top: var(--group-workflow-onboarding-checklist-space-margin-top-comfortable);
+  padding-top: var(--group-workflow-onboarding-checklist-space-padding-top-comfortable);
+  border-top: var(--group-workflow-onboarding-checklist-border-width-hairline) solid
+    var(--group-workflow-onboarding-checklist-color-border-subtle);
 }
 .aegis-onboarding-complete p {
-  color: var(--color-success-fg);
-  font-size: var(--text-sm);
-  margin: 0;
+  color: var(--group-workflow-onboarding-checklist-color-success-foreground);
+  font-size: var(--group-workflow-onboarding-checklist-font-size-body);
+  margin: var(--group-workflow-onboarding-checklist-number-0);
 }
 .aegis-onboarding-loading {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-5);
 }
 .aegis-onboarding-loading > div {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--group-workflow-onboarding-checklist-space-gap-compact);
 }
 .aegis-onboarding-checklist .aegis-notification {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--group-workflow-onboarding-checklist-space-margin-bottom-comfortable);
 }
 @media (max-width: 480px) {
   .aegis-onboarding-checklist {
-    padding: var(--space-4);
+    padding: var(--group-workflow-onboarding-checklist-space-padding-comfortable);
   }
   .aegis-onboarding-steps > li {
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--group-workflow-onboarding-checklist-space-gap-compact);
   }
   .aegis-onboarding-steps > li > .aegis-button {
-    margin-left: calc(18px + var(--space-3));
+    margin-left: calc(
+      var(--group-workflow-onboarding-checklist-size-margin-left-glyph-vast) +
+        var(--group-workflow-onboarding-checklist-space-margin-left-regular)
+    );
   }
 }

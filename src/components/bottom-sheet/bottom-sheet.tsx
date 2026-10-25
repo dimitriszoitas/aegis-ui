@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   useId,
   useLayoutEffect,
@@ -41,15 +42,28 @@ export function BottomSheet({
   headerActions,
   footer,
   height,
-  defaultHeight = 280,
+  defaultHeight: requestedDefaultHeight,
   onHeightChange,
-  minHeight = 160,
-  maxHeight = 640,
-  workspaceMinHeight = 120,
+  minHeight: requestedMinHeight,
+  maxHeight: requestedMaxHeight,
+  workspaceMinHeight: requestedWorkspaceMinHeight,
   className,
 }: BottomSheetProps) {
+  const tokens = useComponentTokenNumbers([
+    'sheet-size',
+    'sheet-min-size',
+    'sheet-max-size',
+    'sheet-content-min-size',
+    'sheet-resize-step',
+    'sheet-resize-step-large',
+  ]);
+  const defaultHeight = requestedDefaultHeight ?? tokens['sheet-size'];
+  const minHeight = requestedMinHeight ?? tokens['sheet-min-size'];
+  const maxHeight = requestedMaxHeight ?? tokens['sheet-max-size'];
+  const workspaceMinHeight = requestedWorkspaceMinHeight ?? tokens['sheet-content-min-size'];
+
   const [localOpen, setLocalOpen] = useState(defaultOpen);
-  const [localHeight, setLocalHeight] = useState(defaultHeight);
+  const [localHeight, setLocalHeight] = useState<number>();
   const [availableHeight, setAvailableHeight] = useState(maxHeight);
   const [resizing, setResizing] = useState(false);
   const [pointerFocus, setPointerFocus] = useState(false);
@@ -64,7 +78,7 @@ export function BottomSheet({
   const isOpen = open ?? localOpen;
   const maximum = Math.max(0, Math.min(maxHeight, availableHeight));
   const minimum = Math.min(minHeight, maximum);
-  const panelHeight = Math.max(minimum, Math.min(height ?? localHeight, maximum));
+  const panelHeight = Math.max(minimum, Math.min(height ?? localHeight ?? defaultHeight, maximum));
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
@@ -182,7 +196,9 @@ export function BottomSheet({
         onLostPointerCapture={() => stopDragRef.current?.()}
         onKeyDown={(event) => {
           setPointerFocus(false);
-          const step = event.shiftKey ? 40 : 20;
+          const step = event.shiftKey
+            ? tokens['sheet-resize-step-large']
+            : tokens['sheet-resize-step'];
           if (event.key === 'ArrowUp') changeHeight(panelHeight + step);
           else if (event.key === 'ArrowDown') changeHeight(panelHeight - step);
           else if (event.key === 'Home') changeHeight(minimum);
@@ -201,7 +217,7 @@ export function BottomSheet({
         <div className="aegis-bottom-sheet-actions">
           {headerActions}
           <IconButton emphasis="ghost" size="sm" aria-label="Close bottom panel" onClick={close}>
-            <X size={16} />
+            <X size={componentToken('surface.icon-md')} />
           </IconButton>
         </div>
       </header>

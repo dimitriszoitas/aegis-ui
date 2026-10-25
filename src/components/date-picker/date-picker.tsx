@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useState } from 'react';
 import { DayPicker, type Matcher } from 'react-day-picker';
 import { CalendarDays } from '@/components/icon';
@@ -45,7 +46,7 @@ export function DatePicker(allProps: DatePickerProps) {
           className="aegis-date-picker-trigger"
           disabled={control.disabled}
           emphasis="secondary"
-          leadingIcon={<CalendarDays size={16} />}
+          leadingIcon={<CalendarDays size={componentToken('input.icon-md')} />}
           aria-label={`${label}${selected ? `: ${selected.toLocaleDateString('en-GB', { timeZone })}` : ''}`}
         >
           {selected

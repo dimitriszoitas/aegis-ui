@@ -5,7 +5,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover, PopoverClose } from './popover';
 
 const meta = {
-  title: 'Components/Overlays/Popover',
+  id: 'components-overlays-popover',
+  title: 'Components/Surfaces/Popover',
   component: Popover,
   subcomponents: { PopoverClose },
   tags: ['autodocs'],
@@ -14,14 +15,14 @@ const meta = {
     docs: {
       description: {
         component:
-          'Popover headers and footers are optional and have no divider lines. Use `showHeader={false}` for a body-only or footer-only layout; an existing title remains available to assistive technology. `density` is `regular` (16px padding) or `tight` (12px). The body scrolls independently while the close control and footer remain visible.\n\n`PopoverClose` closes its nearest parent popover and inherits native button props from Radix. It must be rendered inside that parent.\n\n| PopoverClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
+          'Popover headers and footers are optional and have no divider lines. Use `showHeader={false}` for a body-only or footer-only layout; an existing title remains available to assistive technology. `density` is `regular` (16px padding) or `tight` (12px). The body scrolls independently while the close control and footer remain visible.\n\n`PopoverClose` closes its nearest parent popover and inherits native button props from Base UI. It must be rendered inside that parent.\n\n| PopoverClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
       },
       story: { inline: false, height: 360 },
     },
   },
   args: {
     trigger: <button className="aegis-popover-demo-trigger">Activity details</button>,
-    title: 'Identity correlation',
+    title: 'Project activity',
     description: 'Activity recorded during the selected project period.',
     children: (
       <p>The project team completed 37 tasks and submitted the onboarding milestone for review.</p>
@@ -49,7 +50,7 @@ export const PlacementMatrix: Story = {
 };
 function ControlledExample() {
   const [open, setOpen] = useState(false);
-  const [note, setNote] = useState('Confirm whether the new device belongs to k.nakamura.');
+  const [note, setNote] = useState('Confirm the delivery date with the project owner.');
   return (
     <Popover
       open={open}
@@ -145,8 +146,8 @@ export const ScrollableBody: Story = {
       <div>
         {Array.from({ length: 16 }, (_, index) => (
           <p key={index}>
-            Event {index + 1}: An unfamiliar device requested access to the production workspace.
-            Confirm the project owner and review the related updates.
+            Update {index + 1}: The customer requested a change to the project timeline. Confirm the
+            project owner and review the related updates.
           </p>
         ))}
       </div>

@@ -8,7 +8,8 @@ import { Tag } from '@/components/tag';
 import { PageHeader } from './page-header';
 
 const meta = {
-  title: 'Patterns/PageHeader',
+  id: 'patterns-pageheader',
+  title: 'Patterns/Page Structure/PageHeader',
   component: PageHeader,
   tags: ['autodocs'],
   args: {

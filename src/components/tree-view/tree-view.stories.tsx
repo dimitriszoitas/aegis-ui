@@ -62,7 +62,8 @@ const records: TreeViewItem[] = [
   },
 ];
 const meta = {
-  title: 'Components/Forms/TreeView',
+  id: 'components-forms-treeview',
+  title: 'Components/Inputs & Selection/TreeView',
   component: TreeView,
   tags: ['autodocs'],
   args: { label: 'Workspace records', items: records },

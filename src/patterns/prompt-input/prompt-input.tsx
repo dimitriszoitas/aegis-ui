@@ -1,12 +1,15 @@
-import { useId, useRef, useState, type ReactNode } from 'react';
-import { Popover } from 'radix-ui';
-import { Command } from 'cmdk';
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
+import { useId, useRef, useState, type ReactNode, type ReactElement, type RefObject } from 'react';
+import { Popover } from '@base-ui/react/popover';
+import { Autocomplete } from '@base-ui/react/autocomplete';
 import { ArrowUp, Check, Paperclip, Slash, Square } from '@/components/icon';
+import { Button } from '@/components/button';
 import { IconButton } from '@/components/icon-button';
 import { Textarea } from '@/components/textarea';
 import { Tag } from '@/components/tag';
 import { Kbd } from '@/components/kbd';
 import { cn } from '@/lib/utils';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import type { AiContextItem } from '@/lib/ai';
 import './prompt-input.css';
 
@@ -30,6 +33,8 @@ export interface PromptInputProps {
   commands?: PromptCommand[];
   disabled?: boolean;
   placeholder?: string;
+  /** Hero gives landing-page prompts a spacious composer and a separate context strip. */
+  presentation?: 'compact' | 'hero';
   className?: string;
 }
 const emptyContext: AiContextItem[] = [];
@@ -53,6 +58,84 @@ const defaultCommands: PromptCommand[] = [
     prompt: 'Review the proposed changes and list the validation checks.',
   },
 ];
+/** Searchable choices with keyboard interaction supplied by Base UI. */
+function PromptMenu<T extends { id: string; label: string }>({
+  open,
+  onOpenChange,
+  label,
+  placeholder,
+  emptyLabel,
+  items,
+  trigger,
+  focusTarget,
+  onSelect,
+  renderItem,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  label: string;
+  placeholder: string;
+  emptyLabel: string;
+  items: T[];
+  trigger: ReactElement;
+  focusTarget: RefObject<HTMLTextAreaElement | null>;
+  onSelect: (item: T) => void;
+  renderItem: (item: T) => ReactNode;
+}) {
+  const sizes = useComponentTokenNumbers(
+    ['ai-assistance.popover-offset', 'ai-assistance.overlay-collision-padding'],
+    focusTarget,
+  );
+  return (
+    <Popover.Root open={open} onOpenChange={onOpenChange}>
+      <Popover.Trigger render={trigger} />
+      <Popover.Portal>
+        <Popover.Positioner
+          side="top"
+          align="start"
+          sideOffset={sizes['ai-assistance.popover-offset']}
+          collisionPadding={sizes['ai-assistance.overlay-collision-padding']}
+          className="aegis-prompt-positioner"
+        >
+          <Popover.Popup className="aegis-prompt-menu" aria-label={label} finalFocus={focusTarget}>
+            <Autocomplete.Root
+              items={items}
+              inline
+              open
+              autoHighlight="always"
+              itemToStringValue={(item) => `${item.label} ${item.id}`}
+            >
+              <Autocomplete.Input
+                className="aegis-prompt-menu-input"
+                placeholder={placeholder}
+                aria-label={`Search ${label.toLowerCase()}`}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') onOpenChange(false);
+                }}
+              />
+              <Autocomplete.Empty className="aegis-prompt-menu-empty">
+                {emptyLabel}
+              </Autocomplete.Empty>
+              <Autocomplete.List className="aegis-prompt-menu-list">
+                {(item: T) => (
+                  <Autocomplete.Item
+                    key={item.id}
+                    value={item}
+                    className="aegis-prompt-menu-item"
+                    onClick={() => onSelect(item)}
+                  >
+                    {renderItem(item)}
+                  </Autocomplete.Item>
+                )}
+              </Autocomplete.List>
+            </Autocomplete.Root>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+}
+
 export function PromptInput({
   value,
   defaultValue = '',
@@ -66,8 +149,10 @@ export function PromptInput({
   commands = defaultCommands,
   disabled = false,
   placeholder = 'Ask about your work…',
+  presentation = 'compact',
   className,
 }: PromptInputProps) {
+  useInputFocusModality();
   const [draft, setDraft] = useState(defaultValue);
   const [localContext, setLocalContext] = useState<AiContextItem[]>([]);
   const [commandsOpen, setCommandsOpen] = useState(false);
@@ -109,212 +194,213 @@ export function PromptInput({
       setSubmitting(false);
     }
   }
-  return (
-    <div className={cn('aegis-prompt', className)} data-disabled={disabled || undefined}>
-      {attached.length > 0 && (
-        <div
-          className="aegis-prompt-context"
-          role="region"
-          aria-label="Attached context"
-          tabIndex={0}
+  const contextStrip = attached.length > 0 && (
+    <div className="aegis-prompt-context" role="region" aria-label="Attached context" tabIndex={0}>
+      {presentation === 'hero' && <span className="aegis-prompt-context-label">Context</span>}
+      {attached.map((item) => (
+        <Tag
+          key={item.id}
+          size="sm"
+          variant="removable"
+          disabled={disabled}
+          removeLabel={`Remove ${item.label} from context`}
+          onRemove={() => {
+            changeContext(attached.filter((entry) => entry.id !== item.id));
+            restoreFocus();
+          }}
         >
-          {attached.map((item) => (
-            <Tag
-              key={item.id}
-              size="sm"
-              variant="removable"
-              disabled={disabled}
-              removeLabel={`Remove ${item.label} from context`}
-              onRemove={() => {
-                changeContext(attached.filter((entry) => entry.id !== item.id));
+          <span className="aegis-prompt-context-name" title={item.label}>
+            {item.label}
+          </span>
+        </Tag>
+      ))}
+    </div>
+  );
+  return (
+    <div
+      className={cn('aegis-prompt', className)}
+      data-disabled={disabled || undefined}
+      data-presentation={presentation}
+    >
+      {presentation === 'compact' && contextStrip}
+      <div className="aegis-prompt-composer">
+        <Textarea
+          ref={textarea}
+          appearance="plain"
+          size={presentation === 'hero' ? 'lg' : 'sm'}
+          data-prompt-editor=""
+          aria-label="Message to AI assistant"
+          aria-describedby={`${helpId}${error ? ` ${errorId}` : ''}`}
+          autoGrow
+          rows={2}
+          maxRows={7}
+          value={text}
+          onValueChange={setText}
+          disabled={disabled || submitting}
+          placeholder={placeholder}
+          onKeyDown={(event) => {
+            if (event.nativeEvent.isComposing) return;
+            if (
+              event.key === '/' &&
+              !text.trim() &&
+              !event.ctrlKey &&
+              !event.metaKey &&
+              !event.altKey
+            ) {
+              event.preventDefault();
+              setCommandsOpen(true);
+            } else if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault();
+              void send();
+            }
+          }}
+        />
+        <div className="aegis-prompt-toolbar">
+          <div className="aegis-prompt-tools">
+            <PromptMenu
+              open={attachmentsOpen}
+              onOpenChange={setAttachmentsOpen}
+              label="Attach context"
+              placeholder="Find a record or resource…"
+              emptyLabel="No matching context."
+              items={availableContext}
+              focusTarget={textarea}
+              trigger={
+                presentation === 'hero' ? (
+                  <Button
+                    size="sm"
+                    emphasis="ghost"
+                    disabled={disabled}
+                    leadingIcon={<Paperclip size={componentToken('ai-assistance.icon-md')} />}
+                  >
+                    Attach context
+                  </Button>
+                ) : (
+                  <IconButton
+                    aria-label="Attach context"
+                    tooltip={false}
+                    size="sm"
+                    emphasis="ghost"
+                    disabled={disabled}
+                  >
+                    <Paperclip size={componentToken('ai-assistance.icon-md')} />
+                  </IconButton>
+                )
+              }
+              onSelect={(item) => {
+                if (!attached.some((entry) => entry.id === item.id))
+                  changeContext([...attached, { ...item }]);
+                setAttachmentsOpen(false);
+              }}
+              renderItem={(item) => (
+                <>
+                  <span>
+                    <strong>{item.label}</strong>
+                    <small>
+                      {item.id} · {item.kind}
+                    </small>
+                  </span>
+                  {attached.some((entry) => entry.id === item.id) && (
+                    <Check
+                      size={componentToken('ai-assistance.icon-inline')}
+                      aria-label="Attached"
+                    />
+                  )}
+                </>
+              )}
+            />
+            <PromptMenu
+              open={commandsOpen}
+              onOpenChange={setCommandsOpen}
+              label="Prompt commands"
+              placeholder="Find a command…"
+              emptyLabel="No matching commands."
+              items={commands}
+              focusTarget={textarea}
+              trigger={
+                presentation === 'hero' ? (
+                  <Button
+                    size="sm"
+                    emphasis="ghost"
+                    aria-label="Prompt commands"
+                    disabled={disabled}
+                    leadingIcon={<Slash size={componentToken('ai-assistance.icon-md')} />}
+                  >
+                    Commands
+                  </Button>
+                ) : (
+                  <IconButton
+                    aria-label="Prompt commands"
+                    tooltip={false}
+                    size="sm"
+                    emphasis="ghost"
+                    disabled={disabled}
+                  >
+                    <Slash size={componentToken('ai-assistance.icon-md')} />
+                  </IconButton>
+                )
+              }
+              onSelect={(command) => {
+                setText(command.prompt);
+                setCommandsOpen(false);
+              }}
+              renderItem={(command) => (
+                <>
+                  {command.icon}
+                  <span>
+                    <strong>{command.label}</strong>
+                    {command.description && <small>{command.description}</small>}
+                  </span>
+                </>
+              )}
+            />
+          </div>
+          {generating ? (
+            <IconButton
+              aria-label="Stop generation"
+              tooltip={false}
+              intent="ai"
+              emphasis="secondary"
+              size={presentation === 'hero' ? 'md' : 'sm'}
+              onClick={() => {
+                onStop?.();
                 restoreFocus();
               }}
+              disabled={!onStop}
             >
-              {item.label}
-            </Tag>
-          ))}
+              <Square size={componentToken('ai-assistance.icon-sm')} />
+            </IconButton>
+          ) : (
+            <IconButton
+              aria-label="Send message"
+              tooltip={false}
+              intent="ai"
+              size={presentation === 'hero' ? 'md' : 'sm'}
+              onClick={() => void send()}
+              loading={submitting}
+              disabled={disabled || !text.trim()}
+            >
+              <ArrowUp size={componentToken('ai-assistance.icon-md')} />
+            </IconButton>
+          )}
         </div>
-      )}
-      <Textarea
-        ref={textarea}
-        aria-label="Message to AI assistant"
-        aria-describedby={`${helpId}${error ? ` ${errorId}` : ''}`}
-        autoGrow
-        rows={2}
-        maxRows={7}
-        value={text}
-        onValueChange={setText}
-        disabled={disabled || submitting}
-        placeholder={placeholder}
-        onKeyDown={(event) => {
-          if (event.nativeEvent.isComposing) return;
-          if (
-            event.key === '/' &&
-            !text.trim() &&
-            !event.ctrlKey &&
-            !event.metaKey &&
-            !event.altKey
-          ) {
-            event.preventDefault();
-            setCommandsOpen(true);
-          } else if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            void send();
-          }
-        }}
-      />
-      <div className="aegis-prompt-toolbar">
-        <div className="aegis-prompt-tools">
-          <Popover.Root open={attachmentsOpen} onOpenChange={setAttachmentsOpen}>
-            <Popover.Trigger asChild>
-              <IconButton
-                aria-label="Attach context"
-                tooltip={false}
-                size="sm"
-                emphasis="ghost"
-                disabled={disabled}
-              >
-                <Paperclip size={16} />
-              </IconButton>
-            </Popover.Trigger>
-            <Popover.Portal>
-              <Popover.Content
-                className="aegis-prompt-menu"
-                side="top"
-                align="start"
-                sideOffset={8}
-                collisionPadding={12}
-                aria-label="Attach context"
-                onCloseAutoFocus={(event) => {
-                  event.preventDefault();
-                  restoreFocus();
-                }}
-              >
-                <Command label="Available context">
-                  <Command.Input
-                    placeholder="Find a record or resource…"
-                    aria-label="Search context"
-                  />
-                  <Command.List>
-                    <Command.Empty>No matching context.</Command.Empty>
-                    {availableContext.map((item) => (
-                      <Command.Item
-                        key={item.id}
-                        value={`${item.label} ${item.id}`}
-                        onSelect={() => {
-                          if (!attached.some((entry) => entry.id === item.id))
-                            changeContext([...attached, { ...item }]);
-                          setAttachmentsOpen(false);
-                        }}
-                      >
-                        <span>
-                          <strong>{item.label}</strong>
-                          <small>
-                            {item.id} · {item.kind}
-                          </small>
-                        </span>
-                        {attached.some((entry) => entry.id === item.id) && (
-                          <Check size={15} aria-label="Attached" />
-                        )}
-                      </Command.Item>
-                    ))}
-                  </Command.List>
-                </Command>
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
-          <Popover.Root open={commandsOpen} onOpenChange={setCommandsOpen}>
-            <Popover.Trigger asChild>
-              <IconButton
-                aria-label="Prompt commands"
-                tooltip={false}
-                size="sm"
-                emphasis="ghost"
-                disabled={disabled}
-              >
-                <Slash size={16} />
-              </IconButton>
-            </Popover.Trigger>
-            <Popover.Portal>
-              <Popover.Content
-                className="aegis-prompt-menu"
-                side="top"
-                align="start"
-                sideOffset={8}
-                collisionPadding={12}
-                aria-label="Prompt commands"
-                onCloseAutoFocus={(event) => {
-                  event.preventDefault();
-                  restoreFocus();
-                }}
-              >
-                <Command label="Prompt commands">
-                  <Command.Input
-                    placeholder="Find a command…"
-                    aria-label="Search prompt commands"
-                  />
-                  <Command.List>
-                    <Command.Empty>No matching commands.</Command.Empty>
-                    {commands.map((command) => (
-                      <Command.Item
-                        key={command.id}
-                        value={`${command.label} ${command.id}`}
-                        onSelect={() => {
-                          setText(command.prompt);
-                          setCommandsOpen(false);
-                        }}
-                      >
-                        {command.icon}
-                        <span>
-                          <strong>{command.label}</strong>
-                          {command.description && <small>{command.description}</small>}
-                        </span>
-                      </Command.Item>
-                    ))}
-                  </Command.List>
-                </Command>
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
-        </div>
-        {generating ? (
-          <IconButton
-            aria-label="Stop generation"
-            tooltip={false}
-            intent="ai"
-            emphasis="secondary"
-            size="sm"
-            onClick={() => {
-              onStop?.();
-              restoreFocus();
-            }}
-            disabled={!onStop}
-          >
-            <Square size={14} />
-          </IconButton>
-        ) : (
-          <IconButton
-            aria-label="Send message"
-            tooltip={false}
-            intent="ai"
-            size="sm"
-            onClick={() => void send()}
-            loading={submitting}
-            disabled={disabled || !text.trim()}
-          >
-            <ArrowUp size={16} />
-          </IconButton>
+        <p id={helpId} className="aegis-prompt-hint">
+          {presentation === 'hero' ? (
+            'Enter to send · Shift + Enter for a new line · / for commands'
+          ) : (
+            <>
+              <Kbd>Enter</Kbd> send <span>·</span> <Kbd>Shift + Enter</Kbd> new line <span>·</span>{' '}
+              <Kbd>/</Kbd> commands
+            </>
+          )}
+        </p>
+        {error && (
+          <p id={errorId} className="aegis-prompt-error" role="alert">
+            {error}
+          </p>
         )}
       </div>
-      <p id={helpId} className="aegis-prompt-hint">
-        <Kbd>Enter</Kbd> send <span>·</span> <Kbd>Shift + Enter</Kbd> new line <span>·</span>{' '}
-        <Kbd>/</Kbd> commands
-      </p>
-      {error && (
-        <p id={errorId} className="aegis-prompt-error" role="alert">
-          {error}
-        </p>
-      )}
+      {presentation === 'hero' && contextStrip}
     </div>
   );
 }

@@ -9,7 +9,8 @@ const members = [
   { name: 'Noah Williams' },
 ];
 const meta = {
-  title: 'Components/People/Avatar',
+  id: 'components-people-avatar',
+  title: 'Components/Data Display/Avatar',
   component: Avatar,
   subcomponents: { AvatarGroup },
   tags: ['autodocs'],
@@ -57,4 +58,16 @@ export const InitialsFallback: Story = {
       </div>
     </div>
   ),
+};
+
+export const Playground: Story = {
+  args: { name: 'Maya Chen', initials: '', src: '', size: 'md', status: 'online' },
+  argTypes: {
+    name: { control: 'text' },
+    initials: { control: 'text' },
+    src: { control: 'text', name: 'Image URL' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    status: { control: 'select', options: ['online', 'away', 'busy', 'offline'] },
+  },
+  render: (args) => <Avatar {...args} />,
 };

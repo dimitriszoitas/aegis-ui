@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, useLayoutEffect, useRef, useState, type ComponentPropsWithoutRef } from 'react';
 import { Button } from '@/components/button';
 import { ChevronDown, ChevronUp } from '@/components/icon';
@@ -93,7 +94,11 @@ export function ExpandableText({
           emphasis="ghost"
           size="sm"
           trailingIcon={
-            isExpanded ? <ChevronUp size={14} aria-hidden /> : <ChevronDown size={14} aria-hidden />
+            isExpanded ? (
+              <ChevronUp size={componentToken('data-display.icon-sm')} aria-hidden />
+            ) : (
+              <ChevronDown size={componentToken('data-display.icon-sm')} aria-hidden />
+            )
           }
           aria-expanded={isExpanded}
           aria-controls={contentId}

@@ -1,26 +1,43 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { TypographyExamples, MotionExamples } from './foundation-examples';
+import { TypographyExamples } from './foundation-examples';
+import { FontExamples, FontWeightExamples, TypographyRoles } from './foundation-detail-examples';
 
-<Meta title="Foundations/Type and motion" />
+<Meta title="Foundations/Typography" id="foundations-type-and-motion" />
 
-# Type and motion
+# Typography
 
 Figtree supports scanning across application interfaces. JetBrains Mono distinguishes code, identifiers, and machine-readable data. Both families are self-hosted, so interfaces do not depend on a font CDN.
 
-## Typography
+## Font families
 
-Fundamental and Fundamental Floating share typography. Interface text uses 14px, with 13px supporting text. Page titles use 26px; section and panel titles use 16px. Titles are semibold (600), while body text remains regular (400). Metric values use 28px with tabular numerals; their labels stay quieter. Reserve semantic color for values with meaningful status, not decoration. Sentence case keeps labels readable and direct.
+The semantic families are `--semantic-font-family-ui` and `--semantic-font-family-code`. Components read them through their own group, such as `--group-surface-font-family-ui` or `--group-code-code-editor-font-family-code`. Use the UI family for labels and content, and the code family for code, timestamps, addresses, and identifiers. A monospaced font makes character positions predictable; it does not replace a clear label.
 
-The primitive type scale is available for custom compositions; semantic title and component roles define their actual application. Use JetBrains Mono for code, timestamps, addresses, and identifiers rather than for ordinary interface labels.
+<FontExamples />
+
+## Semantic text roles
+
+All four configurations share font, size, weight, and spacing mappings. Semantic text roles reference primitives directly; family group tokens select the roles used by each component. These foundation specimens inspect the canonical semantic roles, while production components consume their family group.
+
+<TypographyRoles />
+
+Title groups select `--semantic-title-weight`. Body text remains regular, and supporting content uses the secondary text role. Metric values use tabular numerals so changing numbers stay aligned. Reserve semantic color for values with meaningful status.
+
+## Type scale
+
+The canonical scale uses property-aware names such as `--semantic-font-size-label`, `--semantic-font-size-body`, and `--semantic-font-size-heading-m`. Choose a family group token that maps to the intended role when composing interface content. Existing `--text-*` names are compatibility aliases, not the source for new styling.
 
 <TypographyExamples />
 
-## Motion
+## Weight and rhythm
 
-Fast motion gives immediate feedback; base motion connects small state changes; slide motion introduces a sheet. Ease-out curves settle quickly. Sidebar width and padding transition over `--motion-fast` (120ms), from 240px wide with 12px interior padding to 48px wide with 12px vertical and 6px horizontal padding. Labels fade and clip without wrapping, and the toggle remains a stable target.
+Use weight to clarify hierarchy within a size. Avoid turning every label into a heading. The available weight tokens are shown in ascending order.
 
-Fundamental uses edge-aligned navigation and workspace panels. Fundamental Floating contains navigation and assistant panels with rounded corners and exterior insets. Switching presentation keeps the same palette, typography, controls, content, and interaction state. Corner geometry is not animated.
+<FontWeightExamples />
 
-<MotionExamples />
+Line-height and tracking tokens support individual component needs. Preserve the component's existing text rhythm when composing it; do not apply one compact line-height to all content. Allow body copy to wrap and keep complete identifiers available when visual text is truncated.
 
-Respect `prefers-reduced-motion` in every animation and transition. State changes remain clear when movement is removed. Loading and streaming indicators explain progress without preventing people from interacting with the rest of the workspace.
+## Writing for interfaces
+
+Use sentence case, familiar words, and concrete action labels. Keep related labels consistent across the application. Placeholder text supplements a label; it does not replace one.
+
+Read <a className="foundation-detail-link" href="./?path=/docs/foundations-motion--docs" target="_top">Motion</a> for transitions and reduced-motion behavior.

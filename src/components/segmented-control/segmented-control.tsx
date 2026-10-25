@@ -1,3 +1,4 @@
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import { useId, useState, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import './segmented-control.css';
@@ -17,6 +18,8 @@ export interface SegmentedControlProps {
   disabled?: boolean;
   size?: 'sm' | 'md';
   fullWidth?: boolean;
+  /** Allow short option sets to wrap within narrow settings panels. */
+  wrap?: boolean;
   className?: string;
 }
 /** A single selection among related views, using native radio keyboard behavior. */
@@ -29,8 +32,10 @@ export function SegmentedControl({
   disabled,
   size = 'md',
   fullWidth,
+  wrap,
   className,
 }: SegmentedControlProps) {
+  useInputFocusModality();
   const id = useId();
   const [internal, setInternal] = useState(
     defaultValue ?? options.find((option) => !option.disabled)?.value ?? '',
@@ -42,6 +47,7 @@ export function SegmentedControl({
       disabled={disabled}
       data-size={size}
       data-full-width={fullWidth || undefined}
+      data-wrap={wrap || undefined}
     >
       <legend className="sr-only">{label}</legend>
       {options.map((option) => (

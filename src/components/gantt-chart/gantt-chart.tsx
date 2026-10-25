@@ -1,3 +1,4 @@
+import { useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { SegmentedControl } from '@/components/segmented-control';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,18 @@ export function GanttChart({
   showControls = true,
   className,
 }: GanttChartProps) {
+  const tokens = useComponentTokenNumbers([
+    'gantt-arrow-size',
+    'gantt-min-width',
+    'gantt-day-width',
+    'gantt-week-width',
+    'gantt-month-width',
+    'gantt-row-height',
+    'gantt-dependency-turn',
+    'gantt-milestone-width',
+    'gantt-task-min-width',
+    'chart-resize-delay',
+  ]);
   const [local, setLocal] = useState<GanttScale>(defaultScale);
   const scale = controlled ?? local;
   const model = ganttModel(tasks, scale);
@@ -58,7 +71,7 @@ export function GanttChart({
     measure();
     const observer = new ResizeObserver(() => {
       clearTimeout(timer);
-      timer = setTimeout(measure, 140);
+      timer = setTimeout(measure, tokens['chart-resize-delay']);
     });
     observer.observe(viewport);
     observer.observe(taskHeading);
@@ -66,11 +79,16 @@ export function GanttChart({
       clearTimeout(timer);
       observer.disconnect();
     };
-  }, [hasTimeline]);
+  }, [hasTimeline, tokens]);
   const plotWidth = Math.max(
-    520,
+    tokens['gantt-min-width'],
     availablePlotWidth,
-    model.columns.length * (scale === 'day' ? 42 : scale === 'week' ? 100 : 128),
+    model.columns.length *
+      (scale === 'day'
+        ? tokens['gantt-day-width']
+        : scale === 'week'
+          ? tokens['gantt-week-width']
+          : tokens['gantt-month-width']),
   );
   const todayTime = today ? calendarDay(today) : null;
   const x = (date: number) => ((date - model.start) / DAY / (model.days || 1)) * plotWidth;
@@ -81,9 +99,12 @@ export function GanttChart({
       const from = model.rows[parent];
       const x1 = x(from.endTime + DAY),
         x2 = x(task.startTime),
-        y1 = parent * 48 + 24,
-        y2 = index * 48 + 24;
-      const turn = x2 > x1 + 12 ? x1 + (x2 - x1) / 2 : Math.max(x1, x2) + 12;
+        y1 = (parent + 0.5) * tokens['gantt-row-height'],
+        y2 = (index + 0.5) * tokens['gantt-row-height'];
+      const turn =
+        x2 > x1 + tokens['gantt-dependency-turn']
+          ? x1 + (x2 - x1) / 2
+          : Math.max(x1, x2) + tokens['gantt-dependency-turn'];
       return [{ id: `${id}-${task.id}`, path: `M ${x1} ${y1} H ${turn} V ${y2} H ${x2}` }];
     }),
   );
@@ -170,14 +191,15 @@ export function GanttChart({
                 <svg
                   className="aegis-gantt-dependencies"
                   width={plotWidth}
-                  height={model.rows.length * 48}
+                  height={model.rows.length * tokens['gantt-row-height']}
                   aria-hidden="true"
                 >
                   <defs>
                     <marker
                       id={markerId}
-                      markerWidth="6"
-                      markerHeight="6"
+                      viewBox="0 0 6 6"
+                      markerWidth={tokens['gantt-arrow-size']}
+                      markerHeight={tokens['gantt-arrow-size']}
                       refX="5"
                       refY="3"
                       orient="auto"
@@ -194,7 +216,9 @@ export function GanttChart({
                   const style = {
                     left: x(task.startTime),
                     width: Math.max(
-                      task.milestone ? 16 : 5,
+                      task.milestone
+                        ? tokens['gantt-milestone-width']
+                        : tokens['gantt-task-min-width'],
                       x(task.endTime + DAY) - x(task.startTime),
                     ),
                   };

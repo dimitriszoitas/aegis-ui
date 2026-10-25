@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useState, useSyncExternalStore, type ComponentProps, type ReactNode } from 'react';
 import { RefreshCw, Sparkles, ThumbsDown, ThumbsUp } from '@/components/icon';
 import { ConfidenceBadge, type ConfidenceLevel } from '@/components/confidence-badge';
@@ -18,6 +19,7 @@ function prefersReducedMotion() {
 export type AiLabelProps = ComponentProps<'span'>;
 /** The shared visible marker for AI-generated material. */
 export function AiLabel({ children = 'AI generated', className, ...props }: AiLabelProps) {
+  const tokens = useComponentTokenNumbers(['ai-gradient-duration']);
   const gradientId = `ai-marker-${useId().replaceAll(':', '')}`;
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
@@ -29,23 +31,30 @@ export function AiLabel({ children = 'AI generated', className, ...props }: AiLa
       <svg className="aegis-ai-gradient-defs" aria-hidden="true">
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="var(--color-ai-fg)" />
-            <stop offset="50%" stopColor="var(--color-ai-pink-fg)" />
-            <stop offset="100%" stopColor="var(--color-ai-blue-fg)" />
+            <stop offset="0%" stopColor="var(--group-ai-color-ai-foreground)" />
+            <stop offset="50%" stopColor="var(--group-ai-color-ai-pink-fg)" />
+            <stop
+              offset="100%"
+              stopColor="var(--group-ai-color-ai-purple-fg, var(--group-ai-color-ai-blue-fg))"
+            />
             {!reducedMotion && (
               <animateTransform
                 attributeName="gradientTransform"
                 type="rotate"
                 from="0 .5 .5"
                 to="360 .5 .5"
-                dur="6s"
+                dur={`${tokens['ai-gradient-duration']}ms`}
                 repeatCount="indefinite"
               />
             )}
           </linearGradient>
         </defs>
       </svg>
-      <Sparkles size={15} aria-hidden="true" style={{ stroke: `url(#${gradientId})` }} />
+      <Sparkles
+        size={componentToken('ai.icon-inline')}
+        aria-hidden="true"
+        style={{ stroke: `url(#${gradientId})` }}
+      />
       <span>{children}</span>
     </span>
   );
@@ -75,7 +84,7 @@ export function AiFeedback({ feedback, onFeedback, onRegenerate, disabled }: AiF
         disabled={disabled}
         onClick={() => vote('positive')}
       >
-        <ThumbsUp size={14} />
+        <ThumbsUp size={componentToken('ai.icon-sm')} />
       </IconButton>
       <IconButton
         size="sm"
@@ -85,7 +94,7 @@ export function AiFeedback({ feedback, onFeedback, onRegenerate, disabled }: AiF
         disabled={disabled}
         onClick={() => vote('negative')}
       >
-        <ThumbsDown size={14} />
+        <ThumbsDown size={componentToken('ai.icon-sm')} />
       </IconButton>
       {onRegenerate && (
         <IconButton
@@ -96,7 +105,7 @@ export function AiFeedback({ feedback, onFeedback, onRegenerate, disabled }: AiF
           disabled={disabled}
           onClick={onRegenerate}
         >
-          <RefreshCw size={14} />
+          <RefreshCw size={componentToken('ai.icon-sm')} />
         </IconButton>
       )}
     </div>

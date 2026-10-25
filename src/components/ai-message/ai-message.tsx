@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useState, type ComponentProps, type ReactNode } from 'react';
 import Markdown from 'react-markdown';
 import {
@@ -114,14 +115,14 @@ export function AiMessage({
                   ? 'Review incomplete'
                   : `Reviewed ${completedCount} evidence ${completedCount === 1 ? 'step' : 'steps'}`}
             </span>
-            <ChevronDown size={14} aria-hidden="true" />
+            <ChevronDown size={componentToken('ai.icon-sm')} aria-hidden="true" />
           </summary>
           <ol>
             {message.steps.map((step) => {
               const Icon = stepIcons[step.status];
               return (
                 <li key={step.id} data-status={step.status}>
-                  <Icon size={14} aria-hidden="true" />
+                  <Icon size={componentToken('ai.icon-sm')} aria-hidden="true" />
                   <span>{step.label}</span>
                   <span className="sr-only"> — {step.status}</span>
                 </li>
@@ -175,7 +176,7 @@ export function AiMessage({
               const Icon = citationIcons[citation.kind];
               const content = (
                 <>
-                  <Icon size={12} aria-hidden="true" />
+                  <Icon size={componentToken('ai.icon-xs')} aria-hidden="true" />
                   <span>{citation.label}</span>
                 </>
               );
@@ -240,7 +241,11 @@ export function AiMessage({
             aria-label={copyState === 'copied' ? 'Response copied' : 'Copy response'}
             onClick={copy}
           >
-            {copyState === 'copied' ? <Check size={14} /> : <Copy size={14} />}
+            {copyState === 'copied' ? (
+              <Check size={componentToken('ai.icon-sm')} />
+            ) : (
+              <Copy size={componentToken('ai.icon-sm')} />
+            )}
           </IconButton>
           {copyState === 'copied' && (
             <span role="status" className="aegis-ai-provenance">
@@ -268,7 +273,7 @@ export function AiMessage({
             size="sm"
             emphasis="ghost"
             intent="ai"
-            leadingIcon={<RefreshCw size={14} />}
+            leadingIcon={<RefreshCw size={componentToken('ai.icon-sm')} />}
             onClick={onRegenerate}
           >
             Regenerate response

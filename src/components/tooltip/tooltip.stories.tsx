@@ -3,7 +3,8 @@ import { Info, ShieldCheck } from '@/components/icon';
 import { Tooltip, RichTooltip } from './tooltip';
 
 const meta = {
-  title: 'Components/Overlays/Tooltip',
+  id: 'components-overlays-tooltip',
+  title: 'Components/Feedback/Tooltip',
   component: Tooltip,
   subcomponents: { RichTooltip },
   tags: ['autodocs'],

@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   useCallback,
   useId,
@@ -9,16 +10,17 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { Dialog as Primitive } from 'radix-ui';
+import { Dialog as Primitive } from '@base-ui/react/dialog';
 import { ChevronLeft, ChevronRight, X } from '@/components/icon';
 import { cn } from '../../lib/utils';
-import { useModalIsolation } from '../modal/use-modal-isolation';
+import { useInputFocusModality } from '@/lib/use-input-focus';
 import './side-sheet.css';
 
 export interface SideSheetProps extends Omit<
   ComponentPropsWithoutRef<typeof Primitive.Root>,
-  'children' | 'modal'
+  'children' | 'modal' | 'onOpenChange'
 > {
+  onOpenChange?: (open: boolean) => void;
   title: ReactNode;
   description?: ReactNode;
   trigger?: ReactElement;
@@ -57,6 +59,11 @@ function SheetResizeHandle({
   panelId: string;
 }) {
   const handle = useRef<HTMLDivElement>(null);
+  const tokens = useComponentTokenNumbers([
+    'side-sheet-workspace-min-width',
+    'side-sheet-resize-step',
+    'side-sheet-resize-step-large',
+  ]);
   const panel = useRef<HTMLElement | null>(null);
   const limits = useRef({ min: minWidth, max: maxWidth });
   const drag = useRef<{ pointerId: number; x: number; width: number } | null>(null);
@@ -96,7 +103,8 @@ function SheetResizeHandle({
     function measure() {
       if (!element) return;
       const style = getComputedStyle(element);
-      const inset = Number.parseFloat(style.getPropertyValue('--chrome-inset')) || 0;
+      const inset =
+        Number.parseFloat(style.getPropertyValue('--group-surface-overlay-chrome-inset')) || 0;
       const viewportWidth = document.documentElement.clientWidth - 2 * inset;
       const available = flexibleSiblings.length
         ? element.getBoundingClientRect().width +
@@ -108,7 +116,12 @@ function SheetResizeHandle({
         Math.min(
           maxWidth,
           viewportWidth,
-          docked ? Math.min(available, Math.max(minWidth, available - 480)) : viewportWidth,
+          docked
+            ? Math.min(
+                available,
+                Math.max(minWidth, available - tokens['side-sheet-workspace-min-width']),
+              )
+            : viewportWidth,
         ),
       );
       limits.current = { min: Math.min(minWidth, maximum), max: maximum };
@@ -124,7 +137,7 @@ function SheetResizeHandle({
       window.removeEventListener('resize', measure);
       panel.current = null;
     };
-  }, [docked, minWidth, maxWidth, widthRef, resize]);
+  }, [docked, minWidth, maxWidth, widthRef, resize, tokens]);
   function finishResize() {
     drag.current = null;
     if (panel.current) delete panel.current.dataset.resizing;
@@ -166,7 +179,9 @@ function SheetResizeHandle({
       onLostPointerCapture={finishResize}
       onKeyDown={(event) => {
         const current = widthRef.current ?? size.width;
-        const step = event.shiftKey ? 48 : 16;
+        const step = event.shiftKey
+          ? tokens['side-sheet-resize-step-large']
+          : tokens['side-sheet-resize-step'];
         const next =
           event.key === 'ArrowLeft'
             ? current + step
@@ -265,7 +280,7 @@ function SheetHeader({
           className="aegis-sheet-icon-button"
           aria-label={closeLabel}
         >
-          <X size={18} />
+          <X size={componentToken('surface.icon-lg')} />
         </button>
       </div>
       {((position !== undefined && total !== undefined) || actions) && (
@@ -279,7 +294,7 @@ function SheetHeader({
                 disabled={!onPrevious || position <= 1}
                 aria-label="Previous record"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={componentToken('surface.icon-md')} />
               </button>
               <span aria-live="polite">
                 {position} of {total}
@@ -291,7 +306,7 @@ function SheetHeader({
                 disabled={!onNext || position >= total}
                 aria-label="Next record"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={componentToken('surface.icon-md')} />
               </button>
             </div>
           )}
@@ -305,7 +320,6 @@ function SheetHeader({
 function OverlayContent({
   children,
   className,
-  trigger,
   titleId,
   descriptionId,
   panelId,
@@ -318,29 +332,23 @@ function OverlayContent({
   panelId: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const previousFocus = useRef<HTMLElement | null>(null);
-  useModalIsolation(ref);
   return (
-    <Primitive.Content
+    <Primitive.Popup
       ref={ref}
       id={panelId}
       className={className}
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
-      onOpenAutoFocus={() => {
-        previousFocus.current =
-          document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      }}
-      onCloseAutoFocus={(event) => {
-        if (!trigger && previousFocus.current) {
-          event.preventDefault();
-          const element = previousFocus.current;
-          requestAnimationFrame(() => element.focus());
-        }
+      initialFocus={() =>
+        ref.current?.querySelector<HTMLButtonElement>('.aegis-sheet-icon-button') ?? ref.current
+      }
+      finalFocus={() => {
+        const current = document.activeElement;
+        return !(current && current !== document.body && !ref.current?.contains(current));
       }}
     >
       {children}
-    </Primitive.Content>
+    </Primitive.Popup>
   );
 }
 
@@ -416,14 +424,20 @@ export function SideSheet({
   className,
   docked = false,
   resizable = false,
-  minWidth = 320,
-  maxWidth = 720,
+  minWidth: requestedMinWidth,
+  maxWidth: requestedMaxWidth,
   position,
   total,
   onPrevious,
   onNext,
   closeLabel,
+  ...rootProps
 }: SideSheetProps) {
+  useInputFocusModality();
+  const tokens = useComponentTokenNumbers(['side-sheet-min-width', 'side-sheet-max-width']);
+  const minWidth = requestedMinWidth ?? tokens['side-sheet-min-width'];
+  const maxWidth = requestedMaxWidth ?? tokens['side-sheet-max-width'];
+
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = open ?? internalOpen;
   const titleId = useId();
@@ -473,8 +487,14 @@ export function SideSheet({
     className,
   );
   return (
-    <Primitive.Root open={isOpen} onOpenChange={changeOpen} modal={!docked}>
-      {trigger && <Primitive.Trigger asChild>{trigger}</Primitive.Trigger>}
+    <Primitive.Root
+      {...rootProps}
+      open={isOpen}
+      onOpenChange={changeOpen}
+      modal={!docked}
+      disablePointerDismissal={docked || rootProps.disablePointerDismissal}
+    >
+      {trigger && <Primitive.Trigger render={trigger} />}
       {docked ? (
         isOpen && (
           <DockedContent
@@ -489,7 +509,7 @@ export function SideSheet({
         )
       ) : (
         <Primitive.Portal>
-          <Primitive.Overlay data-aegis-overlay className="aegis-sheet-overlay" />
+          <Primitive.Backdrop data-aegis-overlay className="aegis-sheet-overlay" />
           <OverlayContent
             className={classes}
             trigger={trigger}

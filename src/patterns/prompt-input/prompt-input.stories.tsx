@@ -4,14 +4,12 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { records } from '@/sample-data';
 import type { AiContextItem } from '@/lib/ai';
 import { PromptInput } from './prompt-input';
-const context: AiContextItem[] = records
-  .slice(0, 3)
-  .map((record) => ({
-    id: record.id,
-    label: record.id,
-    description: record.title,
-    kind: 'record',
-  }));
+const context: AiContextItem[] = records.slice(0, 3).map((record) => ({
+  id: record.id,
+  label: record.id,
+  description: record.title,
+  kind: 'record',
+}));
 function Demo({ fail = false }: { fail?: boolean }) {
   const [sent, setSent] = useState('');
   return (
@@ -29,7 +27,8 @@ function Demo({ fail = false }: { fail?: boolean }) {
   );
 }
 const meta = {
-  title: 'Patterns/AI/PromptInput',
+  id: 'patterns-ai-promptinput',
+  title: 'Patterns/AI Assistance/PromptInput',
   component: PromptInput,
   tags: ['autodocs'],
   args: { availableContext: context, onSend: () => {} },
@@ -67,7 +66,9 @@ export const KeyboardComposer: Story = {
     await userEvent.click(input);
     await userEvent.keyboard('/');
     const page = within(canvasElement.ownerDocument.body);
-    await userEvent.type(page.getByRole('combobox', { name: 'Prompt commands' }), 'summarize');
+    const commands = await page.findByRole('combobox', { name: 'Search prompt commands' });
+    await waitFor(() => expect(commands).toHaveFocus());
+    await userEvent.type(commands, 'summarize');
     await userEvent.keyboard('{Enter}');
     await waitFor(() => {
       expect(input).toHaveValue('Summarize the attached records for a handoff.');
@@ -93,4 +94,86 @@ export const OpenAttachments: Story = {
   play: async ({ canvasElement }) => {
     await userEvent.click(within(canvasElement).getByRole('button', { name: 'Attach context' }));
   },
+};
+
+const workspaceContext: AiContextItem[] = [
+  { id: 'projects', label: 'Project portfolio', kind: 'scope' },
+  { id: 'customers', label: 'Customer accounts', kind: 'scope' },
+  {
+    id: 'quarterly-review',
+    label: 'Quarterly planning and cross-team delivery review',
+    kind: 'config',
+  },
+];
+function HeroDemo() {
+  const [attached, setAttached] = useState(workspaceContext.slice(0, 1));
+  const [generating, setGenerating] = useState(false);
+  const [status, setStatus] = useState('');
+  return (
+    <>
+      <PromptInput
+        presentation="hero"
+        placeholder="Work with Aegis AI…"
+        availableContext={workspaceContext}
+        context={attached}
+        onContextChange={setAttached}
+        generating={generating}
+        onSend={(prompt, items) => {
+          setStatus(`Requested: ${prompt} · ${items.length} context items`);
+          setGenerating(true);
+        }}
+        onStop={() => {
+          setGenerating(false);
+          setStatus('Generation stopped.');
+        }}
+      />
+      <p role="status">{status}</p>
+    </>
+  );
+}
+export const Hero: Story = {
+  render: () => <HeroDemo />,
+};
+export const HeroKeyboardComposer: Story = {
+  render: () => <HeroDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const input = canvas.getByRole('textbox', { name: 'Message to AI assistant' });
+    await userEvent.click(canvas.getByRole('button', { name: 'Attach context' }));
+    const attachmentSearch = await page.findByRole('combobox', { name: 'Search attach context' });
+    await waitFor(() => expect(attachmentSearch).toHaveFocus());
+    await userEvent.type(attachmentSearch, 'customer');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(input).toHaveFocus());
+    await expect(canvas.getByRole('region', { name: 'Attached context' })).toHaveTextContent(
+      'Customer accounts',
+    );
+    await userEvent.keyboard('/');
+    const commands = await page.findByRole('combobox', { name: 'Search prompt commands' });
+    await waitFor(() => expect(commands).toHaveFocus());
+    await userEvent.type(commands, 'summarize');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(input).toHaveFocus());
+    await userEvent.keyboard('{Shift>}{Enter}{/Shift}Include owners.');
+    await expect(input).toHaveValue(
+      'Summarize the attached records for a handoff.\nInclude owners.',
+    );
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(input).toHaveValue(''));
+    await expect(canvas.getByRole('status')).toHaveTextContent('2 context items');
+    await userEvent.click(canvas.getByRole('button', { name: 'Stop generation' }));
+    await waitFor(() => expect(input).toHaveFocus());
+    await expect(canvas.getByRole('status')).toHaveTextContent('Generation stopped.');
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Remove Customer accounts from context' }),
+    );
+    await waitFor(() => expect(input).toHaveFocus());
+    await expect(canvas.getByRole('region', { name: 'Attached context' })).not.toHaveTextContent(
+      'Customer accounts',
+    );
+  },
+};
+export const HeroLongContext: Story = {
+  args: { presentation: 'hero', context: workspaceContext, placeholder: 'Work with Aegis AI…' },
 };

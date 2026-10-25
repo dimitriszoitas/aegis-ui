@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { SegmentedControl } from './segmented-control';
 const meta = {
-  title: 'Components/Forms/SegmentedControl',
+  id: 'components-forms-segmentedcontrol',
+  title: 'Components/Inputs & Selection/SegmentedControl',
   component: SegmentedControl,
   tags: ['autodocs'],
   args: {

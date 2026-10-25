@@ -1,15 +1,17 @@
+import { useState, type ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Sparkles, Plus, ArrowRight } from '@/components/icon';
 import { Button } from './button';
 const meta = {
-  title: 'Components/Actions/Button',
+  id: 'components-actions-button',
+  title: 'Components/Triggers/Button',
   component: Button,
   args: { children: 'Create project', intent: 'function' },
   parameters: {
     docs: {
       description: {
         component:
-          'Primary actions are filled, secondary actions use a soft tint, tertiary actions have an outline, and ghost actions show only their label and icon. All four support neutral, function, destroy, and AI intents. Buttons use 4/5/6px corners at 28/34/40px heights, with optical padding on icon sides. Loading keeps the original button width.',
+          'Primary actions are filled, secondary actions have an outline, tertiary actions use a soft tint, and ghost actions show only their label and icon. All four support neutral, function, destroy, and AI intents. Buttons use 4/5/6px corners at 28/34/40px heights, with optical padding on icon sides. Loading keeps the original button width.',
       },
     },
   },
@@ -143,4 +145,55 @@ export const IconSpacing: Story = {
     </div>
   ),
 };
-export const Playground: Story = {};
+
+type PlaygroundIcon = 'none' | 'plus' | 'arrow' | 'sparkles';
+type PlaygroundArgs = Omit<ComponentProps<typeof Button>, 'leadingIcon' | 'trailingIcon'> & {
+  leadingIcon: PlaygroundIcon;
+  trailingIcon: PlaygroundIcon;
+};
+const playgroundIcons = {
+  none: undefined,
+  plus: <Plus />,
+  arrow: <ArrowRight />,
+  sparkles: <Sparkles />,
+};
+export const Playground: StoryObj<PlaygroundArgs> = {
+  args: {
+    children: 'Create project',
+    size: 'md',
+    intent: 'function',
+    emphasis: 'primary',
+    disabled: false,
+    loading: false,
+    leadingIcon: 'none',
+    trailingIcon: 'none',
+  },
+  argTypes: {
+    children: { control: 'text', name: 'Label' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    intent: { control: 'select', options: ['default', 'function', 'destroy', 'ai'] },
+    emphasis: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'ghost'] },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+    leadingIcon: { control: 'select', options: ['none', 'plus', 'arrow', 'sparkles'] },
+    trailingIcon: { control: 'select', options: ['none', 'plus', 'arrow', 'sparkles'] },
+  },
+  render: function Playground({ leadingIcon, trailingIcon, ...args }) {
+    const [count, setCount] = useState(0);
+    return (
+      <div className="stack" style={{ alignItems: 'center' }}>
+        <Button
+          {...args}
+          leadingIcon={playgroundIcons[leadingIcon]}
+          trailingIcon={playgroundIcons[trailingIcon]}
+          onClick={() => setCount((value) => value + 1)}
+        />
+        <p className="sr-only" role="status">
+          {count
+            ? `${count} ${count === 1 ? 'action' : 'actions'} completed locally`
+            : 'Activate the button to run the example action.'}
+        </p>
+      </div>
+    );
+  },
+};

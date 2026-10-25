@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ShieldCheck } from '@/components/icon';
 import { Breadcrumb } from './breadcrumb';
 const meta = {
+  id: 'components-navigation-breadcrumb',
   title: 'Components/Navigation/Breadcrumb',
   component: Breadcrumb,
   tags: ['autodocs'],
@@ -52,3 +53,54 @@ function NavigationDemo() {
   );
 }
 export const ClientNavigation: Story = { render: () => <NavigationDemo /> };
+
+interface BreadcrumbPlaygroundOptions {
+  depth: number;
+  separatorStyle: 'chevron' | 'slash' | 'dot';
+  showIcon: boolean;
+  interactive: boolean;
+  currentLabel: string;
+}
+export const Playground: StoryObj<BreadcrumbPlaygroundOptions> = {
+  args: {
+    depth: 3,
+    separatorStyle: 'chevron',
+    showIcon: true,
+    interactive: true,
+    currentLabel: 'Customer portal',
+  },
+  argTypes: {
+    depth: { control: { type: 'range', min: 1, max: 4, step: 1 } },
+    separatorStyle: { control: 'inline-radio', options: ['chevron', 'slash', 'dot'] },
+    showIcon: { control: 'boolean' },
+    interactive: { control: 'boolean' },
+    currentLabel: { control: 'text' },
+  },
+  render: function BreadcrumbPlayground(args) {
+    const [location, setLocation] = useState('');
+    const labels = ['Workspace', 'Projects', 'Deliverables'].slice(
+      0,
+      Math.max(0, Math.min(3, args.depth - 1)),
+    );
+    const items = [...labels, args.currentLabel].map((label, index) => ({
+      label,
+      icon: index === 0 && args.showIcon ? <ShieldCheck size={15} /> : undefined,
+      onClick: args.interactive ? () => setLocation(label) : undefined,
+    }));
+    return (
+      <div className="stack">
+        <Breadcrumb
+          items={items}
+          separator={
+            args.separatorStyle === 'slash' ? '/' : args.separatorStyle === 'dot' ? '·' : undefined
+          }
+        />
+        <p className="muted" role="status">
+          {location
+            ? `Selected destination: ${location}`
+            : 'Choose a parent destination to preview navigation.'}
+        </p>
+      </div>
+    );
+  },
+};

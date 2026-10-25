@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { ArrowDownRight, ArrowUpRight, Minus } from '@/components/icon';
 import { Card, type CardProps } from '@/components/card';
 import { Skeleton } from '@/components/skeleton';
@@ -58,8 +59,11 @@ export function MetricCard({
           role="status"
           aria-label={`Loading ${label.toLowerCase()}`}
         >
-          <Skeleton width="60%" height={30} />
-          <Skeleton width="85%" />
+          <Skeleton
+            width={componentToken('metric-skeleton-width')}
+            height={componentToken('metric-skeleton-height')}
+          />
+          <Skeleton width={componentToken('metric-skeleton-description-width')} />
         </div>
       ) : (
         <>
@@ -74,8 +78,7 @@ export function MetricCard({
               <TrendChart
                 data={sparkline}
                 variant={sparklineVariant}
-                width={100}
-                height={28}
+
                 intent={intent ?? (trend === 'neutral' ? 'function' : trend)}
                 label={sparklineLabel ?? `${label} over the last 24 hours`}
               />
@@ -84,7 +87,7 @@ export function MetricCard({
           {change !== undefined && (
             <div className="aegis-metric-comparison">
               <span className="aegis-metric-delta" data-trend={trend}>
-                <Arrow size={14} aria-hidden="true" />
+                <Arrow size={componentToken('data-display.icon-sm')} aria-hidden="true" />
                 <span>
                   {change > 0 ? '+' : ''}
                   {change.toLocaleString('en-GB', { maximumFractionDigits: 1 })}%

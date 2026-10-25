@@ -4,7 +4,8 @@ const series = [
   1, 0, 2, 1, 4, 3, 5, 7, 4, 6, 11, 8, 15, 12, 18, 23, 19, 16, 12, 22, 28, 24, 30, 26,
 ];
 export default {
-  title: 'Components/Data grid/Sparkline cell',
+  id: 'components-data-grid-sparkline-cell',
+  title: 'Components/Data Display/Data grid/Sparkline cell',
   component: SparklineCell,
   tags: ['autodocs'],
   args: { data: series },
@@ -30,4 +31,22 @@ export const EdgeCases: StoryObj<typeof SparklineCell> = {
       <SparklineCell data={[0, 0, 0, 0]} variant="bar" />
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof SparklineCell> = {
+  args: {
+    data: series,
+    variant: 'line',
+    intent: 'function',
+    width: 160,
+    height: 48,
+    label: 'Project activity',
+  },
+  argTypes: {
+    data: { control: 'object' },
+    variant: { control: 'select', options: ['line', 'area', 'bar'] },
+    intent: { control: 'select', options: ['function', 'ai', 'success', 'warning', 'destroy'] },
+    width: { control: { type: 'number', min: 24, max: 600 } },
+    height: { control: { type: 'number', min: 16, max: 240 } },
+  },
 };

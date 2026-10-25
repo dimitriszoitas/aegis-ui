@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { ArrowUpRight, Pencil, Plus, Sparkles } from '@/components/icon';
 import { Avatar } from '@/components/avatar';
@@ -127,12 +128,16 @@ function DetailHeader({
           <Button
             intent="ai"
             emphasis="secondary"
-            leadingIcon={<Sparkles size={16} />}
+            leadingIcon={<Sparkles size={componentToken('application.icon-md')} />}
             onClick={onAskAi}
           >
             Ask Aegis AI
           </Button>
-          <Button emphasis="tertiary" leadingIcon={<Pencil size={16} />} onClick={onEdit}>
+          <Button
+            emphasis="tertiary"
+            leadingIcon={<Pencil size={componentToken('application.icon-md')} />}
+            onClick={onEdit}
+          >
             Edit {singular}
           </Button>
         </div>
@@ -160,7 +165,7 @@ function MemberLink({
         <strong>{member.name}</strong>
         <small>{member.title}</small>
       </span>
-      <ArrowUpRight size={14} aria-hidden="true" />
+      <ArrowUpRight size={componentToken('application.icon-sm')} aria-hidden="true" />
     </button>
   );
 }
@@ -245,7 +250,7 @@ function ProjectRows({
                 · Due {formatBusinessDate(project.dueDate)}
               </small>
             </span>
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <ArrowUpRight size={componentToken('application.icon-md')} aria-hidden="true" />
           </button>
           <div className="aegis-business-detail-project-progress">
             <Status value={project.status} />
@@ -495,7 +500,11 @@ function ProjectDetails({ project, ...props }: BusinessViewProps & { project: Bu
               <span role="status" className="aegis-business-detail-muted">
                 {noteAdded}
               </span>
-              <Button type="submit" size="sm" leadingIcon={<Plus size={14} />}>
+              <Button
+                type="submit"
+                size="sm"
+                leadingIcon={<Plus size={componentToken('application.icon-sm')} />}
+              >
                 Add note
               </Button>
             </div>
@@ -514,7 +523,7 @@ function ProjectDetails({ project, ...props }: BusinessViewProps & { project: Bu
                     onClick={() => onNavigate({ page: 'customers', recordId: customer.id })}
                   >
                     {customer.name}
-                    <ArrowUpRight size={14} aria-hidden="true" />
+                    <ArrowUpRight size={componentToken('application.icon-sm')} aria-hidden="true" />
                   </button>
                 ) : (
                   'No customer linked'

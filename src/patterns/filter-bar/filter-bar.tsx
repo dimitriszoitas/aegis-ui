@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Columns3, Funnel, Rows2, Rows3, Rows4 } from '@/components/icon';
 import type { RecordOwner } from '@/sample-data/types';
@@ -131,10 +132,10 @@ function FilterPicker({ value, dispatch, owners, disabled }: FilterPickerProps) 
       title="Add filter"
       open={open}
       onOpenChange={setOpen}
-      width={320}
+      width={componentToken('filter-picker-width')}
       trigger={
         <IconButton aria-label="Add filter" data-filter-add emphasis="ghost" disabled={disabled}>
-          <Funnel size={16} />
+          <Funnel size={componentToken('filtering.icon-md')} />
         </IconButton>
       }
     >
@@ -267,7 +268,7 @@ export function FilterBar({
             onClick={onTogglePanel}
             disabled={disabled}
           >
-            <Funnel size={16} />
+            <Funnel size={componentToken('filtering.icon-md')} />
           </IconButton>
         )}
         <SearchInput
@@ -306,17 +307,17 @@ export function FilterBar({
                   onDensityChange?.(next);
                 }}
               >
-                <Icon size={16} />
+                <Icon size={componentToken('filtering.icon-md')} />
               </IconButton>
             ))}
           </ButtonGroup>
           {columns.length > 0 && (
             <Popover
               title="Visible columns"
-              width={240}
+              width={componentToken('filtering.column-settings-width')}
               trigger={
                 <IconButton aria-label="Column settings" emphasis="ghost" disabled={disabled}>
-                  <Columns3 size={16} />
+                  <Columns3 size={componentToken('filtering.icon-md')} />
                 </IconButton>
               }
             >

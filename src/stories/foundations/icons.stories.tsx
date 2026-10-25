@@ -3,7 +3,8 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { IconGallery, iconCounts, iconPageSize, hasLocalUntitledIcons } from './icon-gallery';
 
 const meta = {
-  title: 'Foundations/Icons',
+  id: 'foundations-icons',
+  title: 'Foundations/Iconography',
   component: IconGallery,
   parameters: {
     layout: 'fullscreen',

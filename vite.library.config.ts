@@ -15,6 +15,7 @@ const entry: Record<string, string> = {
   filters: 'src/lib/filters.ts',
   'time-range': 'src/lib/time-range.ts',
   utils: 'src/lib/utils.ts',
+  primitives: 'src/package/primitives.ts',
 };
 for (const directory of readdirSync('src/components')) {
   const path = `src/components/${directory}/index.ts`;
@@ -22,10 +23,7 @@ for (const directory of readdirSync('src/components')) {
 }
 for (const directory of readdirSync('src/patterns')) {
   const path = `src/patterns/${directory}/index.ts`;
-  if (
-    existsSync(path) &&
-    directory !== 'business-app'
-  ) {
+  if (existsSync(path) && directory !== 'business-app') {
     entry[`patterns/${directory}`] = path;
   }
 }

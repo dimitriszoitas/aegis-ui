@@ -26,6 +26,7 @@ const completeMessage: AiMessageData = {
   provenance: 'Local demo · Selected record context',
 };
 const meta = {
+  id: 'components-ai-aimessage',
   title: 'Components/AI/AiMessage',
   component: AiMessage,
   tags: ['autodocs'],

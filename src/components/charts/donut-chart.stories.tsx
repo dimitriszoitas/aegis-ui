@@ -7,7 +7,8 @@ const data = (['critical', 'high', 'medium', 'low', 'info'] as const).map((sever
   color: severity,
 }));
 const meta = {
-  title: 'Components/Charts/Donut chart',
+  id: 'components-charts-donut-chart',
+  title: 'Components/Data Visualization/Donut chart',
   component: DonutChart,
   tags: ['autodocs'],
   args: {

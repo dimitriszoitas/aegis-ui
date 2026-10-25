@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { CheckCheck, ChevronDown, ChevronUp, X } from '@/components/icon';
 import { Button } from '@/components/button';
@@ -99,7 +100,11 @@ export function OnboardingChecklist({
             aria-controls={`${id}-steps`}
             onClick={() => setCollapsed((value) => !value)}
           >
-            {collapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+            {collapsed ? (
+              <ChevronDown size={componentToken('workflow.icon-md')} />
+            ) : (
+              <ChevronUp size={componentToken('workflow.icon-md')} />
+            )}
           </IconButton>
           {onDismiss && (
             <IconButton
@@ -108,7 +113,7 @@ export function OnboardingChecklist({
               aria-label="Dismiss checklist"
               onClick={onDismiss}
             >
-              <X size={16} />
+              <X size={componentToken('workflow.icon-md')} />
             </IconButton>
           )}
         </div>
@@ -117,7 +122,8 @@ export function OnboardingChecklist({
         <span>
           {done ? (
             <>
-              <CheckCheck size={15} aria-hidden="true" /> All steps complete
+              <CheckCheck size={componentToken('workflow.icon-inline')} aria-hidden="true" /> All
+              steps complete
             </>
           ) : (
             `${completed} of ${items.length} steps complete`
@@ -143,8 +149,8 @@ export function OnboardingChecklist({
           <div className="aegis-onboarding-loading" role="status" aria-label="Loading checklist">
             {[0, 1, 2].map((item) => (
               <div key={item}>
-                <Skeleton width="65%" />
-                <Skeleton width="90%" />
+                <Skeleton width={componentToken('onboarding-skeleton-title-width')} />
+                <Skeleton width={componentToken('onboarding-skeleton-body-width')} />
               </div>
             ))}
           </div>

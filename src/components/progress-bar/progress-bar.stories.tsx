@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressBar } from './progress-bar';
 const meta = {
+  id: 'components-feedback-progress-bar',
   title: 'Components/Feedback/Progress bar',
   component: ProgressBar,
   tags: ['autodocs'],
@@ -64,3 +65,25 @@ function CollectionDemo() {
   );
 }
 export const LiveCollection: Story = { render: () => <CollectionDemo /> };
+
+export const Playground: Story = {
+  args: {
+    label: 'Import progress',
+    value: 68,
+    max: 100,
+    showValue: true,
+    size: 'md',
+    intent: 'function',
+  },
+  argTypes: {
+    value: { control: { type: 'number', min: 0 } },
+    max: { control: { type: 'number', min: 1 } },
+    intent: { control: 'select', options: ['function', 'success', 'warning', 'destroy', 'ai'] },
+    size: { control: 'select', options: ['sm', 'md'] },
+  },
+  render: (args) => (
+    <div style={{ width: 'min(100%, 480px)' }}>
+      <ProgressBar {...args} />
+    </div>
+  ),
+};

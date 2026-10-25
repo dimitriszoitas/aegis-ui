@@ -1,27 +1,27 @@
 .aegis-link {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--space-1);
-  max-width: 100%;
-  color: var(--color-function-fg);
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  gap: var(--group-trigger-link-space-gap-snug);
+  max-width: var(--group-trigger-link-size-max-width-full);
+  color: var(--group-trigger-link-color-action-foreground);
+  font-size: var(--group-trigger-link-font-size-body);
+  line-height: var(--group-trigger-link-font-leading-body);
   text-decoration: none;
-  text-underline-offset: 0.18em;
-  text-decoration-thickness: 1px;
-  border-radius: var(--radius-xs);
+  text-underline-offset: var(--group-trigger-link-size-text-underline-offset-0-18em);
+  text-decoration-thickness: var(--group-trigger-link-size-text-decoration-thickness-micro-small);
+  border-radius: var(--group-trigger-link-radius-border-radius-soft);
 }
 .aegis-link[data-intent='default'] {
-  color: var(--color-text-primary);
+  color: var(--group-trigger-link-color-content-primary);
 }
 .aegis-link[data-size='sm'] {
-  font-size: var(--text-xs);
+  font-size: var(--group-trigger-link-font-size-label);
 }
 .aegis-link[data-size='lg'] {
-  font-size: var(--text-base);
+  font-size: var(--group-trigger-link-font-size-body);
 }
 .aegis-link-label {
-  min-width: 0;
+  min-width: var(--group-trigger-link-number-0);
   overflow-wrap: anywhere;
 }
 .aegis-link[data-underline='always'] .aegis-link-label,
@@ -32,14 +32,14 @@
   text-decoration-thickness: inherit;
 }
 .aegis-link:hover:not([aria-disabled='true']) {
-  color: var(--color-text-primary);
+  color: var(--group-trigger-link-color-content-primary);
 }
 .aegis-link:focus-visible {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: 2px;
+  outline: var(--group-trigger-link-border-width-regular) solid var(--group-trigger-link-ring-focus);
+  outline-offset: var(--group-trigger-link-size-outline-offset-micro-compact);
 }
 .aegis-link[aria-disabled='true'] {
-  color: var(--color-text-tertiary);
+  color: var(--group-trigger-link-color-content-tertiary);
   cursor: not-allowed;
   text-decoration: none;
 }
@@ -53,6 +53,6 @@
   align-items: center;
 }
 .aegis-link-icon svg {
-  width: 1em;
-  height: 1em;
+  width: var(--group-trigger-link-size-width-1em);
+  height: var(--group-trigger-link-size-height-1em);
 }

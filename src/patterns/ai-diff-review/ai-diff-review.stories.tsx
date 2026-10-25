@@ -8,7 +8,8 @@ import { AiDiffReview, type AiDiffReviewProps } from './ai-diff-review';
 const original = workflows[2].yaml;
 const proposed = proposedWorkflow;
 const meta = {
-  title: 'Patterns/AI/AiDiffReview',
+  id: 'patterns-ai-aidiffreview',
+  title: 'Patterns/AI Assistance/AiDiffReview',
   component: AiDiffReview,
   parameters: {
     docs: {

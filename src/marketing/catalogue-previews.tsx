@@ -117,9 +117,6 @@ const YamlPresenter = lazy(() =>
 const AiMessage = lazy(() =>
   import('@/components/ai-message').then((module) => ({ default: module.AiMessage })),
 );
-const AwsLogo = lazy(() =>
-  import('@/components/aws-logo').then((module) => ({ default: module.AwsLogo })),
-);
 const LineChart = lazy(() =>
   import('@/components/charts').then((module) => ({ default: module.LineChart })),
 );
@@ -1607,15 +1604,6 @@ function PreviewContent({ id, expanded = false }: ComponentPreviewProps) {
               : []),
           ]}
         />
-      );
-      break;
-    case 'aws-logo':
-      content = (
-        <div className="catalogue-preview-row">
-          <AwsLogo name="service-amazon-ec2" size={expanded ? 64 : 48} />
-          <AwsLogo name="service-amazon-simple-storage-service" size={expanded ? 64 : 48} />
-          <AwsLogo name="service-aws-lambda" size={expanded ? 64 : 48} />
-        </div>
       );
       break;
     case 'icons':

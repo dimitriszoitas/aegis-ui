@@ -60,7 +60,8 @@ const tasks: GanttTask[] = [
   },
 ];
 const meta = {
-  title: 'Components/Charts/GanttChart',
+  id: 'components-charts-ganttchart',
+  title: 'Components/Data Visualization/GanttChart',
   component: GanttChart,
   tags: ['autodocs'],
   args: {

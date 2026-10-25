@@ -23,6 +23,7 @@ function Demo(args: AiInlineSuggestionProps) {
   );
 }
 const meta = {
+  id: 'components-ai-aiinlinesuggestion',
   title: 'Components/AI/AiInlineSuggestion',
   component: AiInlineSuggestion,
   args: {

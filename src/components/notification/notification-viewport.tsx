@@ -1,3 +1,4 @@
+import { readComponentTokenNumber, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   Toaster as SonnerToaster,
   toast as sonnerToast,
@@ -13,11 +14,12 @@ export function NotificationViewport({
   toastOptions,
   ...props
 }: NotificationViewportProps) {
+  const tokens = useComponentTokenNumbers(['notification-gap']);
   return (
     <SonnerToaster
       position="bottom-right"
-      offset={12}
-      gap={12}
+      offset={tokens['notification-gap']}
+      gap={tokens['notification-gap']}
       visibleToasts={4}
       className={cn('aegis-notification-viewport', 'aegis-toaster', className)}
       {...props}
@@ -41,7 +43,7 @@ export interface ShowNotificationOptions extends Pick<
 export function showNotification({
   intent = 'info',
   action,
-  duration = 5000,
+  duration = readComponentTokenNumber('notification-duration'),
   id,
   toasterId,
   ...content

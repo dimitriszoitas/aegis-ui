@@ -1,58 +1,58 @@
 .aegis-entity-cell {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
+  gap: var(--group-data-display-data-grid-cells-space-gap-compact);
+  min-width: var(--group-data-display-data-grid-cells-number-0);
 }
 .aegis-entity-cell-icon {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: var(--space-6);
-  height: var(--space-6);
-  flex-shrink: 0;
-  border-radius: var(--radius-sm);
-  background: var(--color-bg-hover);
-  color: var(--color-text-secondary);
+  width: var(--group-data-display-data-grid-cells-space-width-roomy);
+  height: var(--group-data-display-data-grid-cells-space-height-roomy);
+  flex-shrink: var(--group-data-display-data-grid-cells-flex-none);
+  border-radius: var(--group-data-display-data-grid-cells-radius-border-radius-bold);
+  background: var(--group-data-display-data-grid-cells-color-surface-hover);
+  color: var(--group-data-display-data-grid-cells-color-content-secondary);
 }
 .aegis-entity-cell-copy {
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  gap: 2px;
+  min-width: var(--group-data-display-data-grid-cells-number-0);
+  gap: var(--group-data-display-data-grid-cells-size-gap-micro-compact);
 }
 .aegis-entity-cell-name {
-  font-size: var(--text-sm);
-  font-weight: 500;
+  font-size: var(--group-data-display-data-grid-cells-font-size-body);
+  font-weight: var(--group-data-display-data-grid-cells-font-weight-medium);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--color-text-primary);
+  color: var(--group-data-display-data-grid-cells-color-content-primary);
 }
 .aegis-entity-cell-detail {
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
+  font-size: var(--group-data-display-data-grid-cells-font-size-label);
+  color: var(--group-data-display-data-grid-cells-color-content-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .aegis-time-cell {
-  font-family: var(--font-mono);
+  font-family: var(--group-data-display-data-grid-cells-font-family-code);
   font-variant-numeric: tabular-nums;
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
+  font-size: var(--group-data-display-data-grid-cells-font-size-label);
+  color: var(--group-data-display-data-grid-cells-color-content-secondary);
   white-space: nowrap;
-  border-radius: var(--radius-xs);
+  border-radius: var(--group-data-display-data-grid-cells-radius-border-radius-soft);
 }
 .aegis-tags-cell {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
-  min-width: 0;
+  gap: var(--group-data-display-data-grid-cells-space-gap-snug);
+  min-width: var(--group-data-display-data-grid-cells-number-0);
   white-space: nowrap;
 }
 .aegis-tags-cell .tag {
-  max-width: 130px;
+  max-width: var(--group-data-display-data-grid-cells-size-max-width-panel-small);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -60,41 +60,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--space-5);
-  height: var(--space-5);
-  padding: 0 var(--space-1);
-  color: var(--color-text-secondary);
-  background: var(--color-bg-hover);
-  border-radius: var(--chip-radius);
-  font-size: var(--text-xs);
+  min-width: var(--group-data-display-data-grid-cells-space-min-width-5);
+  height: var(--group-data-display-data-grid-cells-space-height-5);
+  padding: var(--group-data-display-data-grid-cells-number-0)
+    var(--group-data-display-data-grid-cells-space-padding-snug);
+  color: var(--group-data-display-data-grid-cells-color-content-secondary);
+  background: var(--group-data-display-data-grid-cells-color-surface-hover);
+  border-radius: var(--group-data-display-data-grid-cells-radius-border-radius-soft);
+  font-size: var(--group-data-display-data-grid-cells-font-size-label);
   font-variant-numeric: tabular-nums;
 }
 .aegis-cell-empty {
-  color: var(--color-text-tertiary);
-  font-size: var(--text-sm);
+  color: var(--group-data-display-data-grid-cells-color-content-tertiary);
+  font-size: var(--group-data-display-data-grid-cells-font-size-body);
 }
 .aegis-sparkline-cell {
   display: block;
   color: var(--sparkline-color);
-  flex-shrink: 0;
+  flex-shrink: var(--group-data-display-data-grid-cells-flex-none);
   overflow: visible;
 }
 .aegis-number-cell {
   display: block;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  font-size: var(--text-sm);
+  font-size: var(--group-data-display-data-grid-cells-font-size-body);
   white-space: nowrap;
 }
 .aegis-actions-cell,
 .aegis-actions-cell-primary {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--group-data-display-data-grid-cells-space-gap-snug);
 }
 .aegis-actions-cell-primary {
-  opacity: 0;
-  transition: opacity var(--motion-fast) var(--ease-out);
+  opacity: var(--group-data-display-data-grid-cells-opacity-hidden);
+  transition: opacity var(--group-data-display-data-grid-cells-motion-fast)
+    var(--group-data-display-data-grid-cells-ease-out);
 }
 .aegis-actions-cell:hover .aegis-actions-cell-primary,
 .aegis-actions-cell:focus-within .aegis-actions-cell-primary,
@@ -102,58 +104,62 @@ tr:hover .aegis-actions-cell-primary,
 tr:focus-within .aegis-actions-cell-primary,
 [role='row']:hover .aegis-actions-cell-primary,
 [role='row']:focus-within .aegis-actions-cell-primary {
-  opacity: 1;
+  opacity: var(--group-data-display-data-grid-cells-opacity-visible);
 }
 .aegis-ai-verdict-cell {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 3px var(--space-2);
-  border: 1px solid var(--color-ai-border);
-  border-radius: var(--chip-radius);
-  background: var(--gradient-ai-soft, var(--color-ai-soft));
-  color: var(--color-ai-fg);
-  font-size: var(--text-xs);
+  gap: var(--group-data-display-data-grid-cells-space-gap-snug);
+  padding: var(--group-data-display-data-grid-cells-size-padding-micro-snug)
+    var(--group-data-display-data-grid-cells-space-padding-compact);
+  border: var(--group-data-display-data-grid-cells-border-width-hairline) solid
+    var(--group-data-display-data-grid-cells-color-ai-border);
+  border-radius: var(--group-data-display-data-grid-cells-radius-border-radius-soft);
+  background: var(--group-data-display-data-grid-cells-gradient-ai-soft);
+  color: var(--group-data-display-data-grid-cells-color-ai-foreground);
+  font-size: var(--group-data-display-data-grid-cells-font-size-label);
   white-space: nowrap;
 }
 .aegis-ai-verdict-label {
-  background: var(--gradient-ai-text, var(--gradient-ai));
+  background: var(--group-data-display-data-grid-cells-gradient-ai-text);
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
+  color: var(--group-data-display-data-grid-cells-color-transparent);
 }
 .aegis-ai-verdict-confidence {
-  padding-left: var(--space-1);
-  margin-left: var(--space-1);
-  border-left: 1px solid var(--color-ai-border);
+  padding-left: var(--group-data-display-data-grid-cells-space-padding-left-snug);
+  margin-left: var(--group-data-display-data-grid-cells-space-margin-left-snug);
+  border-left: var(--group-data-display-data-grid-cells-border-width-hairline) solid
+    var(--group-data-display-data-grid-cells-color-ai-border);
   font-variant-numeric: tabular-nums;
-  font-size: 11px;
+  font-size: var(--group-data-display-data-grid-cells-font-size-annotation-s);
 }
 .aegis-expand-cell {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  min-width: var(--space-6);
-  height: var(--space-7);
-  padding: 0 var(--space-1);
-  border: 0;
-  border-radius: var(--control-radius-sm, var(--radius-xs));
-  background: transparent;
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
+  gap: var(--group-data-display-data-grid-cells-size-gap-micro-compact);
+  min-width: var(--group-data-display-data-grid-cells-space-min-width-roomy);
+  height: var(--group-data-display-data-grid-cells-space-height-7);
+  padding: var(--group-data-display-data-grid-cells-number-0)
+    var(--group-data-display-data-grid-cells-space-padding-snug);
+  border: var(--group-data-display-data-grid-cells-number-0);
+  border-radius: var(--group-data-display-data-grid-cells-radius-border-radius-rounded);
+  background: var(--group-data-display-data-grid-cells-color-transparent);
+  color: var(--group-data-display-data-grid-cells-color-content-secondary);
+  font-size: var(--group-data-display-data-grid-cells-font-size-label);
   font-variant-numeric: tabular-nums;
 }
 .aegis-expand-cell:hover:not(:disabled) {
-  color: var(--color-text-primary);
-  background: var(--color-bg-hover);
+  color: var(--group-data-display-data-grid-cells-color-content-primary);
+  background: var(--group-data-display-data-grid-cells-color-surface-hover);
 }
 .aegis-expand-cell:disabled {
-  opacity: 0.4;
+  opacity: var(--group-data-display-data-grid-cells-opacity-strength-medium);
 }
 @media (hover: none) {
   .aegis-actions-cell-primary {
-    opacity: 1;
+    opacity: var(--group-data-display-data-grid-cells-opacity-visible);
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Button, type ButtonProps } from '@/components/button';
 import { DropdownMenu, type DropdownMenuActionItem } from '@/components/dropdown-menu';
@@ -147,7 +148,7 @@ export function SplitButton({
               aria-describedby={error ? errorId : undefined}
               disabled={unavailable || actions.length === 0}
             >
-              <ChevronDown size={16} aria-hidden="true" />
+              <ChevronDown size={componentToken('trigger.icon-md')} aria-hidden="true" />
             </Button>
           }
         />

@@ -3,9 +3,21 @@ import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vite';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
+  staticDirs: ['../public'],
   addons: ['@storybook/addon-docs', '@storybook/addon-themes', '@storybook/addon-a11y'],
   framework: '@storybook/react-vite',
   core: { disableTelemetry: true },
+  // Keep browsing, theme controls, live examples and opt-in inspection panels.
+  // These supported feature flags remove duplicate visual tools and setup/review chrome.
+  features: {
+    backgrounds: false,
+    measure: false,
+    outline: false,
+    sidebarOnboardingChecklist: false,
+    menuOnboardingChecklist: false,
+    changeDetection: false,
+    experimentalReview: false,
+  },
   viteFinal(config, { configType }) {
     if (configType !== 'PRODUCTION') return config;
     return mergeConfig(config, {

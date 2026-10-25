@@ -5,7 +5,8 @@ import { TimeRangePicker, type TimeRange } from './time-range-picker';
 import { Field } from '@/components/field';
 import { resolveTimeRange, timePresets } from '@/lib/time-range';
 export default {
-  title: 'Components/Forms/TimeRangePicker',
+  id: 'components-forms-timerangepicker',
+  title: 'Components/Inputs & Selection/TimeRangePicker',
   component: TimeRangePicker,
   parameters: { docs: { story: { inline: false, height: 600 } } },
 } satisfies Meta<typeof TimeRangePicker>;

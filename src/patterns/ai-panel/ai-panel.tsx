@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   useCallback,
   useEffect,
@@ -96,6 +97,10 @@ export function AiPanel({
   const handledRequests = useRef(new Set<string>());
   const suppliedContext = useRef(JSON.stringify(context));
   const transcript = useRef<HTMLDivElement>(null);
+  const sizes = useComponentTokenNumbers(
+    ['ai-assistance.ai-transcript-follow-threshold'],
+    transcript,
+  );
   const composer = useRef<HTMLDivElement>(null);
   const followTranscript = useRef(true);
   const id = useId();
@@ -265,7 +270,7 @@ export function AiPanel({
       size={size}
       title={
         <span className="aegis-ai-panel-title">
-          <Sparkles size={19} />
+          <Sparkles size={componentToken('ai-assistance.icon-notification')} />
           {title}
         </span>
       }
@@ -317,12 +322,13 @@ export function AiPanel({
         onScroll={(event) => {
           const element = event.currentTarget;
           followTranscript.current =
-            element.scrollHeight - element.scrollTop - element.clientHeight < 72;
+            element.scrollHeight - element.scrollTop - element.clientHeight <
+            sizes['ai-assistance.ai-transcript-follow-threshold'];
         }}
       >
         {messages.length === 0 ? (
           <div className="aegis-ai-panel-empty">
-            <Sparkles size={28} />
+            <Sparkles size={componentToken('ai-assistance.icon-display')} />
             <h3>Start with context</h3>
             <p>Ask for an explanation, a summary, or help planning your next steps.</p>
             <Button

@@ -2,9 +2,27 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { ArrowRight, BellRing, Sparkles } from '@/components/icon';
 import { Separator } from '@/components/separator';
 import { Button } from '@/components/button';
+import { TextInput } from '@/components/text-input';
+import { Checkbox } from '@/components/checkbox';
+import { Tag } from '@/components/tag';
+import { componentToken } from '@/lib/component-design-tokens';
 import { SeverityBadge } from '@/components/severity-badge';
 import { tokenNames, tokenValues, type TokenTheme } from './token-source';
 import './foundations.css';
+
+/** Resolve source aliases for specimen labels without claiming to evaluate CSS layout math. */
+export function foundationTokenValue(name: string, theme: TokenTheme = 'light'): string {
+  const resolve = (current: string, seen: Set<string>): string => {
+    if (seen.has(current)) return `var(${current})`;
+    const expression = tokenValues[theme][current];
+    if (expression === undefined) return `var(${current})`;
+    const next = new Set(seen).add(current);
+    return expression.replace(/var\((--[\w-]+)\)/g, (_match, reference: string) =>
+      resolve(reference, next),
+    );
+  };
+  return resolve(name, new Set());
+}
 
 export interface ThemeFrameProps {
   theme: TokenTheme;
@@ -28,7 +46,7 @@ export function ThemeFrame({ theme, children }: ThemeFrameProps) {
 export interface ColorSwatchesProps {
   prefix?: string;
 }
-export function ColorSwatches({ prefix = '--color-bg-' }: ColorSwatchesProps) {
+export function ColorSwatches({ prefix = '--semantic-color-surface-' }: ColorSwatchesProps) {
   const names = tokenNames(prefix);
   return (
     <div className="foundation-theme-pair">
@@ -38,7 +56,7 @@ export function ColorSwatches({ prefix = '--color-bg-' }: ColorSwatchesProps) {
             {names.map((name) => (
               <div className="foundation-swatch" key={name}>
                 <div className="foundation-swatch-color" style={{ background: `var(${name})` }} />
-                <code>{name.replace('--color-', '')}</code>
+                <code>{name.replace('--semantic-color-', '')}</code>
                 <span className="foundation-token-value">{tokenValues[theme][name]}</span>
               </div>
             ))}
@@ -58,33 +76,30 @@ export function IntentExamples() {
           <div className="foundation-stack">
             {intents.map((intent) => (
               <div className="foundation-intent-row" key={intent}>
-                <span
-                  className="foundation-intent-mark"
-                  style={{
-                    background:
-                      intent === 'ai' ? 'var(--gradient-ai)' : `var(--color-${intent}-bg)`,
-                    color: 'var(--color-on-intent)',
-                  }}
-                >
-                  {intent === 'ai' ? (
-                    <Sparkles size={16} aria-hidden />
-                  ) : (
-                    <ArrowRight size={16} aria-hidden />
-                  )}
-                </span>
                 <code>{intent}</code>
-                <span
-                  className="foundation-soft-chip"
-                  style={{
-                    background:
-                      intent === 'ai' ? 'var(--gradient-ai-soft)' : `var(--color-${intent}-soft)`,
-                    color: `var(--color-${intent}-fg)`,
-                  }}
-                >
-                  <span className={intent === 'ai' ? 'foundation-ai-text' : undefined}>
-                    Soft surface
-                  </span>
-                </span>
+                {intent === 'success' || intent === 'warning' ? (
+                  <>
+                    <Tag intent={intent}>
+                      {intent === 'success' ? 'Complete' : 'Needs attention'}
+                    </Tag>
+                    <Tag intent={intent} variant="status">
+                      Status
+                    </Tag>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      intent={intent}
+                      emphasis="primary"
+                      leadingIcon={intent === 'ai' ? <Sparkles /> : <ArrowRight />}
+                    >
+                      Primary
+                    </Button>
+                    <Button intent={intent} emphasis="secondary">
+                      Secondary
+                    </Button>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -134,10 +149,10 @@ export function SurfaceExamples() {
 export function RadiusExamples() {
   return (
     <div className="foundation-example foundation-wrap">
-      {tokenNames('--radius-').map((name) => (
+      {tokenNames('--semantic-radius-').map((name) => (
         <div className="foundation-radius" key={name} style={{ borderRadius: `var(${name})` }}>
-          <code>{name.replace('--radius-', '')}</code>
-          <span>{tokenValues.light[name]}</span>
+          <code>{name.replace('--semantic-radius-', '')}</code>
+          <span>{foundationTokenValue(name)}</span>
         </div>
       ))}
     </div>
@@ -147,16 +162,19 @@ export function RadiusExamples() {
 export function SurfaceRadiusExamples() {
   return (
     <div className="foundation-example foundation-wrap">
-      <div className="foundation-radius" style={{ borderRadius: 'var(--surface-radius)' }}>
+      <div
+        className="foundation-radius"
+        style={{ borderRadius: 'var(--group-surface-radius-strong)' }}
+      >
         <code>surface</code>
-        <span>{tokenValues.light['--surface-radius']}</span>
+        <span>{foundationTokenValue('--group-surface-radius-strong')}</span>
       </div>
       <div className="foundation-nested-radius">
         <div>
           <strong>Nested surfaces</strong>
           <span>
-            Outer {tokenValues.light['--surface-radius-floating']} · nested{' '}
-            {tokenValues.light['--surface-radius-nested']}
+            Outer {foundationTokenValue('--group-surface-radius-strong')} · nested{' '}
+            {foundationTokenValue('--group-surface-radius-bold')}
           </span>
         </div>
       </div>
@@ -181,25 +199,24 @@ export function ControlRadiusExamples() {
                 <Button size={control.size} emphasis="secondary">
                   Open details
                 </Button>
-                <span
-                  className="foundation-control-specimen"
-                  style={{
-                    height: control.height,
-                    borderRadius: `var(--control-radius-${control.size})`,
-                  }}
-                >
-                  Filter value
-                </span>
+                <TextInput
+                  size={control.size}
+                  aria-label={`${control.size} field specimen`}
+                  defaultValue="Filter value"
+                />
                 <span>
                   {control.height}px high · button{' '}
-                  {tokenValues[theme][`--button-radius-${control.size}`]} · field{' '}
-                  {tokenValues[theme][`--control-radius-${control.size}`]}
+                  {foundationTokenValue(
+                    control.size === 'sm'
+                      ? '--group-trigger-button-radius-rounded'
+                      : '--group-trigger-button-radius-bold',
+                  )}{' '}
+                  · field {foundationTokenValue('--group-input-field-radius-bold')}
                 </span>
               </div>
             ))}
             <div className="foundation-control-radius-row">
-              <span className="foundation-checkbox-specimen" aria-hidden="true" />
-              <span>Checkbox / 4px</span>
+              <Checkbox label="Checkbox specimen" />
             </div>
           </div>
         </ThemeFrame>
@@ -237,15 +254,18 @@ export function SeparatorExamples() {
 export function SpacingExamples() {
   return (
     <div className="foundation-example foundation-stack">
-      {tokenNames('--space-').map((name) => (
-        <div className="foundation-spacing-row" key={name}>
-          <code>{name.replace('--', '')}</code>
-          <div className="foundation-spacing-track">
-            <span style={{ width: `var(${name})` }} />
+      {tokenNames('--semantic-space-')
+        .filter((name) => /^--semantic-space-x{0,4}[slm]$/.test(name))
+        .sort((a, b) => parseFloat(foundationTokenValue(a)) - parseFloat(foundationTokenValue(b)))
+        .map((name) => (
+          <div className="foundation-spacing-row" key={name}>
+            <code>{name.replace('--', '')}</code>
+            <div className="foundation-spacing-track">
+              <span style={{ width: `var(${name})` }} />
+            </div>
+            <span>{foundationTokenValue(name)}</span>
           </div>
-          <span>{tokenValues.light[name]}</span>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
@@ -253,11 +273,11 @@ export function SpacingExamples() {
 export function TypographyExamples() {
   return (
     <div className="foundation-example foundation-stack">
-      {tokenNames('--text-')
-        .reverse()
+      {tokenNames('--semantic-font-size-')
+        .sort((a, b) => parseFloat(foundationTokenValue(b)) - parseFloat(foundationTokenValue(a)))
         .map((name) => (
           <div className="foundation-type-row" key={name}>
-            <code>{tokenValues.light[name]}</code>
+            <code title={name}>{foundationTokenValue(name)}</code>
             <span style={{ fontSize: `var(${name})` }}>Build with clarity</span>
           </div>
         ))}
@@ -288,13 +308,17 @@ export function MotionExamples() {
           className={`foundation-motion-panel ${expanded ? 'is-open' : ''}`}
           aria-hidden={!expanded}
         >
-          <BellRing size={20} aria-hidden />
+          <BellRing size={componentToken('icon-lg')} aria-hidden />
           <strong>Background task completed</strong>
           <span>Project Atlas · 6 records updated</span>
         </div>
       </div>
       <div className="foundation-wrap">
-        {tokenNames('--motion-').map((name) => (
+        {[
+          '--group-navigation-motion-fast',
+          '--group-navigation-motion-base',
+          '--group-application-business-app-motion-slide',
+        ].map((name) => (
           <code key={name}>
             {name}: {tokenValues.light[name]}
           </code>
@@ -312,7 +336,7 @@ export function AiLanguageExample() {
   return (
     <div className="foundation-example foundation-ai-card">
       <div className="foundation-ai-label">
-        <Sparkles size={16} aria-hidden />
+        <Sparkles size={componentToken('icon-md')} aria-hidden />
         <span className="foundation-ai-text">AI generated · Workspace assistant</span>
       </div>
       <strong>Review the change before applying it</strong>

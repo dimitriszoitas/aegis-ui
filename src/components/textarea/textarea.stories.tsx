@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -7,7 +8,8 @@ import { Field } from '@/components/field';
 const notes =
   'The customer portal redesign is ready for review. Confirm the onboarding flow, account settings, and billing requirements with the customer team before scheduling the next milestone.';
 const meta = {
-  title: 'Components/Forms/Textarea',
+  id: 'components-forms-textarea',
+  title: 'Components/Inputs & Selection/Textarea',
   component: Textarea,
   tags: ['autodocs'],
   args: { label: 'Project notes', defaultValue: notes },
@@ -81,5 +83,51 @@ export const AutoGrowAndCounter: Story = {
     await userEvent.type(input, 'Review project PRJ-0042.');
     await expect(input).toHaveValue('Review project PRJ-0042.');
     await expect(canvas.getByText('24 / 280 characters')).toBeInTheDocument();
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Project notes',
+    value: 'Review the onboarding flow with the customer team.',
+    defaultValue: undefined,
+    placeholder: 'Add a note',
+    size: 'md',
+    appearance: 'default',
+    rows: 3,
+    maxRows: 8,
+    maxLength: 280,
+    showCount: true,
+    autoGrow: false,
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+    required: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    value: { control: 'text' },
+    placeholder: { control: 'text' },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    appearance: { control: 'inline-radio', options: ['default', 'plain'] },
+    rows: { control: { type: 'number', min: 1, max: 12, step: 1 } },
+    maxRows: { control: { type: 'number', min: 1, max: 20, step: 1 } },
+    maxLength: { control: { type: 'number', min: 1, max: 2000, step: 1 } },
+    showCount: { control: 'boolean' },
+    autoGrow: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  render: function TextareaPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return (
+      <Textarea
+        {...args}
+        defaultValue={undefined}
+        onValueChange={(value) => updateArgs({ value })}
+      />
+    );
   },
 };

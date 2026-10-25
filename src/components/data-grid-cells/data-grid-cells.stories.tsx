@@ -15,7 +15,8 @@ import {
 } from './data-grid-cells';
 
 const meta = {
-  title: 'Components/Data grid/Cells',
+  id: 'components-data-grid-cells',
+  title: 'Components/Data Display/Data grid/Cells',
   component: EntityCell,
   tags: ['autodocs'],
   args: { entity: { type: 'project', name: 'Customer portal', detail: 'Atlas Commerce · Design' } },
@@ -229,4 +230,9 @@ export const Entities: Story = {
       ))}
     </div>
   ),
+};
+
+export const Playground: Story = {
+  args: { entity: { type: 'project', name: 'Customer portal', detail: 'Atlas Commerce · Design' } },
+  argTypes: { entity: { control: 'object' } },
 };

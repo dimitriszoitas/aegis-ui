@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   forwardRef,
   useEffect,
@@ -229,7 +230,7 @@ export const AiInlineSuggestion = forwardRef<
               aria-label="Dismiss suggestion"
               onClick={dismiss}
             >
-              <X size={13} />
+              <X size={componentToken('ai.icon-compact')} />
             </IconButton>
           </div>
           <span className="aegis-ai-inline-hint">Tab to accept · Esc to dismiss</span>

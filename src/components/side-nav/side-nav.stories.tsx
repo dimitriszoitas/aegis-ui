@@ -13,6 +13,7 @@ import {
 import { SideNav } from './side-nav';
 import { Avatar } from '@/components/avatar';
 export default {
+  id: 'components-navigation-sidenav',
   title: 'Components/Navigation/SideNav',
   component: SideNav,
   args: { onSearch: fn() },

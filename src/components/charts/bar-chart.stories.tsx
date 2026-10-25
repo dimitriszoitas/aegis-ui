@@ -11,7 +11,8 @@ const sources = ['Projects', 'Customers', 'Billing', 'Workspace'].map((source) =
   ).length,
 }));
 const meta = {
-  title: 'Components/Charts/Bar chart',
+  id: 'components-charts-bar-chart',
+  title: 'Components/Data Visualization/Bar chart',
   component: BarChart,
   tags: ['autodocs'],
   args: {

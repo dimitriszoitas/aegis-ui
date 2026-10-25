@@ -3,7 +3,8 @@ import { Timeline } from './timeline';
 import { referenceTime } from '@/sample-data';
 import { Tag } from '@/components/tag';
 const meta = {
-  title: 'Components/Data/Timeline',
+  id: 'components-data-timeline',
+  title: 'Components/Data Display/Timeline',
   component: Timeline,
   tags: ['autodocs'],
   args: {

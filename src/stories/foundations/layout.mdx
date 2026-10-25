@@ -1,86 +1,153 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import {
-  SurfaceExamples,
-  RadiusExamples,
-  SurfaceRadiusExamples,
-  ControlRadiusExamples,
-  SeparatorExamples,
-  SpacingExamples,
-  DensityExamples,
-} from './foundation-examples';
+import { SpacingExamples, DensityExamples } from './foundation-examples';
+import { Button } from '../../components/button';
 
-<Meta title="Foundations/Space and surfaces" />
+<Meta title="Foundations/Spacing & Sizing" id="foundations-space-and-surfaces" />
 
-# Space and surfaces
+# Spacing & Sizing
 
-Use a measured rhythm from a compact control to a complete application workspace.
+Use a shared rhythm from the inside of a control to the complete workspace. Choose a spacing role or a component size before creating a custom measurement.
 
-## Two themes
+## Spacing scale
 
-**Fundamental** is the default. Navigation and workspace panels follow the application edges. **Fundamental Floating** places the side navigation and assistant panels in containers with 12px corners and 12px exterior insets, reduced to 8px insets on narrow screens. Both use the same palette, typography, controls, spacing roles, and data densities. The distinction is how persistent navigation and assistant surfaces sit within the workspace.
-
-Light and dark color are independent of presentation, giving four combinations. Theme changes preserve content and interaction state. Use Storybook's theme and color controls to compare them; the business application exposes the same choices in Settings → Appearance.
-
-`data-layout-theme` accepts `fundamental` or `fundamental-floating`, independently from `.dark` and `data-theme`. Apply the document attribute so portaled overlays receive the same theme. Existing layout-theme API names and the storage key remain compatible.
-
-## Surface hierarchy
-
-Canvas establishes the workspace, and borderless cards group content. Raised surface roles share the card fill rather than creating another permanent layer. Inputs have a quiet fill and boundary; transient overlays use a distinct surface and soft shadow. Modal tasks add a backdrop. Tables blend with their parent surface and use subtle horizontal dividers.
-
-<SurfaceExamples />
-
-Component examples use transparent layout wrappers instead of automatic cards. Add a Card when the composition needs a distinct surface. Interactive catalogue tiles can gain a quiet fill on hover; passive groups remain transparent.
-
-## Radius
-
-Fundamental and Fundamental Floating share component corners. Buttons and fields use 5/6/6px radii at small/medium/large sizes. Checkboxes retain a 4px radius. Use button and control tokens for their respective components.
-
-| Size   | Height | Button radius | Input/select radius |
-| ------ | ------ | ------------- | ------------------- |
-| Small  | 28px   | 5px           | 5px                 |
-| Medium | 34px   | 6px           | 6px                 |
-| Large  | 40px   | 6px           | 6px                 |
-
-<ControlRadiusExamples />
-
-Cards use `--surface-radius` (8px); nested surfaces use `--surface-radius-nested` (6px). Tags and severity badges use `--chip-radius` (4px). Genuine circular markers retain their shape. Floating chrome has its own geometry and does not override nested controls.
-
-<SurfaceRadiusExamples />
-
-The primitive scale remains available for custom compositions. Prefer a component-specific role where one exists.
-
-<RadiusExamples />
-
-## Spacing
-
-Spacing uses a 4px base. Fundamental's layout roles provide 28px page padding, 24px section gaps, 20px card padding, and 24px panel padding. At narrow widths these adapt to 20px, 20px, 16px, and 20px respectively. Individual components can use tighter internal spacing to preserve their density and interaction targets. Fundamental Floating shares these interior roles and adds its exterior container insets.
+Primitive dimensions supply the raw measurements. Semantic spacing roles form an ordered ramp from `--semantic-space-xxxs` through `--semantic-space-xxxxl`, with smaller optical and larger section roles where needed. The specimens inspect that semantic ramp. Production consumers use family group tokens, such as `--group-trigger-button-padding-snug`, rather than bypassing the group layer.
 
 <SpacingExamples />
 
-Nested content advances by a small 12px step using `--nested-inset`. Use it for accordion bodies, navigation children, tree levels, JSON branches, and expanded table content so parent and child items remain easy to follow.
+## Layout roles
+
+Fundamental and Fundamental Floating share interior spacing. Layout roles adapt at narrow widths so pages remain comfortable without changing the size of their controls.
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Role</th>
+      <th scope="col">Canonical role or consumer token</th>
+      <th scope="col">Default desktop value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Page padding</td>
+      <td>
+        <code>--group-surface-page-padding</code>
+      </td>
+      <td>28px</td>
+    </tr>
+    <tr>
+      <td>Section spacing</td>
+      <td>
+        <code>--semantic-space-xxl</code>, selected through the owning family group
+      </td>
+      <td>24px</td>
+    </tr>
+    <tr>
+      <td>Card padding</td>
+      <td>
+        <code>--group-surface-card-padding</code>
+      </td>
+      <td>20px</td>
+    </tr>
+    <tr>
+      <td>Panel padding</td>
+      <td>
+        <code>--group-surface-overlay-padding-regular</code>
+      </td>
+      <td>24px</td>
+    </tr>
+    <tr>
+      <td>Nested content inset</td>
+      <td>
+        <code>--group-navigation-nested-inset</code>
+      </td>
+      <td>12px</td>
+    </tr>
+  </tbody>
+</table>
+
+Responsive rules may select a smaller group role for the available space. They do not change the invariant meaning of the semantic spacing ramp. Inspect Tokens Used for the exact role selected by a component.
+
+Use the nested inset for accordion bodies, navigation children, tree levels, JSON branches, and expanded table content. Keep page and section spacing separate from the compact spacing inside a control.
+
+## Control sizing
+
+Use the component's `size` property to change its full geometry together. Buttons and fields share small, medium, and large heights. Their CSS consumes family-owned height tokens. The public size names remain `sm`, `md`, and `lg`.
+
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Size</th>
+      <th scope="col">Button group token</th>
+      <th scope="col">Field group token</th>
+      <th scope="col">Height</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Small</td>
+      <td>
+        <code>--group-trigger-button-height-compact</code>
+      </td>
+      <td>
+        <code>--group-input-field-height-compact</code>
+      </td>
+      <td>28px</td>
+    </tr>
+    <tr>
+      <td>Medium</td>
+      <td>
+        <code>--group-trigger-button-height-regular</code>
+      </td>
+      <td>
+        <code>--group-input-field-height-regular</code>
+      </td>
+      <td>34px</td>
+    </tr>
+    <tr>
+      <td>Large</td>
+      <td>
+        <code>--group-trigger-button-height-large</code>
+      </td>
+      <td>
+        <code>--group-input-field-height-large</code>
+      </td>
+      <td>40px</td>
+    </tr>
+  </tbody>
+</table>
+
+Relative ramps are family-specific. For example, `--group-trigger-button-size-regular` is 28px while `--group-surface-size-regular` is 96px. Choose the role for the property and family; a generic size ramp is not a substitute for a component's complete size variant.
+
+<div className="foundation-example row" aria-label="Control size examples">
+  <Button size="sm" emphasis="secondary">
+    Small
+  </Button>
+  <Button size="md" emphasis="secondary">
+    Medium
+  </Button>
+  <Button size="lg" emphasis="secondary">
+    Large
+  </Button>
+</div>
+
+Avoid resizing a control through its height alone. Its typography, icon size, padding, and corner radius need to stay coordinated. Use the component's Tokens Used tab to inspect the complete mapping.
 
 ## Data density
 
-Use the component row-height tokens: `--grid-row-compact` is 36px, `--grid-row-default` is 48px, and `--grid-row-comfortable` is 60px. Expanded content is measured separately, so changing density does not clip nested data. Truncate long primary labels within the row and expose the full value through a tooltip or accessible label.
+DataGrid consumes the canonical group tokens `--group-data-display-measurement-grid-row-compact` (36px), `--group-data-display-measurement-grid-row-default` (48px), and `--group-data-display-measurement-grid-row-comfortable` (60px). These established public CSS names are retained; their manifest tier is group even though they do not use the `--group-` prefix. Expanded content is measured separately, so a density change does not clip nested content.
 
 <DensityExamples />
 
-## Scrollbars
+Truncate long primary labels within the row and keep the complete value available through the component's supported accessible treatment.
 
-Overflowing pages and nested regions share native scrollbar styling in both color modes. Where supported, an 8px transparent track contains a 6px thumb with a 1px inset and 4px corners. The optional activity helper reveals thumbs while scrolling or using keyboard focus. Browsers using the standards fallback render a thin scrollbar; forced-colors mode retains native styling. Keyboard, wheel, touch, and native scrolling behavior remain unchanged.
+## Responsive composition
 
-## Separators
+A wizard can separate progress and form content into top-aligned regions, with progress stacking above the form at narrow widths. Keep navigation and explicit approval within reach in its footer.
 
-Use a line between sections or controls, and a dot between short inline metadata values. Both variants support `normal` and `light` emphasis. Lines use default or subtle border tokens. Dots use secondary text or strong border tokens. Navigation groups use subtle horizontal dividers without visible group headings in both themes.
+Application examples fill the available width up to 2160px and remain centered on wider screens. Smaller previews use responsive layouts. Fundamental Floating adds exterior container insets while keeping the same interior spacing roles.
 
-<SeparatorExamples />
+## Overflow and scrollbars
 
-## Workflow layout
+Overflowing pages and nested regions share native scrollbar styling in both modes. Where supported, an 8px transparent track contains a 6px thumb with a 1px inset and 4px corners. The activity helper reveals thumbs while scrolling or using keyboard focus. The standards fallback uses a thin scrollbar, and forced-colors mode retains native styling.
 
-A wizard can separate progress and form content into top-aligned cards, with the progress navigation stacking above the form at narrow widths. Use a sticky footer to keep navigation and explicit approval within reach.
-
-Application stories fill the available width up to 2160px and remain centered on wider screens. Smaller previews use responsive layouts. Storybook's 1600px viewport preset is optional.
-
-## Layer order
-
-Sticky content sits at 40, dropdowns at 50, sheets at 60, modals at 70, popovers at 80, notifications at 90, and tooltips at 100. Consume the named z-index tokens so nested interactions remain predictable.
+Keep keyboard, wheel, touch, and native scrolling available. Avoid shrinking text or controls to make an overflowing composition fit.

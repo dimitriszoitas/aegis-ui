@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { forwardRef } from 'react';
 import { HugeiconsIcon, type HugeiconsIconProps, type IconSvgElement } from '@hugeicons/react';
 import {
@@ -104,9 +105,12 @@ export type IconProps = Omit<HugeiconsIconProps, 'icon'>;
 /** Shared sizing, accessible naming and gradient support for the Hugeicons pack. */
 function createIcon(name: string, icon: IconSvgElement) {
   const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
-    { size = 24, strokeWidth = 1.8, style, ...props },
+    { size, strokeWidth, style, className, ...props },
     ref,
   ) {
+    const tokens = useComponentTokenNumbers(['icon-stroke', 'icon-default']);
+    const iconSize =
+      size ?? (props.absoluteStrokeWidth ? tokens['icon-default'] : componentToken('icon-default'));
     const paint =
       typeof style?.stroke === 'string' && style.stroke.startsWith('url(')
         ? style.stroke
@@ -116,11 +120,12 @@ function createIcon(name: string, icon: IconSvgElement) {
       <HugeiconsIcon
         ref={ref}
         icon={icon}
-        size={size}
-        strokeWidth={strokeWidth}
+        size={iconSize}
+        strokeWidth={strokeWidth ?? tokens['icon-stroke']}
         aria-hidden={labelled ? undefined : true}
         focusable="false"
         {...props}
+        className={['aegis-icon', className].filter(Boolean).join(' ')}
         style={style}
         {...(paint ? { primaryColor: paint, secondaryColor: paint } : {})}
       />

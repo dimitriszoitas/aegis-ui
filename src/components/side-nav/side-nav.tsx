@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   forwardRef,
   useId,
@@ -68,7 +69,7 @@ function NavTooltip({
   );
 }
 
-// Keep Radix menu handlers and its trigger ref on the actual tooltip button.
+// Keep Base UI menu handlers and its trigger ref on the actual tooltip button.
 const CollapsedNavButton = forwardRef<
   HTMLButtonElement,
   ComponentPropsWithoutRef<'button'> & { tooltip: string }
@@ -100,13 +101,23 @@ export function SideNav({
   onSearch,
   showSearch = true,
   brandName = 'Aegis',
-  brandIcon = <Shield size={22} strokeWidth={1.6} />,
+  brandIcon,
   footer,
   workspace = 'Northstar',
   showWorkspace = true,
   workspaceContent,
   className,
 }: SideNavProps) {
+  const tokens = useComponentTokenNumbers(['navigation.icon-stroke-thin']);
+  const brandMark =
+    brandIcon === undefined ? (
+      <Shield
+        size={componentToken('navigation.icon-brand')}
+        strokeWidth={tokens['navigation.icon-stroke-thin']}
+      />
+    ) : (
+      brandIcon
+    );
   const [internal, setInternal] = useState(defaultCollapsed);
   const collapsed = controlled ?? internal;
   const navId = useId();
@@ -186,7 +197,7 @@ export function SideNav({
           {item.count !== undefined && <CountBadge count={item.count} />}
           {hasChildren && (
             <ChevronDown
-              size={14}
+              size={componentToken('navigation.icon-sm')}
               style={{ transform: expanded.includes(item.id) ? 'rotate(180deg)' : undefined }}
             />
           )}
@@ -214,7 +225,7 @@ export function SideNav({
     >
       <div className="nav-brand">
         <div className="nav-brand-copy" aria-hidden={collapsed}>
-          {brandIcon && <span className="nav-mark">{brandIcon}</span>}
+          {brandMark && <span className="nav-mark">{brandMark}</span>}
           <strong>{brandName}</strong>
         </div>
         <IconButton
@@ -224,7 +235,11 @@ export function SideNav({
           emphasis="ghost"
           onClick={toggle}
         >
-          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          {collapsed ? (
+            <PanelLeftOpen size={componentToken('navigation.icon-md')} />
+          ) : (
+            <PanelLeftClose size={componentToken('navigation.icon-md')} />
+          )}
         </IconButton>
       </div>
       {showWorkspace && (
@@ -251,7 +266,7 @@ export function SideNav({
             aria-label="Search workspace"
             onClick={onSearch}
           >
-            <Search size={16} />
+            <Search size={componentToken('navigation.icon-md')} />
             <span className="nav-search-copy" aria-hidden={collapsed}>
               <span>Search workspace</span>
               <Kbd>⌘K</Kbd>

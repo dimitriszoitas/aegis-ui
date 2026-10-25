@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useEffect, useId, useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight, Check } from '@/components/icon';
 import { Button } from '@/components/button';
@@ -178,7 +179,7 @@ export function Wizard({
               <Button
                 emphasis="ghost"
                 disabled={pending || currentStep === 0}
-                leadingIcon={<ArrowLeft size={15} />}
+                leadingIcon={<ArrowLeft size={componentToken('workflow.icon-inline')} />}
                 onClick={() => move(currentStep - 1)}
               >
                 Back
@@ -186,7 +187,13 @@ export function Wizard({
               <Button
                 intent="function"
                 loading={pending}
-                trailingIcon={isLast ? <Check size={15} /> : <ArrowRight size={15} />}
+                trailingIcon={
+                  isLast ? (
+                    <Check size={componentToken('workflow.icon-inline')} />
+                  ) : (
+                    <ArrowRight size={componentToken('workflow.icon-inline')} />
+                  )
+                }
                 onClick={advance}
               >
                 {isLast ? finishLabel : 'Continue'}

@@ -37,7 +37,9 @@ export function useInputFocusModality() {
       const onKey = (event: KeyboardEvent) => {
         if (!navigationKeys.has(event.key)) return;
         const target = event.target instanceof Element ? event.target : null;
-        const editing = target?.closest('input, textarea, [contenteditable="true"]');
+        const editing = target?.closest(
+          'textarea, [contenteditable="true"], input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="button"], [type="submit"], [type="reset"])',
+        );
         const navigatingOptions =
           target?.getAttribute('role') === 'combobox' &&
           target.getAttribute('aria-expanded') === 'true' &&

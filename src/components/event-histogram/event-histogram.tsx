@@ -1,3 +1,4 @@
+import { useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   BarChart,
   type BarChartProps,
@@ -32,10 +33,12 @@ export function EventHistogram({
   onValueChange,
   now,
   brush = false,
-  height = 190,
+  height: requestedHeight,
   description,
   ...props
 }: EventHistogramProps) {
+  const tokens = useComponentTokenNumbers(['histogram-height']);
+  const height = requestedHeight ?? tokens['histogram-height'];
   const bucketDuration =
     data.length > 1
       ? Math.max(1, Date.parse(data[1].time) - Date.parse(data[0].time))

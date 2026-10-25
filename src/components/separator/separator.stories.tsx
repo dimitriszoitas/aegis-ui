@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Separator } from './separator';
 const meta = {
-  title: 'Components/Surfaces/Separator',
+  id: 'components-surfaces-separator',
+  title: 'Components/Layout/Separator',
   component: Separator,
   tags: ['autodocs'],
 } satisfies Meta<typeof Separator>;
@@ -64,6 +65,26 @@ export const DotSeparators: Story = {
       <span className="muted">Senior member</span>
       <Separator variant="dot" emphasis="light" />
       <span className="muted">Athens workspace</span>
+    </div>
+  ),
+};
+
+export const Playground: Story = {
+  args: { orientation: 'horizontal', variant: 'line', emphasis: 'normal', decorative: true },
+  argTypes: {
+    orientation: { control: 'select', options: ['horizontal', 'vertical'] },
+    variant: { control: 'select', options: ['line', 'dot'] },
+    emphasis: { control: 'select', options: ['normal', 'light'] },
+    decorative: { control: 'boolean' },
+  },
+  render: (args) => (
+    <div
+      className={args.orientation === 'horizontal' && args.variant === 'line' ? 'stack' : 'row'}
+      style={{ width: '100%', maxWidth: 480 }}
+    >
+      <span>Project overview</span>
+      <Separator {...args} />
+      <span className="muted">Updated today</span>
     </div>
   ),
 };

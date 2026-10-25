@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -6,7 +7,8 @@ import { TextInput, type TextInputSize } from './text-input';
 import { Field } from '@/components/field';
 
 const meta = {
-  title: 'Components/Forms/TextInput',
+  id: 'components-forms-textinput',
+  title: 'Components/Inputs & Selection/TextInput',
   component: TextInput,
   tags: ['autodocs'],
   args: { label: 'Project name', defaultValue: 'Customer portal' },
@@ -114,5 +116,47 @@ export const Clearable: Story = {
     await expect(canvas.getByRole('textbox', { name: 'Project name' })).toHaveValue('');
     await expect(canvas.getByRole('textbox', { name: 'Project name' })).toHaveFocus();
     await expect(canvas.getByText('All projects included')).toBeInTheDocument();
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Project name',
+    value: 'Customer portal',
+    defaultValue: undefined,
+    placeholder: 'Name this project',
+    size: 'md',
+    type: 'text',
+    clearable: true,
+    prefix: '',
+    suffix: '',
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+    required: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    value: { control: 'text' },
+    placeholder: { control: 'text' },
+    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    type: { control: 'select', options: ['text', 'email', 'url', 'password', 'number'] },
+    prefix: { control: 'text' },
+    suffix: { control: 'text' },
+    clearable: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  render: function TextInputPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return (
+      <TextInput
+        {...args}
+        defaultValue={undefined}
+        onValueChange={(value) => updateArgs({ value })}
+      />
+    );
   },
 };

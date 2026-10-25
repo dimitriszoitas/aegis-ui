@@ -13,6 +13,31 @@ export const severityLabels: Record<Severity, string> = {
   low: 'Low',
   info: 'Info',
 };
+const severityStyles: Record<
+  Severity,
+  CSSProperties & Record<'--severity-fg' | '--severity-border', string>
+> = {
+  critical: {
+    '--severity-fg': 'var(--group-data-display-tag-color-severity-critical-fg)',
+    '--severity-border': 'var(--group-data-display-tag-color-severity-critical-border)',
+  },
+  high: {
+    '--severity-fg': 'var(--group-data-display-tag-color-severity-high-fg)',
+    '--severity-border': 'var(--group-data-display-tag-color-severity-high-border)',
+  },
+  medium: {
+    '--severity-fg': 'var(--group-data-display-tag-color-severity-medium-fg)',
+    '--severity-border': 'var(--group-data-display-tag-color-severity-medium-border)',
+  },
+  low: {
+    '--severity-fg': 'var(--group-data-display-tag-color-severity-low-fg)',
+    '--severity-border': 'var(--group-data-display-tag-color-severity-low-border)',
+  },
+  info: {
+    '--severity-fg': 'var(--group-data-display-tag-color-severity-info-fg)',
+    '--severity-border': 'var(--group-data-display-tag-color-severity-info-border)',
+  },
+};
 export function SeverityBadge({ severity, compact = false, className = '' }: SeverityBadgeProps) {
   return (
     <span
@@ -21,12 +46,7 @@ export function SeverityBadge({ severity, compact = false, className = '' }: Sev
       role={compact ? 'img' : undefined}
       aria-label={compact ? `${severityLabels[severity]} severity` : undefined}
       title={compact ? `${severityLabels[severity]} severity` : undefined}
-      style={
-        {
-          '--severity-fg': `var(--color-severity-${severity}-fg)`,
-          '--severity-border': `var(--color-severity-${severity}-border)`,
-        } as CSSProperties
-      }
+      style={severityStyles[severity]}
     >
       {compact ? <span className="severity-dot" aria-hidden /> : severityLabels[severity]}
     </span>

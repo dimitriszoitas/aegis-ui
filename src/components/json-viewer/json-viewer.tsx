@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   useEffect,
   useId,
@@ -171,7 +172,7 @@ export function JsonViewer({
   rootName = 'event',
   defaultExpandedDepth = 1,
   maxVisibleItems = 100,
-  maxHeight = 480,
+  maxHeight = componentToken('json-max-height'),
   onCopy,
   className,
 }: JsonViewerProps) {
@@ -343,7 +344,11 @@ export function JsonViewer({
                 toggle(node);
               }}
             >
-              <ChevronRight size={14} data-expanded={isExpanded} aria-hidden />
+              <ChevronRight
+                size={componentToken('code.icon-sm')}
+                data-expanded={isExpanded}
+                aria-hidden
+              />
             </button>
           ) : (
             <span className="aegis-json-expand-spacer" />
@@ -375,9 +380,9 @@ export function JsonViewer({
               }}
             >
               {copied?.id === node.id && copied.kind === 'path' ? (
-                <Check size={13} />
+                <Check size={componentToken('code.icon-compact')} />
               ) : (
-                <LocateFixed size={13} />
+                <LocateFixed size={componentToken('code.icon-compact')} />
               )}
             </button>
             <button
@@ -393,9 +398,9 @@ export function JsonViewer({
               }}
             >
               {copied?.id === node.id && copied.kind === 'value' ? (
-                <Check size={13} />
+                <Check size={componentToken('code.icon-compact')} />
               ) : (
-                <Copy size={13} />
+                <Copy size={componentToken('code.icon-compact')} />
               )}
             </button>
           </span>
@@ -408,7 +413,7 @@ export function JsonViewer({
                 role="none"
                 className="aegis-json-more"
                 style={{
-                  paddingLeft: `calc(var(--space-3) + ${node.depth + 1} * var(--nested-inset))`,
+                  paddingLeft: `calc(var(--group-code-json-viewer-space-padding-regular) + ${node.depth + 1} * var(--group-code-json-viewer-nested-inset))`,
                 }}
               >
                 <button
@@ -434,7 +439,7 @@ export function JsonViewer({
     <section className={cn('aegis-json-viewer', className)} aria-label={label}>
       <header className="aegis-json-header">
         <span>
-          <Braces size={16} aria-hidden />
+          <Braces size={componentToken('code.icon-md')} aria-hidden />
           <strong>{label}</strong>
           <span className="aegis-json-format">JSON</span>
         </span>
@@ -442,7 +447,7 @@ export function JsonViewer({
           <Button
             size="sm"
             emphasis="ghost"
-            leadingIcon={<ListCollapse size={14} />}
+            leadingIcon={<ListCollapse size={componentToken('code.icon-sm')} />}
             onClick={() => {
               setExpanded(new Set());
               setFocusedId('$');
@@ -453,7 +458,7 @@ export function JsonViewer({
           <Button
             size="sm"
             emphasis="ghost"
-            leadingIcon={<Copy size={14} />}
+            leadingIcon={<Copy size={componentToken('code.icon-sm')} />}
             onClick={() => void copy('value', tree)}
           >
             Copy JSON

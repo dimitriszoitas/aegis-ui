@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -7,7 +8,8 @@ import { Textarea } from '@/components/textarea';
 import { Checkbox } from '@/components/checkbox';
 
 const meta = {
-  title: 'Components/Forms/Field',
+  id: 'components-forms-field',
+  title: 'Components/Inputs & Selection/Field',
   component: Field,
   tags: ['autodocs'],
   args: { label: 'Workflow name', children: <TextInput defaultValue="Customer portal redesign" /> },
@@ -90,5 +92,61 @@ export const Validation: Story = {
     await userEvent.type(input, 'Customer portal redesign');
     await expect(input).toHaveAttribute('aria-invalid', 'false');
     await expect(input).toHaveAccessibleDescription('For example, customer portal redesign.');
+  },
+};
+
+interface FieldPlaygroundOptions {
+  label: string;
+  helpText: string;
+  error: string;
+  required: boolean;
+  optional: boolean;
+  disabled: boolean;
+  controlType: 'text' | 'textarea' | 'checkbox';
+  sampleValue: string;
+  checked: boolean;
+}
+export const Playground: StoryObj<FieldPlaygroundOptions> = {
+  args: {
+    label: 'Project name',
+    helpText: 'Use a name that describes the outcome.',
+    error: '',
+    required: true,
+    optional: false,
+    disabled: false,
+    controlType: 'text',
+    sampleValue: 'Customer portal',
+    checked: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    helpText: { control: 'text' },
+    error: { control: 'text' },
+    required: { control: 'boolean' },
+    optional: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    controlType: { control: 'inline-radio', options: ['text', 'textarea', 'checkbox'] },
+    sampleValue: { control: 'text' },
+    checked: { control: 'boolean' },
+  },
+  render: function FieldPlayground({ controlType, sampleValue, checked, ...args }) {
+    const [, updateArgs] = useArgs();
+    return (
+      <Field {...args}>
+        {controlType === 'checkbox' ? (
+          <Checkbox checked={checked} onCheckedChange={(checked) => updateArgs({ checked })} />
+        ) : controlType === 'textarea' ? (
+          <Textarea
+            value={sampleValue}
+            onValueChange={(sampleValue) => updateArgs({ sampleValue })}
+          />
+        ) : (
+          <TextInput
+            value={sampleValue}
+            onValueChange={(sampleValue) => updateArgs({ sampleValue })}
+          />
+        )}
+      </Field>
+    );
   },
 };

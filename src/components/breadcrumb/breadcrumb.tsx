@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import type { ComponentProps, ReactNode } from 'react';
 import { ChevronRight } from '@/components/icon';
 import { cn } from '@/lib/utils';
@@ -14,7 +15,7 @@ export interface BreadcrumbProps extends ComponentProps<'nav'> {
 }
 export function Breadcrumb({
   items,
-  separator = <ChevronRight size={13} />,
+  separator = <ChevronRight size={componentToken('navigation.icon-compact')} />,
   className,
   ...props
 }: BreadcrumbProps) {

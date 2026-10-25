@@ -2,17 +2,11 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useGlobals } from 'storybook/preview-api';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { Popover } from '@/components/popover';
-import { TextInput } from '@/components/text-input';
-import {
-  defaultLayoutTheme,
-  layoutThemeOptions,
-  normalizeLayoutTheme,
-  type LayoutTheme,
-} from '@/lib/layout-theme';
+import { defaultLayoutTheme, layoutThemeOptions, normalizeLayoutTheme } from '@/lib/layout-theme';
 import { Sparkles } from '@/components/icon';
 import { Button, type Intent } from '@/components/button';
 import { Tag } from '@/components/tag';
+import { SwitchingSpecimen } from './foundations/theme-switching-preview';
 import { SeverityBadge, type Severity } from '@/components/severity-badge';
 const actions: { intent: Intent; label: string }[] = [
   { intent: 'default', label: 'View details' },
@@ -112,9 +106,12 @@ function ThemeSpecimen() {
     </main>
   );
 }
-export default { title: 'Foundations/Theme', component: ThemeSpecimen } satisfies Meta<
-  typeof ThemeSpecimen
->;
+export default {
+  id: 'foundations-theme',
+  title: 'Foundations/Themes & Modes',
+  tags: ['!autodocs'],
+  component: ThemeSpecimen,
+} satisfies Meta<typeof ThemeSpecimen>;
 export const Overview: StoryObj<typeof ThemeSpecimen> = {};
 export const Fundamental: StoryObj<typeof ThemeSpecimen> = {
   globals: { layoutTheme: 'fundamental' },
@@ -126,47 +123,12 @@ export const FundamentalFloating: StoryObj<typeof ThemeSpecimen> = {
     docs: {
       description: {
         story:
-          'The same light and dark colors, typography and controls, with inset floating navigation and panels. Use the color toolbar to compare both color themes.',
+          'The same light and dark colors, typography and controls, with inset floating navigation and panels. Use the sidebar appearance controls to compare light and dark modes.',
       },
     },
   },
 };
 
-function SwitchingSpecimen({
-  layout,
-  onLayoutChange,
-}: {
-  layout: LayoutTheme;
-  onLayoutChange: (theme: LayoutTheme) => void;
-}) {
-  const [draft, setDraft] = useState('');
-  return (
-    <main className="stack story-pad" style={{ maxWidth: 640 }}>
-      <h1>Presentation without losing your place</h1>
-      <div className="row" role="group" aria-label="Presentation">
-        {layoutThemeOptions.map(({ value, label }) => (
-          <Button
-            key={value}
-            emphasis="secondary"
-            aria-pressed={layout === value}
-            onClick={() => onLayoutChange(value)}
-          >
-            {label}
-          </Button>
-        ))}
-      </div>
-      <TextInput label="Draft name" value={draft} onValueChange={setDraft} />
-      <Popover
-        title="Preview details"
-        trigger={<Button emphasis="tertiary">Open preview panel</Button>}
-        showClose
-      >
-        <p>The portaled panel follows the active presentation and color theme.</p>
-        <p>Draft: {draft || 'Untitled'}</p>
-      </Popover>
-    </main>
-  );
-}
 function ThemeSwitchingStory() {
   const [globals, updateGlobals] = useGlobals();
   return (
@@ -178,7 +140,7 @@ function ThemeSwitchingStory() {
 }
 export const Switching: StoryObj<typeof ThemeSpecimen> = {
   render: ThemeSwitchingStory,
-  parameters: { docs: { story: { inline: false, height: 420 } } },
+  parameters: { docs: { story: { inline: true, autoplay: false } } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const document = canvasElement.ownerDocument;

@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ScrollArea } from './scroll-area';
-export default { title: 'Components/Utilities/ScrollArea', component: ScrollArea } satisfies Meta<
-  typeof ScrollArea
->;
+export default {
+  id: 'components-utilities-scrollarea',
+  title: 'Components/Layout/ScrollArea',
+  component: ScrollArea,
+} satisfies Meta<typeof ScrollArea>;
 export const Matrix: StoryObj<typeof ScrollArea> = {
   render: () => (
     <div className="stack" style={{ maxWidth: 760 }}>
@@ -121,5 +123,59 @@ export const NoOverflow: StoryObj<typeof ScrollArea> = {
         <p>All related milestones have been reviewed. The next milestone is ready to plan.</p>
       </ScrollArea>
     </section>
+  ),
+};
+
+interface ScrollAreaPlaygroundOptions {
+  label: string;
+  maxHeight: number;
+  itemCount: number;
+  axes: 'vertical' | 'horizontal' | 'both';
+  contentWidth: number;
+}
+export const Playground: StoryObj<ScrollAreaPlaygroundOptions> = {
+  args: {
+    label: 'Project activity',
+    maxHeight: 240,
+    itemCount: 20,
+    axes: 'vertical',
+    contentWidth: 1000,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    maxHeight: { control: { type: 'range', min: 120, max: 600, step: 20 } },
+    itemCount: { control: { type: 'number', min: 0, max: 100, step: 1 } },
+    axes: { control: 'inline-radio', options: ['vertical', 'horizontal', 'both'] },
+    contentWidth: { control: { type: 'range', min: 500, max: 1800, step: 100 } },
+  },
+  render: (args) => (
+    <ScrollArea label={args.label} maxHeight={args.maxHeight} className="story-layout">
+      <div
+        style={{
+          width: args.axes === 'vertical' ? '100%' : args.contentWidth,
+          display: args.axes === 'horizontal' ? 'flex' : 'block',
+          gap: 'var(--space-4)',
+        }}
+      >
+        {Array.from({ length: Math.max(0, Math.min(100, args.itemCount)) }, (_, index) => (
+          <p
+            key={index}
+            style={{
+              paddingBlock: 'var(--space-3)',
+              flex: args.axes === 'horizontal' ? '0 0 200px' : undefined,
+            }}
+          >
+            <strong>Project update {index + 1}</strong>
+            <br />
+            <span className="muted">
+              {index % 2 === 0
+                ? 'Milestone completed by Maya Chen.'
+                : 'Customer review scheduled for Friday.'}
+            </span>
+          </p>
+        ))}
+        {args.itemCount === 0 && <p className="muted">No project updates yet.</p>}
+      </div>
+    </ScrollArea>
   ),
 };

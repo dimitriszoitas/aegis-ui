@@ -5,10 +5,18 @@ export interface CountBadgeProps {
   max?: number;
   label?: string;
   variant?: 'default' | 'inverted';
+  /** Compact counters for icon buttons and dense rows. */
+  size?: 'sm' | 'md';
 }
-export function CountBadge({ count, max = 99, label, variant = 'default' }: CountBadgeProps) {
+export function CountBadge({
+  count,
+  max = 99,
+  label,
+  variant = 'default',
+  size = 'md',
+}: CountBadgeProps) {
   return (
-    <span className="count-badge" data-variant={variant} title={String(count)}>
+    <span className="count-badge" data-variant={variant} data-size={size} title={String(count)}>
       <span aria-hidden={label ? true : undefined}>
         {count > max ? `${max}+` : Math.max(0, count)}
       </span>

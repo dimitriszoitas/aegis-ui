@@ -78,7 +78,8 @@ function SynchronizedDemo(args: FilterPanelProps) {
   );
 }
 const meta = {
-  title: 'Patterns/FilterPanel',
+  id: 'patterns-filterpanel',
+  title: 'Patterns/Filtering/FilterPanel',
   component: FilterPanel,
   parameters: { layout: 'padded' },
   args: {

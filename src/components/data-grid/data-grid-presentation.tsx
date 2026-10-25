@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useMemo, useRef, useState } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { CheckCheck, Eye, Folder, RotateCcw, Sparkles } from '@/components/icon';
@@ -86,7 +87,7 @@ function RecordHistory({ record }: { record: WorkRecord }) {
           value={record.events}
           label={`Raw history for ${record.id}`}
           defaultExpandedDepth={1}
-          maxHeight={320}
+          maxHeight={componentToken('evidence-max-height')}
         />
       </details>
     </section>
@@ -192,6 +193,23 @@ export function DataGridPresentation({
   initialMode = 'pages',
   initialFilterMode = 'panel',
 }: DataGridPresentationProps) {
+  const tokens = useComponentTokenNumbers([
+    'grid-column-xs',
+    'grid-id-min-width',
+    'grid-column-6xl',
+    'grid-column-3xl',
+    'grid-column-2xl',
+    'grid-column-lg',
+    'grid-column-md',
+    'grid-column-sm',
+    'grid-date-width',
+    'grid-date-min-width',
+    'grid-column-xl',
+    'grid-tags-width',
+    'grid-trend-width',
+    'grid-actions-width',
+    'data-display.business-grid-height',
+  ]);
   const [count, setCount] = useState<150 | 1000>(initialCount);
   const [records, setRecords] = useState(initialCount === 1000 ? largeDataset : fixtures);
   const [mode, setMode] = useState<PresentationMode>(initialMode);
@@ -275,16 +293,16 @@ export function DataGridPresentation({
     {
       accessorKey: 'severity',
       header: 'Severity',
-      size: 120,
-      minSize: 104,
+      size: tokens['grid-column-xs'],
+      minSize: tokens['grid-id-min-width'],
       sortingFn: (a, b) => severityOrder[a.original.severity] - severityOrder[b.original.severity],
       cell: ({ row }) => <SeverityCell severity={row.original.severity} />,
     },
     {
       accessorKey: 'title',
       header: 'Record',
-      size: 360,
-      minSize: 240,
+      size: tokens['grid-column-6xl'],
+      minSize: tokens['grid-column-3xl'],
       enableHiding: false,
       cell: ({ row }) => <span title={row.original.title}>{row.original.title}</span>,
     },
@@ -292,29 +310,29 @@ export function DataGridPresentation({
       id: 'subject',
       accessorFn: (row) => row.subject.name,
       header: 'Subject',
-      size: 220,
-      minSize: 160,
+      size: tokens['grid-column-2xl'],
+      minSize: tokens['grid-column-lg'],
       cell: ({ row }) => <EntityCell entity={row.original.subject} />,
     },
     {
       accessorKey: 'status',
       header: 'Status',
-      size: 140,
+      size: tokens['grid-column-md'],
       cell: ({ row }) => <StatusCell status={row.original.status} />,
     },
-    { accessorKey: 'source', header: 'Source', size: 130 },
+    { accessorKey: 'source', header: 'Source', size: tokens['grid-column-sm'] },
     {
       accessorKey: 'eventCount',
       header: 'Updates',
-      size: 128,
-      minSize: 112,
+      size: tokens['grid-date-width'],
+      minSize: tokens['grid-date-min-width'],
       meta: { align: 'right' },
       cell: ({ row }) => <NumberCell value={row.original.eventCount} />,
     },
     {
       accessorKey: 'lastSeen',
       header: 'Updated',
-      size: 160,
+      size: tokens['grid-column-lg'],
       meta: { align: 'right' },
       cell: ({ row }) => <TimeCell value={row.original.lastSeen} now={referenceTime} />,
     },
@@ -322,7 +340,7 @@ export function DataGridPresentation({
       id: 'assignee',
       accessorFn: (row) => row.assignee?.name ?? 'Unassigned',
       header: 'Assignee',
-      size: 180,
+      size: tokens['grid-column-xl'],
       cell: ({ row }) =>
         row.original.assignee ? (
           <span className="row">
@@ -336,30 +354,30 @@ export function DataGridPresentation({
     {
       id: 'tags',
       header: 'Tags',
-      size: 200,
+      size: tokens['grid-tags-width'],
       accessorFn: (row) => row.tags.join(', '),
       cell: ({ row }) => <TagsCell tags={row.original.tags} maxVisible={1} />,
     },
     {
       id: 'activity',
       header: 'Activity',
-      size: 140,
+      size: tokens['grid-column-md'],
       enableSorting: false,
       cell: ({ row }) => <SparklineCell data={row.original.sparkline} />,
     },
     {
       id: 'ai',
       header: 'AI suggestion',
-      size: 210,
+      size: tokens['grid-trend-width'],
       enableSorting: false,
       cell: ({ row }) => <AiVerdictCell {...row.original.aiVerdict} />,
     },
     {
       id: 'actions',
       header: 'Actions',
-      size: 116,
-      minSize: 116,
-      maxSize: 116,
+      size: tokens['grid-actions-width'],
+      minSize: tokens['grid-actions-width'],
+      maxSize: tokens['grid-actions-width'],
       enableSorting: false,
       enableHiding: false,
       cell: ({ row }) => (
@@ -368,20 +386,20 @@ export function DataGridPresentation({
             {
               id: 'open',
               label: `Open ${row.original.id}`,
-              icon: <Eye size={15} />,
+              icon: <Eye size={componentToken('data-display.icon-inline')} />,
               onClick: () => open(row.original),
             },
             {
               id: 'ai',
               label: `Review ${row.original.id} with AI`,
-              icon: <Sparkles size={15} />,
+              icon: <Sparkles size={componentToken('data-display.icon-inline')} />,
               intent: 'ai',
               onClick: () => explain([row.original]),
             },
             {
               id: 'complete',
               label: 'Mark completed',
-              icon: <CheckCheck size={15} />,
+              icon: <CheckCheck size={componentToken('data-display.icon-inline')} />,
               onClick: () =>
                 updateRecords(
                   records.map((record) =>
@@ -399,7 +417,7 @@ export function DataGridPresentation({
       <header className="aegis-grid-presentation-heading">
         <div>
           <h1>
-            <Folder size={21} aria-hidden="true" />
+            <Folder size={componentToken('data-display.icon-entity')} aria-hidden="true" />
             Work records
           </h1>
           <p>Filter work across teams, update selected records, and review the full history.</p>
@@ -407,7 +425,7 @@ export function DataGridPresentation({
         <Button
           emphasis="secondary"
           size="sm"
-          leadingIcon={<RotateCcw size={14} />}
+          leadingIcon={<RotateCcw size={componentToken('data-display.icon-sm')} />}
           onClick={() => reset()}
         >
           Restore demo
@@ -500,7 +518,7 @@ export function DataGridPresentation({
             onDensityChange={setDensity}
             pagination={mode === 'pages'}
             virtualize={mode === 'virtual'}
-            height={560}
+            height={tokens['data-display.business-grid-height']}
             loading={state === 'loading'}
             error={
               state === 'error'
@@ -603,7 +621,7 @@ export function DataGridPresentation({
             <Button
               intent="ai"
               emphasis="secondary"
-              leadingIcon={<Sparkles size={16} />}
+              leadingIcon={<Sparkles size={componentToken('data-display.icon-md')} />}
               onClick={() => explain([activeRecord])}
             >
               Review with AI

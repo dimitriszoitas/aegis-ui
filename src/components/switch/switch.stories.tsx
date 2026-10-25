@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -5,7 +6,8 @@ import { Switch } from './switch';
 import { Field } from '@/components/field';
 
 const meta = {
-  title: 'Components/Forms/Switch',
+  id: 'components-forms-switch',
+  title: 'Components/Inputs & Selection/Switch',
   component: Switch,
   tags: ['autodocs'],
   args: {
@@ -68,5 +70,32 @@ export const ImmediateSetting: Story = {
     await expect(toggle).toBeChecked();
     await userEvent.keyboard(' ');
     await expect(toggle).not.toBeChecked();
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Enable project notifications',
+    description: 'Send updates when milestones change.',
+    checked: false,
+    size: 'md',
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+    required: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    description: { control: 'text' },
+    checked: { control: 'boolean' },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  render: function SwitchPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return <Switch {...args} onCheckedChange={(checked) => updateArgs({ checked })} />;
   },
 };

@@ -310,10 +310,10 @@
   min-height: var(--v0-control-min);
 }
 [data-layout-theme='v0-simple'] .rdp-root {
-  --rdp-day_button-height: var(--v0-control-min);
-  --rdp-day_button-width: var(--v0-control-min);
-  --rdp-nav_button-height: var(--v0-control-min);
-  --rdp-nav_button-width: var(--v0-control-min);
+  --group-input-measurement-rdp-day_button-height: var(--v0-control-min);
+  --group-input-measurement-rdp-day_button-width: var(--v0-control-min);
+  --group-input-measurement-rdp-nav_button-height: var(--v0-control-min);
+  --group-input-measurement-rdp-nav_button-width: var(--v0-control-min);
 }
 [data-layout-theme='v0-simple'] .aegis-slider-thumb {
   min-width: var(--v0-control-min);

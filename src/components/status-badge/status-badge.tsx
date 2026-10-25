@@ -8,19 +8,18 @@ export const statusLabels: Record<RecordStatus, string> = {
   completed: 'Completed',
   cancelled: 'Cancelled',
 };
-const statusIntent: Record<RecordStatus, string> = {
-  new: 'function',
-  'in-review': 'ai',
-  'in-progress': 'warning',
-  completed: 'success',
-  cancelled: 'default',
+const statusColors: Record<RecordStatus, string> = {
+  new: 'var(--group-data-display-tag-color-function-fg)',
+  'in-review': 'var(--group-data-display-tag-color-status-review-fg)',
+  'in-progress': 'var(--group-data-display-tag-color-warning-fg)',
+  completed: 'var(--group-data-display-tag-color-success-fg)',
+  cancelled: 'var(--group-data-display-tag-color-content-secondary)',
 };
 export interface StatusDotProps {
   status: RecordStatus;
   label?: boolean;
 }
 export function StatusDot({ status, label = true }: StatusDotProps) {
-  const intent = statusIntent[status];
   return (
     <span
       className="status-dot"
@@ -29,11 +28,9 @@ export function StatusDot({ status, label = true }: StatusDotProps) {
       aria-hidden={!label || undefined}
       style={{
         color:
-          status === 'in-review'
-            ? 'var(--color-status-review-fg)'
-            : intent === 'default'
-              ? 'var(--color-text-tertiary)'
-              : `var(--color-${intent}-fg)`,
+          status === 'cancelled'
+            ? 'var(--group-data-display-tag-color-text-tertiary)'
+            : statusColors[status],
       }}
     />
   );
@@ -42,18 +39,12 @@ export interface StatusBadgeProps {
   status: RecordStatus;
 }
 export function StatusBadge({ status }: StatusBadgeProps) {
-  const intent = statusIntent[status];
   return (
     <span
       className="status-badge"
       style={
         {
-          '--status-fg':
-            status === 'in-review'
-              ? 'var(--color-status-review-fg)'
-              : intent === 'default'
-                ? 'var(--color-text-secondary)'
-                : `var(--color-${intent}-fg)`,
+          '--status-fg': statusColors[status],
         } as CSSProperties
       }
     >

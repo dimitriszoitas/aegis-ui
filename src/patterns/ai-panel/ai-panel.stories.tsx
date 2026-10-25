@@ -1,5 +1,6 @@
 import { StrictMode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '@/components/button';
 import { records } from '@/sample-data';
 import {
@@ -10,14 +11,12 @@ import {
   type AiStreamFactory,
 } from '@/lib/ai';
 import { AiPanel } from './ai-panel';
-const context: AiContextItem[] = records
-  .slice(0, 3)
-  .map((record) => ({
-    id: record.id,
-    label: record.id,
-    description: record.title,
-    kind: 'record',
-  }));
+const context: AiContextItem[] = records.slice(0, 3).map((record) => ({
+  id: record.id,
+  label: record.id,
+  description: record.title,
+  kind: 'record',
+}));
 const timestamp = '2026-10-06T08:30:00.000Z';
 const user: AiMessageData = {
   id: 'user-example',
@@ -47,7 +46,8 @@ const response: AiMessageData = {
   provenance: 'Local demo · selected evidence only',
 };
 const meta = {
-  title: 'Patterns/AI/AiPanel',
+  id: 'patterns-ai-aipanel',
+  title: 'Patterns/AI Assistance/AiPanel',
   component: AiPanel,
   tags: ['autodocs'],
   args: { defaultOpen: true, context, availableContext: context },
@@ -120,7 +120,30 @@ function DockedDemo() {
     </div>
   );
 }
-export const DockedPush: Story = { render: () => <DockedDemo /> };
+export const DockedPush: Story = {
+  render: () => <DockedDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('button', { name: 'Toggle AI panel' });
+    await userEvent.click(toggle);
+    await waitFor(() =>
+      expect(
+        canvas.queryByRole('separator', { name: 'Resize side panel' }),
+      ).not.toBeInTheDocument(),
+    );
+    await userEvent.click(toggle);
+    const separator = await canvas.findByRole('separator', { name: 'Resize side panel' });
+    await expect(toggle).toHaveFocus();
+    expect(getComputedStyle(separator, '::after').backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    await userEvent.tab();
+    await expect(separator).toHaveFocus();
+    expect(getComputedStyle(separator, '::after').backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(toggle).toHaveFocus());
+    await userEvent.keyboard('{Enter}');
+    await expect(canvas.getByRole('separator', { name: 'Resize side panel' })).toBeInTheDocument();
+  },
+};
 const slowResponse: AiStreamFactory = async function* (request) {
   // Deliberately ignores abort to demonstrate that the panel rejects late events.
   yield {

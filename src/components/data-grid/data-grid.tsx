@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   useCallback,
   useEffect,
@@ -71,6 +72,11 @@ declare module '@tanstack/react-table' {
 }
 
 export type GridDensity = 'compact' | 'default' | 'comfortable';
+const gridRowHeightTokens: Record<GridDensity, string> = {
+  compact: componentToken('grid-row-compact'),
+  default: componentToken('grid-row-default'),
+  comfortable: componentToken('grid-row-comfortable'),
+};
 export interface GridColumnSetting {
   id: string;
   label: string;
@@ -119,7 +125,6 @@ export interface DataGridProps<T> {
   className?: string;
 }
 
-const rowHeights: Record<GridDensity, number> = { compact: 36, default: 48, comfortable: 60 };
 const selectionColumnId = '__aegis_selection';
 const expansionColumnId = '__aegis_expansion';
 const isInteractive = (target: EventTarget | null) =>
@@ -208,11 +213,31 @@ export function DataGrid<T>({
   pagination = true,
   pageSize = 25,
   virtualize,
-  height = 520,
+  height = componentToken('grid-height'),
   initialSorting = [],
   initialColumnVisibility = {},
   className,
 }: DataGridProps<T>) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const tokens = useComponentTokenNumbers(
+    [
+      'grid-row-compact',
+      'grid-row-default',
+      'grid-row-comfortable',
+      'grid-select-width',
+      'grid-expand-width',
+      'grid-column-default',
+      'grid-column-min',
+      'grid-column-max',
+      'grid-auto-pin-breakpoint',
+      'grid-resize-step',
+      'grid-resize-step-large',
+      'grid-header-height',
+      'grid-detail-estimate-height',
+      'data-display.chart-resize-delay',
+    ],
+    rootRef,
+  );
   const id = useId();
   const instructionsId = `${id}-instructions`;
   const bulkRef = useRef<HTMLDivElement>(null);
@@ -231,6 +256,7 @@ export function DataGrid<T>({
   const pendingFocus = useRef<string | null>(null);
   const [internalDensity, setInternalDensity] = useState<GridDensity>('default');
   const density = controlledDensity ?? internalDensity;
+  const rowHeight = tokens[`grid-row-${density}`];
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialColumnVisibility);
@@ -246,7 +272,10 @@ export function DataGrid<T>({
   const defaultPinnedColumnId = initialPinning.left?.[0];
   // Keep the stored desktop preference while making room to scroll on narrow containers.
   // A user's explicit pin/unpin choice takes precedence over this automatic default.
-  const releaseDefaultPin = viewportWidth > 0 && viewportWidth < 600 && !defaultPinWasCustomized;
+  const releaseDefaultPin =
+    viewportWidth > 0 &&
+    viewportWidth < tokens['grid-auto-pin-breakpoint'] &&
+    !defaultPinWasCustomized;
   const effectiveColumnPinning = useMemo<ColumnPinningState>(
     () => ({
       left: [
@@ -289,9 +318,9 @@ export function DataGrid<T>({
         ? [
             {
               id: selectionColumnId,
-              size: 44,
-              minSize: 44,
-              maxSize: 44,
+              size: tokens['grid-select-width'],
+              minSize: tokens['grid-select-width'],
+              maxSize: tokens['grid-select-width'],
               enableResizing: false,
               enableSorting: false,
               enableHiding: false,
@@ -304,9 +333,9 @@ export function DataGrid<T>({
         ? [
             {
               id: expansionColumnId,
-              size: 36,
-              minSize: 36,
-              maxSize: 36,
+              size: tokens['grid-expand-width'],
+              minSize: tokens['grid-expand-width'],
+              maxSize: tokens['grid-expand-width'],
               enableResizing: false,
               enableSorting: false,
               enableHiding: false,
@@ -317,7 +346,7 @@ export function DataGrid<T>({
         : []),
       ...columns,
     ],
-    [columns, enableSelection, renderExpandedRow],
+    [columns, enableSelection, renderExpandedRow, tokens],
   );
   const table = useReactTable({
     data,
@@ -333,7 +362,12 @@ export function DataGrid<T>({
       expanded,
       pagination: safePagination,
     },
-    defaultColumn: { size: 180, minSize: 72, maxSize: 640, sortDescFirst: false },
+    defaultColumn: {
+      size: tokens['grid-column-default'],
+      minSize: tokens['grid-column-min'],
+      maxSize: tokens['grid-column-max'],
+      sortDescFirst: false,
+    },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnSizingChange: setColumnSizing,
@@ -387,7 +421,7 @@ export function DataGrid<T>({
       columnSizing[column.id] ?? column.getSize(),
       column.columnDef.minSize,
       column.id === fillColumnId
-        ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
+        ? Math.max(column.columnDef.maxSize ?? tokens['grid-column-max'], viewportWidth)
         : column.columnDef.maxSize,
     );
   const baseTotal = visibleColumns.reduce((total, column) => total + baseWidth(column), 0);
@@ -405,12 +439,15 @@ export function DataGrid<T>({
   const sizingBounds = (column: Column<T>) => ({
     min:
       column.id === fillColumnId
-        ? Math.max(column.columnDef.minSize ?? 72, viewportWidth - (baseTotal - baseWidth(column)))
-        : (column.columnDef.minSize ?? 72),
+        ? Math.max(
+            column.columnDef.minSize ?? tokens['grid-column-min'],
+            viewportWidth - (baseTotal - baseWidth(column)),
+          )
+        : (column.columnDef.minSize ?? tokens['grid-column-min']),
     max:
       column.id === fillColumnId
-        ? Math.max(column.columnDef.maxSize ?? 640, viewportWidth)
-        : (column.columnDef.maxSize ?? 640),
+        ? Math.max(column.columnDef.maxSize ?? tokens['grid-column-max'], viewportWidth)
+        : (column.columnDef.maxSize ?? tokens['grid-column-max']),
   });
   useLayoutEffect(() => {
     const scroll = scrollRef.current;
@@ -429,14 +466,14 @@ export function DataGrid<T>({
       resizeTimer = setTimeout(() => {
         measuredWidth = scroll.clientWidth;
         setViewportWidth(measuredWidth);
-      }, 140);
+      }, tokens['data-display.chart-resize-delay']);
     });
     observer.observe(scroll);
     return () => {
       clearTimeout(resizeTimer);
       observer.disconnect();
     };
-  }, []);
+  }, [tokens]);
   useEffect(
     () => () => {
       resizeCleanupRef.current?.();
@@ -624,10 +661,10 @@ export function DataGrid<T>({
   }
   const shouldVirtualize =
     (virtualize ?? data.length > 200) && entries.length > 0 && !loading && !error;
-  const headerHeight = table.getHeaderGroups().length * 40;
+  const headerHeight = table.getHeaderGroups().length * tokens['grid-header-height'];
   const estimateSize = useCallback(
-    (index: number) => (entries[index]?.detail ? 180 : rowHeights[density]),
-    [entries, density],
+    (index: number) => (entries[index]?.detail ? tokens['grid-detail-estimate-height'] : rowHeight),
+    [entries, rowHeight, tokens],
   );
   const getItemKey = useCallback(
     (index: number) => `${entries[index]?.row.id}-${entries[index]?.detail ? 'detail' : 'row'}`,
@@ -788,7 +825,7 @@ export function DataGrid<T>({
       {
         id: 'pin-left',
         label: 'Pin left',
-        icon: <Pin size={14} />,
+        icon: <Pin size={componentToken('data-display.icon-sm')} />,
         disabled: !column.getCanPin() || side === 'left',
         onSelect: () => {
           pinColumn(column, 'left');
@@ -798,7 +835,7 @@ export function DataGrid<T>({
       {
         id: 'pin-right',
         label: 'Pin right',
-        icon: <Pin size={14} />,
+        icon: <Pin size={componentToken('data-display.icon-sm')} />,
         disabled: !column.getCanPin() || side === 'right',
         onSelect: () => {
           pinColumn(column, 'right');
@@ -810,7 +847,7 @@ export function DataGrid<T>({
             {
               id: 'unpin',
               label: 'Unpin column',
-              icon: <PinOff size={14} />,
+              icon: <PinOff size={componentToken('data-display.icon-sm')} />,
               disabled: !column.getCanPin(),
               onSelect: () => {
                 pinColumn(column, false);
@@ -823,14 +860,14 @@ export function DataGrid<T>({
       {
         id: 'sort-asc',
         label: 'Sort A to Z',
-        icon: <ArrowUp size={14} />,
+        icon: <ArrowUp size={componentToken('data-display.icon-sm')} />,
         disabled: !column.getCanSort(),
         onSelect: () => column.toggleSorting(false, false),
       },
       {
         id: 'sort-desc',
         label: 'Sort Z to A',
-        icon: <ArrowDown size={14} />,
+        icon: <ArrowDown size={componentToken('data-display.icon-sm')} />,
         disabled: !column.getCanSort(),
         onSelect: () => column.toggleSorting(true, false),
       },
@@ -838,7 +875,7 @@ export function DataGrid<T>({
       {
         id: 'move-left',
         label: 'Move left',
-        icon: <ArrowLeft size={14} />,
+        icon: <ArrowLeft size={componentToken('data-display.icon-sm')} />,
         disabled: index <= 0,
         onSelect: () => {
           reorderColumn(column.id, peers[index - 1].id);
@@ -848,7 +885,7 @@ export function DataGrid<T>({
       {
         id: 'move-right',
         label: 'Move right',
-        icon: <ArrowRight size={14} />,
+        icon: <ArrowRight size={componentToken('data-display.icon-sm')} />,
         disabled: index === peers.length - 1,
         onSelect: () => {
           reorderColumn(column.id, peers[index + 1].id);
@@ -859,7 +896,7 @@ export function DataGrid<T>({
       {
         id: 'hide',
         label: 'Hide column',
-        icon: <EyeOff size={14} />,
+        icon: <EyeOff size={componentToken('data-display.icon-sm')} />,
         disabled: !column.getCanHide() || visibleDataColumns.length <= 1,
         onSelect: () => {
           const next = visibleDataColumns.find((candidate) => candidate.id !== column.id);
@@ -905,7 +942,7 @@ export function DataGrid<T>({
         ) : (
           <>
             <span>
-              <Check size={16} aria-hidden />
+              <Check size={componentToken('data-display.icon-md')} aria-hidden />
               {selected.length.toLocaleString()} selected
             </span>
             <Button size="sm" emphasis="ghost" onClick={clearSelection}>
@@ -949,19 +986,20 @@ export function DataGrid<T>({
     {
       id: 'reset-widths',
       label: 'Reset column widths',
-      icon: <RotateCcw size={14} />,
+      icon: <RotateCcw size={componentToken('data-display.icon-sm')} />,
       onSelect: () => table.resetColumnSizing(),
     },
   ];
   return (
     <div
+      ref={rootRef}
       className={cn('aegis-data-grid', className)}
       data-density={density}
       style={
         {
-          '--grid-row-height': `var(--grid-row-${density})`,
+          '--grid-row-height': gridRowHeightTokens[density],
           '--grid-expanded-inset': `${expandedInset}px`,
-          '--grid-empty-height': `calc(${typeof height === 'number' ? `${height}px` : height} - ${table.getHeaderGroups().length * 40}px)`,
+          '--grid-empty-height': `calc(${typeof height === 'number' ? `${height}px` : height} - ${table.getHeaderGroups().length * tokens['grid-header-height']}px)`,
         } as CSSProperties
       }
     >
@@ -991,7 +1029,11 @@ export function DataGrid<T>({
               </div>
               <DropdownMenu
                 trigger={
-                  <Button size="sm" emphasis="ghost" leadingIcon={<Columns3 size={15} />}>
+                  <Button
+                    size="sm"
+                    emphasis="ghost"
+                    leadingIcon={<Columns3 size={componentToken('data-display.icon-inline')} />}
+                  >
                     Columns
                   </Button>
                 }
@@ -1186,11 +1228,11 @@ export function DataGrid<T>({
                             </span>
                             <span className="aegis-grid-sort-icon" aria-hidden>
                               {sorted === 'asc' ? (
-                                <ArrowUp size={13} />
+                                <ArrowUp size={componentToken('data-display.icon-compact')} />
                               ) : sorted === 'desc' ? (
-                                <ArrowDown size={13} />
+                                <ArrowDown size={componentToken('data-display.icon-compact')} />
                               ) : (
-                                <ArrowUpDown size={13} />
+                                <ArrowUpDown size={componentToken('data-display.icon-compact')} />
                               )}
                               {sorted && sorting.length > 1 && (
                                 <sup>{column.getSortIndex() + 1}</sup>
@@ -1213,7 +1255,10 @@ export function DataGrid<T>({
                                 className="aegis-grid-column-menu"
                                 aria-label={`${columnLabel(column)} column actions`}
                               >
-                                <MoreHorizontal size={15} aria-hidden />
+                                <MoreHorizontal
+                                  size={componentToken('data-display.icon-inline')}
+                                  aria-hidden
+                                />
                               </button>
                             }
                             items={columnMenu(column)}
@@ -1272,7 +1317,9 @@ export function DataGrid<T>({
                                     ? max
                                     : renderedWidth(column) +
                                       (event.key === 'ArrowRight' ? 1 : -1) *
-                                        (event.shiftKey ? 24 : 8);
+                                        (event.shiftKey
+                                          ? tokens['grid-resize-step-large']
+                                          : tokens['grid-resize-step']);
                               table.setColumnSizing((current) => ({
                                 ...current,
                                 [column.id]: clampColumnWidth(next, min, max),
@@ -1294,7 +1341,7 @@ export function DataGrid<T>({
                       <Skeleton
                         variant="table-row"
                         columns={Math.max(3, visibleColumns.length - 1)}
-                        height={rowHeights[density]}
+                        height={rowHeight}
                       />
                     </td>
                   </tr>
@@ -1435,9 +1482,13 @@ export function DataGrid<T>({
                                   tabIndex={currentFocusedId === row.id ? 0 : -1}
                                 >
                                   {row.getIsExpanded() ? (
-                                    <ChevronDown size={15} />
+                                    <ChevronDown
+                                      size={componentToken('data-display.icon-inline')}
+                                    />
                                   ) : (
-                                    <ChevronRight size={15} />
+                                    <ChevronRight
+                                      size={componentToken('data-display.icon-inline')}
+                                    />
                                   )}
                                 </button>
                               )

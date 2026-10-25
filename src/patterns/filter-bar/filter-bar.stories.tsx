@@ -74,7 +74,8 @@ function Demo(args: FilterBarProps) {
   );
 }
 const meta = {
-  title: 'Patterns/FilterBar',
+  id: 'patterns-filterbar',
+  title: 'Patterns/Filtering/FilterBar',
   component: FilterBar,
   parameters: {
     layout: 'padded',

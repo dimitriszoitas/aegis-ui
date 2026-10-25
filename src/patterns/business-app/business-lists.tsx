@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Accordion } from '@/components/accordion';
@@ -106,6 +107,25 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
   const [dialog, setDialog] = useState<'project' | 'member'>();
   const searchRef = useRef<HTMLInputElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const sizes = useComponentTokenNumbers(
+    [
+      'application.grid-column-2xs',
+      'application.grid-column-xs',
+      'application.grid-column-sm',
+      'application.grid-column-sm-plus',
+      'application.grid-column-md',
+      'application.grid-column-md-plus',
+      'application.grid-column-lg',
+      'application.grid-column-lg-plus',
+      'application.grid-column-xl',
+      'application.grid-column-xl-plus',
+      'application.grid-column-2xl',
+      'application.grid-column-3xl',
+      'application.grid-column-4xl',
+      'application.grid-column-5xl',
+    ],
+    rootRef,
+  );
   const filterPanelId = useId();
   const title = kind === 'team' ? 'Team' : kind[0].toUpperCase() + kind.slice(1);
   const customerById = useMemo(
@@ -319,8 +339,11 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
           : kind === 'projects'
             ? 'Project'
             : 'Customer',
-    size: kind === 'invoices' ? 240 : 320,
-    minSize: 220,
+    size:
+      kind === 'invoices'
+        ? sizes['application.grid-column-3xl']
+        : sizes['application.grid-column-5xl'],
+    minSize: sizes['application.grid-column-2xl'],
     cell: ({ row }) => (
       <div className="aegis-business-name-cell">
         {kind === 'team' && <Avatar name={row.original.name} size="sm" aria-hidden="true" />}
@@ -340,7 +363,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
   const ownerColumn: ColumnDef<ListRow> = {
     accessorKey: 'ownerId',
     header: 'Owner',
-    size: 190,
+    size: sizes['application.grid-column-xl-plus'],
     sortingFn: (a, b) =>
       (memberById.get(a.original.ownerId)?.name ?? '').localeCompare(
         memberById.get(b.original.ownerId)?.name ?? '',
@@ -365,7 +388,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
   const statusColumn: ColumnDef<ListRow> = {
     accessorKey: 'status',
     header: 'Status',
-    size: 140,
+    size: sizes['application.grid-column-md'],
     cell: ({ row }) => (
       <Tag variant="status" intent={statusIntent(row.original.status)}>
         {row.original.status}
@@ -375,8 +398,8 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
   const dateColumn: ColumnDef<ListRow> = {
     accessorKey: 'date',
     header: kind === 'projects' || kind === 'invoices' ? 'Due date' : 'Joined',
-    size: 160,
-    minSize: 160,
+    size: sizes['application.grid-column-lg'],
+    minSize: sizes['application.grid-column-lg'],
     meta: { align: 'right', cellClassName: 'mono' },
     cell: ({ row }) => formatBusinessDate(row.original.date),
   };
@@ -388,7 +411,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
           {
             accessorKey: 'priority',
             header: 'Priority',
-            size: 110,
+            size: sizes['application.grid-column-2xs'],
             sortingFn: (a, b) =>
               priorities.indexOf(a.original.priority as BusinessProject['priority']) -
               priorities.indexOf(b.original.priority as BusinessProject['priority']),
@@ -402,7 +425,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
           {
             accessorKey: 'progress',
             header: 'Progress',
-            size: 170,
+            size: sizes['application.grid-column-lg-plus'],
             cell: ({ row }) => (
               <div className="aegis-business-progress">
                 <ProgressBar
@@ -418,7 +441,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
           {
             accessorKey: 'amount',
             header: 'Budget',
-            size: 135,
+            size: sizes['application.grid-column-sm-plus'],
             meta: { align: 'right', cellClassName: 'mono' },
             cell: ({ row }) => formatMoney(row.original.amount),
           },
@@ -428,18 +451,22 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
         ? [
             nameColumn,
             statusColumn,
-            { accessorKey: 'industry', header: 'Industry', size: 180 },
+            {
+              accessorKey: 'industry',
+              header: 'Industry',
+              size: sizes['application.grid-column-xl'],
+            },
             {
               accessorKey: 'plan',
               header: 'Plan',
-              size: 130,
+              size: sizes['application.grid-column-sm'],
               cell: ({ row }) => <Tag size="sm">{row.original.plan}</Tag>,
             },
             ownerColumn,
             {
               accessorKey: 'amount',
               header: 'Projects',
-              size: 110,
+              size: sizes['application.grid-column-2xs'],
               meta: { align: 'right', cellClassName: 'mono' },
             },
             dateColumn,
@@ -451,7 +478,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                 id: 'project',
                 accessorFn: (row) => projectById.get(row.projectId ?? '')?.name ?? '',
                 header: 'Project',
-                size: 280,
+                size: sizes['application.grid-column-4xl'],
                 cell: ({ row, getValue }) => (
                   <button
                     type="button"
@@ -466,7 +493,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
               {
                 accessorKey: 'amount',
                 header: 'Amount',
-                size: 150,
+                size: sizes['application.grid-column-md-plus'],
                 meta: { align: 'right', cellClassName: 'mono' },
                 cell: ({ row }) => formatMoney(row.original.amount),
               },
@@ -474,14 +501,22 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
             ]
           : [
               nameColumn,
-              { accessorKey: 'role', header: 'Role', size: 120 },
-              { accessorKey: 'department', header: 'Department', size: 180 },
+              { accessorKey: 'role', header: 'Role', size: sizes['application.grid-column-xs'] },
+              {
+                accessorKey: 'department',
+                header: 'Department',
+                size: sizes['application.grid-column-xl'],
+              },
               statusColumn,
-              { accessorKey: 'location', header: 'Location', size: 190 },
+              {
+                accessorKey: 'location',
+                header: 'Location',
+                size: sizes['application.grid-column-xl-plus'],
+              },
               {
                 accessorKey: 'amount',
                 header: 'Active projects',
-                size: 150,
+                size: sizes['application.grid-column-md-plus'],
                 meta: { align: 'right', cellClassName: 'mono' },
               },
               dateColumn,
@@ -588,7 +623,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                   emphasis="ghost"
                   onClick={closeFilters}
                 >
-                  <PanelLeftClose size={16} />
+                  <PanelLeftClose size={componentToken('application.icon-md')} />
                 </IconButton>
               </div>
             </div>
@@ -623,7 +658,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
             selectedRowIds={selectedIds}
             onSelectedRowsChange={setSelectedIds}
             pageSize={10}
-            height={560}
+            height={componentToken('business-grid-height')}
             emptyTitle={`No ${kind === 'team' ? 'members' : kind} found`}
             emptyDescription="Try another search or clear the selected filters."
             renderBulkActions={(selected, clear) => (
@@ -636,7 +671,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                       <Button
                         size="sm"
                         emphasis="secondary"
-                        trailingIcon={<ChevronDown size={14} />}
+                        trailingIcon={<ChevronDown size={componentToken('application.icon-sm')} />}
                       >
                         Set status
                       </Button>
@@ -687,7 +722,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                           aria-expanded={panelOpen}
                           onClick={toggleFilters}
                         >
-                          <Funnel size={16} />
+                          <Funnel size={componentToken('application.icon-md')} />
                         </IconButton>
                       </div>
                       <SearchInput
@@ -703,7 +738,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                       <div className="aegis-business-list-create">
                         {kind === 'projects' && (
                           <Button
-                            leadingIcon={<Plus size={16} />}
+                            leadingIcon={<Plus size={componentToken('application.icon-md')} />}
                             onClick={() => setDialog('project')}
                           >
                             Create project
@@ -711,7 +746,7 @@ export function BusinessLists({ kind, data, onNavigate, onChange }: BusinessList
                         )}
                         {kind === 'team' && (
                           <Button
-                            leadingIcon={<Plus size={16} />}
+                            leadingIcon={<Plus size={componentToken('application.icon-md')} />}
                             onClick={() => setDialog('member')}
                           >
                             Invite member

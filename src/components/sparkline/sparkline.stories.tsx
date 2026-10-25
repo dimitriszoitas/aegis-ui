@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Sparkline } from './sparkline';
 import { records } from '@/sample-data';
 const meta = {
-  title: 'Components/Charts/Sparkline',
+  id: 'components-charts-sparkline',
+  title: 'Components/Data Visualization/Sparkline',
   component: Sparkline,
   tags: ['autodocs'],
   args: { data: records[1].sparkline, label: 'Invoice follow-up events over the last 24 hours' },

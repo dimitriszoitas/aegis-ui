@@ -52,7 +52,8 @@ const sources: MultiComboboxOption[] = [
   },
 ];
 const meta = {
-  title: 'Components/Forms/MultiCombobox',
+  id: 'components-forms-multicombobox',
+  title: 'Components/Inputs & Selection/MultiCombobox',
   component: MultiCombobox,
   tags: ['autodocs'],
   args: { label: 'Included sources', options: sources },
@@ -61,7 +62,7 @@ const meta = {
       story: { inline: false, height: 480 },
       description: {
         component:
-          'A multi-select popover with cmdk list/group primitives. Checked state and active keyboard focus remain independent. Type to filter, use Arrow/Home/End to navigate, Enter to toggle, Escape to close and Backspace on an empty search to remove the last selection. Select all applies to enabled filtered options. Set filterOptions=false for externally searched results.',
+          'A multi-select popover with Base UI Combobox primitives. Checked state and active keyboard focus remain independent. Type to filter, use Arrow/Home/End to navigate, Enter to toggle, Escape to close and Backspace on an empty search to remove the last selection. Select all applies to enabled filtered options. Set filterOptions=false for externally searched results.',
       },
     },
   },
@@ -141,7 +142,8 @@ export const KeyboardSelection: Story = {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
     await userEvent.click(canvas.getByRole('combobox', { name: 'Included sources' }));
-    const input = body.getByRole('combobox', { name: 'Search sources' });
+    const input = await body.findByRole('combobox', { name: 'Search sources' });
+    await waitFor(() => expect(input).toHaveFocus());
     await userEvent.type(input, 'planning');
     await userEvent.keyboard('{Home}{Enter}');
     await expect(body.getByRole('option', { name: /Project tracker/ })).toHaveAttribute(
@@ -151,7 +153,9 @@ export const KeyboardSelection: Story = {
     await userEvent.keyboard('{ArrowDown}{Enter}');
     await expect(canvas.getByText('2 connected sources included')).toBeInTheDocument();
     await userEvent.keyboard('{Escape}');
-    await expect(canvas.getByRole('combobox', { name: 'Included sources' })).toHaveFocus();
+    await waitFor(() =>
+      expect(canvas.getByRole('combobox', { name: 'Included sources' })).toHaveFocus(),
+    );
     await userEvent.click(canvas.getByRole('button', { name: 'Remove Project tracker' }));
     await expect(canvas.getByText('1 connected sources included')).toBeInTheDocument();
   },

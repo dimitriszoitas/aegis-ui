@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagsCell } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Tags cell',
+  id: 'components-data-grid-tags-cell',
+  title: 'Components/Data Display/Data grid/Tags cell',
   component: TagsCell,
   tags: ['autodocs'],
   args: { tags: ['delivery', 'project', 'needs-review', 'workspace'] },
@@ -15,4 +16,12 @@ export const Matrix: StoryObj<typeof TagsCell> = {
       <TagsCell tags={[]} />
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof TagsCell> = {
+  args: { tags: ['delivery', 'project', 'needs-review', 'workspace'], maxVisible: 2 },
+  argTypes: {
+    tags: { control: 'object' },
+    maxVisible: { control: { type: 'number', min: 0, max: 8, step: 1 } },
+  },
 };

@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useState, type ComponentProps, type ReactNode } from 'react';
 import {
   ResponsiveContainer,
@@ -26,7 +27,6 @@ import { cn } from '@/lib/utils';
 import './charts.css';
 
 // Coalesce measurements during the sidebar's 120ms width transition.
-const chartResizeDelay = 140;
 
 export type ChartColor =
   | 'function'
@@ -54,10 +54,26 @@ export const chartPalette: readonly ChartColor[] = [
   'chart-5',
   'chart-6',
 ];
+const chartColorTokens: Record<ChartColor, string> = {
+  function: 'var(--group-data-viz-chart-color-chart-function)',
+  ai: 'var(--group-data-viz-chart-color-chart-ai)',
+  success: 'var(--group-data-viz-chart-color-chart-success)',
+  warning: 'var(--group-data-viz-chart-color-chart-warning)',
+  destroy: 'var(--group-data-viz-chart-color-chart-destroy)',
+  critical: 'var(--group-data-viz-chart-color-chart-severity-critical)',
+  high: 'var(--group-data-viz-chart-color-chart-severity-high)',
+  medium: 'var(--group-data-viz-chart-color-chart-severity-medium)',
+  low: 'var(--group-data-viz-chart-color-chart-severity-low)',
+  info: 'var(--group-data-viz-chart-color-chart-severity-info)',
+  'chart-1': 'var(--group-data-viz-chart-color-chart-1)',
+  'chart-2': 'var(--group-data-viz-chart-color-chart-2)',
+  'chart-3': 'var(--group-data-viz-chart-color-chart-3)',
+  'chart-4': 'var(--group-data-viz-chart-color-chart-4)',
+  'chart-5': 'var(--group-data-viz-chart-color-chart-5)',
+  'chart-6': 'var(--group-data-viz-chart-color-chart-6)',
+};
 export function chartColor(color: ChartColor = 'chart-1'): string {
-  if (['critical', 'high', 'medium', 'low', 'info'].includes(color))
-    return `var(--color-chart-severity-${color})`;
-  return color.startsWith('chart-') ? `var(--color-${color})` : `var(--color-chart-${color})`;
+  return chartColorTokens[color];
 }
 const chartColors = new Set<string>([
   ...chartPalette,
@@ -95,7 +111,7 @@ export function ChartContainer({
   title,
   description,
   action,
-  height = 260,
+  height: requestedHeight,
   loading = false,
   empty = false,
   emptyTitle = 'No events in this time range',
@@ -108,6 +124,8 @@ export function ChartContainer({
   children,
   ...props
 }: ChartContainerProps) {
+  const tokens = useComponentTokenNumbers(['chart-height']);
+  const height = requestedHeight ?? tokens['chart-height'];
   const titleId = useId();
   return (
     <figure
@@ -338,9 +356,28 @@ function CartesianPlot({
   brush = false,
   brushRange,
   onBrushChange,
-  height = 260,
+  height: requestedHeight,
   ...container
 }: CartesianPlotProps) {
+  const tokens = useComponentTokenNumbers([
+    'chart-height',
+    'chart-initial-width',
+    'chart-margin-top',
+    'chart-margin-right',
+    'chart-margin-left',
+    'chart-tick-font-size',
+    'chart-tick-gap',
+    'chart-tick-margin',
+    'chart-y-axis-width',
+    'chart-dot-radius',
+    'chart-stroke',
+    'chart-bar-radius',
+    'chart-bar-max-width',
+    'chart-brush-height',
+    'chart-brush-handle-width',
+    'chart-resize-delay',
+  ]);
+  const height = requestedHeight ?? tokens['chart-height'];
   const [hidden, setHidden] = useState<string[]>([]);
   const id = useId().replaceAll(':', '');
   const Chart =
@@ -375,14 +412,19 @@ function CartesianPlot({
         width="100%"
         height="100%"
         minWidth={0}
-        debounce={chartResizeDelay}
-        initialDimension={{ width: 600, height }}
+        debounce={tokens['chart-resize-delay']}
+        initialDimension={{ width: tokens['chart-initial-width'], height }}
       >
         <Chart
           data={values}
           accessibilityLayer
           aria-label={`${title}. Use left and right arrows to inspect values.`}
-          margin={{ top: 10, right: 8, bottom: 0, left: -18 }}
+          margin={{
+            top: tokens['chart-margin-top'],
+            right: tokens['chart-margin-right'],
+            bottom: 0,
+            left: tokens['chart-margin-left'],
+          }}
         >
           <defs>
             {series.map((item, index) => (
@@ -390,35 +432,41 @@ function CartesianPlot({
                 <stop
                   offset="0%"
                   stopColor={chartColor(item.color ?? chartPalette[index % chartPalette.length])}
-                  stopOpacity=".3"
+                  stopOpacity={componentToken('chart-area-opacity-top')}
                 />
                 <stop
                   offset="100%"
                   stopColor={chartColor(item.color ?? chartPalette[index % chartPalette.length])}
-                  stopOpacity=".025"
+                  stopOpacity={componentToken('chart-area-opacity-bottom')}
                 />
               </linearGradient>
             ))}
           </defs>
           <CartesianGrid
             vertical={false}
-            stroke="var(--color-border-subtle)"
-            strokeDasharray="3 3"
+            stroke="var(--group-data-viz-chart-color-border-subtle)"
+            strokeDasharray={`${componentToken('chart-grid-dash')} ${componentToken('chart-grid-dash')}`}
           />
           <XAxis
             dataKey={xKey}
             axisLine={false}
             tickLine={false}
-            tick={{ fill: 'var(--color-text-secondary)', fontSize: 11 }}
-            minTickGap={30}
-            tickMargin={10}
+            tick={{
+              fill: 'var(--group-data-viz-chart-color-content-secondary)',
+              fontSize: tokens['chart-tick-font-size'],
+            }}
+            minTickGap={tokens['chart-tick-gap']}
+            tickMargin={tokens['chart-tick-margin']}
             tickFormatter={xFormatter}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: 'var(--color-text-secondary)', fontSize: 11 }}
-            width={62}
+            tick={{
+              fill: 'var(--group-data-viz-chart-color-content-secondary)',
+              fontSize: tokens['chart-tick-font-size'],
+            }}
+            width={tokens['chart-y-axis-width']}
             tickFormatter={
               valueFormatter ??
               ((value) => Number(value).toLocaleString('en-GB', { notation: 'compact' }))
@@ -434,8 +482,14 @@ function CartesianPlot({
             }
             cursor={
               kind === 'bar'
-                ? { fill: 'var(--color-bg-hover)', fillOpacity: 0.75 }
-                : { stroke: 'var(--color-border-strong)', strokeDasharray: '3 3' }
+                ? {
+                    fill: 'var(--group-data-viz-chart-color-surface-hover)',
+                    fillOpacity: componentToken('chart-cursor-opacity'),
+                  }
+                : {
+                    stroke: 'var(--group-data-viz-chart-color-border-strong)',
+                    strokeDasharray: `${componentToken('chart-grid-dash')} ${componentToken('chart-grid-dash')}`,
+                  }
             }
             isAnimationActive={false}
           />
@@ -455,10 +509,12 @@ function CartesianPlot({
                       y={shape.y}
                       width={shape.width}
                       height={shape.height}
-                      radius={stacked ? 0 : [3, 3, 0, 0]}
+                      radius={
+                        stacked ? 0 : [tokens['chart-bar-radius'], tokens['chart-bar-radius'], 0, 0]
+                      }
                       fill={
                         shape.isActive
-                          ? `color-mix(in srgb, ${fill} 75%, var(--color-text-primary))`
+                          ? `color-mix(in srgb, ${fill} ${componentToken('chart-active-color-mix')}, var(--group-data-viz-chart-color-content-primary))`
                           : fill
                       }
                     />
@@ -477,9 +533,13 @@ function CartesianPlot({
                 {...common}
                 type="monotone"
                 stroke={color}
-                strokeWidth={2}
+                strokeWidth={componentToken('chart-stroke')}
                 dot={false}
-                activeDot={{ r: 4, stroke: 'var(--color-bg-surface)', strokeWidth: 2 }}
+                activeDot={{
+                  r: tokens['chart-dot-radius'],
+                  stroke: 'var(--group-data-viz-chart-color-surface-surface)',
+                  strokeWidth: tokens['chart-stroke'],
+                }}
                 connectNulls={false}
               />
             ) : kind === 'area' ? (
@@ -488,9 +548,9 @@ function CartesianPlot({
                 {...common}
                 type="monotone"
                 stroke={color}
-                strokeWidth={2}
+                strokeWidth={componentToken('chart-stroke')}
                 fill={stacked ? color : `url(#${id}-area-${index})`}
-                fillOpacity={stacked ? 0.18 : 1}
+                fillOpacity={stacked ? componentToken('chart-stacked-opacity') : 1}
                 stackId={stacked ? 'series' : undefined}
                 connectNulls={false}
               />
@@ -502,22 +562,24 @@ function CartesianPlot({
                 shape={coloredBar}
                 activeBar={
                   coloredBar ?? {
-                    fill: `color-mix(in srgb, ${color} 75%, var(--color-text-primary))`,
+                    fill: `color-mix(in srgb, ${color} ${componentToken('chart-active-color-mix')}, var(--group-data-viz-chart-color-content-primary))`,
                   }
                 }
                 stackId={stacked ? 'series' : undefined}
-                radius={stacked ? 0 : [3, 3, 0, 0]}
-                maxBarSize={42}
+                radius={
+                  stacked ? 0 : [tokens['chart-bar-radius'], tokens['chart-bar-radius'], 0, 0]
+                }
+                maxBarSize={tokens['chart-bar-max-width']}
               />
             );
           })}
           {brush && data.length > 1 && (
             <Brush
               dataKey={xKey}
-              height={24}
-              travellerWidth={8}
-              fill="var(--color-bg-surface)"
-              stroke="var(--color-border-strong)"
+              height={tokens['chart-brush-height']}
+              travellerWidth={tokens['chart-brush-handle-width']}
+              fill="var(--group-data-viz-chart-color-surface-surface)"
+              stroke="var(--group-data-viz-chart-color-border-strong)"
               startIndex={brushRange?.startIndex}
               endIndex={brushRange?.endIndex}
               onChange={onBrushChange}
@@ -563,12 +625,21 @@ export interface DonutChartProps extends Omit<
 export function DonutChart({
   title,
   data,
-  height = 260,
+  height: requestedHeight,
   showLegend = true,
   showDataTable = false,
   totalLabel = 'Total records',
   ...props
 }: DonutChartProps) {
+  const tokens = useComponentTokenNumbers([
+    'chart-height',
+    'chart-resize-delay',
+    'donut-initial-width',
+    'donut-inner-radius',
+    'donut-outer-radius',
+    'donut-padding-angle',
+  ]);
+  const height = requestedHeight ?? tokens['chart-height'];
   const values = data.map((item) => ({
     ...item,
     value: Number.isFinite(item.value) ? Math.max(0, item.value) : 0,
@@ -606,8 +677,8 @@ export function DonutChart({
         <ResponsiveContainer
           width="100%"
           height="100%"
-          debounce={chartResizeDelay}
-          initialDimension={{ width: 500, height }}
+          debounce={tokens['chart-resize-delay']}
+          initialDimension={{ width: tokens['donut-initial-width'], height }}
         >
           <RechartsPieChart
             accessibilityLayer
@@ -617,11 +688,11 @@ export function DonutChart({
               data={values}
               dataKey="value"
               nameKey="name"
-              innerRadius="62%"
-              outerRadius="88%"
-              paddingAngle={2}
-              stroke="var(--color-bg-surface)"
-              strokeWidth={3}
+              innerRadius={`${tokens['donut-inner-radius']}%`}
+              outerRadius={`${tokens['donut-outer-radius']}%`}
+              paddingAngle={tokens['donut-padding-angle']}
+              stroke="var(--group-data-viz-chart-color-surface-surface)"
+              strokeWidth={componentToken('donut-stroke')}
               isAnimationActive={false}
             >
               {values.map((item, index) => (

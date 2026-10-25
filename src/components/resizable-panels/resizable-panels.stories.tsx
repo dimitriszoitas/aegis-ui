@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ResizablePanels, ResizablePanel, ResizeHandle } from './resizable-panels';
 import { SeverityBadge } from '@/components/severity-badge';
 const meta = {
+  id: 'components-layout-resizablepanels',
   title: 'Components/Layout/ResizablePanels',
   component: ResizablePanels,
   subcomponents: { ResizablePanel, ResizeHandle },

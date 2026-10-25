@@ -7,7 +7,8 @@ const data: readonly ChartMetricDatum[] = [10100, 9300, 9900, 6100, 7000, 9700, 
 );
 const metric = data.reduce((total, point) => total + point.value, 0);
 const meta = {
-  title: 'Components/Charts/Chart metric card',
+  id: 'components-charts-chart-metric-card',
+  title: 'Components/Data Visualization/Chart metric card',
   component: ChartMetricCard,
   tags: ['autodocs'],
   args: {

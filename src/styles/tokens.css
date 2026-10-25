@@ -1,4 +1,4 @@
-/* Aegis: primitive → semantic → component tokens. Raw colors live only here. */
+/* Aegis: primitive → semantic → component tokens. Raw colors stay in token stylesheets. */
 :root,
 .aegis-theme-light {
   --slate-50: oklch(0.98 0.0037 255);
@@ -161,9 +161,9 @@
   --z-popover: 80;
   --z-toast: 90;
   --z-tooltip: 100;
-  --grid-row-compact: 36px;
-  --grid-row-default: 48px;
-  --grid-row-comfortable: 60px;
+  --group-data-display-measurement-grid-row-compact: 36px;
+  --group-data-display-measurement-grid-row-default: 48px;
+  --group-data-display-measurement-grid-row-comfortable: 60px;
   --button-radius-sm: 4px;
   --button-radius-md: 5px;
   --button-radius-lg: 6px;

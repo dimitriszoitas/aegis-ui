@@ -1,112 +1,131 @@
 .aegis-button {
-  --intent-bg: var(--color-bg-selected);
-  --intent-fg: var(--color-text-primary);
-  --intent-soft: var(--color-bg-hover);
-  --intent-on: var(--color-text-primary);
-  --intent-border: var(--color-border-strong);
-  --button-radius: var(--button-radius-md, 5px);
-  --button-text-padding: 12px;
-  --button-icon-padding: 8px;
+  --group-trigger-button-intent-bg: var(--semantic-color-control-neutral-fill);
+  --group-trigger-button-intent-fg: var(--semantic-color-content-primary);
+  --group-trigger-button-intent-soft: var(--semantic-color-surface-hover);
+  --group-trigger-button-intent-on: var(--semantic-color-content-primary);
+  --group-trigger-button-intent-border: var(--semantic-color-border-strong);
+  --group-trigger-button-radius-current: var(--semantic-radius-l);
+  --group-trigger-button-padding-inline: var(--semantic-space-l);
+  --group-trigger-button-padding-icon: var(--semantic-space-m);
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  height: 34px;
-  padding: 0 var(--button-text-padding);
-  border: 1px solid transparent;
-  border-radius: var(--button-radius);
-  font-size: var(--text-sm);
-  line-height: 1;
-  font-weight: 500;
+  gap: var(--group-trigger-button-gap-compact);
+  height: var(--group-trigger-button-height-regular);
+  padding: var(--group-trigger-button-number-0) var(--group-trigger-button-padding-inline);
+  border: var(--group-trigger-button-border-width-hairline) solid transparent;
+  border-radius: var(--group-trigger-button-radius-current);
+  font-size: var(--group-trigger-button-font-size-body);
+  line-height: var(--group-trigger-button-font-leading-solid);
+  font-weight: var(--group-trigger-button-font-weight-medium);
   white-space: nowrap;
   transition:
-    background var(--motion-fast),
-    box-shadow var(--motion-fast),
-    transform var(--motion-fast);
-  background: var(--intent-bg);
-  color: var(--intent-on);
+    background var(--group-trigger-button-motion-fast),
+    box-shadow var(--group-trigger-button-motion-fast),
+    transform var(--group-trigger-button-motion-fast);
+  background: var(--group-trigger-button-intent-bg);
+  color: var(--group-trigger-button-intent-on);
 }
 .aegis-button[data-intent='function'] {
-  --intent-bg: var(--color-function-bg);
-  --intent-fg: var(--color-function-fg);
-  --intent-soft: var(--color-function-soft);
-  --intent-on: var(--color-on-intent);
-  --intent-border: var(--color-function-fg);
+  --group-trigger-button-intent-bg: var(--semantic-color-action-fill);
+  --group-trigger-button-intent-fg: var(--semantic-color-action-foreground);
+  --group-trigger-button-intent-soft: var(--semantic-color-action-soft);
+  --group-trigger-button-intent-on: var(--semantic-color-on-intent);
+  --group-trigger-button-intent-border: var(--semantic-color-action-foreground);
 }
 .aegis-button[data-intent='destroy'] {
-  --intent-bg: var(--color-destroy-bg);
-  --intent-fg: var(--color-destroy-fg);
-  --intent-soft: var(--color-destroy-soft);
-  --intent-on: var(--color-on-intent);
-  --intent-border: var(--color-destroy-fg);
+  --group-trigger-button-intent-bg: var(--semantic-color-danger-fill);
+  --group-trigger-button-intent-fg: var(--semantic-color-danger-foreground);
+  --group-trigger-button-intent-soft: var(--semantic-color-danger-soft);
+  --group-trigger-button-intent-on: var(--semantic-color-on-intent);
+  --group-trigger-button-intent-border: var(--semantic-color-danger-foreground);
 }
 .aegis-button[data-intent='ai'] {
-  --intent-bg: var(--color-ai-bg);
-  --intent-fg: var(--color-ai-fg);
-  --intent-soft: var(--color-ai-soft);
-  --intent-on: var(--color-on-intent);
+  --group-trigger-button-intent-bg: var(--semantic-color-ai-fill);
+  --group-trigger-button-intent-fg: var(--semantic-color-ai-foreground);
+  --group-trigger-button-intent-soft: var(--semantic-color-ai-soft);
+  --group-trigger-button-intent-on: var(--semantic-color-on-ai);
 }
 .aegis-button[data-intent='ai'][data-emphasis='primary'] {
-  background: var(--gradient-ai);
+  background: var(--group-trigger-button-gradient-ai);
 }
 .aegis-button[data-size='sm'] {
-  height: 28px;
-  --button-radius: var(--button-radius-sm, 4px);
-  --button-text-padding: 8px;
-  --button-icon-padding: 6px;
-  font-size: var(--text-xs);
+  height: var(--group-trigger-button-height-compact);
+  --group-trigger-button-radius-current: var(--semantic-radius-m);
+  --group-trigger-button-padding-inline: var(--semantic-space-m);
+  --group-trigger-button-padding-icon: var(--semantic-space-optical-m);
+  font-size: var(--group-trigger-button-font-size-label);
 }
 .aegis-button[data-size='lg'] {
-  height: 40px;
-  --button-radius: var(--button-radius-lg, 6px);
-  --button-text-padding: 16px;
-  --button-icon-padding: 12px;
-  font-size: var(--text-base);
+  height: var(--group-trigger-button-height-large);
+  --group-trigger-button-radius-current: var(--semantic-radius-l);
+  --group-trigger-button-padding-inline: var(--semantic-space-xl);
+  --group-trigger-button-padding-icon: var(--semantic-space-l);
+  font-size: var(--group-trigger-button-font-size-body);
 }
 .aegis-button[data-leading-icon] {
-  padding-inline-start: var(--button-icon-padding);
+  padding-inline-start: var(--group-trigger-button-padding-icon);
 }
 .aegis-button[data-trailing-icon] {
-  padding-inline-end: var(--button-icon-padding);
-}
-.aegis-button[data-emphasis='secondary'] {
-  background: var(--intent-soft);
-  color: var(--intent-fg);
-}
-.aegis-button[data-emphasis='tertiary'],
-.aegis-button[data-emphasis='ghost'] {
-  background: transparent;
-  color: var(--intent-fg);
+  padding-inline-end: var(--group-trigger-button-padding-icon);
 }
 .aegis-button[data-emphasis='tertiary'] {
-  border-color: var(--intent-border);
+  background: var(--group-trigger-button-intent-soft);
+  color: var(--group-trigger-button-intent-fg);
 }
-.aegis-button[data-intent='ai'][data-emphasis='tertiary'] {
-  border-color: transparent;
+.aegis-button[data-emphasis='secondary'],
+.aegis-button[data-emphasis='ghost'] {
+  background: var(--group-trigger-button-color-transparent);
+  color: var(--group-trigger-button-intent-fg);
 }
-.aegis-button[data-intent='ai'][data-emphasis='tertiary']::before {
+.aegis-button[data-emphasis='secondary'] {
+  border-color: var(--group-trigger-button-intent-border);
+}
+.aegis-button[data-intent='ai'][data-emphasis='secondary'] {
+  border-color: var(--group-trigger-button-color-transparent);
+}
+.aegis-button[data-intent='ai'][data-emphasis='secondary']::before {
   content: '';
   position: absolute;
-  inset: -1px;
-  padding: 1px;
+  inset: var(--group-trigger-button-outline-overlap);
+  padding: var(--group-trigger-button-outline-width);
   border-radius: inherit;
   pointer-events: none;
-  background: var(--gradient-ai-border, var(--gradient-ai-text));
+  background: var(--group-trigger-button-gradient-ai-border);
   mask:
-    linear-gradient(var(--color-text-primary) 0 0) content-box,
-    linear-gradient(var(--color-text-primary) 0 0);
+    linear-gradient(
+        var(--group-trigger-button-color-content-primary) var(--group-trigger-button-number-0)
+          var(--group-trigger-button-number-0)
+      )
+      content-box,
+    linear-gradient(
+      var(--group-trigger-button-color-content-primary) var(--group-trigger-button-number-0)
+        var(--group-trigger-button-number-0)
+    );
   mask-composite: exclude;
 }
 .aegis-button:hover:not(:disabled) {
-  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 8%, transparent);
+  box-shadow: inset var(--group-trigger-button-number-0) var(--group-trigger-button-number-0)
+    var(--group-trigger-button-number-0) var(--group-trigger-button-state-overlay-spread)
+    color-mix(
+      in srgb,
+      var(--group-trigger-button-intent-fg) var(--group-trigger-button-state-overlay-hover),
+      transparent
+    );
 }
 .aegis-button:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--intent-fg) 13%, transparent);
+  transform: translateY(var(--group-trigger-button-press-offset));
+  box-shadow: inset var(--group-trigger-button-number-0) var(--group-trigger-button-number-0)
+    var(--group-trigger-button-number-0) var(--group-trigger-button-state-overlay-spread)
+    color-mix(
+      in srgb,
+      var(--group-trigger-button-intent-fg) var(--group-trigger-button-state-overlay-pressed),
+      transparent
+    );
 }
 .aegis-button:disabled {
-  opacity: 0.45;
+  opacity: var(--group-trigger-button-opacity-disabled);
 }
 .button-icon {
   display: inline-flex;
@@ -114,93 +133,97 @@
   justify-content: center;
 }
 .button-icon svg {
-  width: 16px;
-  height: 16px;
+  width: var(--group-trigger-measurement-icon-md);
+  height: var(--group-trigger-measurement-icon-md);
 }
 .button-spinner {
-  animation: button-spin 900ms linear infinite;
+  animation: button-spin var(--group-trigger-button-loading-duration) linear infinite;
 }
 .button-loading {
   position: absolute;
-  inset: 0;
+  inset: var(--group-trigger-button-number-0);
   display: grid;
   place-items: center;
 }
 .button-label-loading {
-  opacity: 0;
+  opacity: var(--group-trigger-button-opacity-hidden);
 }
 .aegis-icon-button {
-  width: 34px;
-  padding: 0;
+  width: var(--group-trigger-button-icon-size-regular);
+  padding: var(--group-trigger-button-number-0);
 }
 .aegis-icon-button[data-size='sm'] {
-  width: 28px;
-  padding: 0;
+  width: var(--group-trigger-button-icon-size-compact);
+  padding: var(--group-trigger-button-number-0);
 }
 .aegis-icon-button[data-size='lg'] {
-  width: 40px;
-  padding: 0;
+  width: var(--group-trigger-button-icon-size-large);
+  padding: var(--group-trigger-button-number-0);
 }
 .aegis-icon-button .button-label {
   display: flex;
 }
 .button-group {
   display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--group-trigger-button-padding-snug);
+  padding: var(--group-trigger-button-padding-snug);
+  border: var(--group-trigger-button-border-width-hairline) solid
+    var(--group-trigger-button-color-border-default);
+  border-radius: var(--group-trigger-button-radius-strong);
   isolation: isolate;
-}
-.button-group > .aegis-button {
-  border-radius: 0;
-}
-.button-group > .aegis-button:not(:last-child) {
-  border-inline-end: 1px solid var(--color-border-default);
-}
-.button-group > .aegis-button:first-child {
-  border-start-start-radius: var(--button-radius);
-  border-end-start-radius: var(--button-radius);
-}
-.button-group > .aegis-button:last-child {
-  border-start-end-radius: var(--button-radius);
-  border-end-end-radius: var(--button-radius);
-}
-.button-group > .aegis-button:focus-visible {
-  z-index: 1;
 }
 @keyframes button-spin {
   to {
-    transform: rotate(360deg);
+    transform: rotate(var(--group-trigger-button-loading-rotation));
   }
 }
 
 .button-gradient-defs {
   position: absolute;
-  width: 0;
-  height: 0;
+  width: var(--group-trigger-button-number-0);
+  height: var(--group-trigger-button-number-0);
   overflow: hidden;
 }
-.aegis-button[data-intent='ai'][data-emphasis='secondary'] {
-  background: var(--gradient-ai-soft);
+.aegis-button[data-intent='ai'][data-emphasis='tertiary'] {
+  background: var(--group-trigger-button-gradient-ai-soft);
 }
-.aegis-button[data-intent='ai'][data-emphasis='secondary']:hover:not(:disabled) {
-  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 8%, transparent);
+.aegis-button[data-intent='ai'][data-emphasis='tertiary']:hover:not(:disabled) {
+  box-shadow: inset var(--group-trigger-button-number-0) var(--group-trigger-button-number-0)
+    var(--group-trigger-button-number-0) var(--group-trigger-button-state-overlay-spread)
+    color-mix(
+      in srgb,
+      var(--group-trigger-button-color-surface-surface)
+        var(--group-trigger-button-state-overlay-hover),
+      transparent
+    );
 }
-.aegis-button[data-intent='ai'][data-emphasis='secondary']:active:not(:disabled) {
-  box-shadow: inset 0 0 0 100px color-mix(in srgb, var(--color-bg-surface) 13%, transparent);
+.aegis-button[data-intent='ai'][data-emphasis='tertiary']:active:not(:disabled) {
+  box-shadow: inset var(--group-trigger-button-number-0) var(--group-trigger-button-number-0)
+    var(--group-trigger-button-number-0) var(--group-trigger-button-state-overlay-spread)
+    color-mix(
+      in srgb,
+      var(--group-trigger-button-color-surface-surface)
+        var(--group-trigger-button-state-overlay-pressed),
+      transparent
+    );
 }
 .aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label {
-  background-image: var(--gradient-ai-text);
+  background-image: var(--group-trigger-button-gradient-ai-text);
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
+  color: var(--group-trigger-button-color-transparent);
 }
 @media (forced-colors: active) {
-  .aegis-button[data-intent='ai'][data-emphasis='tertiary'] {
+  .aegis-button[data-intent='ai'][data-emphasis='secondary'] {
     border-color: ButtonText;
   }
-  .aegis-button[data-intent='ai'][data-emphasis='tertiary']::before {
+  .aegis-button[data-intent='ai'][data-emphasis='secondary']::before {
     display: none;
   }
   .aegis-button[data-intent='ai']:not([data-emphasis='primary']) .button-label {
-    background: none;
+    background: var(--group-trigger-button-elevation-none);
     color: ButtonText;
   }
 }

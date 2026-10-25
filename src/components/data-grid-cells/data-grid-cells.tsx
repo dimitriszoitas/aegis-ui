@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import type { ComponentProps, ReactNode } from 'react';
 import {
   ChevronDown,
@@ -45,7 +46,11 @@ export function EntityCell({ entity, avatar, className, ...props }: EntityCellPr
           <Avatar name={entity.name} size="sm" />
         ) : (
           <span className="aegis-entity-cell-icon" aria-hidden="true">
-            {entity.type === 'project' ? <Folder size={14} /> : <Globe2 size={14} />}
+            {entity.type === 'project' ? (
+              <Folder size={componentToken('data-display.icon-sm')} />
+            ) : (
+              <Globe2 size={componentToken('data-display.icon-sm')} />
+            )}
           </span>
         ))}
       <span className="aegis-entity-cell-copy">
@@ -194,7 +199,7 @@ export function ActionsCell({
             disabled={action.disabled}
             onClick={action.onClick}
           >
-            {action.icon ?? <MoreHorizontal size={15} />}
+            {action.icon ?? <MoreHorizontal size={componentToken('data-display.icon-inline')} />}
           </IconButton>
         ))}
       </div>
@@ -208,7 +213,7 @@ export function ActionsCell({
               emphasis="ghost"
               aria-label={`More ${label.toLowerCase()}`}
             >
-              <MoreHorizontal size={16} />
+              <MoreHorizontal size={componentToken('data-display.icon-md')} />
             </IconButton>
           }
           items={overflow.map((action) => ({
@@ -249,7 +254,7 @@ export function AiVerdictCell({ verdict, confidence, className, ...props }: AiVe
         className={cn('aegis-ai-verdict-cell', className)}
         aria-label={`AI suggestion: ${verdict}. ${label.toLowerCase()} confidence, ${Math.round(score * 100)} percent.`}
       >
-        <Sparkles size={12} aria-hidden="true" />
+        <Sparkles size={componentToken('data-display.icon-xs')} aria-hidden="true" />
         <span className="aegis-ai-verdict-label">{verdict}</span>
         <span className="aegis-ai-verdict-confidence">{Math.round(score * 100)}%</span>
       </span>
@@ -293,9 +298,9 @@ export function ExpandCell({
       }}
     >
       {expanded ? (
-        <ChevronDown size={15} aria-hidden="true" />
+        <ChevronDown size={componentToken('data-display.icon-inline')} aria-hidden="true" />
       ) : (
-        <ChevronRight size={15} aria-hidden="true" />
+        <ChevronRight size={componentToken('data-display.icon-inline')} aria-hidden="true" />
       )}
       {count !== undefined && <span aria-hidden="true">{count}</span>}
     </button>

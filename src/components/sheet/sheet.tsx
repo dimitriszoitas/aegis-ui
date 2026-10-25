@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import {
   useId,
   useLayoutEffect,
@@ -58,11 +59,11 @@ export function Sheet({
   defaultOpen = false,
   onOpenChange,
   size,
-  defaultSize = 280,
+  defaultSize: requestedDefaultSize,
   onSizeChange,
-  minSize = 160,
-  maxSize = 640,
-  contentMinSize = 120,
+  minSize: requestedMinSize,
+  maxSize: requestedMaxSize,
+  contentMinSize: requestedContentMinSize,
   headerActions,
   footer,
   closeLabel = 'Close sheet',
@@ -70,8 +71,21 @@ export function Sheet({
   className,
   style,
 }: SheetProps) {
+  const tokens = useComponentTokenNumbers([
+    'sheet-size',
+    'sheet-min-size',
+    'sheet-max-size',
+    'sheet-content-min-size',
+    'sheet-resize-step',
+    'sheet-resize-step-large',
+  ]);
+  const defaultSize = requestedDefaultSize ?? tokens['sheet-size'];
+  const minSize = requestedMinSize ?? tokens['sheet-min-size'];
+  const maxSize = requestedMaxSize ?? tokens['sheet-max-size'];
+  const contentMinSize = requestedContentMinSize ?? tokens['sheet-content-min-size'];
+
   const [localOpen, setLocalOpen] = useState(defaultOpen);
-  const [localSize, setLocalSize] = useState(defaultSize);
+  const [localSize, setLocalSize] = useState<number>();
   const [available, setAvailable] = useState(maxSize + contentMinSize);
   const [resizing, setResizing] = useState(false);
   const [pointerFocus, setPointerFocus] = useState(false);
@@ -93,7 +107,7 @@ export function Sheet({
   const isOpen = open ?? localOpen;
   const horizontal = placement === 'bottom';
   const bounds = sheetBounds(available, contentMinSize, minSize, maxSize);
-  const panelSize = clampSheetSize(size ?? localSize, bounds);
+  const panelSize = clampSheetSize(size ?? localSize ?? defaultSize, bounds);
   const locked = bounds.max === bounds.min;
 
   useLayoutEffect(() => {
@@ -246,6 +260,7 @@ export function Sheet({
                 event.key,
                 event.shiftKey,
                 bounds,
+                { regular: tokens['sheet-resize-step'], large: tokens['sheet-resize-step-large'] },
               );
               if (next === null || locked) return;
               event.preventDefault();
@@ -262,7 +277,7 @@ export function Sheet({
             <div className="aegis-contained-sheet-actions">
               {headerActions}
               <IconButton size="sm" emphasis="ghost" aria-label={closeLabel} onClick={close}>
-                <X size={16} />
+                <X size={componentToken('surface.icon-md')} />
               </IconButton>
             </div>
           </header>

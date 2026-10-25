@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 import './progress-bar.css';
@@ -49,7 +50,12 @@ export function ProgressBar({
       >
         <span
           className="aegis-progress-fill"
-          style={{ width: percent === undefined ? '35%' : `${percent}%` }}
+          style={{
+            width:
+              percent === undefined
+                ? componentToken('progress-indeterminate-width')
+                : `${percent}%`,
+          }}
         />
       </div>
     </div>

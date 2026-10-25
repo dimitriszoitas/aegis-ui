@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { Bell, CheckCheck, CircleCheck, Info, Sparkles, TriangleAlert, X } from '@/components/icon';
 import { Button } from '@/components/button';
@@ -5,7 +6,7 @@ import { CountBadge } from '@/components/count-badge';
 import { EmptyState } from '@/components/empty-state';
 import { IconButton } from '@/components/icon-button';
 import { Notification } from '@/components/notification';
-import { Popover } from '@/components/popover';
+import { SideSheet } from '@/components/side-sheet';
 import { RelativeTime } from '@/components/relative-time';
 import { SearchInput } from '@/components/search-input';
 import { Skeleton } from '@/components/skeleton';
@@ -30,6 +31,8 @@ export interface NotificationCenterProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Runs after the panel finishes opening or closing, for coordinated navigation. */
+  onOpenChangeComplete?: (open: boolean) => void;
   loading?: boolean;
   error?: ReactNode;
   onRetry?: () => void;
@@ -54,6 +57,7 @@ export function NotificationCenter({
   open,
   defaultOpen = false,
   onOpenChange,
+  onOpenChangeComplete,
   loading = false,
   error,
   onRetry,
@@ -76,9 +80,7 @@ export function NotificationCenter({
         .includes(query.trim().toLocaleLowerCase()),
   );
   const fallback = () =>
-    requestAnimationFrame(() =>
-      body.current?.querySelector<HTMLInputElement>('input[type=search]')?.focus(),
-    );
+    body.current?.querySelector<HTMLInputElement>('input[type=search]')?.focus();
   async function perform(
     id: string,
     action: () => void | Promise<void>,
@@ -87,12 +89,13 @@ export function NotificationCenter({
   ) {
     if (busy.current) return;
     busy.current = true;
+    // Move off a disappearing row before the dialog recovers focus from its removal.
+    if (restoreFocus) fallback();
     setPending(id);
     setActionError('');
     try {
       await action();
       setMessage(success);
-      if (restoreFocus) fallback();
     } catch (cause) {
       setActionError(
         cause instanceof Error ? cause.message : 'The update could not be saved. Try again.',
@@ -103,15 +106,14 @@ export function NotificationCenter({
     }
   }
   return (
-    <Popover
+    <SideSheet
       title={title}
-      showClose
+      size="sm"
+      closeLabel="Close notifications"
       open={open}
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}
-      align="end"
-      width={420}
-      className="aegis-notification-center"
+      onOpenChangeComplete={onOpenChangeComplete}
       trigger={
         trigger ?? (
           <IconButton
@@ -119,17 +121,17 @@ export function NotificationCenter({
             emphasis="ghost"
             tooltip={false}
           >
-            <Bell size={18} />
+            <Bell size={componentToken('communication.icon-lg')} />
             {unread.length > 0 && (
               <span className="aegis-notification-center-count">
-                <CountBadge count={unread.length} max={99} variant="inverted" />
+                <CountBadge count={unread.length} max={99} variant="inverted" size="sm" />
               </span>
             )}
           </IconButton>
         )
       }
     >
-      <div ref={body} className="aegis-notification-center-body">
+      <div ref={body} className="aegis-notification-center aegis-notification-center-body">
         <SearchInput
           aria-label="Search notifications"
           placeholder="Search notifications"
@@ -142,7 +144,7 @@ export function NotificationCenter({
             <Button
               size="sm"
               emphasis="ghost"
-              leadingIcon={<CheckCheck size={14} />}
+              leadingIcon={<CheckCheck size={componentToken('communication.icon-sm')} />}
               disabled={!unread.length || !!pending || loading}
               loading={pending === 'all'}
               onClick={() =>
@@ -186,9 +188,15 @@ export function NotificationCenter({
               >
                 {[0, 1, 2].map((item) => (
                   <div key={item}>
-                    <Skeleton width="68%" />
-                    <Skeleton width="94%" />
-                    <Skeleton width="35%" />
+                    <Skeleton
+                      width={componentToken('communication.notification-skeleton-title-width')}
+                    />
+                    <Skeleton
+                      width={componentToken('communication.notification-skeleton-body-width')}
+                    />
+                    <Skeleton
+                      width={componentToken('communication.notification-skeleton-time-width')}
+                    />
                   </div>
                 ))}
               </div>
@@ -217,7 +225,7 @@ export function NotificationCenter({
                       data-intent={item.intent ?? 'info'}
                     >
                       <span className="aegis-notification-center-icon" aria-hidden="true">
-                        <Icon size={17} />
+                        <Icon size={componentToken('communication.icon-navigation')} />
                       </span>
                       <div className="aegis-notification-center-copy">
                         {onOpenItem ? (
@@ -278,7 +286,7 @@ export function NotificationCenter({
                             )
                           }
                         >
-                          <X size={14} />
+                          <X size={componentToken('communication.icon-sm')} />
                         </IconButton>
                       )}
                     </li>
@@ -320,6 +328,6 @@ export function NotificationCenter({
           {message}
         </p>
       </div>
-    </Popover>
+    </SideSheet>
   );
 }

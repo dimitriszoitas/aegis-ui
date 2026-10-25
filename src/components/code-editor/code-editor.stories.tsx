@@ -6,6 +6,7 @@ import { Button } from '@/components/button';
 import { CodeEditor, type CodeEditorHandle, type CodeEditorProps } from './code-editor';
 
 const meta = {
+  id: 'components-code-codeeditor',
   title: 'Components/Code/CodeEditor',
   component: CodeEditor,
   args: {

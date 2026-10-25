@@ -7,7 +7,8 @@ import { ExpandableText } from './expandable-text';
 const project =
   'The customer portal redesign brings onboarding, account settings, and billing into one workspace. The first milestone includes updated navigation and a clearer project overview. Review the proposed flow with the customer team before scheduling implementation. Compare the designs with the agreed requirements, confirm accessibility and content responsibilities, and record the next steps in the project brief so everyone can follow the decision.';
 const meta = {
-  title: 'Components/Content/ExpandableText',
+  id: 'components-content-expandabletext',
+  title: 'Components/Data Display/ExpandableText',
   component: ExpandableText,
   parameters: {
     docs: {

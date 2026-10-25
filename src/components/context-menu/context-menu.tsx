@@ -1,25 +1,30 @@
-import { useRef, useState, type ComponentPropsWithoutRef, type ReactElement } from 'react';
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
+import { useRef, useState, type ReactElement } from 'react';
 import { flushSync } from 'react-dom';
-import { ContextMenu as Primitive } from 'radix-ui';
+import { ContextMenu as Primitive } from '@base-ui/react/context-menu';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Check, ChevronRight, Circle, Minus } from '@/components/icon';
 import type { DropdownMenuEntry } from '../dropdown-menu';
 import { cn } from '../../lib/utils';
 import './context-menu.css';
 
 export type ContextMenuEntry = DropdownMenuEntry;
-export interface ContextMenuProps extends Omit<
-  ComponentPropsWithoutRef<typeof Primitive.Root>,
-  'children'
-> {
+export interface ContextMenuProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** @deprecated Context menus use Base UI native modal focus behavior. */
+  modal?: boolean;
+  dir?: 'ltr' | 'rtl';
   children: ReactElement;
   items: ContextMenuEntry[];
-  defaultOpen?: boolean;
   disabled?: boolean;
   label?: string;
   className?: string;
 }
 
 function MenuEntries({ items }: { items: ContextMenuEntry[] }) {
+  const tokens = useComponentTokenNumbers(['submenu-offset', 'trigger.overlay-collision-padding']);
   return items.map((item) => {
     switch (item.type) {
       case 'separator':
@@ -28,7 +33,9 @@ function MenuEntries({ items }: { items: ContextMenuEntry[] }) {
         return (
           <Primitive.Group key={item.id}>
             {item.label && (
-              <Primitive.Label className="aegis-context-label">{item.label}</Primitive.Label>
+              <Primitive.GroupLabel className="aegis-context-label">
+                {item.label}
+              </Primitive.GroupLabel>
             )}
             <MenuEntries items={item.items} />
           </Primitive.Group>
@@ -37,15 +44,22 @@ function MenuEntries({ items }: { items: ContextMenuEntry[] }) {
         return (
           <Primitive.CheckboxItem
             key={item.id}
-            checked={item.checked}
-            onCheckedChange={item.onCheckedChange}
+            checked={item.checked !== false}
+            aria-checked={item.checked === 'indeterminate' ? 'mixed' : item.checked}
+            onCheckedChange={(checked) =>
+              item.onCheckedChange(item.checked === 'indeterminate' ? true : checked)
+            }
             disabled={item.disabled}
-            onSelect={(event) => event.preventDefault()}
+            closeOnClick={false}
             className="aegis-context-item aegis-context-checkable"
           >
-            <Primitive.ItemIndicator className="aegis-context-indicator">
-              {item.checked === 'indeterminate' ? <Minus size={14} /> : <Check size={14} />}
-            </Primitive.ItemIndicator>
+            <Primitive.CheckboxItemIndicator className="aegis-context-indicator">
+              {item.checked === 'indeterminate' ? (
+                <Minus size={componentToken('trigger.icon-sm')} />
+              ) : (
+                <Check size={componentToken('trigger.icon-sm')} />
+              )}
+            </Primitive.CheckboxItemIndicator>
             <span className="aegis-context-item-label">{item.label}</span>
             {item.shortcut && <kbd>{item.shortcut}</kbd>}
           </Primitive.CheckboxItem>
@@ -54,19 +68,22 @@ function MenuEntries({ items }: { items: ContextMenuEntry[] }) {
         return (
           <Primitive.Group key={item.id}>
             {item.label && (
-              <Primitive.Label className="aegis-context-label">{item.label}</Primitive.Label>
+              <Primitive.GroupLabel className="aegis-context-label">
+                {item.label}
+              </Primitive.GroupLabel>
             )}
             <Primitive.RadioGroup value={item.value} onValueChange={item.onValueChange}>
               {item.options.map((option) => (
                 <Primitive.RadioItem
                   key={option.value}
                   value={option.value}
+                  closeOnClick
                   disabled={option.disabled}
                   className="aegis-context-item aegis-context-checkable"
                 >
-                  <Primitive.ItemIndicator className="aegis-context-indicator">
-                    <Circle size={7} fill="currentColor" />
-                  </Primitive.ItemIndicator>
+                  <Primitive.RadioItemIndicator className="aegis-context-indicator">
+                    <Circle size={componentToken('trigger.icon-dot')} fill="currentColor" />
+                  </Primitive.RadioItemIndicator>
                   {option.label}
                 </Primitive.RadioItem>
               ))}
@@ -75,33 +92,38 @@ function MenuEntries({ items }: { items: ContextMenuEntry[] }) {
         );
       case 'submenu':
         return (
-          <Primitive.Sub key={item.id}>
-            <Primitive.SubTrigger disabled={item.disabled} className="aegis-context-item">
+          <Primitive.SubmenuRoot key={item.id}>
+            <Primitive.SubmenuTrigger disabled={item.disabled} className="aegis-context-item">
               {item.icon && (
                 <span className="aegis-context-icon" aria-hidden>
                   {item.icon}
                 </span>
               )}
               <span className="aegis-context-item-label">{item.label}</span>
-              <ChevronRight className="aegis-context-sub-arrow" size={14} />
-            </Primitive.SubTrigger>
+              <ChevronRight
+                className="aegis-context-sub-arrow"
+                size={componentToken('trigger.icon-sm')}
+              />
+            </Primitive.SubmenuTrigger>
             <Primitive.Portal>
-              <Primitive.SubContent
-                className="aegis-context-content"
-                sideOffset={5}
-                collisionPadding={12}
+              <Primitive.Positioner
+                className="aegis-context-positioner"
+                sideOffset={tokens['submenu-offset']}
+                collisionPadding={tokens['trigger.overlay-collision-padding']}
               >
-                <MenuEntries items={item.items} />
-              </Primitive.SubContent>
+                <Primitive.Popup className="aegis-context-content">
+                  <MenuEntries items={item.items} />
+                </Primitive.Popup>
+              </Primitive.Positioner>
             </Primitive.Portal>
-          </Primitive.Sub>
+          </Primitive.SubmenuRoot>
         );
       default:
         return (
           <Primitive.Item
             key={item.id}
             disabled={item.disabled}
-            onSelect={item.onSelect}
+            onClick={item.onSelect}
             className={cn(
               'aegis-context-item',
               item.intent === 'destroy' && 'aegis-context-item-destroy',
@@ -129,28 +151,39 @@ export function ContextMenu({
   disabled = false,
   label = 'Context actions',
   className,
-  modal = false,
-  ...rootProps
+  modal: _modal,
+  dir,
 }: ContextMenuProps) {
+  const tokens = useComponentTokenNumbers([
+    'trigger.overlay-offset',
+    'trigger.overlay-collision-padding',
+  ]);
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const triggerRef = useRef<HTMLSpanElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const [pointerAnchored, setPointerAnchored] = useState(false);
   const closingWithTab = useRef(false);
   function changeOpen(next: boolean) {
     if (open === undefined) setInternalOpen(next);
     onOpenChange?.(next);
   }
-  return (
-    <Primitive.Root
-      {...rootProps}
-      open={open ?? internalOpen}
-      onOpenChange={changeOpen}
-      modal={modal}
-    >
+  const menu = (
+    <Primitive.Root disabled={disabled} open={open ?? internalOpen} onOpenChange={changeOpen}>
       <Primitive.Trigger
-        asChild
+        render={children}
         ref={triggerRef}
-        disabled={disabled}
+        aria-disabled={disabled || undefined}
+        onContextMenu={() => setPointerAnchored(true)}
+        onTouchStart={() => setPointerAnchored(true)}
         tabIndex={0}
+        onKeyDownCapture={(event) => {
+          // A pointer-opened menu may still be transferring focus from its trigger.
+          if (event.key === 'Tab' && (open ?? internalOpen)) {
+            event.stopPropagation();
+            closingWithTab.current = true;
+            flushSync(() => changeOpen(false));
+          }
+        }}
         onKeyDown={(event) => {
           if (
             !disabled &&
@@ -158,42 +191,52 @@ export function ContextMenu({
           ) {
             event.preventDefault();
             const bounds = event.currentTarget.getBoundingClientRect();
-            event.currentTarget.dispatchEvent(
-              new MouseEvent('contextmenu', {
-                bubbles: true,
-                cancelable: true,
-                clientX: bounds.left + 12,
-                clientY: bounds.top + Math.min(bounds.height, 32),
-              }),
-            );
+            const trigger = event.currentTarget;
+            flushSync(() => {
+              trigger.dispatchEvent(
+                new MouseEvent('contextmenu', {
+                  bubbles: true,
+                  cancelable: true,
+                  clientX: bounds.left + tokens['trigger.overlay-collision-padding'],
+                  clientY: bounds.top + bounds.height / 2,
+                }),
+              );
+            });
+            popupRef.current?.focus();
           }
         }}
-      >
-        {children}
-      </Primitive.Trigger>
+      />
       <Primitive.Portal>
-        <Primitive.Content
-          aria-label={label}
-          className={cn('aegis-context-content', className)}
-          collisionPadding={12}
-          onKeyDownCapture={(event) => {
-            if (event.key === 'Tab') {
-              event.stopPropagation();
-              closingWithTab.current = true;
-              flushSync(() => changeOpen(false));
-              triggerRef.current?.focus();
-            }
-          }}
-          onCloseAutoFocus={(event) => {
-            if (closingWithTab.current) {
-              event.preventDefault();
-              closingWithTab.current = false;
-            }
-          }}
+        <Primitive.Positioner
+          className="aegis-context-positioner"
+          anchor={pointerAnchored ? undefined : triggerRef}
+          collisionPadding={tokens['trigger.overlay-collision-padding']}
         >
-          <MenuEntries items={items} />
-        </Primitive.Content>
+          <Primitive.Popup
+            ref={popupRef}
+            aria-label={label}
+            className={cn('aegis-context-content', className)}
+            onKeyDownCapture={(event) => {
+              if (event.key === 'Tab') {
+                event.stopPropagation();
+                closingWithTab.current = true;
+                flushSync(() => changeOpen(false));
+                triggerRef.current?.focus();
+              }
+            }}
+            finalFocus={() => {
+              if (closingWithTab.current) {
+                closingWithTab.current = false;
+                return false;
+              }
+              return triggerRef.current;
+            }}
+          >
+            <MenuEntries items={items} />
+          </Primitive.Popup>
+        </Primitive.Positioner>
       </Primitive.Portal>
     </Primitive.Root>
   );
+  return dir ? <DirectionProvider direction={dir}>{menu}</DirectionProvider> : menu;
 }

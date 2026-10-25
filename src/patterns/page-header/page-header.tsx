@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { ArrowLeft } from '@/components/icon';
 import { Breadcrumb, type BreadcrumbItem } from '@/components/breadcrumb';
@@ -51,7 +52,7 @@ export function PageHeader({
                 href={back.href}
                 intent="default"
                 underline="hover"
-                leadingIcon={<ArrowLeft size={16} />}
+                leadingIcon={<ArrowLeft size={componentToken('page-structure.icon-md')} />}
               >
                 {back.label}
               </Link>
@@ -59,7 +60,7 @@ export function PageHeader({
               <Button
                 emphasis="ghost"
                 size="sm"
-                leadingIcon={<ArrowLeft size={16} />}
+                leadingIcon={<ArrowLeft size={componentToken('page-structure.icon-md')} />}
                 onClick={back.onClick}
               >
                 {back.label}

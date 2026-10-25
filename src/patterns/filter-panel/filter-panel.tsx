@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { Children, useId, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { X } from '@/components/icon';
 import type { WorkRecord, RecordOwner } from '@/sample-data/types';
@@ -82,7 +83,7 @@ export interface FilterPanelProps extends Omit<
   statusLabelOverrides?: Partial<Record<RecordStatus, string>>;
 }
 
-/** A 300px in-flow panel. The containing grid shell owns its push/collapse transition. */
+/** An in-flow panel. The containing grid shell owns its push/collapse transition. */
 export function FilterPanel({
   value,
   onValueChange,
@@ -262,7 +263,7 @@ export function FilterPanel({
               size="sm"
               onClick={onClose}
             >
-              <X size={14} />
+              <X size={componentToken('filtering.icon-sm')} />
             </IconButton>
           )}
         </div>

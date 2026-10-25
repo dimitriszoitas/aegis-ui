@@ -1,85 +1,99 @@
 .aegis-metric-card {
-  padding: var(--layout-card-padding);
-  min-width: 0;
+  padding: var(--group-data-display-metric-card-layout-card-padding);
+  min-width: var(--group-data-display-metric-card-number-0);
 }
 .aegis-metric-card[data-intent='function'] {
-  --metric-accent: var(--color-function-fg);
+  --group-data-display-metric-card-metric-accent: var(
+    --semantic-part-metric-card-metric-accent-function
+  );
 }
 .aegis-metric-card[data-intent='success'] {
-  --metric-accent: var(--color-success-fg);
+  --group-data-display-metric-card-metric-accent: var(
+    --semantic-part-metric-card-metric-accent-success
+  );
 }
 .aegis-metric-card[data-intent='warning'] {
-  --metric-accent: var(--color-warning-fg);
+  --group-data-display-metric-card-metric-accent: var(
+    --semantic-part-metric-card-metric-accent-warning
+  );
 }
 .aegis-metric-card[data-intent='destroy'] {
-  --metric-accent: var(--color-destroy-fg);
+  --group-data-display-metric-card-metric-accent: var(
+    --semantic-part-metric-card-metric-accent-destroy
+  );
 }
 .aegis-metric-card[data-intent='ai'] {
-  --metric-accent: var(--color-ai-fg);
+  --group-data-display-metric-card-metric-accent: var(--semantic-part-metric-card-metric-accent-ai);
 }
 .aegis-metric-label {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-2);
+  font-size: var(--group-data-display-metric-card-font-size-body);
+  font-weight: var(--group-data-display-metric-card-font-weight-medium);
+  color: var(--group-data-display-metric-card-color-content-secondary);
+  margin-bottom: var(--group-data-display-metric-card-space-margin-bottom-compact);
 }
 .aegis-metric-main {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--group-data-display-metric-card-space-gap-comfortable);
 }
 .aegis-metric-value {
-  flex: 0 0 auto;
-  max-width: 100%;
-  color: var(--metric-accent, var(--color-text-primary));
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  font-size: var(--metric-value-size);
+  flex: var(--group-data-display-metric-card-flex-none)
+    var(--group-data-display-metric-card-flex-none) auto;
+  max-width: var(--group-data-display-metric-card-size-max-width-full);
+  color: var(
+    --group-data-display-metric-card-metric-accent,
+    var(--group-data-display-metric-card-color-content-primary)
+  );
+  font-weight: var(--group-data-display-metric-card-font-weight-bold);
+  letter-spacing: var(--group-data-display-metric-card-font-tracking-display);
+  line-height: var(--group-data-display-metric-card-font-leading-display);
+  font-size: var(--group-data-display-metric-card-metric-value-size);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 .aegis-metric-main > :is(.aegis-sparkline, .aegis-sparkline-empty) {
-  flex: 1 1 64px;
-  min-width: 0;
-  max-width: 100px;
+  flex: var(--group-data-display-metric-card-flex-fill)
+    var(--group-data-display-metric-card-flex-fill)
+    var(--group-data-display-metric-card-size-flex-content-snug);
+  min-width: var(--group-data-display-metric-card-number-0);
+  max-width: var(--group-data-display-metric-card-size-max-width-wide-content-regular);
   margin-inline-start: auto;
 }
 .aegis-metric-main > .aegis-sparkline {
   height: auto;
 }
 .aegis-metric-value > span {
-  margin-left: var(--space-1);
-  font-size: var(--text-md);
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--color-text-secondary);
+  margin-left: var(--group-data-display-metric-card-space-margin-left-snug);
+  font-size: var(--group-data-display-metric-card-font-size-subheading);
+  font-weight: var(--group-data-display-metric-card-font-weight-regular);
+  letter-spacing: var(--group-data-display-metric-card-font-tracking-normal);
+  color: var(--group-data-display-metric-card-color-content-secondary);
 }
 .aegis-metric-comparison {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
-  margin-top: var(--space-2);
+  gap: var(--group-data-display-metric-card-space-gap-compact);
+  font-size: var(--group-data-display-metric-card-font-size-label);
+  color: var(--group-data-display-metric-card-color-content-secondary);
+  margin-top: var(--group-data-display-metric-card-space-margin-top-compact);
   flex-wrap: wrap;
 }
 .aegis-metric-delta {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--group-data-display-metric-card-size-gap-micro-compact);
   font-variant-numeric: tabular-nums;
 }
 .aegis-metric-delta[data-trend='success'] {
-  color: var(--color-success-fg);
+  color: var(--group-data-display-metric-card-color-success-foreground);
 }
 .aegis-metric-delta[data-trend='destroy'] {
-  color: var(--color-destroy-fg);
+  color: var(--group-data-display-metric-card-color-danger-foreground);
 }
 .aegis-metric-loading {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--group-data-display-metric-card-space-gap-comfortable);
 }

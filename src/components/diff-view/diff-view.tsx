@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useEffect, useId, useRef, useState, type CSSProperties, type HTMLAttributes } from 'react';
 import { ArrowDown, ArrowUp, Columns2, List } from '@/components/icon';
 import { ChangeSet, type Text } from '@codemirror/state';
@@ -143,8 +144,8 @@ export function DiffView({
   focusFirstChange = false,
   modifiedIntent = 'default',
   wrapLines = false,
-  minHeight = 160,
-  maxHeight = 560,
+  minHeight = componentToken('code-min-height'),
+  maxHeight = componentToken('diff-max-height'),
   showModeToggle = true,
   className,
   style,
@@ -324,7 +325,7 @@ export function DiffView({
               disabled={!changeCount}
               onClick={() => navigate('previous')}
             >
-              <ArrowUp size={14} />
+              <ArrowUp size={componentToken('code.icon-sm')} />
             </IconButton>
             <IconButton
               aria-label="Next change"
@@ -333,7 +334,7 @@ export function DiffView({
               disabled={!changeCount}
               onClick={() => navigate('next')}
             >
-              <ArrowDown size={14} />
+              <ArrowDown size={componentToken('code.icon-sm')} />
             </IconButton>
           </ButtonGroup>
           {showModeToggle && (
@@ -350,7 +351,7 @@ export function DiffView({
                   emphasis={activeMode === value ? 'secondary' : 'ghost'}
                   intent={activeMode === value ? 'function' : 'default'}
                   aria-pressed={activeMode === value}
-                  leadingIcon={<Icon size={14} />}
+                  leadingIcon={<Icon size={componentToken('code.icon-sm')} />}
                   onClick={() => {
                     if (mode === undefined) setInternalMode(value);
                     onModeChange?.(value);

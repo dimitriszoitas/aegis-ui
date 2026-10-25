@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MetricCard } from './metric-card';
 import { records, timeSeries } from '@/sample-data';
 const meta = {
-  title: 'Components/Charts/Metric card',
+  id: 'components-charts-metric-card',
+  title: 'Components/Data Display/Metric card',
   component: MetricCard,
   tags: ['autodocs'],
   args: { label: 'Open records', value: 86 },
@@ -59,6 +60,33 @@ export const States: StoryObj<typeof meta> = {
       />
       <MetricCard label="Events awaiting review" value={1284} />
       <MetricCard label="Critical records" value={0} loading />
+    </div>
+  ),
+};
+
+export const Playground: StoryObj<typeof MetricCard> = {
+  args: {
+    label: 'Completed projects',
+    value: 1284,
+    unit: 'projects',
+    delta: 12.4,
+    deltaLabel: 'vs previous month',
+    trendIsPositive: true,
+    loading: false,
+    intent: 'function',
+    sparklineVariant: 'line',
+    sparkline: [3, 5, 4, 8, 7, 11, 14],
+    sparklineLabel: 'Completed projects over seven days',
+  },
+  argTypes: {
+    intent: { control: 'select', options: ['function', 'ai', 'success', 'warning', 'destroy'] },
+    sparklineVariant: { control: 'select', options: ['line', 'area', 'bar'] },
+    sparkline: { control: 'object' },
+    format: { control: 'object' },
+  },
+  render: (args) => (
+    <div style={{ width: 'min(100%, 420px)' }}>
+      <MetricCard {...args} />
     </div>
   ),
 };

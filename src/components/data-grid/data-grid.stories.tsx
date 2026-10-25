@@ -108,7 +108,8 @@ function ExpandedEvents({ record }: { record: WorkRecord }) {
 }
 const renderExpandedRow = (row: WorkRecord) => <ExpandedEvents record={row} />;
 const meta = {
-  title: 'Components/Data/DataGrid',
+  id: 'components-data-datagrid',
+  title: 'Components/Data Display/DataGrid',
   component: DataGrid<WorkRecord>,
   tags: ['autodocs'],
   parameters: {

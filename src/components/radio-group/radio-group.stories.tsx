@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
@@ -22,7 +23,8 @@ const options: RadioOption[] = [
   },
 ];
 const meta = {
-  title: 'Components/Forms/RadioGroup',
+  id: 'components-forms-radiogroup',
+  title: 'Components/Inputs & Selection/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
   args: { label: 'Update frequency', options, defaultValue: 'weekly' },
@@ -98,10 +100,48 @@ export const KeyboardSelection: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('radio', { name: 'Weekly digest' }));
-    // Radix moves roving focus on the next task while the arrow key is held.
+    // Base UI moves roving focus on the next task while the arrow key is held.
     await userEvent.keyboard('{ArrowDown>}');
     await waitFor(() => expect(canvas.getByRole('radio', { name: 'Daily digest' })).toBeChecked());
     await expect(canvas.getByRole('radio', { name: 'Daily digest' })).toHaveFocus();
     await userEvent.keyboard('{/ArrowDown}');
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Update frequency',
+    description: 'Choose how often you receive project updates.',
+    options,
+    value: 'weekly',
+    defaultValue: undefined,
+    orientation: 'vertical',
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+    required: false,
+    loop: true,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    description: { control: 'text' },
+    value: { control: 'select', options: ['weekly', 'daily', 'monthly'] },
+    options: { control: 'object' },
+    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+    loop: { control: 'boolean' },
+  },
+  render: function RadioPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return (
+      <RadioGroup
+        {...args}
+        defaultValue={undefined}
+        onValueChange={(value) => updateArgs({ value })}
+      />
+    );
   },
 };

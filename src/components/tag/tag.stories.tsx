@@ -1,8 +1,12 @@
+import type { ComponentProps } from 'react';
+import { useArgs } from 'storybook/preview-api';
+import { Button } from '@/components/button';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Tag, Chip } from './tag';
 export default {
-  title: 'Components/Tags/Tag',
+  id: 'components-tags-tag',
+  title: 'Components/Data Display/Tag',
   component: Tag,
   subcomponents: { Chip },
 } satisfies Meta<typeof Tag>;
@@ -87,4 +91,57 @@ export const Status: StoryObj<typeof Tag> = {
       ))}
     </div>
   ),
+};
+
+type PlaygroundArgs = ComponentProps<typeof Tag> & { visible: boolean };
+export const Playground: StoryObj<PlaygroundArgs> = {
+  args: {
+    children: 'Customer portal',
+    variant: 'static',
+    size: 'md',
+    intent: 'function',
+    count: 24,
+    selected: false,
+    disabled: false,
+    visible: true,
+    removeLabel: 'Remove Customer portal tag',
+  },
+  argTypes: {
+    children: { control: 'text', name: 'Label' },
+    variant: {
+      control: 'select',
+      options: ['static', 'interactive', 'removable', 'counter', 'status'],
+    },
+    size: { control: 'select', options: ['sm', 'md'] },
+    intent: {
+      control: 'select',
+      options: ['default', 'function', 'destroy', 'ai', 'success', 'warning'],
+    },
+    count: { control: { type: 'number', min: 0, step: 1 } },
+    selected: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    visible: { control: 'boolean' },
+    removeLabel: { control: 'text' },
+  },
+  render: function Playground({ visible, ...args }) {
+    const [, updateArgs] = useArgs<PlaygroundArgs>();
+    return (
+      <div className="stack">
+        {visible ? (
+          <Tag
+            {...args}
+            onSelectedChange={(selected) => updateArgs({ selected })}
+            onRemove={() => updateArgs({ visible: false })}
+          />
+        ) : (
+          <>
+            <p role="status">Tag removed.</p>
+            <Button emphasis="ghost" onClick={() => updateArgs({ visible: true })}>
+              Restore tag
+            </Button>
+          </>
+        )}
+      </div>
+    );
+  },
 };

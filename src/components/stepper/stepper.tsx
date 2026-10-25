@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   useEffect,
   useRef,
@@ -73,9 +74,9 @@ export function Stepper({
             <>
               <span className="aegis-stepper-marker" aria-hidden="true">
                 {state === 'complete' ? (
-                  <Check size={16} />
+                  <Check size={componentToken('navigation.icon-md')} />
                 ) : state === 'error' ? (
-                  <CircleAlert size={17} />
+                  <CircleAlert size={componentToken('navigation.icon-navigation')} />
                 ) : (
                   index + 1
                 )}

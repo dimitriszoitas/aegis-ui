@@ -44,6 +44,7 @@ const examples = [
 ] as const satisfies readonly NotificationProps[];
 
 const meta = {
+  id: 'components-feedback-notification',
   title: 'Components/Feedback/Notification',
   component: Notification,
   subcomponents: { NotificationViewport },

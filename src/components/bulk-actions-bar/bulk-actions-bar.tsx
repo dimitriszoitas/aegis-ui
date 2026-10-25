@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useRef, useState, type ComponentProps } from 'react';
 import {
   CheckCheck,
@@ -98,8 +99,8 @@ export function BulkActionsBar({
             <Button
               size="sm"
               emphasis="ghost"
-              leadingIcon={<UserRoundCheck size={15} />}
-              trailingIcon={<ChevronDown size={12} />}
+              leadingIcon={<UserRoundCheck size={componentToken('data-display.icon-inline')} />}
+              trailingIcon={<ChevronDown size={componentToken('data-display.icon-xs')} />}
               disabled={busy}
               loading={pending === 'assign'}
             >
@@ -124,7 +125,7 @@ export function BulkActionsBar({
             {
               id: 'unassign',
               label: 'Remove assignee',
-              icon: <UserRoundMinus size={15} />,
+              icon: <UserRoundMinus size={componentToken('data-display.icon-inline')} />,
               onSelect: () => {
                 void perform('assign', () => onAssign(null));
               },
@@ -137,8 +138,8 @@ export function BulkActionsBar({
             <Button
               size="sm"
               emphasis="ghost"
-              leadingIcon={<CheckCheck size={15} />}
-              trailingIcon={<ChevronDown size={12} />}
+              leadingIcon={<CheckCheck size={componentToken('data-display.icon-inline')} />}
+              trailingIcon={<ChevronDown size={componentToken('data-display.icon-xs')} />}
               disabled={busy}
               loading={pending === 'status'}
             >
@@ -160,7 +161,7 @@ export function BulkActionsBar({
           size="sm"
           emphasis="secondary"
           intent="ai"
-          leadingIcon={<Sparkles size={15} />}
+          leadingIcon={<Sparkles size={componentToken('data-display.icon-inline')} />}
           disabled={busy}
           loading={pending === 'summarize'}
           onClick={() => {
@@ -177,7 +178,7 @@ export function BulkActionsBar({
           disabled={busy}
           onClick={onClear}
         >
-          <X size={15} />
+          <X size={componentToken('data-display.icon-inline')} />
         </IconButton>
       </div>
       {error && (

@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, useMemo, useState, type ComponentProps, type CSSProperties } from 'react';
 import { Button } from '@/components/button';
 import { SearchInput } from '@/components/search-input';
@@ -46,13 +47,15 @@ export interface AwsLogoProps extends Omit<ComponentProps<'span'>, 'children'> {
 /** Original AWS artwork in a square, rounded frame. Official light/dark variants follow the theme. */
 export function AwsLogo({
   name,
-  size = 48,
+  size,
   decorative = false,
   label,
   className,
   style,
   ...props
 }: AwsLogoProps) {
+  const tokens = useComponentTokenNumbers(['brand-catalog-logo-size']);
+  const logoSize = size ?? tokens['brand-catalog-logo-size'];
   const logo = logoById.get(name);
   if (!logo) return null;
   const alt = decorative ? '' : (label ?? logo.name);
@@ -60,13 +63,13 @@ export function AwsLogo({
     <span
       {...props}
       className={cn('aegis-aws-logo', className)}
-      style={{ '--aws-logo-size': `${size}px`, ...style } as CSSProperties}
+      style={{ '--aws-logo-size': `${logoSize}px`, ...style } as CSSProperties}
     >
       <img
         src={getAwsLogoUrl(name)}
         alt={alt}
-        width={size}
-        height={size}
+        width={logoSize}
+        height={logoSize}
         loading="lazy"
         decoding="async"
         className={logo.darkFile ? 'aegis-aws-logo-light' : undefined}
@@ -75,8 +78,8 @@ export function AwsLogo({
         <img
           src={getAwsLogoUrl(name, 'dark')}
           alt={alt}
-          width={size}
-          height={size}
+          width={logoSize}
+          height={logoSize}
           loading="lazy"
           decoding="async"
           className="aegis-aws-logo-dark"
@@ -183,7 +186,11 @@ export function AwsLogoCatalog({
         />
       </div>
       <div className="aegis-aws-catalog-selection">
-        <AwsLogo name={current.id} size={64} decorative />
+        <AwsLogo
+          name={current.id}
+          style={{ '--aws-logo-size': componentToken('brand-preview-logo-size') } as CSSProperties}
+          decorative
+        />
         <div className="aegis-aws-catalog-selected-copy">
           <strong>{current.name}</strong>
           <span>
@@ -220,9 +227,21 @@ export function AwsLogoCatalog({
                 }}
               >
                 {selected === logo.id && (
-                  <Check className="aegis-aws-catalog-check" size={16} aria-hidden="true" />
+                  <Check
+                    className="aegis-aws-catalog-check"
+                    size={componentToken('icon-md')}
+                    aria-hidden="true"
+                  />
                 )}
-                <AwsLogo name={logo.id} size={48} decorative />
+                <AwsLogo
+                  name={logo.id}
+                  style={
+                    {
+                      '--aws-logo-size': componentToken('brand-catalog-logo-size'),
+                    } as CSSProperties
+                  }
+                  decorative
+                />
                 <strong>{logo.name}</strong>
                 <span>{logo.category}</span>
                 <small>{logo.kind}</small>

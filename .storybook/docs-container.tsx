@@ -16,6 +16,8 @@ import {
   type LayoutTheme,
 } from '../src/lib/layout-theme';
 import { useAutoHideScrollbars } from '../src/lib/scrollbars';
+import { useInputFocusModality } from '../src/lib/use-input-focus';
+import './docs-focus.css';
 
 const docsThemeAttribute = 'data-aegis-docs-theme';
 const docsLayoutAttribute = 'data-aegis-docs-layout-theme';
@@ -40,6 +42,7 @@ function layoutTheme(value: unknown): LayoutTheme | undefined {
 }
 function LayoutThemeBoundary({ layout, children }: PropsWithChildren<{ layout: LayoutTheme }>) {
   useAutoHideScrollbars();
+  useInputFocusModality();
   // React layout effects run before play; preview-hook effects run after play.
   useLayoutEffect(() => {
     applyLayoutTheme(layout, { persist: false });
@@ -158,21 +161,23 @@ const docsThemes = {
 /** MDX pages need the same global theme treatment as decorated component stories. */
 export function AegisDocsContainer({ context, children }: PropsWithChildren<DocsContainerProps>) {
   useAutoHideScrollbars();
+  useInputFocusModality();
   const [theme, setTheme] = useState(() => initialTheme(context));
   const [layout, setLayout] = useState(() => initialLayoutTheme(context));
   useEffect(() => {
     const update = ({ globals }: { globals: Record<string, unknown> }) => {
-      if (globals.theme === 'light' || globals.theme === 'dark') setTheme(globals.theme);
+      let nextTheme = globals.theme;
       let nextLayout = layoutTheme(globals.layoutTheme);
       try {
         // Isolated story frames also emit this event. Their default globals must
         // not replace the toolbar choice held by the containing docs preview.
-        nextLayout =
-          layoutTheme(context.getStoryContext(context.storyById()).userGlobals.layoutTheme) ??
-          nextLayout;
+        const userGlobals = context.getStoryContext(context.storyById()).userGlobals;
+        nextTheme = userGlobals.theme ?? nextTheme;
+        nextLayout = layoutTheme(userGlobals.layoutTheme) ?? nextLayout;
       } catch {
-        // Standalone MDX pages have no component story or child story frames.
+        // Unattached MDX pages use the globals broadcast by their own preview.
       }
+      if (nextTheme === 'light' || nextTheme === 'dark') setTheme(nextTheme);
       if (nextLayout) setLayout(nextLayout);
     };
     context.channel.on(GLOBALS_UPDATED, update);

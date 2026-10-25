@@ -21,7 +21,8 @@ const sources = [
 ];
 
 const meta = {
-  title: 'Components/Charts/Mini bar chart',
+  id: 'components-charts-mini-bar-chart',
+  title: 'Components/Data Visualization/Mini bar chart',
   component: MiniBarChart,
   tags: ['autodocs'],
   args: {

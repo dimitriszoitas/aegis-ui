@@ -59,35 +59,66 @@
   --color-success-fg: var(--color-success-bg);
   --color-warning-bg: light-dark(#986000, #eac000);
   --color-warning-fg: var(--color-warning-bg);
-  --color-ai-bg: light-dark(#176f73, #4b9f9c);
-  --color-ai-fg: var(--color-ai-bg);
+  --color-ai-lime-bg: #b9ef54;
+  --color-ai-lime-fg: light-dark(#466b09, #c6f76b);
+  --color-ai-bg: var(--color-ai-lime-bg);
+  --color-ai-fg: var(--color-ai-lime-fg);
+  --color-on-ai: #10181f;
   --color-status-review-fg: light-dark(#7540dc, #b18aff);
-  /* Existing gradient consumers use the pink stop name; Fundamental maps it to teal. */
-  --color-ai-pink-bg: var(--color-ai-bg);
-  --color-ai-pink-fg: var(--color-ai-fg);
-  --color-ai-blue-bg: light-dark(#3f65ac, #6b91c9);
-  --color-ai-blue-fg: var(--color-ai-blue-bg);
+  /* Retain the original stop aliases for existing gradient consumers. */
+  --color-ai-pink-bg: var(--color-ai-blue-bg);
+  --color-ai-pink-fg: var(--color-ai-blue-fg);
+  --color-ai-blue-bg: #79a5ff;
+  --color-ai-blue-fg: light-dark(#2455c4, #8bb5ff);
+  --color-ai-purple-bg: #bf92ff;
+  --color-ai-purple-fg: light-dark(#7335b8, #c6a1ff);
   --color-destroy-soft: color-mix(in srgb, var(--color-destroy-fg) 7%, var(--color-bg-surface));
   --color-success-soft: color-mix(in srgb, var(--color-success-fg) 7%, var(--color-bg-surface));
   --color-warning-soft: color-mix(in srgb, var(--color-warning-fg) 7%, var(--color-bg-surface));
-  --color-ai-soft: color-mix(in srgb, var(--color-ai-fg) 5%, var(--color-bg-surface));
-  --color-ai-pink-soft: var(--color-ai-soft);
-  --color-ai-blue-soft: color-mix(in srgb, var(--color-ai-blue-fg) 5%, var(--color-bg-surface));
+  --color-ai-soft: color-mix(in srgb, var(--color-ai-lime-bg) 14%, var(--color-bg-surface));
+  --color-ai-pink-soft: var(--color-ai-blue-soft);
+  --color-ai-blue-soft: color-mix(in srgb, var(--color-ai-blue-bg) 14%, var(--color-bg-surface));
+  --color-ai-purple-soft: color-mix(
+    in srgb,
+    var(--color-ai-purple-bg) 14%,
+    var(--color-bg-surface)
+  );
   --color-ai-surface: var(--color-bg-surface);
   --color-destroy-border: color-mix(in srgb, var(--color-destroy-fg) 24%, var(--color-bg-surface));
   --color-success-border: color-mix(in srgb, var(--color-success-fg) 24%, var(--color-bg-surface));
   --color-warning-border: color-mix(in srgb, var(--color-warning-fg) 24%, var(--color-bg-surface));
   --color-ai-border: color-mix(in srgb, var(--color-ai-fg) 24%, var(--color-bg-surface));
-  --gradient-ai: linear-gradient(115deg, var(--color-ai-pink-bg), var(--color-ai-blue-bg));
-  --gradient-ai-text: linear-gradient(115deg, var(--color-ai-pink-fg), var(--color-ai-blue-fg));
+  --gradient-ai: linear-gradient(
+    115deg,
+    var(--color-ai-lime-bg) 8%,
+    var(--color-ai-blue-bg) 50%,
+    var(--color-ai-purple-bg) 92%
+  );
+  --gradient-ai-text: linear-gradient(
+    115deg,
+    var(--color-ai-lime-fg),
+    var(--color-ai-blue-fg),
+    var(--color-ai-purple-fg)
+  );
   --gradient-ai-border: var(--gradient-ai-text);
-  --gradient-ai-soft: linear-gradient(115deg, var(--color-ai-pink-soft), var(--color-ai-blue-soft));
+  --gradient-ai-soft: linear-gradient(
+    115deg,
+    var(--color-ai-soft),
+    var(--color-ai-blue-soft),
+    var(--color-ai-purple-soft)
+  );
   --fundamental-ai-hover: linear-gradient(
     115deg,
-    color-mix(in srgb, var(--color-ai-pink-bg) 92%, var(--color-text-primary)),
-    color-mix(in srgb, var(--color-ai-blue-bg) 92%, var(--color-text-primary))
+    color-mix(in srgb, var(--color-ai-lime-bg) 92%, var(--color-on-ai)) 8%,
+    color-mix(in srgb, var(--color-ai-blue-bg) 92%, var(--color-on-ai)) 50%,
+    color-mix(in srgb, var(--color-ai-purple-bg) 92%, var(--color-on-ai)) 92%
   );
-  --gradient-ai-surface: linear-gradient(var(--color-ai-surface), var(--color-ai-surface));
+  --gradient-ai-surface: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--color-ai-lime-bg) 9%, var(--color-ai-surface)),
+    color-mix(in srgb, var(--color-ai-blue-bg) 9%, var(--color-ai-surface)),
+    color-mix(in srgb, var(--color-ai-purple-bg) 9%, var(--color-ai-surface))
+  );
   --badge-border-strength: 45%;
   --color-severity-critical-fg: light-dark(#d62b2b, #ff4d4f);
   --color-severity-high-fg: light-dark(#c54f10, #ff8a3d);

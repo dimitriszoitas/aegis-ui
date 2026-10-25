@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Spinner } from './spinner';
 const meta = {
+  id: 'components-feedback-spinner',
   title: 'Components/Feedback/Spinner',
   component: Spinner,
   tags: ['autodocs'],
@@ -35,4 +36,9 @@ export const AiIntent: Story = {
       <span>Preparing an project summary…</span>
     </div>
   ),
+};
+
+export const Playground: Story = {
+  args: { size: 'md', label: 'Loading records' },
+  argTypes: { size: { control: 'select', options: ['sm', 'md', 'lg'] } },
 };

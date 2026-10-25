@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatePicker } from './date-picker';
 import { Field } from '@/components/field';
 export default {
-  title: 'Components/Forms/DatePicker',
+  id: 'components-forms-datepicker',
+  title: 'Components/Inputs & Selection/DatePicker',
   component: DatePicker,
   parameters: { docs: { story: { inline: false, height: 420 } } },
 } satisfies Meta<typeof DatePicker>;

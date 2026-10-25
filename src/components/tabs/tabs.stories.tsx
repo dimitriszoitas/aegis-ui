@@ -27,6 +27,7 @@ const items = [
   },
 ];
 const meta = {
+  id: 'components-navigation-tabs',
   title: 'Components/Navigation/Tabs',
   component: Tabs,
   tags: ['autodocs'],

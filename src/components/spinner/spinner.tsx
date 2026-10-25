@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+import { componentToken } from '@/lib/component-design-tokens';
 import { cn } from '@/lib/utils';
 import './spinner.css';
 
@@ -18,11 +19,18 @@ export function Spinner({ size = 'md', label, className, ...props }: SpinnerProp
       {...props}
     >
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity=".2" />
+        <circle
+          cx="12"
+          cy="12"
+          r="9"
+          stroke="currentColor"
+          strokeWidth={componentToken('feedback.icon-stroke-strong')}
+          opacity={componentToken('spinner-track-opacity')}
+        />
         <path
           d="M12 3a9 9 0 0 1 9 9"
           stroke="currentColor"
-          strokeWidth="2.5"
+          strokeWidth={componentToken('feedback.icon-stroke-strong')}
           strokeLinecap="round"
         />
       </svg>

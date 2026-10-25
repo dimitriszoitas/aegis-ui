@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   useEffect,
   useId,
@@ -243,16 +244,20 @@ export function TreeView({
                   toggleExpanded(node);
                 }}
               >
-                <ChevronRight size={14} aria-hidden="true" data-expanded={isExpanded} />
+                <ChevronRight
+                  size={componentToken('input.icon-sm')}
+                  aria-hidden="true"
+                  data-expanded={isExpanded}
+                />
               </button>
             ) : (
               <span className="aegis-tree-expand-spacer" />
             )}
             <span className="aegis-tree-checkbox" data-state={checkState} aria-hidden="true">
               {checkState === true ? (
-                <Check size={13} />
+                <Check size={componentToken('input.icon-compact')} />
               ) : checkState === 'indeterminate' ? (
-                <Minus size={13} />
+                <Minus size={componentToken('input.icon-compact')} />
               ) : null}
             </span>
             {node.icon && (

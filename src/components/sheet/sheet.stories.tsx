@@ -31,7 +31,8 @@ function Workspace(args: SheetProps) {
 }
 
 const meta = {
-  title: 'Components/Overlays/Sheet',
+  id: 'components-overlays-sheet',
+  title: 'Components/Surfaces/Sheet',
   component: Sheet,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

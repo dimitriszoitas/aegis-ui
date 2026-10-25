@@ -27,7 +27,8 @@ const items: ContextMenuEntry[] = [
   { id: 'delete', label: 'Delete project note', icon: <Trash2 />, intent: 'destroy' },
 ];
 const meta = {
-  title: 'Components/Lists/ContextMenu',
+  id: 'components-lists-contextmenu',
+  title: 'Components/Triggers/ContextMenu',
   component: ContextMenu,
   parameters: { docs: { story: { inline: false, height: 460 } } },
   tags: ['autodocs'],

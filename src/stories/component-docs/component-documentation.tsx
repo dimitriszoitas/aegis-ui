@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react';
+import { Tabs } from '@base-ui/react/tabs';
+import { SegmentedControl } from '@/components/segmented-control';
 import { loadComponentMetadata } from './generated';
+import { AnatomyDocumentation } from './anatomy/anatomy-documentation';
 import { authoredGuidance } from './authored-guidance';
-import { inspectTokens, tokenModes } from './inspect-tokens';
-import type { ComponentMetadata, ComputedBinding, DocumentationSection } from './types';
+import { TokenDocumentation } from './token-documentation';
+import { PlaygroundControls } from './playground-controls';
+import { playgroundControls } from './playground-controls-model';
+import { useSpecimenArgs } from './use-specimen-args';
+import type { SpecimenPresentation } from './specimen-args-protocol';
+import type { ComponentMetadata, DocumentationSection } from './types';
 import './component-documentation.css';
 
 const sections: { id: DocumentationSection; label: string }[] = [
@@ -19,7 +26,7 @@ const sections: { id: DocumentationSection; label: string }[] = [
   { id: 'context', label: 'Use cases/In Context' },
 ];
 function storyUrl(id: string) {
-  return `?path=/story/${id}`;
+  return `./?path=/story/${id}`;
 }
 function docsId(title: string) {
   return (
@@ -29,8 +36,75 @@ function docsId(title: string) {
       .replace(/^-|-$/g, '') + '--docs'
   );
 }
+type HubTab = 'overview' | 'guidelines' | 'tokens' | 'examples';
+type GuidelineSection = Exclude<DocumentationSection, 'overview' | 'tokens'>;
+const hubTabs: { id: HubTab; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'guidelines', label: 'Component Guidelines' },
+  { id: 'tokens', label: 'Tokens Used' },
+  { id: 'examples', label: 'Examples' },
+];
+const guidelineSections = sections.filter(
+  (item): item is { id: GuidelineSection; label: string } =>
+    item.id !== 'overview' && item.id !== 'tokens',
+);
 function sectionUrl(meta: ComponentMetadata, section: DocumentationSection) {
-  return `?path=/docs/${docsId(`${meta.title}/${section === 'tokens' ? 'Tokens Used' : `Component Guidelines/${sections.find((item) => item.id === section)?.label}`}`)}`;
+  const params = new URLSearchParams({
+    path: `/docs/${docsId(`${meta.id === 'foundations-icons' ? 'Foundations/Icons' : meta.title}/Overview`)}`,
+  });
+  if (section !== 'overview') params.set('docsTab', section === 'tokens' ? 'tokens' : 'guidelines');
+  if (section !== 'overview' && section !== 'tokens') params.set('docsSection', section);
+  return `./?${params}`;
+}
+function navigationWindow() {
+  try {
+    if (window.top?.location.origin === window.location.origin) return window.top;
+  } catch {
+    // A separately hosted preview can still keep its own document state.
+  }
+  return window;
+}
+function readHubState(section: DocumentationSection, meta: ComponentMetadata) {
+  const params = new URLSearchParams(navigationWindow().location.search);
+  const requestedTab = params.get('docsTab');
+  const tab = hubTabs.some((item) => item.id === requestedTab)
+    ? (requestedTab as HubTab)
+    : section === 'tokens'
+      ? 'tokens'
+      : section === 'overview'
+        ? 'overview'
+        : 'guidelines';
+  const requestedSection = params.get('docsSection');
+  const anchor = guidelineSections.some((item) => item.id === requestedSection)
+    ? (requestedSection as GuidelineSection)
+    : section !== 'overview' && section !== 'tokens'
+      ? section
+      : 'anatomy';
+  const requestedExample = params.get('docsExample');
+  const example = meta.stories.some((story) => story.id === requestedExample)
+    ? requestedExample!
+    : (preferredExample(meta)?.id ?? '');
+  return { tab, anchor, example };
+}
+function preferredExample(meta: ComponentMetadata) {
+  return (
+    meta.stories.find((story) => story.exportName === 'Playground') ??
+    meta.stories.find((story) => story.supportsArgs) ??
+    meta.stories[0]
+  );
+}
+function updateHubUrl(tab: HubTab, anchor: GuidelineSection, example: string) {
+  const target = navigationWindow();
+  const url = new URL(target.location.href);
+  url.searchParams.set('docsTab', tab);
+  if (tab === 'guidelines') url.searchParams.set('docsSection', anchor);
+  else url.searchParams.delete('docsSection');
+  if (example) url.searchParams.set('docsExample', example);
+  else url.searchParams.delete('docsExample');
+  target.history.replaceState(target.history.state, '', url);
+}
+function isPlainClick(event: MouseEvent<HTMLAnchorElement>) {
+  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 }
 function Table({ headers, children }: { headers: string[]; children: ReactNode }) {
   return (
@@ -59,38 +133,69 @@ function Specimen({
   meta,
   onInspect,
   onLoading,
+  story: requestedStory,
+  onStoryChange,
+  showSelector = true,
+  playground = false,
 }: {
   meta: ComponentMetadata;
+  story: string;
+  onStoryChange: (story: string) => void;
+  showSelector?: boolean;
+  playground?: boolean;
   onInspect?: (document: Document) => void;
   onLoading?: () => void;
 }) {
-  const [story, setStory] = useState(meta.stories[0]?.id ?? '');
+  const interactiveStories = meta.stories.filter(
+    (item) => item.supportsArgs || item.exportName === 'Playground',
+  );
+  const story =
+    playground && !interactiveStories.some((item) => item.id === requestedStory)
+      ? (preferredExample(meta)?.id ?? requestedStory)
+      : requestedStory;
+  const exampleOptions =
+    playground && interactiveStories.length ? interactiveStories : meta.stories;
   const [ready, setReady] = useState(false);
   const [error, setError] = useState('');
   const frame = useRef<HTMLIFrameElement>(null);
+  const specimen = useSpecimenArgs(frame, story, playground);
   const callback = useRef(onInspect);
   callback.current = onInspect;
   const loadingCallback = useRef(onLoading);
   loadingCallback.current = onLoading;
-  const [presentation, setPresentation] = useState(() => ({
+  const [presentation, setPresentation] = useState<SpecimenPresentation>(() => ({
     theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-    layout: document.documentElement.getAttribute('data-layout-theme') ?? 'fundamental',
+    layoutTheme:
+      document.documentElement.getAttribute('data-layout-theme') === 'fundamental-floating'
+        ? 'fundamental-floating'
+        : 'fundamental',
   }));
+  const initialPresentation = useRef(presentation);
   useEffect(() => {
     const root = document.documentElement;
     const observer = new MutationObserver(() => {
-      const next = {
+      const next: SpecimenPresentation = {
         theme: root.classList.contains('dark') ? 'dark' : 'light',
-        layout: root.getAttribute('data-layout-theme') ?? 'fundamental',
+        layoutTheme:
+          root.getAttribute('data-layout-theme') === 'fundamental-floating'
+            ? 'fundamental-floating'
+            : 'fundamental',
       };
       setPresentation((previous) =>
-        previous.theme === next.theme && previous.layout === next.layout ? previous : next,
+        previous.theme === next.theme && previous.layoutTheme === next.layoutTheme
+          ? previous
+          : next,
       );
     });
     observer.observe(root, { attributes: true, attributeFilter: ['class', 'data-layout-theme'] });
     return () => observer.disconnect();
   }, []);
-  const source = `iframe.html?id=${story}&viewMode=story&globals=theme:${presentation.theme};layoutTheme:${presentation.layout}`;
+  const { updatePresentation } = specimen;
+  useEffect(() => {
+    if (playground) updatePresentation(presentation);
+  }, [playground, presentation, story, updatePresentation]);
+  const framePresentation = playground ? initialPresentation.current : presentation;
+  const source = `iframe.html?id=${story}&viewMode=story&globals=theme:${framePresentation.theme};layoutTheme:${framePresentation.layoutTheme}${playground ? '&aegisPlayground=1&embed=true' : ''}`;
   useEffect(() => {
     let active = true;
     setReady(false);
@@ -102,8 +207,6 @@ function Specimen({
       if (!doc) return;
       if (
         new URLSearchParams(doc.defaultView?.location.search).get('id') === story &&
-        new URLSearchParams(doc.defaultView?.location.search).get('globals') ===
-          `theme:${presentation.theme};layoutTheme:${presentation.layout}` &&
         (doc.querySelector('#storybook-root')?.children.length ||
           doc.querySelector('[role="dialog"], [role="menu"], [role="listbox"]') ||
           (
@@ -131,29 +234,51 @@ function Specimen({
       active = false;
       clearInterval(timer);
     };
-  }, [source, story, presentation.layout, presentation.theme]);
+  }, [source, story]);
   if (!story) return <p>No standalone specimen is registered for this family.</p>;
   return (
-    <section className="component-docs-specimen" aria-label={`${meta.name} live example`}>
+    <section
+      className="component-docs-specimen"
+      data-playground={playground || undefined}
+      aria-label={`${meta.name} live example`}
+    >
       <div className="component-docs-specimen-toolbar">
-        <label>
-          Example{' '}
-          <select
-            aria-label="Component example"
+        {showSelector && exampleOptions.length <= 4 ? (
+          <SegmentedControl
+            label="Component example"
+            size="sm"
+            wrap
+            options={exampleOptions.map((item) => ({ value: item.id, label: item.name }))}
             value={story}
-            onChange={(event) => {
+            onValueChange={(value) => {
               setReady(false);
-              setStory(event.target.value);
+              onStoryChange(value);
             }}
-          >
-            {meta.stories.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <a href={storyUrl(story)}>Open canvas</a>
+          />
+        ) : showSelector ? (
+          <label>
+            Example{' '}
+            <select
+              aria-label="Component example"
+              value={story}
+              onChange={(event) => {
+                setReady(false);
+                onStoryChange(event.target.value);
+              }}
+            >
+              {exampleOptions.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : (
+          <span>Live example</span>
+        )}
+        <a href={storyUrl(story)} target="_top">
+          Open canvas
+        </a>
         {onInspect && (
           <button
             type="button"
@@ -167,165 +292,38 @@ function Specimen({
           </button>
         )}
       </div>
-      <iframe
-        ref={frame}
-        title={`${meta.name} example`}
-        src={source}
-        loading="eager"
-        className="component-docs-frame"
-      />
-      {error && <p role="status">{error}</p>}
-    </section>
-  );
-}
-function TokenDocumentation({ meta }: { meta: ComponentMetadata }) {
-  const [bindings, setBindings] = useState<ComputedBinding[]>([]),
-    [query, setQuery] = useState(''),
-    [expanded, setExpanded] = useState(false),
-    [mode, setMode] = useState<string>(tokenModes[0]);
-  const [message, setMessage] = useState('Loading the live specimen to resolve its properties…');
-  const read = (document: Document) => {
-    try {
-      const result = inspectTokens(document);
-      setBindings(result);
-      setMessage(
-        result.length
-          ? `${result.length} matched token bindings measured across four theme and mode combinations.`
-          : 'This specimen currently has no visible elements with token-bound declarations. Open its control or choose another example, then refresh.',
-      );
-    } catch {
-      setMessage(
-        'Live inspection is unavailable for this specimen. Its complete source declaration inventory is below.',
-      );
-    }
-  };
-  const matched = bindings.filter((binding) =>
-    `${binding.element} ${binding.property} ${binding.tokens.join(' ')}`
-      .toLowerCase()
-      .includes(query.toLowerCase()),
-  );
-  const declared = meta.css.filter((row) =>
-    `${row.selector} ${row.property} ${row.value} ${row.file}`
-      .toLowerCase()
-      .includes(query.toLowerCase()),
-  );
-  const tokenNames = [...new Set(meta.css.flatMap((row) => row.tokens))];
-  return (
-    <>
-      <p>
-        Inspect every matched token binding in the selected example, including nested components.
-        Effective values come from the browser after the CSS cascade. The declaration inventory also
-        covers variants and conditions that are not active in the preview.
-      </p>
-      <Specimen
-        meta={meta}
-        onInspect={read}
-        onLoading={() => {
-          setBindings([]);
-          setMessage('Loading the live specimen to resolve its properties…');
-        }}
-      />
-      <div className="component-docs-controls">
-        <label>
-          Find a property or token
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setExpanded(false);
-            }}
-            placeholder="background, radius, --color…"
+      <div className={playground ? 'component-docs-playground-layout' : undefined}>
+        <div className="component-docs-specimen-stage">
+          <iframe
+            ref={frame}
+            title={`${meta.name} example`}
+            src={source}
+            loading="eager"
+            className="component-docs-frame"
+            data-ready={ready || undefined}
+            tabIndex={ready ? 0 : -1}
+            aria-hidden={!ready || undefined}
           />
-        </label>
-        <label>
-          Resolved values
-          <select value={mode} onChange={(event) => setMode(event.target.value)}>
-            {tokenModes.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-        </label>
+          {!ready && (
+            <p className="component-docs-specimen-loading" role="status">
+              {error || 'Loading example…'}
+            </p>
+          )}
+        </div>
+        {playground && (
+          <PlaygroundControls
+            key={story}
+            controls={playgroundControls(meta, specimen.argTypes, specimen.args)}
+            args={specimen.args}
+            onArgsChange={specimen.updateArgs}
+            onReset={() => specimen.resetArgs()}
+            loading={specimen.status === 'loading'}
+            disabled={specimen.status !== 'ready'}
+            error={specimen.error}
+          />
+        )}
       </div>
-      <p className="component-docs-note" role="status">
-        {message}
-      </p>
-      <h2>Live resolved properties</h2>
-      <p className="component-docs-note">
-        Multiple declarations can match one property. The effective value shows the final computed
-        result, including overrides. Open a menu or dialog in the preview and refresh to inspect its
-        surface. CSS custom properties can retain functions; the corresponding regular property
-        shows the resolved color, length, or other value.
-      </p>
-      <Table headers={['Element / property', 'Token binding', 'Raw effective value']}>
-        {(expanded ? matched : matched.slice(0, 80)).map((row) => (
-          <tr key={row.id}>
-            <th scope="row">
-              <code>{row.property}</code>
-              <small>{row.element}</small>
-              <details>
-                <summary>Matching selector</summary>
-                <code>{row.selector}</code>
-              </details>
-            </th>
-            <td>
-              <code>{row.declaration}</code>
-              {row.tokens.map((token) => (
-                <small key={token}>
-                  <code>{token}</code> ={' '}
-                  {row.tokenValues[mode]?.[token] ?? 'Not matched in this mode'}
-                </small>
-              ))}
-            </td>
-            <td>
-              <code>{row.values[mode] ?? 'Not matched in this mode'}</code>
-              <details>
-                <summary>Compare modes</summary>
-                {tokenModes.map((item) => (
-                  <small key={item}>
-                    {item}: <code>{row.values[item] ?? 'Not matched'}</code>
-                  </small>
-                ))}
-              </details>
-            </td>
-          </tr>
-        ))}
-      </Table>
-      {matched.length > 80 && (
-        <button className="component-docs-text-action" onClick={() => setExpanded(!expanded)}>
-          {expanded ? 'Show fewer' : `Show all ${matched.length} bindings`}
-        </button>
-      )}
-      <h2>Complete declaration inventory</h2>
-      <p>
-        {tokenNames.length} token names across {meta.css.length} declarations. Each row retains its
-        source file, selector, and conditions. Literal values are shown explicitly so untokenized
-        geometry is visible.
-      </p>
-      <details>
-        <summary>Browse all declarations ({declared.length})</summary>
-        <Table headers={['Property', 'Declared value / tokens', 'Selector / source']}>
-          {declared.map((row, index) => (
-            <tr key={index}>
-              <th scope="row">
-                <code>{row.property}</code>
-              </th>
-              <td>
-                <code>{row.value}</code>
-                <small>
-                  {row.tokens.length ? row.tokens.join(', ') : 'Literal value; no token binding'}
-                </small>
-              </td>
-              <td>
-                <code>{row.selector}</code>
-                <small>{row.conditions.join(' · ')}</small>
-                <small>{row.file}</small>
-              </td>
-            </tr>
-          ))}
-        </Table>
-      </details>
-    </>
+    </section>
   );
 }
 const enumProps = (meta: ComponentMetadata) =>
@@ -373,7 +371,19 @@ function VariantTable({
     </p>
   );
 }
-function Guidelines({ meta, section }: { meta: ComponentMetadata; section: DocumentationSection }) {
+function Guidelines({
+  meta,
+  section,
+  example,
+  onExampleChange,
+  onNavigate,
+}: {
+  meta: ComponentMetadata;
+  section: DocumentationSection;
+  example: string;
+  onExampleChange: (story: string) => void;
+  onNavigate: (tab: HubTab, anchor?: GuidelineSection) => void;
+}) {
   const guidance = authoredGuidance[meta.name] ?? authoredGuidance[meta.title];
   const notes = (items?: string[]) =>
     items?.length ? (
@@ -403,7 +413,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
           <p className="component-docs-lead">
             {guidance?.overview || meta.purpose || meta.description}
           </p>
-          <Specimen meta={meta} />
+          <Specimen meta={meta} story={example} onStoryChange={onExampleChange} playground />
           <h2>When to use it</h2>
           {notes(guidance?.usage)}
           <p>
@@ -419,44 +429,35 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
           <h2>Explore the family</h2>
           <div className="component-docs-link-grid">
             {sections.slice(1).map((item) => (
-              <a key={item.id} href={sectionUrl(meta, item.id)}>
+              <a
+                key={item.id}
+                href={sectionUrl(meta, item.id)}
+                target="_top"
+                onClick={(event) => {
+                  if (!isPlainClick(event)) return;
+                  event.preventDefault();
+                  onNavigate('guidelines', item.id as GuidelineSection);
+                }}
+              >
                 {item.label}
               </a>
             ))}
-            <a href={sectionUrl(meta, 'tokens')}>Tokens Used</a>
+            <a
+              href={sectionUrl(meta, 'tokens')}
+              target="_top"
+              onClick={(event) => {
+                if (!isPlainClick(event)) return;
+                event.preventDefault();
+                onNavigate('tokens');
+              }}
+            >
+              Tokens Used
+            </a>
           </div>
         </>
       );
     case 'anatomy':
-      return (
-        <>
-          <p>
-            The numbered parts describe the component’s content hierarchy. Match each part to the
-            live specimen, then inspect its implementation hooks below.
-          </p>
-          <Specimen meta={meta} />
-          <ol className="component-docs-anatomy">
-            {(meta.anatomy.length ? meta.anatomy : (meta.exportNames ?? [meta.name])).map(
-              (part, index) => (
-                <li key={`${part}-${index}`}>
-                  <span aria-hidden="true">{index + 1}</span>
-                  <div>{part}</div>
-                </li>
-              ),
-            )}
-          </ol>
-          <h2>Implementation hooks</h2>
-          <p>
-            These classes come from the family source. They identify structure and state rather than
-            public replacement APIs.
-          </p>
-          <div className="component-docs-code-tags">
-            {meta.cssClasses?.map((name) => (
-              <code key={name}>{name}</code>
-            ))}
-          </div>
-        </>
-      );
+      return <AnatomyDocumentation meta={meta} />;
     case 'types':
       return (
         <>
@@ -481,7 +482,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
               </tr>
             ))}
           </Table>
-          <h2>Related building blocks</h2>
+          <h3>Related building blocks</h3>
           <p>
             {meta.relatedComponents?.join(', ') ||
               'No nested design-system component import is declared in this family.'}
@@ -496,7 +497,6 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
             from the public type definitions and curated component catalogue.
           </p>
           <VariantTable meta={meta} />
-          <Specimen meta={meta} />
         </>
       );
     case 'intent':
@@ -512,7 +512,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
             filter={(name) => /intent|emphasis|tone|variant|color/i.test(name)}
           />
           {notes(guidance?.intent)}
-          <h2>Composed controls</h2>
+          <h3>Composed controls</h3>
           <p>
             {meta.relatedComponents?.length
               ? `When composing ${meta.relatedComponents.join(', ')}, configure each child through its own properties. The parent does not add an undocumented intent or emphasis.`
@@ -527,7 +527,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
             State is driven by interaction, controlled properties, and data. The inventory below
             preserves the selectors used by the implementation.
           </p>
-          <h2>State properties</h2>
+          <h3>State properties</h3>
           <Table headers={['Property', 'Type', 'Meaning / default']}>
             {uniqueProps
               .filter((prop) =>
@@ -553,7 +553,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
                 </tr>
               ))}
           </Table>
-          <h2>Styled states</h2>
+          <h3>Styled states</h3>
           {sourceStates.length ? (
             <ul
               className="component-docs-selector-list"
@@ -572,7 +572,6 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
               own states.
             </p>
           )}
-          <Specimen meta={meta} />
         </>
       );
     case 'sizes': {
@@ -613,7 +612,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
         <>
           <p className="component-docs-lead">{meta.usage || meta.description}</p>
           {notes(guidance?.usage)}
-          <h2>Content contract</h2>
+          <h3>Content contract</h3>
           <Table headers={['Content property', 'Purpose', 'Value shape']}>
             {uniqueProps
               .filter((prop) =>
@@ -634,7 +633,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
                 </tr>
               ))}
           </Table>
-          <h2>Writing and layout</h2>
+          <h3>Writing and layout</h3>
           <ul>
             <li>
               Use familiar business terms and concrete labels. Match related labels across the page.
@@ -649,7 +648,6 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
               view.
             </li>
           </ul>
-          <Specimen meta={meta} />
         </>
       );
     case 'accessibility':
@@ -693,7 +691,7 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
               </td>
             </tr>
           </Table>
-          <h2>Integration checks</h2>
+          <h3>Integration checks</h3>
           <ul>
             <li>Provide a visible or programmatic name for every interactive instance.</li>
             <li>
@@ -708,7 +706,6 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
             </li>
             <li>Check both modes, reduced motion, long text, and a narrow viewport.</li>
           </ul>
-          <Specimen meta={meta} />
         </>
       );
     case 'api':
@@ -721,21 +718,24 @@ function Guidelines({ meta, section }: { meta: ComponentMetadata; section: Docum
             These examples are registered for this family. Use the canvas link to explore the full
             interaction, controls, and theme modes.
           </p>
-          <Specimen meta={meta} />
           <Table headers={['Example', 'Open']}>
             {meta.stories.map((story) => (
               <tr key={story.id}>
                 <th scope="row">{story.name}</th>
                 <td>
-                  <a href={storyUrl(story.id)}>Open {story.name}</a>
+                  <a href={storyUrl(story.id)} target="_top">
+                    Open {story.name}
+                  </a>
                 </td>
               </tr>
             ))}
           </Table>
-          <h2>In the application</h2>
+          <h3>In the application</h3>
           <p>
-            <a href="?path=/story/console-application-demo--demo">Open Application Demo</a> to
-            explore the shared visual language in dashboards, data grids, records, profiles, and
+            <a href="./?path=/story/console-application-demo--demo" target="_top">
+              Open Application Demo
+            </a>{' '}
+            to explore the shared visual language in dashboards, data grids, records, profiles, and
             workspace settings.
           </p>
         </>
@@ -800,7 +800,7 @@ function ApiTable({ meta }: { meta: ComponentMetadata }) {
           </tr>
         ))}
       </Table>
-      <h2>Source files</h2>
+      <h3>Source files</h3>
       <ul>
         {meta.sourceFiles.map((file) => (
           <li key={file}>
@@ -837,25 +837,173 @@ export function ComponentDocumentation({
   }, [componentId]);
   if (error) return <p role="alert">{error}</p>;
   if (!meta) return <p role="status">Loading component documentation…</p>;
-  const name =
-    section === 'tokens' ? 'Tokens Used' : sections.find((item) => item.id === section)?.label;
+  return <ComponentHub key={componentId} meta={meta} initialSection={section} />;
+}
+
+function ComponentHub({
+  meta,
+  initialSection,
+}: {
+  meta: ComponentMetadata;
+  initialSection: DocumentationSection;
+}) {
+  const [state, setState] = useState(() => readHubState(initialSection, meta));
+  const guidelineContent = useRef<HTMLDivElement>(null);
+  const pendingAnchor = useRef<GuidelineSection | null>(
+    state.tab === 'guidelines' ? state.anchor : null,
+  );
+  const focusAnchor = useRef(false);
+  useEffect(() => {
+    const target = navigationWindow();
+    const restore = () => {
+      const next = readHubState(initialSection, meta);
+      pendingAnchor.current = next.tab === 'guidelines' ? next.anchor : null;
+      setState(next);
+    };
+    target.addEventListener('popstate', restore);
+    return () => target.removeEventListener('popstate', restore);
+  }, [meta, initialSection]);
+  useEffect(() => {
+    if (state.tab !== 'guidelines' || !pendingAnchor.current) return;
+    const target = guidelineContent.current?.querySelector<HTMLElement>(
+      `#guideline-${pendingAnchor.current}`,
+    );
+    if (!target) return;
+    const frame = requestAnimationFrame(() => {
+      target.scrollIntoView({ block: 'start' });
+      if (focusAnchor.current)
+        target.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+      pendingAnchor.current = null;
+      focusAnchor.current = false;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [state.tab, state.anchor]);
+  useEffect(() => {
+    if (state.tab !== 'guidelines' || !guidelineContent.current) return;
+    const nodes = [
+      ...guidelineContent.current.querySelectorAll<HTMLElement>('[data-guideline-section]'),
+    ];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const next = visible[0]?.target.getAttribute('data-guideline-section') as
+          GuidelineSection | undefined;
+        if (next && !pendingAnchor.current)
+          setState((current) => (current.anchor === next ? current : { ...current, anchor: next }));
+      },
+      { rootMargin: '-10% 0px -65% 0px' },
+    );
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [state.tab]);
+  const navigate = (tab: HubTab, anchor?: GuidelineSection) => {
+    const nextAnchor = anchor ?? state.anchor;
+    pendingAnchor.current = tab === 'guidelines' && anchor ? anchor : null;
+    focusAnchor.current = !!anchor;
+    setState((current) => ({ ...current, tab, anchor: nextAnchor }));
+    updateHubUrl(tab, nextAnchor, state.example);
+    // A repeated anchor still needs to move focus and scroll to the same section.
+    if (tab === state.tab && nextAnchor === state.anchor && anchor) {
+      const target = guidelineContent.current?.querySelector<HTMLElement>(`#guideline-${anchor}`);
+      target?.scrollIntoView({ block: 'start' });
+      target?.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+      pendingAnchor.current = null;
+      focusAnchor.current = false;
+    }
+  };
+  const changeExample = (example: string) => {
+    setState((current) => ({ ...current, example }));
+    updateHubUrl(state.tab, state.anchor, example);
+  };
+  const guidanceProps = {
+    meta,
+    example: state.example,
+    onExampleChange: changeExample,
+    onNavigate: navigate,
+  };
   return (
-    <article className="component-docs">
+    <article className="component-docs" data-component-id={meta.id}>
       <header className="component-docs-heading">
-        <p>
-          {meta.category} / {meta.name}
-        </p>
-        <h1>{name}</h1>
+        <p>{meta.category.replace(/^Components\//, '').replace(/^Patterns\//, '')}</p>
+        <h1>{meta.name}</h1>
+        <p className="component-docs-description">{meta.description}</p>
         <div className="component-docs-page-links">
-          <a href={sectionUrl(meta, 'overview')}>Component Guidelines</a>
-          <a href={sectionUrl(meta, 'tokens')}>Tokens Used</a>
+          <a href="./?path=/docs/foundations-component-directory--docs" target="_top">
+            Directory
+          </a>
+          <a href={`ai/components/${meta.id}.json`} target="_blank" rel="noreferrer">
+            AI reference
+          </a>
         </div>
       </header>
-      {section === 'tokens' ? (
-        <TokenDocumentation key={componentId} meta={meta} />
-      ) : (
-        <Guidelines key={`${componentId}-${section}`} meta={meta} section={section} />
-      )}
+      <Tabs.Root
+        value={state.tab}
+        onValueChange={(value) => {
+          if (hubTabs.some((tab) => tab.id === value)) navigate(value as HubTab);
+        }}
+      >
+        <Tabs.List className="component-docs-tabs" aria-label={`${meta.name} documentation`}>
+          {hubTabs.map((tab) => (
+            <Tabs.Tab className="component-docs-tab" key={tab.id} value={tab.id}>
+              {tab.label}
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
+        <Tabs.Panel value="overview" className="component-docs-panel">
+          <Guidelines {...guidanceProps} section="overview" />
+        </Tabs.Panel>
+        <Tabs.Panel value="guidelines" className="component-docs-panel">
+          <div className="component-docs-guidelines">
+            <nav className="component-docs-guideline-nav" aria-label="Component guideline sections">
+              <p>On this page</p>
+              {guidelineSections.map((item) => (
+                <a
+                  key={item.id}
+                  href={sectionUrl(meta, item.id)}
+                  target="_top"
+                  aria-current={state.anchor === item.id ? 'location' : undefined}
+                  onClick={(event) => {
+                    if (!isPlainClick(event)) return;
+                    event.preventDefault();
+                    navigate('guidelines', item.id);
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            <div ref={guidelineContent} className="component-docs-guideline-content">
+              {guidelineSections.map((item) => (
+                <section
+                  key={item.id}
+                  id={`guideline-${item.id}`}
+                  data-guideline-section={item.id}
+                  className="component-docs-guideline-section"
+                  aria-labelledby={`guideline-heading-${item.id}`}
+                >
+                  <h2 id={`guideline-heading-${item.id}`} tabIndex={-1}>
+                    {item.label}
+                  </h2>
+                  <Guidelines {...guidanceProps} section={item.id} />
+                </section>
+              ))}
+            </div>
+          </div>
+        </Tabs.Panel>
+        <Tabs.Panel value="tokens" className="component-docs-panel">
+          <TokenDocumentation meta={meta} />
+        </Tabs.Panel>
+        <Tabs.Panel value="examples" className="component-docs-panel">
+          <p>
+            Explore {meta.stories.length}{' '}
+            {meta.stories.length === 1 ? 'working example' : 'working examples'}. Select a specimen
+            to try its behavior, or open the full canvas.
+          </p>
+          <Specimen meta={meta} story={state.example} onStoryChange={changeExample} />
+        </Tabs.Panel>
+      </Tabs.Root>
     </article>
   );
 }

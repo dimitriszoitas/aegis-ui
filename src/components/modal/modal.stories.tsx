@@ -6,14 +6,15 @@ import { TextInput } from '../text-input';
 import { Modal, Dialog, ModalClose, ConfirmDialog } from './modal';
 
 const meta = {
-  title: 'Components/Overlays/Modal',
+  id: 'components-overlays-modal',
+  title: 'Components/Surfaces/Modal',
   component: Modal,
   subcomponents: { Dialog, ConfirmDialog, ModalClose },
   parameters: {
     docs: {
       description: {
         component:
-          'Modal has three width presets: `small` (400px), `regular` (560px, default), and `large` (800px), clamped to the viewport. `showHeader={false}` hides the visual header while preserving its accessible title. Header and footer have divider lines and remain outside the scrollable body.\n\n`ModalClose` closes its nearest parent modal and inherits native button props from Radix. It must be rendered inside that parent.\n\n| ModalClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
+          'Modal has three width presets: `small` (400px), `regular` (560px, default), and `large` (800px), clamped to the viewport. `showHeader={false}` hides the visual header while preserving its accessible title. Header and footer have divider lines and remain outside the scrollable body.\n\n`ModalClose` closes its nearest parent modal and inherits native button props from Base UI. It must be rendered inside that parent.\n\n| ModalClose prop | Type | Behavior |\n| --- | --- | --- |\n| asChild | `boolean` | Uses its single child as the close control instead of adding a button |\n| children | `ReactNode` | Button content or the single child when asChild is enabled |\n| disabled | `boolean` | Disables the close control |\n| onClick | `MouseEventHandler<HTMLButtonElement>` | Runs alongside the close behavior |\n| className / style | `string` / `CSSProperties` | Native presentation props |\n| aria-label | `string` | Accessible name for an icon-only control |\n',
       },
       story: { inline: false, height: 600 },
     },
@@ -26,7 +27,7 @@ const meta = {
     children: (
       <TextInput
         label="Project note"
-        defaultValue="Review the new device before resolving the record."
+        defaultValue="Review the delivery checklist before completing the record."
       />
     ),
     footer: (
@@ -232,7 +233,7 @@ export const HeaderActionsKeyboardOrder: Story = {
     await userEvent.tab();
     await expect(content.getByRole('button', { name: 'Save assignment' })).toHaveFocus();
     await userEvent.tab();
-    await expect(headerAction).toHaveFocus();
+    await waitFor(() => expect(headerAction).toHaveFocus());
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(trigger).toHaveFocus());
     await expect(page.queryByRole('dialog')).not.toBeInTheDocument();

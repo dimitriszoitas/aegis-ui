@@ -1,3 +1,4 @@
+import { useArgs, useState as useStoryState } from 'storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { useState } from 'react';
@@ -5,6 +6,7 @@ import { Folder, FileCode, Search, Clock, Plus } from '@/components/icon';
 import { CommandPalette, type CommandAction } from './command-palette';
 import { Button } from '@/components/button';
 export default {
+  id: 'components-navigation-commandpalette',
   title: 'Components/Navigation/CommandPalette',
   component: CommandPalette,
   parameters: { docs: { story: { inline: false, height: 620 } } },
@@ -79,7 +81,7 @@ export const KeyboardFocus: StoryObj<typeof CommandPalette> = {
     const opener = canvas.getByRole('button', { name: 'Search workspace' });
     opener.focus();
     await userEvent.keyboard('{Enter}');
-    const input = await portal.findByRole('combobox', { name: 'Search Aegis' });
+    const input = await portal.findByRole('combobox', { name: 'Search commands' });
     await waitFor(() => expect(input).toHaveFocus());
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(opener).toHaveFocus());
@@ -88,5 +90,75 @@ export const KeyboardFocus: StoryObj<typeof CommandPalette> = {
     await userEvent.keyboard('{Enter}');
     await expect(canvas.getByRole('status')).toHaveTextContent('Records workspace selected');
     await waitFor(() => expect(opener).toHaveFocus());
+  },
+};
+
+interface CommandPlaygroundOptions {
+  open: boolean;
+  shortcut: boolean;
+  showAi: boolean;
+  showIcons: boolean;
+  actionSet: 'all' | 'navigation' | 'empty';
+}
+export const Playground: StoryObj<CommandPlaygroundOptions> = {
+  args: { open: false, shortcut: true, showAi: true, showIcons: true, actionSet: 'all' },
+  argTypes: {
+    open: { control: 'boolean' },
+    shortcut: { control: 'boolean' },
+    showAi: { control: 'boolean' },
+    showIcons: { control: 'boolean' },
+    actionSet: { control: 'inline-radio', options: ['all', 'navigation', 'empty'] },
+  },
+  render: function CommandPlayground(args) {
+    const [, updateArgs] = useArgs();
+    const [result, setResult] = useStoryState('Choose an action to preview its result.');
+    const actions: CommandAction[] = [
+      {
+        id: 'projects',
+        label: 'Go to projects',
+        group: 'Navigation',
+        icon: args.showIcons ? <Folder /> : undefined,
+        onSelect: () => setResult('Projects selected'),
+      },
+      {
+        id: 'customers',
+        label: 'Go to customers',
+        group: 'Navigation',
+        icon: args.showIcons ? <Search /> : undefined,
+        onSelect: () => setResult('Customers selected'),
+      },
+      {
+        id: 'create',
+        label: 'Create project',
+        group: 'Actions',
+        icon: args.showIcons ? <Plus /> : undefined,
+        onSelect: () => setResult('Project creation selected'),
+      },
+    ];
+    return (
+      <div className="stack">
+        <Button onClick={() => updateArgs({ open: true })}>Search workspace</Button>
+        <p className="muted" role="status">
+          {result}
+        </p>
+        <CommandPalette
+          open={args.open}
+          onOpenChange={(open) => updateArgs({ open })}
+          shortcut={args.shortcut}
+          actions={
+            args.actionSet === 'empty'
+              ? []
+              : args.actionSet === 'navigation'
+                ? actions.filter((action) => action.group === 'Navigation')
+                : actions
+          }
+          onAskAi={
+            args.showAi
+              ? (query) => setResult(`Aegis AI request: ${query || 'current workspace'}`)
+              : undefined
+          }
+        />
+      </div>
+    );
   },
 };

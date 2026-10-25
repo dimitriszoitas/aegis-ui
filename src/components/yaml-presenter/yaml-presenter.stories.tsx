@@ -4,6 +4,7 @@ import { workflows } from '@/sample-data';
 import { YamlPresenter } from './yaml-presenter';
 
 const meta = {
+  id: 'components-code-yamlpresenter',
   title: 'Components/Code/YamlPresenter',
   component: YamlPresenter,
   args: {

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Kbd } from './kbd';
 const meta = {
-  title: 'Components/Tags/Kbd',
+  id: 'components-tags-kbd',
+  title: 'Components/Data Display/Kbd',
   component: Kbd,
   tags: ['autodocs'],
   args: { children: '⌘ K' },
@@ -41,4 +42,14 @@ export const WorkspaceShortcuts: Story = {
       ))}
     </div>
   ),
+};
+
+export const Playground: Story = {
+  args: { children: '⌘ K', size: 'sm', 'aria-label': 'Command K' },
+  argTypes: {
+    children: { control: 'text', name: 'Keys' },
+    size: { control: 'select', options: ['sm', 'md'] },
+    'aria-label': { control: 'text', name: 'Accessible label' },
+  },
+  render: (args) => <Kbd {...args} />,
 };

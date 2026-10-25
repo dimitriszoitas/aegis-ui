@@ -6,7 +6,8 @@ import { Field } from '@/components/field';
 
 const percent = (value: number) => `${value}%`;
 const meta = {
-  title: 'Components/Forms/Slider',
+  id: 'components-forms-slider',
+  title: 'Components/Inputs & Selection/Slider',
   component: Slider,
   tags: ['autodocs'],
   args: { label: 'Review threshold', defaultValue: [65], min: 0, max: 100, formatValue: percent },
@@ -14,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Accessible Radix slider supporting single values and ranges, horizontal/vertical orientation, form names and keyboard arrows, Page Up/Down, Home/End. Field descriptions are applied to every thumb; thumbLabels distinguish range endpoints.',
+          'Accessible Base UI slider supporting single values and ranges, horizontal/vertical orientation, form names and keyboard arrows, Page Up/Down, Home/End. Field descriptions are applied to every thumb; thumbLabels distinguish range endpoints.',
       },
     },
   },

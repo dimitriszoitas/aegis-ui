@@ -6,6 +6,7 @@ const index = await (await fetch(`${base}/index.json`)).json();
 const stories = Object.values(index.entries).filter(
   (s) =>
     s.type === 'story' &&
+    s.tags?.includes('test') &&
     (!process.env.STORY_FILTER || new RegExp(process.env.STORY_FILTER).test(s.id)),
 );
 const browser = await chromium.launch();
@@ -40,6 +41,10 @@ async function worker() {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction((t) => document.documentElement.dataset.theme === t, theme);
       const result = await new AxeBuilder({ page })
+        // Base UI's hidden focus sentinels redirect Tab through its
+        // focus manager. Native keyboard checks cover the boundaries separately.
+        // Keep aria-hidden-focus enabled for every authored component element.
+        .exclude('[data-base-ui-focus-guard]')
         .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
         .analyze();
       const violations = result.violations.map((v) => ({

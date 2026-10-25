@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
@@ -5,7 +6,8 @@ import { Checkbox } from './checkbox';
 import { Field } from '@/components/field';
 
 const meta = {
-  title: 'Components/Forms/Checkbox',
+  id: 'components-forms-checkbox',
+  title: 'Components/Inputs & Selection/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
   args: { label: 'Include resolved records' },
@@ -140,5 +142,32 @@ export const SelectAll: Story = {
     await expect(canvas.getByText('3 severity levels included')).toBeInTheDocument();
     await userEvent.keyboard(' ');
     await expect(all).not.toBeChecked();
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    label: 'Include completed projects',
+    description: 'Show completed work in this view.',
+    checked: false,
+    size: 'md',
+    disabled: false,
+    readOnly: false,
+    invalid: false,
+    required: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    description: { control: 'text' },
+    checked: { control: 'select', options: [false, true, 'indeterminate'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  render: function CheckboxPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return <Checkbox {...args} onCheckedChange={(checked) => updateArgs({ checked })} />;
   },
 };

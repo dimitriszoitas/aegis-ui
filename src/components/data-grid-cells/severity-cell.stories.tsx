@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SeverityCell } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Severity cell',
+  id: 'components-data-grid-severity-cell',
+  title: 'Components/Data Display/Data grid/Severity cell',
   component: SeverityCell,
   tags: ['autodocs'],
   args: { severity: 'critical' },
@@ -18,4 +19,11 @@ export const Matrix: StoryObj<typeof SeverityCell> = {
       ))}
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof SeverityCell> = {
+  args: { severity: 'high', compact: false },
+  argTypes: {
+    severity: { control: 'select', options: ['critical', 'high', 'medium', 'low', 'info'] },
+  },
 };

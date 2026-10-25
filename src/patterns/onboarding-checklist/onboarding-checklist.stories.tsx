@@ -90,7 +90,8 @@ function Example(args: OnboardingChecklistProps) {
   );
 }
 const meta = {
-  title: 'Patterns/OnboardingChecklist',
+  id: 'patterns-onboardingchecklist',
+  title: 'Patterns/Workflows/OnboardingChecklist',
   component: OnboardingChecklist,
   tags: ['autodocs'],
   parameters: {

@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Sparkles, SlidersHorizontal, Trash2 } from '@/components/icon';
 import { IconButton } from './icon-button';
-export default { title: 'Components/Actions/IconButton', component: IconButton } satisfies Meta<
-  typeof IconButton
->;
+export default {
+  id: 'components-actions-iconbutton',
+  title: 'Components/Triggers/IconButton',
+  component: IconButton,
+} satisfies Meta<typeof IconButton>;
 export const Matrix: StoryObj<typeof IconButton> = {
   render: () => (
     <div className="stack">
@@ -50,4 +53,40 @@ export const States: StoryObj<typeof IconButton> = {
       </IconButton>
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof IconButton> = {
+  args: {
+    'aria-label': 'Configure workspace',
+    size: 'md',
+    emphasis: 'secondary',
+    intent: 'function',
+    tooltip: true,
+    disabled: false,
+    loading: false,
+  },
+  argTypes: {
+    'aria-label': { control: 'text', name: 'Accessible label' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    emphasis: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'ghost'] },
+    intent: { control: 'select', options: ['default', 'function', 'destroy', 'ai'] },
+    tooltip: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+  },
+  render: function Playground(args) {
+    const [count, setCount] = useState(0);
+    return (
+      <div className="stack">
+        <IconButton {...args} onClick={() => setCount((value) => value + 1)}>
+          <SlidersHorizontal />
+        </IconButton>
+        <p className="muted" role="status">
+          {count
+            ? `Configured ${count} ${count === 1 ? 'time' : 'times'}`
+            : 'Activate the button to configure the workspace.'}
+        </p>
+      </div>
+    );
+  },
 };

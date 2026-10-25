@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useCallback, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import {
   Activity,
@@ -31,6 +32,8 @@ import { Timeline } from '@/components/timeline';
 import { Toaster, showToast } from '@/components/toast';
 import { AiPanel } from '@/patterns/ai-panel';
 import { PromptInput } from '@/patterns/prompt-input';
+import { NotificationCenter } from '@/patterns/notification-center';
+import { PageHeader } from '@/patterns/page-header';
 import type { AiRequest } from '@/lib/ai';
 import type { Theme } from '@/lib/theme';
 import { layoutThemeOptions, type LayoutTheme } from '@/lib/layout-theme';
@@ -142,7 +145,7 @@ function BusinessActivityView({
                       size="sm"
                       emphasis="ghost"
                       onClick={() => onNavigate({ page: entry.page!, recordId: entry.recordId! })}
-                      trailingIcon={<ArrowRight size={14} />}
+                      trailingIcon={<ArrowRight size={componentToken('application.icon-sm')} />}
                     >
                       View record
                     </Button>
@@ -171,6 +174,7 @@ function BusinessActivityView({
 }
 function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) {
   const { data, onNavigate, onAskAi, showActivity } = props;
+  const sizes = useComponentTokenNumbers(['business-chart-height']);
   const [months, setMonths] = useState('6');
   const [contextIds, setContextIds] = useState(['workspace-summary']);
   const availableContext = [
@@ -204,14 +208,14 @@ function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) 
       <section className="business-ai-hub" aria-labelledby="business-ai-heading">
         <div className="business-ai-intro">
           <span className="business-ai-eyebrow">
-            <Sparkles size={16} /> Aegis AI
+            <Sparkles size={componentToken('application.icon-md')} /> Aegis AI
           </span>
           <h2 id="business-ai-heading">What should we work on?</h2>
           <p>Bring your projects, customers, and next steps together.</p>
         </div>
         <PromptInput
-          className="business-ai-composer"
-          placeholder="Ask a question or describe what you need…"
+          presentation="hero"
+          placeholder="Work with Aegis AI…"
           availableContext={availableContext}
           context={availableContext.filter((item) => contextIds.includes(item.id))}
           onContextChange={(items) => setContextIds(items.map((item) => item.id))}
@@ -272,7 +276,7 @@ function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) 
               onClick={() => onNavigate({ page: metric.page })}
             >
               <span>{metric.caption}</span>
-              <ArrowRight size={14} />
+              <ArrowRight size={componentToken('application.icon-sm')} />
             </button>
           </div>
         ))}
@@ -298,14 +302,14 @@ function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) 
           period={`last ${months} months · invoice issue date`}
           valueFormatter={formatMoney}
           variant="bar"
-          height={180}
+          height={sizes['business-chart-height']}
         />
         <ChartMetricCard
           label="Project portfolio"
           metric={data.projects.length}
           data={statuses}
           period="projects across all statuses"
-          height={180}
+          height={sizes['business-chart-height']}
         />
       </div>
       <Card className="business-project-timeline">
@@ -339,7 +343,7 @@ function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) 
             <Button
               emphasis="ghost"
               size="sm"
-              trailingIcon={<ArrowRight size={14} />}
+              trailingIcon={<ArrowRight size={componentToken('application.icon-sm')} />}
               onClick={() => onNavigate({ page: 'projects' })}
             >
               View projects
@@ -377,7 +381,7 @@ function BusinessOverview(props: BusinessViewProps & { showActivity: boolean }) 
               <Button
                 emphasis="ghost"
                 size="sm"
-                trailingIcon={<ArrowRight size={14} />}
+                trailingIcon={<ArrowRight size={componentToken('application.icon-sm')} />}
                 onClick={() => onNavigate({ page: 'activity' })}
               >
                 View all
@@ -417,11 +421,19 @@ export function BusinessApp({
   });
   const [collapsed, setCollapsed] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(false);
-  const compact = useMedia('(max-width: 1000px)');
-  const docked = useMedia('(min-width: 1280px)');
+  const sizes = useComponentTokenNumbers([
+    'application.breakpoint-compact',
+    'application.breakpoint-docked',
+  ]);
+  const compact = useMedia(`(max-width: ${sizes['application.breakpoint-compact']}px)`);
+  const docked = useMedia(`(min-width: ${sizes['application.breakpoint-docked']}px)`);
   const [aiOpen, setAiOpen] = useState(defaultAiOpen);
   const [request, setRequest] = useState<AiRequest>();
   const [commandOpen, setCommandOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationDestination = useRef<BusinessRoute | null>(null);
+  const [notificationRead, setNotificationRead] = useState<Record<string, boolean>>({});
+  const [dismissedNotifications, setDismissedNotifications] = useState<string[]>([]);
   const [workspaceName, setWorkspaceName] = useState('Northstar');
   const [workspaceDraft, setWorkspaceDraft] = useState('Northstar');
   const [showActivity, setShowActivity] = useState(true);
@@ -431,6 +443,15 @@ export function BusinessApp({
   const [visited, setVisited] = useState<BusinessPage[]>([initialPage]);
   const self = data.team.find((member) => member.id === currentMemberId)!;
   const context = businessContext(data, route);
+  const notifications = data.activity
+    .filter((entry) => !dismissedNotifications.includes(entry.id))
+    .map((entry) => ({
+      id: entry.id,
+      title: entry.text,
+      description: `${data.team.find((member) => member.id === entry.actorId)?.name ?? 'Workspace'} · ${entry.page ? pageLabels[entry.page] : 'Workspace update'}`,
+      timestamp: entry.date,
+      read: notificationRead[entry.id] ?? false,
+    }));
   useLayoutEffect(() => {
     mainRef.current?.scrollTo({ top: 0 });
     const heading = mainRef.current?.querySelector<HTMLElement>(
@@ -555,7 +576,7 @@ export function BusinessApp({
               aria-label="Workspace settings"
               onClick={() => navigate({ page: 'settings' })}
             >
-              <Settings size={17} />
+              <Settings size={componentToken('application.icon-navigation')} />
               <span className="nav-item-copy" aria-hidden={small}>
                 <span className="nav-item-label">Settings</span>
               </span>
@@ -603,38 +624,77 @@ export function BusinessApp({
               <span className="business-workspace-label">{workspaceName} workspace</span>
             )}
             <div>
+              <NotificationCenter
+                items={notifications}
+                open={notificationsOpen}
+                onOpenChange={setNotificationsOpen}
+                onOpenChangeComplete={(open) => {
+                  if (open || !notificationDestination.current) return;
+                  const destination = notificationDestination.current;
+                  notificationDestination.current = null;
+                  // Let the closing panel finish restoring focus before the new page owns it.
+                  requestAnimationFrame(() => navigate(destination));
+                }}
+                now={Math.max(
+                  new Date(businessReferenceDate).getTime(),
+                  ...data.activity.map((entry) => new Date(entry.date).getTime()),
+                )}
+                onReadChange={(ids, read) =>
+                  setNotificationRead((current) => ({
+                    ...current,
+                    ...Object.fromEntries(ids.map((id) => [id, read])),
+                  }))
+                }
+                onDismiss={(id) => setDismissedNotifications((current) => [...current, id])}
+                onOpenItem={(item) => {
+                  const entry = data.activity.find((activity) => activity.id === item.id);
+                  notificationDestination.current =
+                    entry?.page && entry.recordId
+                      ? { page: entry.page, recordId: entry.recordId }
+                      : { page: 'activity' };
+                  setNotificationsOpen(false);
+                }}
+              />
               <Button
                 size="sm"
                 emphasis="ghost"
                 aria-label="Search workspace"
                 onClick={() => setCommandOpen(true)}
               >
-                <Search size={16} />
+                <Search size={componentToken('application.icon-md')} />
               </Button>
               <Button
                 size="sm"
                 intent="ai"
                 emphasis="ghost"
-                leadingIcon={<Sparkles size={15} />}
+                leadingIcon={<Sparkles size={componentToken('application.icon-inline')} />}
                 onClick={() => setAiOpen(true)}
               >
                 Aegis AI
               </Button>
             </div>
           </div>
+          {route.page === 'overview' && (
+            <div className="business-overview-header">
+              <PageHeader
+                title="Overview"
+                description={descriptions.overview}
+                actions={
+                  <span className="business-date">
+                    <Clock size={componentToken('application.icon-sm')} />
+                    24 October 2026
+                  </span>
+                }
+              />
+            </div>
+          )}
           {!route.recordId &&
-            !['projects', 'customers', 'invoices', 'team'].includes(route.page) && (
+            !['overview', 'projects', 'customers', 'invoices', 'team'].includes(route.page) && (
               <header className="business-page-heading">
                 <div>
                   <h1 tabIndex={-1}>{pageLabels[route.page]}</h1>
                   <p>{descriptions[route.page]}</p>
                 </div>
-                {route.page === 'overview' && (
-                  <span className="business-date">
-                    <Clock size={14} />
-                    24 October 2026
-                  </span>
-                )}
               </header>
             )}
           {route.page === 'overview' && <BusinessOverview {...views} showActivity={showActivity} />}

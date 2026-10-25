@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CopyableField } from './copyable-field';
 const meta = {
-  title: 'Components/Forms/CopyableField',
+  id: 'components-forms-copyablefield',
+  title: 'Components/Data Display/CopyableField',
   component: CopyableField,
   tags: ['autodocs'],
   args: {

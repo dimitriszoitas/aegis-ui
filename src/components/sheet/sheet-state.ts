@@ -1,3 +1,4 @@
+import { componentTokenDefaults } from '@/lib/component-design-tokens';
 export type SheetPlacement = 'bottom' | 'left' | 'right';
 
 export function sheetBounds(
@@ -27,6 +28,10 @@ export function sheetKeyboardSize(
   key: string,
   shift: boolean,
   bounds: { min: number; max: number },
+  steps = {
+    regular: componentTokenDefaults['sheet-resize-step'],
+    large: componentTokenDefaults['sheet-resize-step-large'],
+  },
 ) {
   if (key === 'Home') return bounds.min;
   if (key === 'End') return bounds.max;
@@ -35,5 +40,8 @@ export function sheetKeyboardSize(
   const shrink =
     placement === 'bottom' ? 'ArrowDown' : placement === 'left' ? 'ArrowLeft' : 'ArrowRight';
   if (key !== grow && key !== shrink) return null;
-  return clampSheetSize(current + (key === grow ? 1 : -1) * (shift ? 40 : 20), bounds);
+  return clampSheetSize(
+    current + (key === grow ? 1 : -1) * (shift ? steps.large : steps.regular),
+    bounds,
+  );
 }

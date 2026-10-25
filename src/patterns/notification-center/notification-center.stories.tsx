@@ -54,7 +54,8 @@ function Example(args: NotificationCenterProps) {
   );
 }
 const meta = {
-  title: 'Patterns/NotificationCenter',
+  id: 'patterns-notificationcenter',
+  title: 'Patterns/Communication/NotificationCenter',
   component: NotificationCenter,
   tags: ['autodocs'],
   parameters: {
@@ -63,7 +64,7 @@ const meta = {
       story: { inline: false, height: 640 },
       description: {
         component:
-          'A controlled inbox for application updates. Search and All/Unread views stay local; read, dismiss and open callbacks let the host persist changes. Async callbacks are guarded and failures stay visible without removing the original notification.',
+          'A notification inbox that slides in from the right. Search and All/Unread views stay local; read, dismiss and open callbacks let the host persist changes. Async callbacks are guarded and failures stay visible without removing the original notification.',
       },
     },
   },

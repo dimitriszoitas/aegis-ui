@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, type ComponentProps } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from '@/components/icon';
 import { cn } from '@/lib/utils';
@@ -76,7 +77,7 @@ export function Pagination({
                   </option>
                 ))}
               </select>
-              <ChevronDown size={14} aria-hidden="true" />
+              <ChevronDown size={componentToken('navigation.icon-sm')} aria-hidden="true" />
             </span>
           </div>
         )}
@@ -87,7 +88,7 @@ export function Pagination({
             disabled={disabled || current === 1 || safeTotal === 0}
             onClick={() => onPageChange(current - 1)}
           >
-            <ChevronLeft size={16} aria-hidden="true" />
+            <ChevronLeft size={componentToken('navigation.icon-md')} aria-hidden="true" />
           </button>
           {visiblePages.map((number, index) => (
             <span className="aegis-pagination-page-slot" key={number}>
@@ -113,7 +114,7 @@ export function Pagination({
             disabled={disabled || current === pages || safeTotal === 0}
             onClick={() => onPageChange(current + 1)}
           >
-            <ChevronRight size={16} aria-hidden="true" />
+            <ChevronRight size={componentToken('navigation.icon-md')} aria-hidden="true" />
           </button>
         </div>
       </div>

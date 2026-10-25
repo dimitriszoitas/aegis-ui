@@ -1,9 +1,12 @@
+import type { ComponentProps } from 'react';
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { AiCard, AiLabel, AiFeedback, type AiFeedbackValue } from './ai-card';
 import { StreamingSkeleton } from '@/components/streaming-skeleton';
 const meta = {
+  id: 'components-ai-aicard',
   title: 'Components/AI/AiCard',
   component: AiCard,
   subcomponents: { AiLabel, AiFeedback },
@@ -92,4 +95,51 @@ export const ConfidenceLevels: StoryObj<typeof meta> = {
       ))}
     </div>
   ),
+};
+
+type PlaygroundArgs = ComponentProps<typeof AiCard> & {
+  showFeedback: boolean;
+  showRegenerate: boolean;
+};
+export const Playground: StoryObj<PlaygroundArgs> = {
+  args: {
+    title: 'Review the project handoff',
+    children: 'Confirm the remaining owner and due date before completing the handoff.',
+    confidence: 'high',
+    provenance: 'Project checklist · 2 supplied records',
+    loading: false,
+    showFeedback: true,
+    showRegenerate: true,
+    feedback: null,
+  },
+  argTypes: {
+    title: { control: 'text' },
+    children: { control: 'text', name: 'Content' },
+    provenance: { control: 'text' },
+    confidence: { control: 'select', options: ['high', 'medium', 'low'] },
+    loading: { control: 'boolean' },
+    showFeedback: { control: 'boolean', name: 'Feedback actions' },
+    showRegenerate: { control: 'boolean', name: 'Regenerate action' },
+    feedback: { control: false },
+  },
+  render: function Playground({ showFeedback, showRegenerate, ...args }) {
+    const [, updateArgs] = useArgs<PlaygroundArgs>();
+    return (
+      <div style={{ width: '100%', maxWidth: 640 }}>
+        <AiCard
+          {...args}
+          onFeedback={showFeedback ? (feedback) => updateArgs({ feedback }) : undefined}
+          onRegenerate={
+            showRegenerate
+              ? () =>
+                  updateArgs({
+                    feedback: null,
+                    provenance: 'Regenerated locally from the supplied project checklist',
+                  })
+              : undefined
+          }
+        />
+      </div>
+    );
+  },
 };

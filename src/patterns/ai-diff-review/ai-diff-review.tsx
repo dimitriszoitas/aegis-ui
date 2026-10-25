@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   useEffect,
   useId,
@@ -70,7 +71,7 @@ export function AiDiffReview({
   now,
   disabled = false,
   defaultMode = 'split',
-  maxHeight = 420,
+  maxHeight = componentToken('ai-assistance.ai-diff-max-height'),
   className,
   ...props
 }: AiDiffReviewProps) {
@@ -193,7 +194,7 @@ export function AiDiffReview({
               <Button
                 data-review-action="reject"
                 emphasis="ghost"
-                leadingIcon={<X size={16} />}
+                leadingIcon={<X size={componentToken('ai-assistance.icon-md')} />}
                 disabled={!canReview}
                 loading={current.action === 'reject'}
                 onClick={() => {
@@ -205,7 +206,7 @@ export function AiDiffReview({
               <Button
                 data-review-action="approve"
                 intent="function"
-                leadingIcon={<Check size={16} />}
+                leadingIcon={<Check size={componentToken('ai-assistance.icon-md')} />}
                 disabled={!canReview}
                 loading={current.action === 'approve'}
                 onClick={() => {
@@ -225,9 +226,9 @@ export function AiDiffReview({
             data-status={current.status}
           >
             {current.status === 'approved' ? (
-              <CheckCheck size={16} aria-hidden="true" />
+              <CheckCheck size={componentToken('ai-assistance.icon-md')} aria-hidden="true" />
             ) : (
-              <X size={16} aria-hidden="true" />
+              <X size={componentToken('ai-assistance.icon-md')} aria-hidden="true" />
             )}
             <span>
               {current.status === 'approved' ? 'Approved' : 'Rejected'} by {reviewer} · {timestamp}{' '}

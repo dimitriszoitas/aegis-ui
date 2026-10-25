@@ -2,10 +2,10 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--group-navigation-space-gap-compact);
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: var(--group-navigation-number-0);
+  padding: var(--group-navigation-number-0);
 }
 .aegis-breadcrumb li,
 .aegis-breadcrumb a,
@@ -13,33 +13,33 @@
 .aegis-breadcrumb li > span {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
+  gap: var(--group-navigation-space-gap-compact);
+  min-width: var(--group-navigation-number-0);
 }
 .aegis-breadcrumb li {
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  font-size: var(--group-navigation-font-size-body);
+  color: var(--group-navigation-color-content-secondary);
 }
 .aegis-breadcrumb a,
 .aegis-breadcrumb button {
-  border: 0;
-  padding: 0;
-  border-radius: var(--radius-xs);
-  background: transparent;
-  color: var(--color-text-secondary);
+  border: var(--group-navigation-number-0);
+  padding: var(--group-navigation-number-0);
+  border-radius: var(--group-navigation-radius-border-radius-soft);
+  background: var(--group-navigation-color-transparent);
+  color: var(--group-navigation-color-content-secondary);
   font: inherit;
   text-decoration: none;
 }
 .aegis-breadcrumb a:hover,
 .aegis-breadcrumb button:hover {
-  color: var(--color-text-primary);
+  color: var(--group-navigation-color-content-primary);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: var(--group-navigation-size-text-underline-offset-micro-snug);
 }
 .aegis-breadcrumb-separator {
-  color: var(--color-text-tertiary);
+  color: var(--group-navigation-color-content-tertiary);
 }
 .aegis-breadcrumb .aegis-breadcrumb-current {
-  color: var(--color-text-primary);
-  font-weight: 500;
+  color: var(--group-navigation-color-content-primary);
+  font-weight: var(--group-navigation-font-weight-medium);
 }

@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   forwardRef,
   useId,
@@ -127,7 +128,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function T
             aria-label={clearLabel}
             onClick={clear}
           >
-            <X size={14} aria-hidden="true" />
+            <X size={componentToken('input.icon-sm')} aria-hidden="true" />
           </button>
         )}
         {suffix && <span className="aegis-input-suffix">{suffix}</span>}

@@ -43,7 +43,8 @@ const sources: SelectOption[] = [
   },
 ];
 const meta = {
-  title: 'Components/Forms/Select',
+  id: 'components-forms-select',
+  title: 'Components/Inputs & Selection/Select',
   component: Select,
   tags: ['autodocs'],
   args: { label: 'Data source', options: sources, placeholder: 'Choose an data source' },
@@ -52,7 +53,7 @@ const meta = {
       story: { inline: false, height: 460 },
       description: {
         component:
-          'A single-selection Radix listbox with labeled groups, descriptive options, icons, typeahead, Arrow/Home/End navigation, Escape dismissal and native form participation. Values must be nonempty strings.',
+          'A single-selection Base UI listbox with labeled groups, descriptive options, icons, typeahead, Arrow/Home/End navigation, Escape dismissal and native form participation. Values must be nonempty strings.',
       },
     },
   },
@@ -89,6 +90,9 @@ export const KeyboardSelection: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole('combobox', { name: 'Data source' }));
+    await waitFor(() =>
+      expect(within(document.body).getByRole('option', { name: /^Project tracker/ })).toHaveFocus(),
+    );
     await userEvent.keyboard('{ArrowDown}{Enter}');
     await expect(canvas.getByText('Selected source: customers')).toBeInTheDocument();
     await waitFor(() =>

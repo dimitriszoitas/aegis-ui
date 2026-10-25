@@ -32,7 +32,8 @@ function RecordFields() {
   );
 }
 const meta = {
-  title: 'Components/Overlays/SideSheet',
+  id: 'components-overlays-sidesheet',
+  title: 'Components/Surfaces/SideSheet',
   component: SideSheet,
   subcomponents: { SideSheetSection, SideSheetField },
   parameters: {
@@ -215,6 +216,54 @@ export const HeaderAlignmentAndClose: Story = {
     expect(header.getBoundingClientRect().top).toBe(top);
     close.focus();
     await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
+
+export const ResizeFocus: Story = {
+  args: { resizable: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Pointer opening focuses the close control without a ring or persistent resize highlight. Keyboard navigation reveals focus, and the resize separator supports arrows, Home, and End.',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('button', { name: 'Open record details' });
+    await userEvent.click(trigger);
+    const close = await page.findByRole('button', { name: 'Close detail panel' });
+    const separator = page.getByRole('separator', { name: 'Resize side panel' });
+    await waitFor(() => expect(close).toHaveFocus());
+    expect(getComputedStyle(close).outlineStyle).toBe('none');
+    expect(getComputedStyle(separator, '::after').backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    await userEvent.tab({ shift: true });
+    await expect(separator).toHaveFocus();
+    expect(getComputedStyle(separator, '::after').backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+    await userEvent.keyboard('{Home}');
+    await waitFor(() =>
+      expect(separator.getAttribute('aria-valuenow')).toBe(separator.getAttribute('aria-valuemin')),
+    );
+    await userEvent.keyboard('{ArrowLeft}');
+    await waitFor(() =>
+      expect(Number(separator.getAttribute('aria-valuenow'))).toBeGreaterThan(
+        Number(separator.getAttribute('aria-valuemin')),
+      ),
+    );
+    await userEvent.keyboard('{End}');
+    await waitFor(() =>
+      expect(separator.getAttribute('aria-valuenow')).toBe(separator.getAttribute('aria-valuemax')),
+    );
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await userEvent.keyboard('{Enter}');
+    const keyboardClose = await page.findByRole('button', { name: 'Close detail panel' });
+    await waitFor(() => expect(keyboardClose).toHaveFocus());
+    expect(getComputedStyle(keyboardClose).outlineStyle).toBe('solid');
+    await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(trigger).toHaveFocus());
   },
 };

@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   cloneElement,
   isValidElement,
@@ -19,7 +20,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
 }
-/** A shadcn-style native button, restyled with Aegis intent and surface tokens. */
+/** A native action button styled with intent and surface tokens. */
 export function Button({
   size = 'md',
   emphasis = 'primary',
@@ -57,21 +58,32 @@ export function Button({
         <svg className="button-gradient-defs" aria-hidden="true" focusable="false">
           <defs>
             <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="var(--color-ai-fg)" />
-              <stop offset="50%" stopColor="var(--color-ai-pink-fg)" />
-              <stop offset="100%" stopColor="var(--color-ai-blue-fg)" />
+              <stop offset="0%" stopColor="var(--group-trigger-button-color-ai-fg)" />
+              <stop offset="50%" stopColor="var(--group-trigger-button-color-ai-pink-fg)" />
+              <stop
+                offset="100%"
+                stopColor="var(--group-trigger-button-color-ai-purple-fg, var(--group-trigger-button-color-ai-blue-fg))"
+              />
             </linearGradient>
           </defs>
         </svg>
       )}
       {leadingIcon && (
         <span className="button-icon">
-          {paintIcon(loading ? <LoaderCircle className="button-spinner" size={16} /> : leadingIcon)}
+          {paintIcon(
+            loading ? (
+              <LoaderCircle className="button-spinner" size={componentToken('trigger.icon-md')} />
+            ) : (
+              leadingIcon
+            ),
+          )}
         </span>
       )}
       {loading && !leadingIcon && (
         <span className="button-loading">
-          {paintIcon(<LoaderCircle className="button-spinner" size={16} />)}
+          {paintIcon(
+            <LoaderCircle className="button-spinner" size={componentToken('trigger.icon-md')} />,
+          )}
         </span>
       )}
       <span className={cn('button-label', loading && !leadingIcon && 'button-label-loading')}>

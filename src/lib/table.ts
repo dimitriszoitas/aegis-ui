@@ -1,6 +1,15 @@
-export function clampColumnWidth(width: number, minWidth = 64, maxWidth = 560): number {
-  const minimum = Number.isFinite(minWidth) ? Math.max(24, minWidth) : 64;
-  const maximum = Number.isFinite(maxWidth) ? Math.max(minimum, maxWidth) : 560;
+import { readComponentTokenNumber } from './component-design-tokens';
+export function clampColumnWidth(
+  width: number,
+  minWidth = readComponentTokenNumber('table-column-min-width'),
+  maxWidth = readComponentTokenNumber('table-column-max-width'),
+): number {
+  const minimum = Number.isFinite(minWidth)
+    ? Math.max(readComponentTokenNumber('table-column-minimum'), minWidth)
+    : readComponentTokenNumber('table-column-min-width');
+  const maximum = Number.isFinite(maxWidth)
+    ? Math.max(minimum, maxWidth)
+    : readComponentTokenNumber('table-column-max-width');
   return Math.max(minimum, Math.min(maximum, Number.isFinite(width) ? Math.round(width) : minimum));
 }
 
@@ -8,8 +17,8 @@ export function clampColumnWidth(width: number, minWidth = 64, maxWidth = 560): 
 export function estimateColumnWidth(
   label: string,
   values: readonly string[],
-  minWidth = 64,
-  maxWidth = 560,
+  minWidth = readComponentTokenNumber('table-column-min-width'),
+  maxWidth = readComponentTokenNumber('table-column-max-width'),
 ): number {
   const longest = Math.max(
     label.length,
@@ -17,7 +26,12 @@ export function estimateColumnWidth(
       .slice(0, 200)
       .map((value) => Math.max(...value.split('\n').map((line) => line.length))),
   );
-  return clampColumnWidth(longest * 7.5 + 48, minWidth, maxWidth);
+  return clampColumnWidth(
+    longest * readComponentTokenNumber('table-character-width') +
+      readComponentTokenNumber('table-cell-chrome-width'),
+    minWidth,
+    maxWidth,
+  );
 }
 
 /** Clamp stale pages after filtering, including the zero-result state. */

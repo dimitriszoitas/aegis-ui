@@ -1,146 +1,197 @@
 .aegis-modal-overlay {
   position: fixed;
-  inset: 0;
-  z-index: var(--z-modal);
-  background: var(--color-scrim);
-  backdrop-filter: blur(3px);
-  animation: aegis-modal-fade var(--motion-base) var(--ease-out);
+  inset: var(--group-surface-overlay-number-0);
+  z-index: var(--group-surface-overlay-z-modal);
+  background: var(--group-surface-overlay-color-scrim);
+  backdrop-filter: blur(var(--group-surface-overlay-size-backdrop-filter-micro-snug));
+  animation: aegis-modal-fade var(--group-surface-overlay-motion-base)
+    var(--group-surface-overlay-ease-out);
 }
 .aegis-modal {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  z-index: var(--z-modal);
+  left: var(--group-surface-overlay-size-left-half);
+  top: var(--group-surface-overlay-size-top-half);
+  z-index: var(--group-surface-overlay-z-modal);
   display: flex;
   flex-direction: column;
-  width: min(560px, calc(100vw - var(--space-6)));
-  max-width: calc(100vw - var(--space-6));
-  max-height: calc(100dvh - var(--space-6));
-  transform: translate(-50%, -50%);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--surface-corner-radius, var(--surface-radius-floating));
-  background: var(--color-bg-surface-raised);
-  color: var(--color-text-primary);
-  box-shadow: var(--shadow-overlay);
-  font-family: var(--font-ui);
+  width: min(
+    var(--group-surface-overlay-size-width-wide-canvas-small),
+    calc(
+      var(--group-surface-overlay-size-width-100vw) - var(--group-surface-overlay-space-width-roomy)
+    )
+  );
+  max-width: calc(
+    var(--group-surface-overlay-size-max-width-100vw) -
+      var(--group-surface-overlay-space-max-width-roomy)
+  );
+  max-height: calc(
+    var(--group-surface-overlay-size-max-height-100dvh) -
+      var(--group-surface-overlay-space-max-height-roomy)
+  );
+  transform: translate(
+    var(--group-surface-overlay-size-transform-negative-50percent),
+    var(--group-surface-overlay-size-transform-negative-50percent)
+  );
+  border: var(--group-surface-overlay-border-width-hairline) solid
+    var(--group-surface-overlay-color-border-subtle);
+  border-radius: var(
+    --group-surface-corner-radius,
+    var(--group-surface-overlay-radius-border-radius-strong)
+  );
+  background: var(--group-surface-overlay-color-surface-surface-raised);
+  color: var(--group-surface-overlay-color-content-primary);
+  box-shadow: var(--group-surface-overlay-shadow-overlay);
+  font-family: var(--group-surface-overlay-font-family-ui);
   overflow: hidden;
   outline: none;
-  animation: aegis-modal-enter var(--motion-base) var(--ease-out);
+  animation: aegis-modal-enter var(--group-surface-overlay-motion-base)
+    var(--group-surface-overlay-ease-out);
 }
 .aegis-modal-small {
-  width: min(400px, calc(100vw - var(--space-6)));
+  width: min(
+    var(--group-surface-overlay-size-width-canvas-comfortable),
+    calc(
+      var(--group-surface-overlay-size-width-100vw) - var(--group-surface-overlay-space-width-roomy)
+    )
+  );
 }
 .aegis-modal-large {
-  width: min(800px, calc(100vw - var(--space-6)));
+  width: min(
+    var(--group-surface-overlay-size-width-wide-canvas-huge),
+    calc(
+      var(--group-surface-overlay-size-width-100vw) - var(--group-surface-overlay-space-width-roomy)
+    )
+  );
 }
 .aegis-modal-header {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-4);
-  padding: var(--layout-panel-padding);
-  flex-shrink: 0;
-  border-bottom: 1px solid var(--color-border-subtle);
+  gap: var(--group-surface-overlay-space-gap-comfortable);
+  padding: var(--group-surface-overlay-space-padding-roomy);
+  flex-shrink: var(--group-surface-overlay-flex-none);
+  border-bottom: var(--group-surface-overlay-border-width-hairline) solid
+    var(--group-surface-overlay-color-border-subtle);
 }
 .aegis-modal-heading {
-  min-width: 0;
-  flex: 1;
+  min-width: var(--group-surface-overlay-number-0);
+  flex: var(--group-surface-overlay-flex-fill);
 }
 .aegis-modal-title {
-  font-size: var(--title-panel-size);
-  font-weight: var(--title-weight);
-  line-height: 28px;
-  margin: 0;
+  font-size: var(--group-surface-overlay-font-size-subheading);
+  font-weight: var(--group-surface-overlay-title-weight);
+  line-height: var(--group-surface-overlay-font-line-box-xxl);
+  margin: var(--group-surface-overlay-number-0);
   overflow-wrap: anywhere;
 }
 .aegis-modal-description {
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin: var(--space-2) 0 0;
+  font-size: var(--group-surface-overlay-font-size-body);
+  color: var(--group-surface-overlay-color-content-secondary);
+  line-height: var(--group-surface-overlay-font-leading-relaxed);
+  margin: var(--group-surface-overlay-space-margin-compact) var(--group-surface-overlay-number-0)
+    var(--group-surface-overlay-number-0);
 }
 .aegis-modal-close {
   display: grid;
   place-items: center;
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  margin: 0;
-  background: transparent;
-  color: var(--color-text-secondary);
-  border: 0;
-  border-radius: var(--radius-sm);
+  flex-shrink: var(--group-surface-overlay-flex-none);
+  width: var(--group-surface-overlay-size-width-regular);
+  height: var(--group-surface-overlay-size-height-regular);
+  margin: var(--group-surface-overlay-number-0);
+  background: var(--group-surface-overlay-color-transparent);
+  color: var(--group-surface-overlay-color-content-secondary);
+  border: var(--group-surface-overlay-number-0);
+  border-radius: var(--group-surface-overlay-radius-border-radius-bold);
   cursor: pointer;
 }
 .aegis-modal-close-floating {
   position: absolute;
-  top: var(--layout-panel-padding);
-  right: var(--layout-panel-padding);
-  z-index: 1;
+  top: var(--group-surface-overlay-space-top-roomy);
+  right: var(--group-surface-overlay-space-right-roomy);
+  z-index: var(--group-surface-overlay-layer-local);
 }
 .aegis-modal[data-header='false'][data-close='true'] .aegis-modal-body {
-  padding-top: calc(var(--layout-panel-padding) + 28px + var(--space-2));
+  padding-top: calc(
+    var(--group-surface-overlay-space-padding-top-roomy) +
+      var(--group-surface-overlay-space-padding-top-7) +
+      var(--group-surface-overlay-space-padding-top-compact)
+  );
 }
 .aegis-modal-close:hover {
-  background: var(--color-bg-hover);
+  background: var(--group-surface-overlay-color-surface-hover);
 }
 .aegis-modal-close:focus-visible {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: 2px;
+  outline: var(--group-surface-overlay-border-width-regular) solid
+    var(--group-surface-overlay-ring-focus);
+  outline-offset: var(--group-surface-overlay-size-outline-offset-micro-compact);
 }
 .aegis-modal-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  padding: var(--layout-panel-padding);
+  flex: var(--group-surface-overlay-flex-fill) var(--group-surface-overlay-flex-fill) auto;
+  min-height: var(--group-surface-overlay-number-0);
+  padding: var(--group-surface-overlay-space-padding-roomy);
   overflow: auto;
   overscroll-behavior: contain;
-  font-size: var(--text-base);
-  line-height: 1.6;
+  font-size: var(--group-surface-overlay-font-size-body);
+  line-height: var(--group-surface-overlay-font-leading-relaxed);
 }
 .aegis-modal-body:focus-visible {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: -3px;
+  outline: var(--group-surface-overlay-border-width-regular) solid
+    var(--group-surface-overlay-ring-focus);
+  outline-offset: var(--group-surface-overlay-size-outline-offset-negative-3);
 }
 .aegis-modal-body > p:first-child {
-  margin-top: 0;
+  margin-top: var(--group-surface-overlay-number-0);
 }
 .aegis-modal-body > p:last-child {
-  margin-bottom: 0;
+  margin-bottom: var(--group-surface-overlay-number-0);
 }
 .aegis-modal-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  flex-shrink: 0;
-  padding: var(--space-3) var(--layout-panel-padding);
-  background: var(--color-bg-surface-raised);
-  border-top: 1px solid var(--color-border-subtle);
+  gap: var(--group-surface-overlay-space-gap-compact);
+  flex-shrink: var(--group-surface-overlay-flex-none);
+  padding: var(--group-surface-overlay-space-padding-regular)
+    var(--group-surface-overlay-space-padding-roomy);
+  background: var(--group-surface-overlay-color-surface-surface-raised);
+  border-top: var(--group-surface-overlay-border-width-hairline) solid
+    var(--group-surface-overlay-color-border-subtle);
 }
 .aegis-confirm-field {
-  margin-top: var(--space-2);
+  margin-top: var(--group-surface-overlay-space-margin-top-compact);
 }
 .aegis-confirm-error {
-  color: var(--color-destroy-fg);
-  font-size: var(--text-sm);
-  margin-bottom: 0;
+  color: var(--group-surface-overlay-color-danger-foreground);
+  font-size: var(--group-surface-overlay-font-size-body);
+  margin-bottom: var(--group-surface-overlay-number-0);
 }
 @keyframes aegis-modal-fade {
   from {
-    opacity: 0;
+    opacity: var(--group-surface-overlay-opacity-hidden);
   }
   to {
-    opacity: 1;
+    opacity: var(--group-surface-overlay-opacity-visible);
   }
 }
 @keyframes aegis-modal-enter {
   from {
-    opacity: 0;
-    transform: translate(-50%, calc(-50% + 8px)) scale(0.98);
+    opacity: var(--group-surface-overlay-opacity-hidden);
+    transform: translate(
+        var(--group-surface-overlay-size-transform-negative-50percent),
+        calc(
+          var(--group-surface-overlay-size-transform-negative-50percent) +
+            var(--group-surface-overlay-size-transform-micro-vast)
+        )
+      )
+      scale(var(--group-surface-overlay-scale-0-98));
   }
   to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    opacity: var(--group-surface-overlay-opacity-visible);
+    transform: translate(
+        var(--group-surface-overlay-size-transform-negative-50percent),
+        var(--group-surface-overlay-size-transform-negative-50percent)
+      )
+      scale(var(--group-surface-overlay-scale-1));
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -149,4 +200,10 @@
     animation: none;
   }
 }
-.aegis-modal-header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-left: auto; }
+.aegis-modal-header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--group-surface-overlay-space-gap-compact);
+  margin-left: auto;
+}

@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import type { ReactNode, CSSProperties } from 'react';
 import { X } from '@/components/icon';
 import type { Intent } from '@/components/button';
@@ -18,6 +19,17 @@ export interface TagProps {
   disabled?: boolean;
   className?: string;
 }
+const intentStyles: Record<
+  NonNullable<TagProps['intent']>,
+  { '--group-data-display-tag-tag-fg': string }
+> = {
+  default: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-content-secondary)' },
+  function: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-action-foreground)' },
+  destroy: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-danger-foreground)' },
+  ai: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-ai-foreground)' },
+  success: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-success-foreground)' },
+  warning: { '--group-data-display-tag-tag-fg': 'var(--semantic-color-caution-foreground)' },
+};
 export function Tag({
   children,
   variant = 'static',
@@ -32,13 +44,13 @@ export function Tag({
   disabled,
   className,
 }: TagProps) {
-  const intentColor =
-    intent === 'default' ? 'var(--color-text-secondary)' : `var(--color-${intent}-fg)`;
+  const selectedStyle = intentStyles[intent];
   const style = {
-    ...(intent !== 'default' && { '--tag-fg': intentColor }),
+    ...(intent !== 'default' && selectedStyle),
     ...(variant === 'status' && {
-      '--tag-fg': dotColor ?? intentColor,
-      '--status-fg': 'var(--tag-fg)',
+      '--group-data-display-tag-tag-fg':
+        dotColor ?? selectedStyle['--group-data-display-tag-tag-fg'],
+      '--status-fg': 'var(--group-data-display-tag-tag-fg)',
     }),
   } as CSSProperties;
   const props = {
@@ -81,7 +93,7 @@ export function Tag({
             }
           }}
         >
-          <X size={12} />
+          <X size={componentToken('data-display.icon-xs')} />
         </button>
       )}
     </span>

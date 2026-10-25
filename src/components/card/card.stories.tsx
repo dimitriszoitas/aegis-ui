@@ -3,6 +3,7 @@ import { ShieldCheck, Clock3 } from '@/components/icon';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './card';
 
 const meta = {
+  id: 'components-surfaces-card',
   title: 'Components/Surfaces/Card',
   component: Card,
   subcomponents: { CardHeader, CardTitle, CardDescription, CardContent, CardFooter },

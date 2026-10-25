@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useArgs } from 'storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BulkActionsBar } from './bulk-actions-bar';
+import { BulkActionsBar, type BulkActionsBarProps } from './bulk-actions-bar';
 import { Banner } from '@/components/banner';
 import { Button } from '@/components/button';
 import { Checkbox } from '@/components/checkbox';
@@ -8,7 +9,8 @@ import { SeverityBadge, type Severity } from '@/components/severity-badge';
 import { StatusBadge, type RecordStatus } from '@/components/status-badge';
 
 const meta = {
-  title: 'Components/Data grid/Bulk actions bar',
+  id: 'components-data-grid-bulk-actions-bar',
+  title: 'Components/Data Display/Data grid/Bulk actions bar',
   component: BulkActionsBar,
   tags: ['autodocs'],
 } satisfies Meta<typeof BulkActionsBar>;
@@ -172,3 +174,63 @@ export const FloatingAtBottom: StoryObj = {
   parameters: { layout: 'fullscreen' },
 };
 export const FailedAssignment: StoryObj = { render: () => <BulkSelectionDemo failAssignment /> };
+
+function BulkPlayground({
+  args,
+  updateArgs,
+}: {
+  args: BulkActionsBarProps;
+  updateArgs: (patch: Partial<BulkActionsBarProps>) => void;
+}) {
+  const [message, setMessage] = useState('Choose an action for the selected records.');
+  return (
+    <div className="stack" style={{ width: '100%', minHeight: 160 }}>
+      <BulkActionsBar
+        {...args}
+        onAssign={(id) =>
+          setMessage(
+            id
+              ? `Assigned to ${args.owners.find((owner) => owner.id === id)?.name ?? id}`
+              : 'Assignment cleared',
+          )
+        }
+        onStatusChange={(status) => setMessage(`Status changed to ${status}`)}
+        onSummarize={() =>
+          setMessage(`Requested a summary for ${args.selectedCount} selected records`)
+        }
+        onClear={() => {
+          updateArgs({ selectedCount: 0 });
+          setMessage('Selection cleared');
+        }}
+      />
+      <p role="status">{message}</p>
+      {args.selectedCount === 0 && (
+        <Button size="sm" emphasis="secondary" onClick={() => updateArgs({ selectedCount: 3 })}>
+          Select three records
+        </Button>
+      )}
+    </div>
+  );
+}
+
+export const Playground: StoryObj<typeof BulkActionsBar> = {
+  args: {
+    selectedCount: 3,
+    owners,
+    position: 'inline',
+    loading: false,
+    onAssign: () => undefined,
+    onStatusChange: () => undefined,
+    onSummarize: () => undefined,
+    onClear: () => undefined,
+  },
+  argTypes: {
+    selectedCount: { control: { type: 'number', min: 0, step: 1 } },
+    position: { control: 'select', options: ['inline', 'fixed'] },
+    owners: { control: 'object' },
+  },
+  render: function Render(args) {
+    const [, updateArgs] = useArgs<BulkActionsBarProps>();
+    return <BulkPlayground args={args} updateArgs={updateArgs} />;
+  },
+};

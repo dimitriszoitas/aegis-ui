@@ -1,3 +1,5 @@
+import { useInputFocusModality } from '@/lib/use-input-focus';
+import { componentToken } from '@/lib/component-design-tokens';
 import { useEffect, useId, useRef, useState, type ComponentProps } from 'react';
 import { ArrowUp, CircleCheck, Paperclip, RefreshCw, X } from '@/components/icon';
 import { Button } from '@/components/button';
@@ -75,6 +77,7 @@ export function FileUpload({
   className,
   ...props
 }: FileUploadProps) {
+  useInputFocusModality();
   const [internal, setInternal] = useState(defaultValue);
   const items = value ?? internal;
   const current = useRef(items);
@@ -253,7 +256,7 @@ export function FileUpload({
         }}
       >
         <span className="aegis-file-upload-symbol" aria-hidden="true">
-          <ArrowUp size={22} />
+          <ArrowUp size={componentToken('input.icon-brand')} />
         </span>
         <div className="aegis-file-upload-copy">
           <p id={`${id}-description`}>{description}</p>
@@ -301,7 +304,11 @@ export function FileUpload({
           {items.map((item) => (
             <li key={item.id} data-file-id={item.id} data-status={item.status}>
               <span className="aegis-file-upload-item-icon" aria-hidden="true">
-                {item.status === 'complete' ? <CircleCheck size={18} /> : <Paperclip size={18} />}
+                {item.status === 'complete' ? (
+                  <CircleCheck size={componentToken('input.icon-lg')} />
+                ) : (
+                  <Paperclip size={componentToken('input.icon-lg')} />
+                )}
               </span>
               <div className="aegis-file-upload-item-copy">
                 <strong title={item.file.name}>{item.file.name}</strong>
@@ -333,7 +340,11 @@ export function FileUpload({
                     disabled={disabled}
                     onClick={() => void upload(item)}
                   >
-                    {item.status === 'error' ? <RefreshCw size={15} /> : <ArrowUp size={15} />}
+                    {item.status === 'error' ? (
+                      <RefreshCw size={componentToken('input.icon-inline')} />
+                    ) : (
+                      <ArrowUp size={componentToken('input.icon-inline')} />
+                    )}
                   </IconButton>
                 )}
                 {item.status === 'uploading' ? (
@@ -353,7 +364,7 @@ export function FileUpload({
                     disabled={disabled}
                     onClick={() => remove(item)}
                   >
-                    <X size={15} />
+                    <X size={componentToken('input.icon-inline')} />
                   </IconButton>
                 )}
               </div>

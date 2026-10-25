@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { type ReactNode, type ComponentProps } from 'react';
 import {
   CheckCheck,
@@ -59,7 +60,7 @@ export function Timeline({
         return (
           <li className="aegis-timeline-entry" key={item.id} data-type={type}>
             <span className="aegis-timeline-marker" aria-hidden="true">
-              {item.icon ?? <Icon size={14} />}
+              {item.icon ?? <Icon size={componentToken('data-display.icon-sm')} />}
             </span>
             <div className="aegis-timeline-content">
               <div className="aegis-timeline-heading">

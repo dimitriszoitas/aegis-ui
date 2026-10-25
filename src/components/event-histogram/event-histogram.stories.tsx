@@ -5,7 +5,8 @@ import { TimeRangePicker } from '@/components/time-range-picker';
 import { timeSeries, referenceTime } from '@/sample-data';
 import type { TimeRange } from '@/lib/time-range';
 const meta = {
-  title: 'Components/Charts/Event histogram',
+  id: 'components-charts-event-histogram',
+  title: 'Components/Data Visualization/Event histogram',
   component: EventHistogram,
   tags: ['autodocs'],
   args: { data: timeSeries, title: 'Workspace activity over time' },

@@ -1,7 +1,9 @@
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './pagination';
 const meta = {
+  id: 'components-navigation-pagination',
   title: 'Components/Navigation/Pagination',
   component: Pagination,
   tags: ['autodocs'],
@@ -46,4 +48,33 @@ export const States: Story = {
       </div>
     </div>
   ),
+};
+
+export const Playground: Story = {
+  args: {
+    page: 1,
+    pageSize: 25,
+    total: 150,
+    pageSizeOptions: [10, 25, 50, 100],
+    disabled: false,
+    noun: 'projects',
+  },
+  argTypes: {
+    page: { control: { type: 'number', min: 1, max: 1000, step: 1 } },
+    pageSize: { control: 'select', options: [10, 25, 50, 100] },
+    total: { control: { type: 'number', min: 0, max: 100000, step: 1 } },
+    pageSizeOptions: { control: 'object' },
+    disabled: { control: 'boolean' },
+    noun: { control: 'text' },
+  },
+  render: function PaginationPlayground(args) {
+    const [, updateArgs] = useArgs();
+    return (
+      <Pagination
+        {...args}
+        onPageChange={(page) => updateArgs({ page })}
+        onPageSizeChange={(pageSize) => updateArgs({ pageSize, page: 1 })}
+      />
+    );
+  },
 };

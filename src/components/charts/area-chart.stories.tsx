@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AreaChart } from './charts';
 import { timeSeries } from '@/sample-data';
 const meta = {
-  title: 'Components/Charts/Area chart',
+  id: 'components-charts-area-chart',
+  title: 'Components/Data Visualization/Area chart',
   component: AreaChart,
   tags: ['autodocs'],
   args: {

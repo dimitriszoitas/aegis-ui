@@ -15,16 +15,16 @@ Start with **Foundations → Principles**, then browse components and reusable p
 - Toolbar or side-panel filters, time ranges, and removable summaries of applied filter groups.
 - Charts, compact activity bars, metrics, activity timelines, and a Gantt timeline with day/week/month scales, progress, milestones, dependencies, and an accessible schedule table.
 - File upload, segmented controls, description lists, copyable fields, links, and split buttons.
-- Page headers, master/detail layouts, unsaved-change controls, notification centers, and onboarding checklists.
+- Page headers, unsaved-change controls, notification centers, and onboarding checklists.
 - Structured data viewers, code editing, and comparison.
 - Assistants with attached context, streaming, stop, retry, regenerate, feedback, and reference navigation.
 - Wizards with separate progress and form content, horizontal and vertical layouts, validation, and explicit approval.
 
-For a complete table demonstration, open **Components → Data → DataGrid → Full presentation**. It combines filters, search, density and column controls, sorting and resizing, selection and bulk changes, record expansion, editable details, and AI summaries. Presentation controls switch between toolbar/sidebar filters, 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states. Selecting rows replaces the search and table-controls row with bulk actions; clearing selection restores the unchanged search. Header indicators show sorting direction and multi-sort priority without an extra summary row. A trailing Actions column stays compact and pinned to the right by default; the last visible data column before it fills any spare width.
+For a complete table demonstration, open **Components → Data Display → DataGrid → Full presentation**. It combines filters, search, density and column controls, sorting and resizing, selection and bulk changes, record expansion, editable details, and AI summaries. Presentation controls switch between toolbar/sidebar filters, 150 and 1,000 records, pagination and virtual scrolling, and loading, empty, or retryable error states. Selecting rows replaces the search and table-controls row with bulk actions; clearing selection restores the unchanged search. Header indicators show sorting direction and multi-sort priority without an extra summary row. A trailing Actions column stays compact and pinned to the right by default; the last visible data column before it fills any spare width.
 
 ### Component documentation
 
-Each of the 104 registered families has a **Tokens Used** page and eleven **Component Guidelines** pages: Overview, Anatomy, Types, Variants, Intent & Emphasis, States, Sizes, Usage & Content, Accessibility, API & Props, and Use cases/In Context.
+Each of the 103 registered families starts with **Overview**, followed by **Component Guidelines** and **Tokens Used**. The ten guideline pages are Anatomy, Types, Variants, Intent & Emphasis, States, Sizes, Usage & Content, Accessibility, API & Props, and Use cases/In Context. Anatomy uses one or two populated component examples with numbered, keyboard-accessible callouts and matching part descriptions. Tokens Used has no canvas. It groups property bindings into separate color, border, text, icon, sizing, spacing, typography, radius, elevation, opacity, motion, and layout tables, with resolved values for all four theme and mode combinations. Variant selectors and source locations remain inspectable.
 
 Token pages inspect the rendered example in all four theme/mode combinations and include source declarations for inactive variants and states. API tables come from public TypeScript definitions. Authored guidance explains component-specific usage and integration responsibilities.
 
@@ -52,7 +52,7 @@ Import the compiled component stylesheet once at your application's entry point.
 
 ```tsx
 import '@dimitriszoitas/aegis-ui/reset.css'; // Optional application-wide baseline
-import '@dimitriszoitas/aegis-ui/styles.css'; // Required component styles and tokens
+import '@dimitriszoitas/aegis-ui/styles.css'; // Styles and tokens for the supplied visual language
 import '@dimitriszoitas/aegis-ui/fonts.css'; // Optional self-hosted Figtree and JetBrains Mono
 ```
 
@@ -155,7 +155,7 @@ Application stories use the available width up to 2160px, then stay centered on 
 
 **Two themes, one visual system.** Fundamental is the default, with full-height navigation and workspace panels. Fundamental Floating places navigation and assistant panels in rounded containers with exterior insets. Both use the same palette, typography, controls, data density, and interaction behavior. Light/dark color is a separate choice, giving four combinations. Switching presentation preserves application state.
 
-**Quiet surfaces and clear actions.** Both themes use neutral surfaces, borderless cards, and subtle horizontal table dividers. Form controls retain their own fill and boundary. Transient overlays use a distinct surface and soft shadows; modal tasks add a backdrop. Ordinary actions use blue, AI actions use a muted teal-to-blue gradient, and red, green, amber, and cyan communicate semantic state. Figtree carries interface text; JetBrains Mono distinguishes code and identifiers.
+**Quiet surfaces and clear actions.** Both themes use neutral surfaces, borderless cards, and subtle horizontal table dividers. Form controls retain their own fill and boundary. Transient overlays use a distinct surface and soft shadows; modal tasks add a backdrop. Ordinary actions use blue, AI actions use a contrasting lime-to-blue-to-purple gradient, and red, green, amber, and cyan communicate semantic state. Figtree carries interface text; JetBrains Mono distinguishes code and identifiers.
 
 `SideNav` can collapse to an icon rail while keeping Settings and the user profile at the bottom. `brandName` and `brandIcon` customize its identity; `brandIcon={null}` omits the mark. Subtle horizontal dividers separate navigation groups without visible group headings. Fundamental Floating contains the navigation in an inset rounded surface while preserving the same controls and content.
 
@@ -165,7 +165,7 @@ Application stories use the available width up to 2160px, then stay centered on 
 
 **Hierarchy stays clear.** Accordion bodies, navigation children, tree levels, JSON branches, and expanded table content use a shared 12px inset.
 
-**Color has a purpose.** Function blue identifies actions. Muted teal-to-blue gradients identify AI assistance and provenance in both themes. Generic tags have transparent backgrounds with semantic outlines and optional dots. Labeled severity badges use text and an outline; their explicit compact variant keeps a colored dot. Status indicators pair a readable label with their state treatment. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
+**Color has a purpose.** Function blue identifies actions. Lime-to-blue-to-purple gradients identify AI assistance and provenance in both themes. Generic tags have transparent backgrounds with semantic outlines and optional dots. Labeled severity badges use text and an outline; their explicit compact variant keeps a colored dot. Status indicators pair a readable label with their state treatment. Destructive, success, and warning colors are separate from the five-level severity scale. Labels and icons preserve meaning without color.
 
 **Density preserves access.** Grid rows are 36px compact, 48px default, and 60px comfortable. Long record titles stay on one line with full-text tooltips and accessible row labels. Compact metadata fits the row height. Density preserves available actions.
 
@@ -175,15 +175,21 @@ Use compact sticky page controls when long pages need persistent navigation or a
 
 ## Tokens and themes
 
-The token system has three layers:
+The token system has three strict tiers:
 
-1. Primitives: color ramps, spacing, type, radii, and motion scales.
-2. Semantic tokens: surfaces, text, borders, intent, severity, syntax, charts, and focus.
-3. Component tokens: control radii, sidebar dimensions, and grid densities.
+1. **Primitive:** exact raw values, including 21 color palettes, dimensions, opacity and motion.
+2. **Semantic:** shared roles referencing primitives, with four explicit mappings for Fundamental and Fundamental Floating in light and dark.
+3. **Group:** sidebar-category roles referencing semantics. Every component or pattern consumes only its own category namespace for its own properties.
 
-[`src/styles/tokens.css`](src/styles/tokens.css) defines shared primitive scales and baseline roles; [`fundamental-tokens.css`](src/styles/fundamental-tokens.css) supplies the canonical palette, typography, and component geometry for both themes. [`theme.css`](src/styles/theme.css) maps tokens into Tailwind v4 and bridges shadcn variables; [`globals.css`](src/styles/globals.css) loads self-hosted Figtree and JetBrains Mono and common styles. Components consume semantic roles rather than raw colors. Foundation specimens read the canonical source values directly.
+[`tokens/design-tokens.json`](tokens/design-tokens.json) is the authoritative graph. `npm run tokens:generate` produces [`design-tokens.css`](src/styles/design-tokens.css) and the runtime group aliases. Semantic sizing, spacing and font metrics stay identical across all four configurations. Theme changes affect styling such as color, radius and elevation. Semantic ramps use `xxxs` through `xxxxl`; descriptive group ramps are relative to their owner. For example, a Trigger button’s snug spacing can be 4px while a Surface container’s snug spacing is 16px.
 
-Primitives, semantic roles, and component aliases remain separate. Some semantic colors use explicit theme values; others reference shared roles. Component radii, spacing, and row heights consume their dedicated tokens, so changing surface geometry does not change nested controls.
+[`tokens/component-categories.json`](tokens/component-categories.json) maps source folders to sidebar categories. All **Triggers** components, including Button, Link, DropdownMenu and ContextMenu, use `--group-trigger-*` for their own CSS, inline styles and numeric defaults. A real nested child keeps its own category: a Button inside a Card still uses Trigger tokens while the Card uses Surface tokens. Importing a shared helper or registry does not make it a nested component. Tokens Used separates owned bindings from nested component bindings and reports actual category mismatches rather than hiding them.
+
+[`component-design-tokens.ts`](src/lib/component-design-tokens.ts) bridges CSS aliases to numeric chart, grid, overlay and icon APIs. Tests verify its server defaults equal the resolved canonical mappings. Explicit component props and measured geometry remain runtime inputs. Older variable names remain compatibility exports for existing documentation and integrations; they are not additional canonical tiers and runtime components do not consume them directly.
+
+Run `npm run tokens:check` to validate adjacent-tier references, complete theme mappings, invariant dimensions, consumer bindings and fixed-value coverage. The audit covers runtime components, patterns and supported shared styles. Actual measurements, data values, intrinsic SVG geometry and media-query syntax are bounded structural exceptions. Marketing artwork, story compositions and archived review themes are outside this runtime audit.
+
+Repository workflows live in [`skills/create-component`](skills/create-component/SKILL.md), [`skills/create-token`](skills/create-token/SKILL.md), and [`skills/create-layout`](skills/create-layout/SKILL.md). Storybook renders these same files under **Agentic Skills**, immediately after AI Guidelines. The machine-readable graph is also exported as `@dimitriszoitas/aegis-ui/token-manifest.json`.
 
 Color is reflected by `.dark` and `data-theme` on `<html>`. [`useTheme`](src/lib/theme.ts) supports `light`, `dark`, and `system`, follows system changes, and persists explicit preferences when storage is available. The independent presentation uses `data-layout-theme="fundamental"` or `data-layout-theme="fundamental-floating"`; [`applyLayoutTheme`](src/lib/layout-theme.ts) applies it to the document so portaled sheets and menus receive the same treatment. Fundamental is the default. Storybook's color and theme controls preview all four combinations without persisting a standalone preference.
 
@@ -251,7 +257,7 @@ Theme helpers apply `.dark`, `data-theme`, and `data-layout-theme` to `<html>` s
 
 ## Component refinements
 
-Buttons have four emphasis levels: `primary` (filled), `secondary` (soft), `tertiary` (outline), and `ghost` (text). Icon-side padding is optically balanced; loading keeps the same footprint. `CountBadge` and `Tooltip` accept `variant="inverted"` in either color theme. Tooltip arrows use a continuous outline without an interior seam.
+Buttons have four emphasis levels: `primary` (filled), `secondary` (outline), `tertiary` (soft), and `ghost` (text). Icon-side padding is optically balanced; loading keeps the same footprint. `CountBadge` and `Tooltip` accept `variant="inverted"` in either color theme. Tooltip arrows use a continuous outline without an interior seam.
 
 `Popover` supports optional headers and footers with `density="regular" | "tight"` and no internal dividers. `Modal` uses header/footer dividers and `size="small" | "regular" | "large"`. `SideSheet` aligns its title and close button, with optional `headerActions` and `footer` content. These surfaces keep header and footer actions outside the scrolling body.
 
@@ -259,7 +265,7 @@ Buttons have four emphasis levels: `primary` (filled), `secondary` (soft), `tert
 
 The interface uses Hugeicons through the package's `/icons` entry (`@/components/icon` inside this repository). **Foundations → Icons** includes the searchable Hugeicons catalog with sizes, stroke weights, and copyable imports. Local development additionally exposes the installed Untitled UI reference catalog. Figtree is the UI typeface; JetBrains Mono is used for code. The full icon catalogs are isolated from the console bundle, and the Untitled UI gallery is excluded from the installable package. Bundled fonts and AWS artwork retain the notices in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Third-party icon packs and logos retain their own licenses. Untitled UI's bundled license restricts redistribution. Production Storybook builds replace that pack with an empty module, hide its selector, and reject any build that still contains its package modules; the complete catalog remains available only in local development. See the [Untitled UI license](https://www.untitledui.com/license). Hugeicons' free pack is MIT licensed. AWS assets remain AWS-owned marks with source attribution in the logo catalog. **Components → Brand → AWS logos** includes 810 symbols from the official July 2026 package: 305 service marks, 26 categories, 466 resources, and 13 architecture-group marks. The 859 local SVGs include 49 official dark variants. Search the catalog, copy a typed logo name, or download its SVG; `AwsLogo` presents the original artwork in a square rounded frame.
+Third-party icon packs and logos retain their own licenses. Untitled UI's bundled license restricts redistribution. Production Storybook builds replace that pack with an empty module, hide its selector, and reject any build that still contains its package modules; the complete catalog remains available only in local development. See the [Untitled UI license](https://www.untitledui.com/license). Hugeicons' free pack is MIT licensed. AWS assets remain AWS-owned marks with source attribution in the logo catalog. The optional `AwsLogo` package entry remains available for applications that need the original artwork.
 
 ## Keyboard behavior
 
@@ -306,13 +312,13 @@ pnpm test:stories
 
 `STORYBOOK_URL` selects another running Storybook, and `STORY_FILTER` limits stories by ID using a regular expression. `CAPTURE_STORIES=1` also saves screenshots. Results go into ignored `test-results/`. The story sweep covers rendered story states and their play interactions; foundation MDX pages and additional keyboard workflows are reviewed separately. These checks support accessibility review and do not replace it.
 
-When adding a component, export its typed API, use semantic tokens, add a colocated story matrix and focused interaction states, and verify both themes. Use realistic application content. Keep raw color values in the token source files.
+When adding a component, export its typed API, use only its sidebar category’s group tokens for its own properties, add a colocated story matrix and focused interaction states, and verify both themes. Use realistic application content. Keep raw color values in the token source files.
 
 ## Repository map
 
 ```text
 .storybook/                 Preview, themes, docs, and accessibility configuration
-src/styles/                 Primitive, semantic, and component tokens
+src/styles/                 Generated tokens and compatibility styles
 src/components/             Reusable controls, surfaces, data display, and AI components
 src/patterns/               Reusable workflows, assistant, details, and sample applications
 src/sample-data/            Typed fixtures for business component demonstrations
@@ -322,7 +328,7 @@ src/package/               Library style and public API entry points
 scripts/                   Package build/consumer checks, token guard, and story verification
 ```
 
-The implementation uses React, TypeScript, Vite, Tailwind v4, Radix/shadcn foundations, TanStack Table and Virtual, CodeMirror 6, Recharts, cmdk, react-day-picker, react-resizable-panels, and Sonner. Fonts are bundled locally; no external font CDN is needed.
+The implementation uses React, TypeScript, Vite, Tailwind v4, Base UI headless primitives, TanStack Table and Virtual, CodeMirror 6, Recharts, react-day-picker, react-resizable-panels, and Sonner. Fonts are bundled locally; no external font CDN is needed.
 
 ## Roadmap
 
@@ -331,3 +337,11 @@ The implementation uses React, TypeScript, Vite, Tailwind v4, Radix/shadcn found
 - Connect host-owned data and AI adapters while preserving controlled APIs, reference provenance, cancellation, and explicit approval.
 
 Aegis code is licensed under the [MIT license](LICENSE). Third-party fonts, icons, and logos retain their respective licenses.
+
+## Component discovery and headless composition
+
+Storybook groups components by purpose: Triggers, Inputs & Selection, Navigation, Surfaces, Layout, Data Display, Data Visualization, Code, Feedback, and AI. Patterns group coordinated behavior into Filtering, Page Structure, Workflows, Communication, and AI Assistance. Every family retains its Overview, Component Guidelines, and Tokens Used sections. The Component Directory searches familiar aliases such as chips, textfield, drawer, and toast. Aliases help discovery; they are not additional exports.
+
+Use `@dimitriszoitas/aegis-ui/primitives` for unstyled Base UI parts. This entry imports no design-system CSS, tokens, fixtures, routing, or application state. It exposes Base UI composition, controlled state, and accessibility APIs. Use the existing component entries and `styles.css` when you want the Fundamental visual language. Light/dark and Fundamental/Fundamental Floating remain independent presentation choices. Native React controls remain native where no interaction primitive is needed.
+
+The documentation host serves `llms.txt`, `ai/index.json`, a versioned schema, compact per-component contracts, and a shared token declaration graph. These are generated from current source metadata and authored guidance. They list exact imports, supported props, variants, aliases, source links, and token references. Source extraction is distinct from runtime accessibility or visual evidence. Run `npm run docs:generate` after API changes and `npm run docs:check` to detect stale output.

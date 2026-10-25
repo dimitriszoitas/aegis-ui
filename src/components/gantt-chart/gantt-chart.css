@@ -1,138 +1,159 @@
 .aegis-gantt {
-  min-width: 0;
-  color: var(--color-text-primary);
+  min-width: var(--group-data-viz-chart-number-0);
+  color: var(--group-data-viz-chart-color-content-primary);
 }
 .aegis-gantt-header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-4);
+  gap: var(--group-data-viz-chart-space-gap-comfortable);
+  margin-bottom: var(--group-data-viz-chart-space-margin-bottom-comfortable);
 }
 .aegis-gantt-header h3 {
-  margin: 0;
-  font-size: var(--text-base);
+  margin: var(--group-data-viz-chart-number-0);
+  font-size: var(--group-data-viz-chart-font-size-body);
 }
 .aegis-gantt-header p {
-  margin: var(--space-1) 0 0;
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
+  margin: var(--group-data-viz-chart-space-margin-snug) var(--group-data-viz-chart-number-0)
+    var(--group-data-viz-chart-number-0);
+  color: var(--group-data-viz-chart-color-content-secondary);
+  font-size: var(--group-data-viz-chart-font-size-body);
 }
 .aegis-gantt-scroll {
   overflow: auto;
-  max-height: 620px;
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  background: var(--color-bg-canvas);
+  max-height: var(--group-data-viz-chart-size-max-height-wide-canvas-snug);
+  border: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
+  border-radius: var(--group-data-viz-chart-radius-border-radius-strong);
+  background: var(--group-data-viz-chart-color-surface-canvas);
 }
 .aegis-gantt-canvas {
   display: grid;
-  grid-template-columns: 200px var(--gantt-width);
+  grid-template-columns: var(--group-data-viz-chart-size-grid-template-columns-wide-panel-tiny) var(
+      --gantt-width
+    );
   width: max-content;
 }
 .aegis-gantt-column-heading,
 .aegis-gantt-axis {
   position: sticky;
-  top: 0;
-  height: 40px;
+  top: var(--group-data-viz-chart-number-0);
+  height: var(--group-data-viz-chart-size-height-large);
   display: flex;
   align-items: center;
-  background: var(--color-bg-surface);
-  border-bottom: 1px solid var(--color-border-subtle);
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
-  z-index: 3;
+  background: var(--group-data-viz-chart-color-surface-surface);
+  border-bottom: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
+  color: var(--group-data-viz-chart-color-content-secondary);
+  font-size: var(--group-data-viz-chart-font-size-label);
+  z-index: var(--group-data-viz-chart-layer-local-3);
 }
 .aegis-gantt-column-heading {
-  left: 0;
-  z-index: 5;
-  padding-inline: var(--space-4);
-  border-inline-end: 1px solid var(--color-border-subtle);
+  left: var(--group-data-viz-chart-number-0);
+  z-index: var(--group-data-viz-chart-layer-local-5);
+  padding-inline: var(--group-data-viz-chart-space-padding-inline-comfortable);
+  border-inline-end: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
 }
 .aegis-gantt-axis > span {
-  flex-shrink: 0;
-  padding-inline: var(--space-2);
+  flex-shrink: var(--group-data-viz-chart-flex-none);
+  padding-inline: var(--group-data-viz-chart-space-padding-inline-compact);
   text-align: center;
 }
 .aegis-gantt-labels {
   position: sticky;
-  left: 0;
-  z-index: 4;
-  background: var(--color-bg-canvas);
-  border-inline-end: 1px solid var(--color-border-subtle);
+  left: var(--group-data-viz-chart-number-0);
+  z-index: var(--group-data-viz-chart-layer-local-4);
+  background: var(--group-data-viz-chart-color-surface-canvas);
+  border-inline-end: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
 }
 .aegis-gantt-labels > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px;
-  height: 48px;
-  padding-inline: var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
+  gap: var(--group-data-viz-chart-size-gap-micro-compact);
+  height: var(--group-data-viz-measurement-gantt-row-height);
+  padding-inline: var(--group-data-viz-chart-space-padding-inline-comfortable);
+  border-bottom: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
 }
 .aegis-gantt-labels :is(strong, small) {
-  min-width: 0;
-  flex-shrink: 0;
+  min-width: var(--group-data-viz-chart-number-0);
+  flex-shrink: var(--group-data-viz-chart-flex-none);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .aegis-gantt-labels strong {
-  font-size: var(--text-sm);
-  font-weight: var(--title-weight);
+  font-size: var(--group-data-viz-chart-font-size-body);
+  font-weight: var(--group-data-viz-chart-title-weight);
 }
 .aegis-gantt-labels small {
-  color: var(--color-text-secondary);
-  font-size: var(--text-xs);
+  color: var(--group-data-viz-chart-color-content-secondary);
+  font-size: var(--group-data-viz-chart-font-size-label);
 }
 .aegis-gantt-plot {
   position: relative;
 }
 .aegis-gantt-grid {
   position: absolute;
-  inset: 0;
+  inset: var(--group-data-viz-chart-number-0);
   display: flex;
   pointer-events: none;
 }
 .aegis-gantt-grid > span {
-  flex-shrink: 0;
-  border-inline-end: 1px solid var(--color-border-subtle);
+  flex-shrink: var(--group-data-viz-chart-flex-none);
+  border-inline-end: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
 }
 .aegis-gantt-row {
   position: relative;
-  height: 48px;
-  border-bottom: 1px solid var(--color-border-subtle);
+  height: var(--group-data-viz-measurement-gantt-row-height);
+  border-bottom: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
 }
 .aegis-gantt-bar {
-  --gantt-color: var(--color-function-fg);
+  --group-data-viz-chart-gantt-color: var(--semantic-part-chart-gantt-color-default);
   position: absolute;
-  top: 10px;
-  height: 28px;
+  top: var(--group-data-viz-chart-size-top-glyph-small);
+  height: var(--group-data-viz-chart-size-height-regular);
   overflow: hidden;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--gantt-color);
-  padding: 0;
-  background: color-mix(in srgb, var(--gantt-color) 16%, var(--color-bg-canvas));
-  color: var(--color-text-primary);
+  border-radius: var(--group-data-viz-chart-radius-border-radius-bold);
+  border: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-gantt-color);
+  padding: var(--group-data-viz-chart-number-0);
+  background: color-mix(
+    in srgb,
+    var(--group-data-viz-chart-gantt-color) var(--group-data-viz-chart-mix-16),
+    var(--group-data-viz-chart-color-surface-canvas)
+  );
+  color: var(--group-data-viz-chart-color-content-primary);
 }
 .aegis-gantt-bar[data-intent='success'] {
-  --gantt-color: var(--color-success-fg);
+  --group-data-viz-chart-gantt-color: var(--semantic-part-chart-gantt-color-success);
 }
 .aegis-gantt-bar[data-intent='warning'] {
-  --gantt-color: var(--color-warning-fg);
+  --group-data-viz-chart-gantt-color: var(--semantic-part-chart-gantt-color-warning);
 }
 .aegis-gantt-bar[data-intent='ai'] {
-  --gantt-color: var(--color-ai-fg);
+  --group-data-viz-chart-gantt-color: var(--semantic-part-chart-gantt-color-ai);
 }
 .aegis-gantt-bar[data-selected] {
-  outline: 2px solid var(--ring-focus);
-  outline-offset: 2px;
+  outline: var(--group-data-viz-chart-border-width-regular) solid
+    var(--group-data-viz-chart-ring-focus);
+  outline-offset: var(--group-data-viz-chart-size-outline-offset-micro-compact);
 }
 .aegis-gantt-progress {
   position: absolute;
-  inset: 0 auto 0 0;
-  background: color-mix(in srgb, var(--gantt-color) 25%, transparent);
+  inset: var(--group-data-viz-chart-number-0) auto var(--group-data-viz-chart-number-0)
+    var(--group-data-viz-chart-number-0);
+  background: color-mix(
+    in srgb,
+    var(--group-data-viz-chart-gantt-color) var(--group-data-viz-chart-mix-25),
+    transparent
+  );
 }
 .aegis-gantt-bar-label {
   position: relative;
@@ -140,87 +161,93 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-inline: var(--space-2);
-  font-size: var(--text-xs);
+  padding-inline: var(--group-data-viz-chart-space-padding-inline-compact);
+  font-size: var(--group-data-viz-chart-font-size-label);
   text-align: start;
 }
 .aegis-gantt-bar[data-milestone] {
-  top: 16px;
-  width: 16px !important;
-  height: 16px;
-  transform: translateX(4px) rotate(45deg);
-  background: var(--gantt-color);
+  top: var(--group-data-viz-chart-size-top-small);
+  width: var(--group-data-viz-measurement-gantt-milestone-width) !important;
+  height: var(--group-data-viz-measurement-gantt-milestone-width);
+  transform: translateX(var(--group-data-viz-chart-size-transform-micro-regular))
+    rotate(var(--group-data-viz-chart-angle-45deg));
+  background: var(--group-data-viz-chart-gantt-color);
 }
 .aegis-gantt-dependencies {
   position: absolute;
-  inset: 0;
+  inset: var(--group-data-viz-chart-number-0);
   overflow: visible;
   pointer-events: none;
 }
 .aegis-gantt-dependencies > path {
-  stroke: var(--color-text-tertiary);
-  fill: none;
-  stroke-width: 1.5;
+  stroke: var(--group-data-viz-chart-color-content-tertiary);
+  fill: var(--group-data-viz-chart-elevation-none);
+  stroke-width: var(--group-data-viz-chart-icon-stroke-light);
 }
 .aegis-gantt-dependencies marker path {
-  fill: var(--color-text-tertiary);
+  fill: var(--group-data-viz-chart-color-content-tertiary);
 }
 .aegis-gantt-today {
   position: absolute;
-  inset-block: 0;
-  z-index: 2;
-  border-inline-start: 1px dashed var(--color-destroy-fg);
+  inset-block: var(--group-data-viz-chart-number-0);
+  z-index: var(--group-data-viz-chart-layer-local-2);
+  border-inline-start: var(--group-data-viz-chart-border-width-hairline) dashed
+    var(--group-data-viz-chart-color-danger-foreground);
   pointer-events: none;
 }
 .aegis-gantt-today > span {
   position: absolute;
-  top: 0;
-  padding: 2px 4px;
-  color: var(--color-destroy-fg);
-  background: var(--color-bg-canvas);
-  font-size: 10px;
+  top: var(--group-data-viz-chart-number-0);
+  padding: var(--group-data-viz-chart-size-padding-micro-compact)
+    var(--group-data-viz-chart-space-padding-snug);
+  color: var(--group-data-viz-chart-color-danger-foreground);
+  background: var(--group-data-viz-chart-color-surface-canvas);
+  font-size: var(--group-data-viz-chart-font-size-annotation-xs);
 }
 .aegis-gantt-data {
-  margin-top: var(--space-3);
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
+  margin-top: var(--group-data-viz-chart-space-margin-top-regular);
+  font-size: var(--group-data-viz-chart-font-size-label);
+  color: var(--group-data-viz-chart-color-content-secondary);
 }
 .aegis-gantt-data summary {
   cursor: pointer;
   width: fit-content;
 }
 .aegis-gantt-table-scroll {
-  max-width: 100%;
+  max-width: var(--group-data-viz-chart-size-max-width-full);
   overflow: auto;
 }
 .aegis-gantt-data table {
-  width: 100%;
+  width: var(--group-data-viz-chart-size-width-full);
   border-collapse: collapse;
-  margin-block: var(--space-3);
-  color: var(--color-text-primary);
+  margin-block: var(--group-data-viz-chart-space-margin-block-regular);
+  color: var(--group-data-viz-chart-color-content-primary);
 }
 .aegis-gantt-data :is(th, td) {
-  padding: var(--space-2);
+  padding: var(--group-data-viz-chart-space-padding-compact);
   text-align: start;
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: var(--group-data-viz-chart-border-width-hairline) solid
+    var(--group-data-viz-chart-color-border-subtle);
   white-space: nowrap;
 }
 .aegis-gantt-empty {
-  padding: var(--space-7);
-  background: var(--color-bg-surface);
+  padding: var(--group-data-viz-chart-space-padding-7);
+  background: var(--group-data-viz-chart-color-surface-surface);
   text-align: center;
-  color: var(--color-text-secondary);
+  color: var(--group-data-viz-chart-color-content-secondary);
 }
 .aegis-gantt-notice {
-  color: var(--color-warning-fg);
-  font-size: var(--text-sm);
+  color: var(--group-data-viz-chart-color-caution-foreground);
+  font-size: var(--group-data-viz-chart-font-size-body);
 }
 @media (max-width: 600px) {
   .aegis-gantt-canvas {
-    grid-template-columns: 140px var(--gantt-width);
+    grid-template-columns: var(--group-data-viz-chart-size-grid-template-columns-panel-snug) var(
+        --gantt-width
+      );
   }
   .aegis-gantt-labels > div {
-    padding-inline: var(--space-2);
+    padding-inline: var(--group-data-viz-chart-space-padding-inline-compact);
   }
 }
 @media (forced-colors: active) {

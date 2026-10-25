@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ConfidenceBadge } from './confidence-badge';
 const meta = {
+  id: 'components-ai-confidencebadge',
   title: 'Components/AI/ConfidenceBadge',
   component: ConfidenceBadge,
   tags: ['autodocs'],
@@ -26,4 +27,10 @@ export const Levels: StoryObj<typeof meta> = {
       ))}
     </div>
   ),
+};
+
+export const Playground: StoryObj<typeof meta> = {
+  args: { confidence: 'high' },
+  argTypes: { confidence: { control: 'select', options: ['high', 'medium', 'low'] } },
+  render: (args) => <ConfidenceBadge {...args} />,
 };

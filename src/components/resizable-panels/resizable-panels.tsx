@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useCallback, useState } from 'react';
 import {
   Group,
@@ -79,7 +80,7 @@ export function ResizeHandle({
       {children ??
         (withGrip && (
           <span aria-hidden="true">
-            <GripVertical size={12} />
+            <GripVertical size={componentToken('layout.icon-xs')} />
           </span>
         ))}
     </Separator>

@@ -44,7 +44,8 @@ function ApplicationWorkspace({
   );
 }
 const meta = {
-  title: 'Components/Overlays/BottomSheet',
+  id: 'components-overlays-bottomsheet',
+  title: 'Components/Surfaces/BottomSheet',
   component: BottomSheet,
   tags: ['autodocs'],
   parameters: {

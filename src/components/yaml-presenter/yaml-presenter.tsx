@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useId, useRef, type HTMLAttributes } from 'react';
 import { ChevronsDownUp, ChevronsUpDown, FileCode2 } from '@/components/icon';
 import {
@@ -26,8 +27,8 @@ export function YamlPresenter({
   filename = 'config.yaml',
   label,
   highlightedLines,
-  minHeight = 120,
-  maxHeight = 520,
+  minHeight = componentToken('yaml-min-height'),
+  maxHeight = componentToken('code-max-height'),
   wrapLines = false,
   onCopy,
   className,
@@ -40,7 +41,7 @@ export function YamlPresenter({
     <section {...props} className={cn('aegis-yaml-presenter', className)} aria-labelledby={titleId}>
       <div className="aegis-yaml-header">
         <span className="aegis-yaml-filename" id={titleId}>
-          <FileCode2 size={15} aria-hidden="true" />
+          <FileCode2 size={componentToken('code.icon-inline')} aria-hidden="true" />
           <span>{filename}</span>
         </span>
         <div className="aegis-yaml-actions" role="group" aria-label="YAML actions">
@@ -50,7 +51,7 @@ export function YamlPresenter({
             aria-label="Fold all YAML sections"
             onClick={() => editor.current?.foldAll()}
           >
-            <ChevronsDownUp size={15} />
+            <ChevronsDownUp size={componentToken('code.icon-inline')} />
           </IconButton>
           <IconButton
             size="sm"
@@ -58,7 +59,7 @@ export function YamlPresenter({
             aria-label="Unfold all YAML sections"
             onClick={() => editor.current?.unfoldAll()}
           >
-            <ChevronsUpDown size={15} />
+            <ChevronsUpDown size={componentToken('code.icon-inline')} />
           </IconButton>
           <CopyButton size="sm" text={value} aria-label={`Copy ${filename}`} onCopy={onCopy} />
         </div>

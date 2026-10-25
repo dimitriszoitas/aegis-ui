@@ -28,6 +28,7 @@ const report = { package: manifest.name, version: manifest.version, checks: [], 
 const publicBase = '/consumer/';
 let browser;
 let server;
+let headlessServer;
 let succeeded = false;
 
 function run(command, arguments_, cwd, timeout = 180_000) {
@@ -180,9 +181,94 @@ try {
     );
   }
   passed('Tarball installs with React peers and all public export files');
+  const exportedTokens = await readFile(
+    join(consumer, 'node_modules', manifest.name, installed.exports['./tokens.css']),
+    'utf8',
+  );
+  const primitiveSource = await readFile(
+    join(repository, 'src/styles/primitive-color-tokens.css'),
+    'utf8',
+  );
+  const tokenNames = (source, pattern) =>
+    [...new Set([...source.matchAll(pattern)].map((match) => match[1]))].sort();
+  for (const pattern of [
+    /(--color-[a-z]+-(?:50|[1-9]00|1[0-3]00))\s*:/g,
+    /(--color-[a-z]+-(?:300|700)-alpha-\d{2})\s*:/g,
+  ]) {
+    const expected = tokenNames(primitiveSource, pattern);
+    assert(expected.length > 0, 'The source primitive ramp must not be empty.');
+    assert.deepEqual(
+      tokenNames(exportedTokens, pattern),
+      expected,
+      'The token-only export must contain every generated primitive ramp and alpha alias.',
+    );
+  }
+  for (const name of [
+    '--opacity-05',
+    '--opacity-95',
+    '--opacity-32',
+    '--opacity-65',
+    '--color-white',
+    '--color-black',
+    '--color-transparent',
+    '--shadow-popover',
+    '--shadow-dialog',
+    '--drop-shadow-md',
+  ])
+    assert(exportedTokens.includes(`${name}:`), `The token-only export is missing ${name}.`);
+  passed(
+    'Token-only export includes all primitive/alpha colors, opacity stops and elevation aliases',
+  );
+  assert(
+    installed.exports['./token-manifest.json'],
+    'The canonical token manifest must have a public data export.',
+  );
+  const exportedTokenManifest = JSON.parse(
+    await readFile(
+      join(consumer, 'node_modules', manifest.name, installed.exports['./token-manifest.json']),
+      'utf8',
+    ),
+  );
+  const sourceTokenManifest = JSON.parse(
+    await readFile(join(repository, 'tokens/design-tokens.json'), 'utf8'),
+  );
+  const exportedStyles = await readFile(
+    join(consumer, 'node_modules', manifest.name, installed.exports['./styles.css']),
+    'utf8',
+  );
+  assert.deepEqual(
+    exportedTokenManifest,
+    sourceTokenManifest,
+    'The packaged canonical manifest must match its source.',
+  );
+  assert.equal(exportedTokenManifest.configurations.length, 4);
+  for (const [name, token] of Object.entries(exportedTokenManifest.tokens)) {
+    if (token.scope === 'local') {
+      assert(
+        !exportedTokens.includes(`${name}:`),
+        `Local group ${name} must not become a global token-only default.`,
+      );
+      assert(
+        exportedStyles.includes(`${name}:`),
+        `The component stylesheet must declare local group ${name}.`,
+      );
+    } else {
+      assert(
+        exportedTokens.includes(`${name}:`),
+        `The token-only export is missing canonical token ${name}.`,
+      );
+    }
+    if (token.tier === 'semantic')
+      assert.deepEqual(
+        Object.keys(token.mappings).sort(),
+        [...exportedTokenManifest.configurations].sort(),
+        `${name} needs all four explicit mappings.`,
+      );
+  }
+  passed('Canonical token manifest and four-configuration token CSS are packaged together');
 
   const imports = Object.keys(installed.exports).filter(
-    (entry) => !entry.includes('*') && !entry.endsWith('.css') && entry !== './package.json',
+    (entry) => !entry.includes('*') && !entry.endsWith('.css') && !entry.endsWith('.json'),
   );
   const publicImportChecks = imports
     .map((entry, index) => {
@@ -206,7 +292,7 @@ try {
         noEmit: true,
         types: ['react', 'react-dom'],
       },
-      include: ['consumer.tsx', 'public-exports.ts'],
+      include: ['consumer.tsx', 'public-exports.ts', 'headless/consumer.tsx'],
     }),
   );
   await writeFile(join(consumer, 'public-exports.ts'), publicImportChecks);
@@ -277,6 +363,51 @@ h1 { font-size: 24px; }`,
   await writeFile(
     join(consumer, 'index.html'),
     '<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Aegis package consumer</title><link rel="icon" href="data:,"></head><body><div id="root"></div><script type="module" src="/consumer.tsx"></script></body></html>',
+  );
+  assert(
+    installed.exports['./primitives'],
+    'The package must expose the unstyled primitives entry.',
+  );
+  const headless = join(consumer, 'headless');
+  await mkdir(headless);
+  await writeFile(
+    join(headless, 'consumer.tsx'),
+    `import { useState, type ReactNode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Button, Checkbox } from ${specifier('primitives')};
+
+// This consumer deliberately imports no Aegis CSS, reset, fonts, theme, or tokens.
+function HeadlessConsumer(): ReactNode {
+  const [count, setCount] = useState(0);
+  const [checked, setChecked] = useState(false);
+  const [submitted, setSubmitted] = useState('Not submitted');
+  return (
+    <main>
+      <h1>Unstyled Aegis primitives</h1>
+      <Button onClick={() => setCount((current) => current + 1)}>Count: {count}</Button>
+      <form onSubmit={(event) => {
+        event.preventDefault();
+        setSubmitted(new FormData(event.currentTarget).get('updates') === 'enabled' ? 'Enabled' : 'Disabled');
+      }}>
+        <label>
+          <Checkbox.Root name="updates" value="enabled" checked={checked} onCheckedChange={setChecked}>
+            <Checkbox.Indicator>✓</Checkbox.Indicator>
+          </Checkbox.Root>
+          Receive project updates
+        </label>
+        <p role="status">Updates: {checked ? 'enabled' : 'disabled'}</p>
+        <Button type="submit">Save preferences</Button>
+      </form>
+      <p data-testid="submitted">{submitted}</p>
+    </main>
+  );
+}
+createRoot(document.getElementById('root')!).render(<HeadlessConsumer />);
+`,
+  );
+  await writeFile(
+    join(headless, 'index.html'),
+    '<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Headless package consumer</title><link rel="icon" href="data:,"></head><body><div id="root"></div><script type="module" src="/consumer.tsx"></script></body></html>',
   );
   await run(process.execPath, [require.resolve('typescript/bin/tsc'), '-p', consumer], consumer);
   passed(`Strict consumer TypeScript resolves ${imports.length} public entry points`);
@@ -406,6 +537,8 @@ assert.match(html, /aegis-button/);
     await page.keyboard.press('Shift+Tab');
     await expect(lastControl).toBeFocused();
     const overlayAxe = await new AxeBuilder({ page })
+      // Base UI's aria-hidden focus sentinels implement the native traversal checked above.
+      .exclude('[data-base-ui-focus-guard]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();
     assert.deepEqual(
@@ -439,6 +572,133 @@ assert.match(html, /aegis-button/);
   passed(
     'Light/dark behavior, Field semantics, Select keyboard, Modal focus trap, SVG/fonts, and accessibility',
   );
+  // A separate production graph and fresh browser context prove the headless
+  // entry does not inherit styles or tokens from the styled consumer above.
+  const headlessBuild = await build({
+    root: headless,
+    base: publicBase,
+    configFile: false,
+    publicDir: false,
+    logLevel: 'warn',
+    build: {
+      outDir: 'dist',
+      emptyOutDir: true,
+      rolldownOptions: {
+        onwarn(warning, defaultHandler) {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client'))
+            return;
+          defaultHandler(warning);
+        },
+      },
+    },
+  });
+  const headlessOutput = (Array.isArray(headlessBuild) ? headlessBuild : [headlessBuild]).flatMap(
+    (result) => ('output' in result ? result.output : []),
+  );
+  assert(headlessOutput.length > 0, 'The headless production build must emit files.');
+  const headlessModules = headlessOutput
+    .filter((output) => output.type === 'chunk')
+    .flatMap((output) => Object.keys(output.modules));
+  const packageDirectory = join(consumer, 'node_modules', manifest.name).replaceAll('\\', '/');
+  const packageModules = headlessModules.filter((id) =>
+    id.replaceAll('\\', '/').startsWith(packageDirectory),
+  );
+  assert(
+    packageModules.every((id) => id.endsWith('/lib-dist/primitives.js')),
+    `Headless composition imported styled package modules: ${packageModules.join(', ')}`,
+  );
+  assert(
+    !headlessOutput.some((output) => output.fileName.endsWith('.css')),
+    'Headless composition must not generate a CSS asset.',
+  );
+  for (const output of headlessOutput) {
+    if (output.type !== 'chunk') continue;
+    assert(
+      !output.code.includes('--color-bg-canvas'),
+      'Headless bundle must not embed design tokens.',
+    );
+    assert(
+      !output.code.includes('aegis-button'),
+      'Headless bundle must not embed styled components.',
+    );
+  }
+  passed(
+    'Headless Button/Checkbox production graph contains no styled package modules or CSS assets',
+  );
+  headlessServer = await serve(join(headless, 'dist'));
+  const headlessAddress = headlessServer.address();
+  assert(headlessAddress && typeof headlessAddress === 'object');
+  const headlessContext = await browser.newContext();
+  const headlessPage = await headlessContext.newPage();
+  const headlessErrors = [];
+  const stylesheetRequests = [];
+  headlessPage.on('pageerror', (error) => headlessErrors.push(error.message));
+  headlessPage.on('console', (message) => {
+    if (message.type() === 'error') headlessErrors.push(message.text());
+  });
+  headlessPage.on('request', (request) => {
+    if (request.resourceType() === 'stylesheet') stylesheetRequests.push(request.url());
+  });
+  headlessPage.on('requestfailed', (request) => headlessErrors.push(request.url()));
+  headlessPage.on('response', (response) => {
+    if (response.status() >= 400) headlessErrors.push(`${response.status()} ${response.url()}`);
+  });
+  await headlessPage.goto(`http://127.0.0.1:${headlessAddress.port}${publicBase}`);
+  await expect(
+    headlessPage.getByRole('heading', { name: 'Unstyled Aegis primitives' }),
+  ).toBeVisible();
+  const headlessButton = headlessPage.getByRole('button', { name: 'Count: 0' });
+  await headlessButton.focus();
+  await headlessPage.keyboard.press('Enter');
+  await expect(headlessPage.getByRole('button', { name: 'Count: 1' })).toBeFocused();
+  await headlessPage.keyboard.press('Tab');
+  const headlessCheckbox = headlessPage.getByRole('checkbox', { name: 'Receive project updates' });
+  await expect(headlessCheckbox).toBeFocused();
+  await headlessPage.keyboard.press('Space');
+  await expect(headlessCheckbox).toBeChecked();
+  await expect(headlessPage.getByRole('status')).toHaveText('Updates: enabled');
+  await headlessPage.keyboard.press('Tab');
+  await expect(headlessPage.getByRole('button', { name: 'Save preferences' })).toBeFocused();
+  await headlessPage.keyboard.press('Enter');
+  await expect(headlessPage.getByTestId('submitted')).toHaveText('Enabled');
+  await headlessPage.locator('label').filter({ has: headlessCheckbox }).click();
+  await expect(headlessCheckbox).not.toBeChecked();
+  await headlessPage.getByRole('button', { name: 'Save preferences' }).click();
+  await expect(headlessPage.getByTestId('submitted')).toHaveText('Disabled');
+  const headlessPresentation = await headlessPage.evaluate(() => ({
+    stylesheets: document.styleSheets.length,
+    styleElements: document.querySelectorAll('style, link[rel="stylesheet"]').length,
+    designTokens: ['--color-bg-canvas', '--font-ui', '--button-radius-md'].map((token) =>
+      getComputedStyle(document.documentElement).getPropertyValue(token).trim(),
+    ),
+  }));
+  assert.deepEqual(headlessPresentation, {
+    stylesheets: 0,
+    styleElements: 0,
+    designTokens: ['', '', ''],
+  });
+  assert.deepEqual(stylesheetRequests, [], 'Headless controls must not request a stylesheet.');
+  assert.deepEqual(headlessErrors, [], 'Headless controls must not emit runtime or asset errors.');
+  const headlessAxe = await new AxeBuilder({ page: headlessPage })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+    .analyze();
+  assert.deepEqual(
+    headlessAxe.violations.map(({ id }) => id),
+    [],
+    'Headless accessibility violations',
+  );
+  report.headless = {
+    assets: headlessOutput.map((output) => output.fileName),
+    packageModules,
+    presentation: headlessPresentation,
+    stylesheetRequests,
+    browserErrors: headlessErrors,
+    violations: 0,
+  };
+  await headlessContext.close();
+  passed(
+    'Unstyled primitives retain keyboard, label, controlled state, native form and accessibility behavior without styles or tokens',
+  );
   succeeded = true;
 } catch (error) {
   report.error = error instanceof Error ? error.stack : String(error);
@@ -447,6 +707,7 @@ assert.match(html, /aegis-button/);
 } finally {
   await browser?.close();
   if (server) await new Promise((resolveClose) => server.close(resolveClose));
+  if (headlessServer) await new Promise((resolveClose) => headlessServer.close(resolveClose));
   await mkdir(join(repository, 'test-results'), { recursive: true });
   await writeFile(
     join(repository, 'test-results', 'package-smoke.json'),

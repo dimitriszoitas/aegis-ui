@@ -4,7 +4,8 @@ import { expect, userEvent, within } from 'storybook/test';
 import { TextInput } from '@/components/text-input';
 import { UnsavedChangesBar, type UnsavedChangesBarProps } from './unsaved-changes-bar';
 const meta = {
-  title: 'Patterns/UnsavedChangesBar',
+  id: 'patterns-unsavedchangesbar',
+  title: 'Patterns/Workflows/UnsavedChangesBar',
   component: UnsavedChangesBar,
   tags: ['autodocs'],
   args: { dirty: true, onSave: async () => {}, onDiscard: () => {} },

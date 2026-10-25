@@ -1,24 +1,27 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import {
   useEffect,
   useId,
   useRef,
   useState,
+  forwardRef,
+  isValidElement,
   type ComponentPropsWithoutRef,
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { Dialog as Primitive } from 'radix-ui';
+import { Dialog as Primitive } from '@base-ui/react/dialog';
 import { X } from '@/components/icon';
 import { Button, type Intent } from '../button';
 import { TextInput } from '../text-input';
 import { cn } from '../../lib/utils';
-import { useModalIsolation } from './use-modal-isolation';
 import './modal.css';
 
 export interface ModalProps extends Omit<
   ComponentPropsWithoutRef<typeof Primitive.Root>,
-  'children' | 'modal'
+  'children' | 'modal' | 'onOpenChange'
 > {
+  onOpenChange?: (open: boolean) => void;
   title: ReactNode;
   description?: ReactNode;
   children?: ReactNode;
@@ -48,47 +51,26 @@ function ModalContent({
   className,
   showClose = true,
   closeLabel = 'Close dialog',
-  closeOnOutsideClick = true,
-  trigger,
   role = 'dialog',
 }: Omit<ModalProps, 'open' | 'defaultOpen' | 'onOpenChange'>) {
   const contentRef = useRef<HTMLDivElement>(null);
-  const previousFocus = useRef<HTMLElement | null>(null);
   const descriptionId = useId();
-  useModalIsolation(contentRef);
   return (
-    <Primitive.Content
+    <Primitive.Popup
       ref={contentRef}
       role={role}
       className={cn('aegis-modal', `aegis-modal-${size}`, className)}
       aria-describedby={description ? descriptionId : undefined}
       data-header={showHeader}
       data-close={showClose}
-      onOpenAutoFocus={() => {
-        previousFocus.current =
-          document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      }}
-      onCloseAutoFocus={(event) => {
+      finalFocus={() => {
         const content = contentRef.current;
         const current = document.activeElement;
         // A completed action may already have focused a different page or dialog.
         if (current !== document.body && !content?.contains(current)) {
-          event.preventDefault();
-          return;
+          return false;
         }
-        if (!trigger && previousFocus.current) {
-          event.preventDefault();
-          const element = previousFocus.current;
-          requestAnimationFrame(() => {
-            const active = document.activeElement;
-            if (element.isConnected && (active === document.body || content?.contains(active))) {
-              element.focus({ preventScroll: true });
-            }
-          });
-        }
-      }}
-      onPointerDownOutside={(event) => {
-        if (!closeOnOutsideClick) event.preventDefault();
+        return true;
       }}
     >
       {showHeader ? (
@@ -104,7 +86,7 @@ function ModalContent({
           {headerActions && <div className="aegis-modal-header-actions">{headerActions}</div>}
           {showClose && (
             <Primitive.Close className="aegis-modal-close" aria-label={closeLabel}>
-              <X size={18} />
+              <X size={componentToken('surface.icon-lg')} />
             </Primitive.Close>
           )}
         </header>
@@ -121,7 +103,7 @@ function ModalContent({
               className="aegis-modal-close aegis-modal-close-floating"
               aria-label={closeLabel}
             >
-              <X size={18} />
+              <X size={componentToken('surface.icon-lg')} />
             </Primitive.Close>
           )}
         </>
@@ -132,16 +114,40 @@ function ModalContent({
         </div>
       )}
       {footer && <footer className="aegis-modal-footer">{footer}</footer>}
-    </Primitive.Content>
+    </Primitive.Popup>
   );
 }
 
-export function Modal({ open, defaultOpen, onOpenChange, trigger, ...props }: ModalProps) {
+export function Modal({
+  open,
+  defaultOpen,
+  onOpenChange,
+  onOpenChangeComplete,
+  actionsRef,
+  handle,
+  triggerId,
+  defaultTriggerId,
+  disablePointerDismissal,
+  trigger,
+  closeOnOutsideClick = true,
+  ...props
+}: ModalProps) {
   return (
-    <Primitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} modal>
-      {trigger && <Primitive.Trigger asChild>{trigger}</Primitive.Trigger>}
+    <Primitive.Root
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      onOpenChangeComplete={onOpenChangeComplete}
+      actionsRef={actionsRef}
+      handle={handle}
+      triggerId={triggerId}
+      defaultTriggerId={defaultTriggerId}
+      modal
+      disablePointerDismissal={disablePointerDismissal ?? !closeOnOutsideClick}
+    >
+      {trigger && <Primitive.Trigger render={trigger} />}
       <Primitive.Portal>
-        <Primitive.Overlay data-aegis-overlay className="aegis-modal-overlay" />
+        <Primitive.Backdrop data-aegis-overlay className="aegis-modal-overlay" />
         <ModalContent {...props} trigger={trigger} />
       </Primitive.Portal>
     </Primitive.Root>
@@ -149,8 +155,22 @@ export function Modal({ open, defaultOpen, onOpenChange, trigger, ...props }: Mo
 }
 export const Dialog = Modal;
 export type DialogProps = ModalProps;
-export const ModalClose = Primitive.Close;
-export type ModalCloseProps = ComponentPropsWithoutRef<typeof Primitive.Close>;
+export type ModalCloseProps = ComponentPropsWithoutRef<typeof Primitive.Close> & {
+  /** @deprecated Use render={<Button />} for headless composition. */
+  asChild?: boolean;
+};
+export const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(function ModalClose(
+  { asChild, children, render, ...props },
+  ref,
+) {
+  if (asChild && !isValidElement(children))
+    throw new Error('ModalClose asChild requires one React element.');
+  return (
+    <Primitive.Close {...props} ref={ref} render={asChild ? (children as ReactElement) : render}>
+      {asChild ? undefined : children}
+    </Primitive.Close>
+  );
+});
 
 export interface ConfirmDialogProps extends Omit<ModalProps, 'footer' | 'size' | 'role'> {
   onConfirm: () => void | Promise<void>;

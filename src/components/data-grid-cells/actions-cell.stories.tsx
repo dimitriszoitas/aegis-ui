@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CheckCheck, ExternalLink, Sparkles, UserRoundCheck } from '@/components/icon';
-import { ActionsCell } from './data-grid-cells';
+import { ActionsCell, type ActionsCellProps, type GridCellAction } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Actions cell',
+  id: 'components-data-grid-actions-cell',
+  title: 'Components/Data Display/Data grid/Actions cell',
   component: ActionsCell,
   tags: ['autodocs'],
 } satisfies Meta<typeof ActionsCell>;
@@ -50,3 +51,38 @@ function ActionsDemo() {
   );
 }
 export const Interactive: StoryObj = { render: () => <ActionsDemo /> };
+
+type ActionPlaygroundArgs = Omit<ActionsCellProps, 'actions'> & {
+  actions: Omit<GridCellAction, 'onClick' | 'icon'>[];
+};
+export const Playground: StoryObj<ActionPlaygroundArgs> = {
+  args: {
+    label: 'Record actions',
+    maxVisible: 2,
+    actions: [
+      { id: 'open', label: 'Open record', intent: 'default' },
+      { id: 'summarize', label: 'Summarize record', intent: 'ai' },
+      { id: 'complete', label: 'Mark completed', intent: 'function' },
+    ],
+  },
+  argTypes: {
+    actions: { control: 'object' },
+    maxVisible: { control: { type: 'number', min: 0, max: 8, step: 1 } },
+  },
+  render: function Render({ actions, ...args }) {
+    const [message, setMessage] = useState('Choose an action.');
+    return (
+      <div className="stack">
+        <ActionsCell
+          {...args}
+          actions={actions.map((action) => ({
+            ...action,
+            icon: action.intent === 'ai' ? <Sparkles /> : <ExternalLink />,
+            onClick: () => setMessage(`${action.label} selected`),
+          }))}
+        />
+        <p role="status">{message}</p>
+      </div>
+    );
+  },
+};

@@ -41,7 +41,8 @@ const items: AccordionItem[] = [
   },
 ];
 const meta = {
-  title: 'Components/Lists/Accordion',
+  id: 'components-lists-accordion',
+  title: 'Components/Surfaces/Accordion',
   component: Accordion,
   tags: ['autodocs'],
   parameters: {

@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RelativeTime } from './relative-time';
 import { referenceTime } from '@/sample-data';
 const meta = {
-  title: 'Components/Data/RelativeTime',
+  id: 'components-data-relativetime',
+  title: 'Components/Data Display/RelativeTime',
   component: RelativeTime,
   tags: ['autodocs'],
   args: { value: referenceTime - 6 * 60000, now: referenceTime },

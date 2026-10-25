@@ -5,6 +5,7 @@ import { EmptyState } from './empty-state';
 import { Button } from '@/components/button';
 import { Banner } from '@/components/banner';
 const meta = {
+  id: 'components-feedback-empty-state',
   title: 'Components/Feedback/Empty state',
   component: EmptyState,
   tags: ['autodocs'],
@@ -101,5 +102,19 @@ export const CustomWorkspace: Story = {
       title="All caught up"
       description="You’ve reviewed every record assigned to you. Your team has 3 connected workspaces."
     />
+  ),
+};
+
+export const Playground: Story = {
+  args: { preset: 'no-results', compact: false },
+  argTypes: {
+    preset: { control: 'select', options: ['no-results', 'no-data', 'error'] },
+    title: { control: 'text' },
+    description: { control: 'text' },
+  },
+  render: (args) => (
+    <div style={{ width: 'min(100%, 540px)' }}>
+      <EmptyState {...args} />
+    </div>
   ),
 };

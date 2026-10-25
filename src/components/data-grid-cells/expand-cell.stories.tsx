@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useArgs } from 'storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ExpandCell } from './data-grid-cells';
+import { ExpandCell, type ExpandCellProps } from './data-grid-cells';
 export default {
-  title: 'Components/Data grid/Expand cell',
+  id: 'components-data-grid-expand-cell',
+  title: 'Components/Data Display/Data grid/Expand cell',
   component: ExpandCell,
   tags: ['autodocs'],
 } satisfies Meta<typeof ExpandCell>;
@@ -38,3 +40,17 @@ function ExpandDemo() {
   );
 }
 export const NestedEvents: StoryObj = { render: () => <ExpandDemo /> };
+
+export const Playground: StoryObj<typeof ExpandCell> = {
+  args: { expanded: false, count: 3, label: 'Project updates', onExpandedChange: () => undefined },
+  argTypes: { count: { control: { type: 'number', min: 0, step: 1 } } },
+  render: function Render(args) {
+    const [, updateArgs] = useArgs<ExpandCellProps>();
+    return (
+      <div className="stack">
+        <ExpandCell {...args} onExpandedChange={(expanded) => updateArgs({ expanded })} />
+        {args.expanded && <p>Three project updates are available for review.</p>}
+      </div>
+    );
+  },
+};

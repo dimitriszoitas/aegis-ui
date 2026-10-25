@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Search } from '@/components/icon';
 import { TextInput, type TextInputProps } from '@/components/text-input';
@@ -51,7 +52,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
       value={query}
       clearable={clearable}
       clearLabel={clearLabel}
-      prefix={<Search size={16} aria-hidden="true" />}
+      prefix={<Search size={componentToken('input.icon-md')} aria-hidden="true" />}
       suffix={shortcut ? <kbd className="aegis-search-shortcut">{shortcut}</kbd> : undefined}
       onValueChange={(next) => {
         if (value === undefined) setUncontrolledValue(next);

@@ -1,40 +1,13 @@
+import { useInputFocusModality } from '@/lib/use-input-focus';
+import { componentToken } from '@/lib/component-design-tokens';
 import { useState, useEffect, useRef, type ReactNode } from 'react';
-import { Command } from 'cmdk';
-import { Dialog } from 'radix-ui';
+import { Autocomplete } from '@base-ui/react/autocomplete';
+import { Dialog } from '@base-ui/react/dialog';
 import { Search, Sparkles, X } from '@/components/icon';
 import { IconButton } from '@/components/icon-button';
 import { Kbd } from '@/components/kbd';
-import { useModalIsolation } from '@/components/modal/use-modal-isolation';
 import './command-palette.css';
-function CommandContent({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const previous = useRef<HTMLElement | null>(null);
-  useModalIsolation(ref);
-  return (
-    <Dialog.Content
-      ref={ref}
-      className="command-dialog"
-      aria-describedby="command-description"
-      onOpenAutoFocus={() => {
-        previous.current =
-          document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      }}
-      onCloseAutoFocus={(event) => {
-        event.preventDefault();
-        const opener = previous.current;
-        const content = ref.current;
-        requestAnimationFrame(() => {
-          const current = document.activeElement;
-          if (opener?.isConnected && (current === document.body || content?.contains(current))) {
-            opener.focus({ preventScroll: true });
-          }
-        });
-      }}
-    >
-      {children}
-    </Dialog.Content>
-  );
-}
+
 export interface CommandAction {
   id: string;
   label: string;
@@ -60,11 +33,15 @@ export function CommandPalette({
   onAskAi,
   shortcut = true,
 }: CommandPaletteProps) {
-  const [internal, setInternal] = useState(defaultOpen),
-    [query, setQuery] = useState('');
+  useInputFocusModality();
+  const [internal, setInternal] = useState(defaultOpen);
+  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
   const open = controlled ?? internal;
   const setOpen = (next: boolean) => {
-    setInternal(next);
+    if (controlled === undefined) setInternal(next);
     onOpenChange?.(next);
     if (!next) setQuery('');
   };
@@ -73,54 +50,101 @@ export function CommandPalette({
     const onKey = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setInternal((v) => !v);
+        if (controlled === undefined) setInternal(!open);
         onOpenChange?.(!open);
+        if (open) setQuery('');
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [shortcut, open, onOpenChange]);
-  const groups = [...new Set(actions.map((a) => a.group ?? 'Actions'))];
+  }, [shortcut, open, controlled, onOpenChange]);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const matched = actions.filter((action) =>
+    [action.label, ...(action.keywords ?? [])]
+      .join(' ')
+      .toLocaleLowerCase()
+      .includes(normalizedQuery),
+  );
+  const askAction: CommandAction = {
+    id: 'aegis-ai-query',
+    label: query ? `Ask Aegis AI about “${query}”` : 'Open Aegis AI',
+    group: 'Aegis AI',
+    icon: <Sparkles size={componentToken('navigation.icon-navigation')} />,
+    onSelect: () => onAskAi?.(query),
+  };
+  const visible = onAskAi ? [...matched, askAction] : matched;
+  const groups = [...new Set(visible.map((action) => action.group ?? 'Actions'))];
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay data-aegis-overlay className="command-scrim" />
-        <CommandContent>
+        <Dialog.Backdrop data-aegis-overlay className="command-scrim" />
+        <Dialog.Popup
+          ref={contentRef}
+          className="command-dialog"
+          initialFocus={() => {
+            const active = document.activeElement;
+            if (active instanceof HTMLElement && !contentRef.current?.contains(active))
+              openerRef.current = active;
+            return inputRef.current;
+          }}
+          finalFocus={() => {
+            const active = document.activeElement;
+            if (active && active !== document.body && !contentRef.current?.contains(active))
+              return false;
+            return openerRef.current?.isConnected ? openerRef.current : false;
+          }}
+        >
           <Dialog.Title className="sr-only">Command palette</Dialog.Title>
-          <Dialog.Description id="command-description" className="sr-only">
+          <Dialog.Description className="sr-only">
             Search navigation, actions, and records. Use arrow keys to choose and Enter to run.
           </Dialog.Description>
-          <Command label="Search Aegis">
+          <Autocomplete.Root<CommandAction>
+            items={visible}
+            filter={null}
+            inline
+            open={open}
+            autoHighlight="always"
+            value={query}
+            onValueChange={setQuery}
+            itemToStringValue={(action) => action.label}
+            onOpenChange={(next, details) => {
+              if (!next && details.reason !== 'focus-out') setOpen(false);
+            }}
+          >
             <div className="command-search">
-              <Search size={18} aria-hidden />
-              <Command.Input
+              <Search size={componentToken('navigation.icon-lg')} aria-hidden />
+              <Autocomplete.Input
+                ref={inputRef}
+                className="command-input"
                 placeholder={
                   onAskAi
                     ? 'Search commands, or ask Aegis AI…'
                     : 'Search navigation, actions, and records…'
                 }
-                value={query}
-                onValueChange={setQuery}
                 aria-label="Search commands"
               />
-              <Dialog.Close asChild>
-                <IconButton aria-label="Close command palette" size="sm" emphasis="ghost">
-                  <X size={14} />
-                </IconButton>
+              <Dialog.Close
+                render={
+                  <IconButton aria-label="Close command palette" size="sm" emphasis="ghost" />
+                }
+              >
+                <X size={componentToken('navigation.icon-sm')} />
               </Dialog.Close>
             </div>
-            <Command.List>
-              <Command.Empty>No matching actions. Try another search.</Command.Empty>
+            <Autocomplete.List className="command-list" aria-label="Available commands">
               {groups.map((group) => (
-                <Command.Group heading={group} key={group}>
-                  {actions
-                    .filter((a) => (a.group ?? 'Actions') === group)
+                <Autocomplete.Group key={group}>
+                  <Autocomplete.GroupLabel className="command-group-label">
+                    {group}
+                  </Autocomplete.GroupLabel>
+                  {visible
+                    .filter((action) => (action.group ?? 'Actions') === group)
                     .map((action) => (
-                      <Command.Item
+                      <Autocomplete.Item
                         key={action.id}
-                        value={action.label}
-                        keywords={action.keywords}
-                        onSelect={() => {
+                        value={action}
+                        className="command-item"
+                        onClick={() => {
                           setOpen(false);
                           action.onSelect();
                         }}
@@ -128,26 +152,16 @@ export function CommandPalette({
                         {action.icon}
                         <span>{action.label}</span>
                         {action.shortcut && <Kbd>{action.shortcut}</Kbd>}
-                      </Command.Item>
+                      </Autocomplete.Item>
                     ))}
-                </Command.Group>
+                </Autocomplete.Group>
               ))}
-              {onAskAi && (
-                <Command.Group heading="Aegis AI">
-                  <Command.Item
-                    forceMount
-                    value="ask-aegis"
-                    onSelect={() => {
-                      setOpen(false);
-                      onAskAi(query);
-                    }}
-                  >
-                    <Sparkles size={17} />
-                    <span>{query ? `Ask Aegis AI about “${query}”` : 'Open Aegis AI'}</span>
-                  </Command.Item>
-                </Command.Group>
-              )}
-            </Command.List>
+            </Autocomplete.List>
+            {!visible.length && (
+              <div className="command-empty" role="status">
+                No matching actions. Try another search.
+              </div>
+            )}
             <div className="command-footer">
               <span>
                 <Kbd>↑ ↓</Kbd> Navigate
@@ -159,8 +173,8 @@ export function CommandPalette({
                 <Kbd>Esc</Kbd> Close
               </span>
             </div>
-          </Command>
-        </CommandContent>
+          </Autocomplete.Root>
+        </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
   );

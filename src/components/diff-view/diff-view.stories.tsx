@@ -8,6 +8,7 @@ import { DiffView, type DiffViewProps } from './diff-view';
 const original = workflows[2].yaml;
 const proposed = proposedWorkflow.replace('enabled: true', 'enabled: false');
 const meta = {
+  id: 'components-code-diffview',
   title: 'Components/Code/DiffView',
   component: DiffView,
   args: {

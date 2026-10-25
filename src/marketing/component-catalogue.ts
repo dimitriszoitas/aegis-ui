@@ -257,7 +257,7 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     'Radio group',
     'Forms',
     'Present a small set of mutually exclusive choices.',
-    'Options can include descriptions and disabled choices. Arrow keys move through the group using native Radix behavior.',
+    'Options can include descriptions and disabled choices. Arrow keys move through the group using native Base UI behavior.',
     ['Group label', 'Radio indicator', 'Option label', 'Description'],
     {
       exports: 'RadioGroup',
@@ -1099,7 +1099,7 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     'Dropdown menu',
     'Overlays',
     'Group secondary actions behind a predictable menu trigger.',
-    'Entries support actions, checkboxes, radio groups, nested groups, and submenus. Radix supplies roving focus and dismissal behavior.',
+    'Entries support actions, checkboxes, radio groups, nested groups, and submenus. Base UI supplies roving focus and dismissal behavior.',
     ['Trigger', 'Menu surface', 'Labeled groups', 'Menu items', 'Submenu', 'Shortcut hints'],
     {
       exports: 'DropdownMenu',
@@ -1377,21 +1377,6 @@ export const componentCatalogue: ComponentCatalogueEntry[] = [
     [v('variant', ['text', 'card'], 'text')],
   ),
 
-  entry(
-    'aws-logo',
-    'AWS logos',
-    'Brand & icons',
-    'Identify AWS services and resources with their official architecture artwork.',
-    'Import this optional subpath only where AWS assets are needed. Choose a catalogued name and use a meaningful label unless the logo is decorative.',
-    ['Official SVG artwork', 'Accessible label', 'Optional service caption'],
-    {
-      exports: 'AwsLogo',
-      jsx: '<AwsLogo name="service-amazon-ec2" size={48} label="Amazon EC2" />',
-    },
-    'components-brand-aws-logos',
-    [v('size', ['24', '32', '40', '48', '64', '80'], '48')],
-    ['cloud', 'architecture'],
-  ),
   entry(
     'icons',
     'Icons',

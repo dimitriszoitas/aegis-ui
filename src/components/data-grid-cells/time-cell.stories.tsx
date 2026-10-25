@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TimeCell } from './data-grid-cells';
 const now = Date.parse('2026-10-06T12:00:00Z');
 export default {
-  title: 'Components/Data grid/Time cell',
+  id: 'components-data-grid-time-cell',
+  title: 'Components/Data Display/Data grid/Time cell',
   component: TimeCell,
   tags: ['autodocs'],
   args: { value: '2026-10-06T11:57:00Z', now },

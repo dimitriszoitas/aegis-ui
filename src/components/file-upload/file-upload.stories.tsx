@@ -4,7 +4,8 @@ import { expect, userEvent, within, waitFor } from 'storybook/test';
 import { FileUpload, type FileUploadContext } from './file-upload';
 
 const meta = {
-  title: 'Components/Forms/FileUpload',
+  id: 'components-forms-fileupload',
+  title: 'Components/Inputs & Selection/FileUpload',
   component: FileUpload,
   tags: ['autodocs'],
   parameters: {

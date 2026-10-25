@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { ArrowUpRight } from '@/components/icon';
 import { cn } from '@/lib/utils';
@@ -78,7 +79,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
       <span className="aegis-link-label">{children}</span>
       {(trailingIcon || external) && (
         <span className="aegis-link-icon" aria-hidden="true">
-          {trailingIcon ?? <ArrowUpRight size={14} />}
+          {trailingIcon ?? <ArrowUpRight size={componentToken('trigger.icon-sm')} />}
         </span>
       )}
       {opensNewTab && !disabled && <span className="sr-only"> (opens in a new tab)</span>}

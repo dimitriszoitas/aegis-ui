@@ -3,6 +3,10 @@ export interface ComponentMetadata {
   name: string;
   title: string;
   category: string;
+  kind: 'component' | 'pattern' | 'foundation';
+  aliases: string[];
+  /** Sidebar category that owns this implementation’s design bindings. */
+  tokenGroup?: string;
   description: string;
   purpose?: string;
   usage?: string;
@@ -10,7 +14,14 @@ export interface ComponentMetadata {
   sourceFiles: string[];
   exportNames?: string[];
   imports: { name: string; path: string }[];
-  stories: { id: string; name: string; exportName: string; sourceFile?: string }[];
+  stories: {
+    id: string;
+    name: string;
+    exportName: string;
+    sourceFile?: string;
+    /** True for automatic component rendering or a custom render that reads its args. */
+    supportsArgs?: boolean;
+  }[];
   props: {
     component: string;
     name: string;
@@ -27,6 +38,12 @@ export interface ComponentMetadata {
     property: string;
     value: string;
     tokens: string[];
+    ownership?: {
+      kind: 'owned' | 'nested' | 'inherited' | 'definition';
+      component: string;
+      category?: string;
+      group?: string;
+    };
   }[];
   variants: { name: string; values: string[]; default?: string }[];
   cssClasses?: string[];

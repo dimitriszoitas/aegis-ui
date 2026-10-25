@@ -1,84 +1,95 @@
 .command-scrim {
   position: fixed;
-  inset: 0;
-  background: var(--color-scrim);
-  backdrop-filter: blur(3px);
-  z-index: var(--z-modal);
+  inset: var(--group-navigation-command-palette-number-0);
+  background: var(--group-navigation-command-palette-color-scrim);
+  backdrop-filter: blur(var(--group-navigation-command-palette-size-backdrop-filter-micro-snug));
+  z-index: var(--group-navigation-command-palette-z-modal);
 }
 .command-dialog {
   position: fixed;
-  left: 50%;
-  top: 14vh;
-  transform: translateX(-50%);
-  width: min(600px, calc(100vw - 32px));
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-2xl);
-  background: var(--color-bg-surface-raised);
-  box-shadow: var(--shadow-overlay);
-  z-index: var(--z-modal);
+  left: var(--group-navigation-command-palette-size-left-half);
+  top: var(--group-navigation-command-palette-size-top-14vh);
+  transform: translateX(var(--group-navigation-command-palette-size-transform-negative-50percent));
+  width: min(
+    var(--group-navigation-command-palette-size-width-wide-canvas-compact),
+    calc(
+      var(--group-navigation-command-palette-size-width-100vw) -
+        var(--group-navigation-command-palette-size-width-comfortable)
+    )
+  );
+  border: var(--group-navigation-command-palette-border-width-hairline) solid
+    var(--group-navigation-command-palette-color-border-default);
+  border-radius: var(--group-navigation-command-palette-radius-border-radius-strong);
+  background: var(--group-navigation-command-palette-color-surface-surface-raised);
+  box-shadow: var(--group-navigation-command-palette-shadow-overlay);
+  z-index: var(--group-navigation-command-palette-z-modal);
   overflow: hidden;
 }
 .command-search {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
-  color: var(--color-text-secondary);
+  gap: var(--group-navigation-command-palette-space-gap-regular);
+  padding: var(--group-navigation-command-palette-space-padding-comfortable);
+  border-bottom: var(--group-navigation-command-palette-border-width-hairline) solid
+    var(--group-navigation-command-palette-color-border-subtle);
+  color: var(--group-navigation-command-palette-color-content-secondary);
 }
 .command-search input {
-  background: transparent;
-  border: 0;
-  flex: 1;
-  min-width: 0;
-  color: var(--color-text-primary);
-  height: 34px;
+  background: var(--group-navigation-command-palette-color-transparent);
+  border: var(--group-navigation-command-palette-number-0);
+  flex: var(--group-navigation-command-palette-flex-fill);
+  min-width: var(--group-navigation-command-palette-number-0);
+  color: var(--group-navigation-command-palette-color-content-primary);
+  height: var(--group-navigation-command-palette-size-height-compact-content-small);
   outline: none;
 }
-.command-dialog [cmdk-list] {
-  padding: var(--space-2);
-  max-height: 440px;
+.command-dialog .command-list {
+  padding: var(--group-navigation-command-palette-space-padding-compact);
+  max-height: var(--group-navigation-command-palette-size-max-height-canvas-large);
   overflow: auto;
 }
-.command-dialog [cmdk-group-heading] {
-  padding: var(--space-3);
-  font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
+.command-dialog .command-group-label {
+  padding: var(--group-navigation-command-palette-space-padding-regular);
+  font-size: var(--group-navigation-command-palette-font-size-label);
+  color: var(--group-navigation-command-palette-color-content-tertiary);
 }
-.command-dialog [cmdk-item] {
+.command-dialog .command-item {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: 11px var(--space-3);
-  border-radius: var(--radius-lg);
+  gap: var(--group-navigation-command-palette-space-gap-regular);
+  padding: var(--group-navigation-command-palette-size-padding-glyph-compact)
+    var(--group-navigation-command-palette-space-padding-regular);
+  border-radius: var(--group-navigation-command-palette-radius-border-radius-strong);
   cursor: pointer;
-  color: var(--color-text-secondary);
+  color: var(--group-navigation-command-palette-color-content-secondary);
 }
-.command-dialog [cmdk-item] svg {
-  width: 17px;
-  height: 17px;
+.command-dialog .command-item svg {
+  width: var(--group-navigation-measurement-icon-navigation);
+  height: var(--group-navigation-measurement-icon-navigation);
 }
-.command-dialog [cmdk-item] > span {
-  flex: 1;
+.command-dialog .command-item > span {
+  flex: var(--group-navigation-command-palette-flex-fill);
 }
-.command-dialog [cmdk-item][data-selected='true'] {
-  background: var(--color-bg-hover);
-  color: var(--color-text-primary);
+.command-dialog .command-item[data-highlighted] {
+  background: var(--group-navigation-command-palette-color-surface-hover);
+  color: var(--group-navigation-command-palette-color-content-primary);
 }
-.command-dialog [cmdk-empty] {
-  padding: var(--space-6);
-  color: var(--color-text-secondary);
+.command-dialog .command-empty {
+  padding: var(--group-navigation-command-palette-space-padding-roomy);
+  color: var(--group-navigation-command-palette-color-content-secondary);
 }
 .command-footer {
   display: flex;
-  gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--color-border-subtle);
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
+  gap: var(--group-navigation-command-palette-space-gap-comfortable);
+  padding: var(--group-navigation-command-palette-space-padding-regular)
+    var(--group-navigation-command-palette-space-padding-comfortable);
+  border-top: var(--group-navigation-command-palette-border-width-hairline) solid
+    var(--group-navigation-command-palette-color-border-subtle);
+  font-size: var(--group-navigation-command-palette-font-size-label);
+  color: var(--group-navigation-command-palette-color-content-secondary);
 }
 .command-footer > span {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--group-navigation-command-palette-space-gap-compact);
 }

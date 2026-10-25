@@ -1,3 +1,4 @@
+import { componentToken, useComponentTokenNumbers } from '@/lib/component-design-tokens';
 import { useId, type ComponentProps, type ReactNode } from 'react';
 import { Database, SearchX, ShieldAlert } from '@/components/icon';
 import { cn } from '@/lib/utils';
@@ -41,6 +42,7 @@ export function EmptyState({
   children,
   ...props
 }: EmptyStateProps) {
+  const tokens = useComponentTokenNumbers(['feedback.icon-stroke-thin']);
   const titleId = useId();
   const descriptionId = useId();
   const defaults = presets[preset];
@@ -55,7 +57,12 @@ export function EmptyState({
       {...props}
     >
       <div className="aegis-empty-state-icon" aria-hidden="true">
-        {icon ?? <Icon size={25} strokeWidth={1.6} />}
+        {icon ?? (
+          <Icon
+            size={componentToken('feedback.icon-empty')}
+            strokeWidth={tokens['feedback.icon-stroke-thin']}
+          />
+        )}
       </div>
       <div className="aegis-empty-state-copy">
         <h3 id={titleId}>{title ?? defaults.title}</h3>

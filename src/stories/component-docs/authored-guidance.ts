@@ -17,7 +17,7 @@ export const authoredGuidance: Record<
       'Use nested accordions sparingly; the content inset already establishes the next level of hierarchy.',
     ],
     accessibility: [
-      'Radix supplies trigger buttons, expanded state, content relationships, and arrow-key navigation. Keep the heading and trigger structure intact.',
+      'Base UI supplies trigger buttons, expanded state, content relationships, and arrow-key navigation. Keep the heading and trigger structure intact.',
       'Disabled items remain readable but cannot be opened. Essential instructions should remain outside a disabled disclosure.',
     ],
     intent: [
@@ -106,7 +106,7 @@ export const authoredGuidance: Record<
       'Do not use the menu to hide an unrelated navigation group; all alternatives should relate to the main action.',
     ],
     accessibility: [
-      'The primary action and menu trigger are separate buttons. Radix manages menu arrow navigation and Escape dismissal.',
+      'The primary action and menu trigger are separate buttons. Base UI manages menu arrow navigation and Escape dismissal.',
       'Duplicate activation is guarded while pending, and focus returns to the originating control after completion when the user has not moved elsewhere.',
     ],
     intent: [
@@ -194,7 +194,7 @@ export const authoredGuidance: Record<
       'The sm size is intended for dense facets and tables; it preserves the same state and labeling behavior.',
     ],
     accessibility: [
-      'Radix exposes checked and mixed states and supports Space activation. The visible label is associated with the control.',
+      'Base UI exposes checked and mixed states and supports Space activation. The visible label is associated with the control.',
       'Description and Field help/error references are combined. Do not repeat the full label as the description.',
     ],
     context: [
@@ -208,7 +208,7 @@ export const authoredGuidance: Record<
       'Choose a radio group when every choice should remain visible; use Select when space is limited or the option list is longer.',
     ],
     accessibility: [
-      'Radix provides arrow-key navigation and selection, with disabled options skipped.',
+      'Base UI provides arrow-key navigation and selection, with disabled options skipped.',
       'The group and each option have separate labels; option descriptions are associated with their own radio controls.',
     ],
     context: [
@@ -223,7 +223,7 @@ export const authoredGuidance: Record<
       'The component reports checked changes; the host decides whether the change is immediate or part of a later form submission.',
     ],
     accessibility: [
-      'Radix exposes switch semantics and keyboard activation. Visible labels and descriptions are associated with the control.',
+      'Base UI exposes switch semantics and keyboard activation. Visible labels and descriptions are associated with the control.',
       'Use the description to explain the consequence of enabling the setting, and Field for related validation.',
     ],
     context: [
@@ -239,7 +239,7 @@ export const authoredGuidance: Record<
       'Use descriptions for additional context in the menu. Use MultiCombobox when more than one value is allowed.',
     ],
     accessibility: [
-      'Radix supplies arrow navigation, typeahead, selection, and focus return. The trigger inherits Field labeling and error descriptions.',
+      'Base UI supplies arrow navigation, typeahead, selection, and focus return. The trigger inherits Field labeling and error descriptions.',
       'An empty option set renders a disabled “No options available” option instead of an actionable placeholder.',
     ],
     context: ['Use for status, owner, source, or a finite setting in a compact form.'],
@@ -285,7 +285,7 @@ export const authoredGuidance: Record<
       'Provide thumbLabels when generic Minimum and Maximum do not explain the range.',
     ],
     accessibility: [
-      'Radix provides arrow, Home, End, and larger-step keyboard adjustments. Each thumb has its own name and value.',
+      'Base UI provides arrow, Home, End, and larger-step keyboard adjustments. Each thumb has its own name and value.',
       'Field help and validation are associated with the thumbs, not only the visual track.',
     ],
     context: [
@@ -397,17 +397,22 @@ export const authoredGuidance: Record<
   },
   List: {
     overview:
-      'A native list with optional selectable rows, leading identity, metadata, and trailing actions.',
+      'A native list with one-line or two-line rows, optional selection controls, identity, tags, counters, and nested groups.',
     usage: [
-      'Use ListItem title as the primary information and description for a supporting line. Use DataGrid for comparable columns.',
-      'Set selectable for a pressed selection state, or supply onSelect for a plain action row. The host owns selection.',
+      'Use title for the primary line and subtitle for supporting text. The description alias remains supported; subtitle takes precedence when both are supplied. Use DataGrid when rows need comparable columns.',
+      'Pass checkbox props for an independent controlled or uncontrolled Checkbox. Set selectable and selected for a separate pressed row button, or onSelect for a plain row action. The host decides whether these states should be linked.',
+      'Compose Avatar and Tag components through avatar and tags. Actions, tags, checkboxes, and the counter remain outside the primary button. Use counterLabel to describe what the end counter represents.',
+      'Place a child List inside its parent ListItem. Up to four visual levels are supported; nested lists inherit density unless explicitly overridden. This is a nested list, not a collapsible tree.',
+      'Titles and subtitles stay on separate lines. Narrow containers move supplementary tags, metadata, and actions beneath the copy while the checkbox and counter remain aligned with the title.',
     ],
     accessibility: [
-      'The primary row button and trailing action controls are siblings, preventing interactive controls from being nested inside a button.',
-      'Static rows remain list content. Selectable rows expose aria-pressed and disabled state.',
+      'The title names the row button and its default checkbox; the subtitle is their accessible description. Supply an explicit checkbox aria-label or aria-labelledby when it needs a different name.',
+      'Checkboxes use native form semantics and support mixed, read-only, and disabled states. Space changes a focused checkbox; Enter or Space activates a row button. Each interactive tag or action has its own tab stop.',
+      'Nested ul and li elements preserve parent-child relationships. No tree roles or arrow-key behavior are implied. Static rows remain list content, and selectable rows expose aria-pressed.',
+      'Row disabled disables its primary button and checkbox. Supply disabled to any custom tags or actions that should also be unavailable.',
     ],
     context: [
-      'Use for members, compact project lists, and search results that do not require column sorting.',
+      'Use for member directories, project and task hierarchies, compact work queues, and search results that do not require column sorting.',
     ],
   },
   Separator: {
@@ -418,7 +423,7 @@ export const authoredGuidance: Record<
       'Set the orientation to match the layout and provide sufficient height for a vertical divider.',
     ],
     accessibility: [
-      'The Radix primitive supports decorative separators, which are omitted from the accessibility tree.',
+      'Decorative separators are omitted from the accessibility tree.',
       'Use a semantic separator only when the boundary conveys a content division, not for every visual gap.',
     ],
     context: ['Use between menu groups, toolbar clusters, or distinct content sections.'],
@@ -479,14 +484,14 @@ export const authoredGuidance: Record<
     ],
   },
   Tabs: {
-    overview: 'A labeled set of peer views using Radix tabs and associated content panels.',
+    overview: 'A labeled set of peer views using Base UI tabs and associated content panels.',
     usage: [
       'Use stable values and concise labels. The first enabled item is selected by default unless value or defaultValue is supplied.',
       'Use sharedContent for one persistent workspace whose data changes by tab; this preserves its local state instead of remounting separate panels.',
       'Item counts describe items, with values above 99 visually shortened to 99+.',
     ],
     accessibility: [
-      'Radix provides tablist, tab, and tabpanel relationships and arrow-key navigation. Give the tablist a label that explains the views.',
+      'Base UI provides tablist, tab, and tabpanel relationships and arrow-key navigation. Give the tablist a label that explains the views.',
       'Disabled tabs are skipped. Do not use disabled tabs to conceal essential information about a blocked task.',
     ],
     intent: [
@@ -520,7 +525,7 @@ export const authoredGuidance: Record<
       'Disable shortcut registration when embedding a palette where the host already owns the global shortcut.',
     ],
     accessibility: [
-      'The dialog focuses its command input; cmdk provides active-item navigation and Enter selection.',
+      'The dialog focuses its command input; Base UI provides active-item navigation and Enter selection.',
       'Escape closes the palette. Focus returns to the opener unless the action deliberately moved focus elsewhere.',
     ],
     context: [
@@ -536,7 +541,7 @@ export const authoredGuidance: Record<
       'Leading icons describe actions; selected checkbox and radio indicators appear at the trailing edge.',
     ],
     accessibility: [
-      'Radix supplies menu roles, arrow navigation, typeahead, and Escape dismissal. The trigger must be one focusable React element.',
+      'Base UI supplies menu roles, arrow navigation, typeahead, and Escape dismissal. The trigger must be one focusable React element.',
       'Tab closes the menu and continues from its trigger rather than trapping focus inside the menu.',
     ],
     intent: [
@@ -555,7 +560,7 @@ export const authoredGuidance: Record<
     ],
     accessibility: [
       'The trigger region is focusable and supports the Context Menu key and Shift+F10 in addition to pointer context activation.',
-      'Keyboard menu navigation is provided by Radix; Tab closes the menu and restores a predictable focus origin.',
+      'Keyboard menu navigation is provided by Base UI; Tab closes the menu and restores a predictable focus origin.',
     ],
     context: [
       'Use on a record, canvas item, or file preview as a shortcut to an existing action set.',
@@ -587,7 +592,7 @@ export const authoredGuidance: Record<
     ],
     accessibility: [
       'The popover focuses an available control on opening, with its scrollable body as a fallback.',
-      'Escape and close controls dismiss it, and Radix manages focus return. PopoverClose must be used inside its corresponding Popover.',
+      'Escape and close controls dismiss it, and Base UI manages focus return. PopoverClose must be used inside its corresponding Popover.',
     ],
     context: [
       'Use for compact filters, calendar controls, and contextual configuration that benefits from staying anchored to its trigger.',
@@ -812,6 +817,7 @@ export const authoredGuidance: Record<
     overview:
       'A compact count that can visually cap large values while preserving their full meaning.',
     usage: [
+      'Use size="sm" for icon-button counters and dense rows; the default size suits labels and summaries.',
       'Set max for the visual cap, such as 99+. The full numeric value remains in the title.',
       'Provide label when the count is not self-explanatory; the accessible text includes the full count and that noun.',
     ],
@@ -894,21 +900,6 @@ export const authoredGuidance: Record<
       'Use for list pages, record details, and settings pages while keeping page navigation distinct from local controls.',
     ],
   },
-  MasterDetail: {
-    overview:
-      'A nonmodal list and detail workspace that becomes a single-pane flow on narrow screens.',
-    usage: [
-      'Keep selection and open state in the host. Pass the collection as list and the selected record content as detail.',
-      'Use a descriptive detailTitle; emptyMessage explains the unselected desktop preview.',
-    ],
-    accessibility: [
-      'Opening focuses the detail heading. Closing restores the element that opened it when that element is still connected.',
-      'This is not a modal dialog: it does not trap focus. Narrow layout hides the alternate pane so only the active view is presented.',
-    ],
-    context: [
-      'Use for inboxes, project directories, and record inspection when list context should remain nearby on larger screens.',
-    ],
-  },
   UnsavedChangesBar: {
     overview: 'An inline save/discard boundary for host-owned edited data.',
     usage: [
@@ -940,14 +931,14 @@ export const authoredGuidance: Record<
   },
   NotificationCenter: {
     overview:
-      'A controlled notification inbox with search, all/unread views, read state, and optional item actions.',
+      'A right-side notification panel with search, all/unread views, read state, and optional item actions.',
     usage: [
       'The host owns items and persists onReadChange and onDismiss updates. The component does not mark items read merely because the inbox opens.',
       'Opening an item calls onOpenItem and then marks it read when onReadChange is available. Mark all read applies to all unread items, not only search matches.',
       'Return promises from callbacks so pending actions are guarded and failures remain visible.',
     ],
     accessibility: [
-      'The trigger includes the unread count, the popover is titled, and Tabs names the All and Unread views.',
+      'The trigger includes the unread count. The titled side panel traps focus while open, closes with Escape, and restores focus to its trigger. Tabs names the All and Unread views.',
       'When an action removes the focused item from the view, focus returns to search; outcomes are announced in a status region.',
     ],
     context: [
@@ -1589,7 +1580,7 @@ export const authoredGuidance: Record<
       'Use for truthful infrastructure and integration references; original artwork and associated notices remain separate from the UI theme.',
     ],
   },
-  Icons: {
+  Iconography: {
     overview: 'A shared named icon adapter for consistent stroke-based interface artwork.',
     usage: [
       'Import the specific named icons needed by a component. Keep full icon-pack namespace imports confined to the gallery.',

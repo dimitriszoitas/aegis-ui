@@ -9,6 +9,7 @@ const steps: StepperStep[] = [
   { id: 'review', title: 'Review and create', description: 'Approve the project setup' },
 ];
 const meta = {
+  id: 'components-navigation-stepper',
   title: 'Components/Navigation/Stepper',
   component: Stepper,
   tags: ['autodocs'],

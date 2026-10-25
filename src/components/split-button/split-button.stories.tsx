@@ -5,7 +5,8 @@ import { Copy, Download } from '@/components/icon';
 import { SplitButton } from './split-button';
 
 const meta = {
-  title: 'Components/Actions/SplitButton',
+  id: 'components-actions-splitbutton',
+  title: 'Components/Triggers/SplitButton',
   component: SplitButton,
   tags: ['autodocs'],
   args: { children: 'Save project', onAction: () => undefined, actions: [] },
@@ -131,5 +132,54 @@ export const FailureAndRetry: Story = {
     await userEvent.click(primary);
     await waitFor(() => expect(canvas.getByLabelText('Export requests')).toHaveTextContent('2'));
     await waitFor(() => expect(primary).toBeEnabled());
+  },
+};
+
+export const Playground: Story = {
+  args: {
+    children: 'Export CSV',
+    size: 'md',
+    intent: 'function',
+    emphasis: 'secondary',
+    disabled: false,
+    loading: false,
+    menuLabel: 'Export formats',
+  },
+  argTypes: {
+    children: { control: 'text', name: 'Label' },
+    menuLabel: { control: 'text' },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    intent: { control: 'select', options: ['default', 'function', 'destroy', 'ai'] },
+    emphasis: { control: 'select', options: ['primary', 'secondary', 'tertiary', 'ghost'] },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+    actions: { control: false },
+    onAction: { control: false },
+  },
+  render: function Playground(args) {
+    const [result, setResult] = useState('Choose an export format.');
+    return (
+      <div className="stack">
+        <SplitButton
+          {...args}
+          onAction={() => setResult('CSV export prepared locally')}
+          actions={[
+            {
+              id: 'json',
+              label: 'Export JSON',
+              onSelect: () => setResult('JSON export prepared locally'),
+            },
+            {
+              id: 'text',
+              label: 'Export text',
+              onSelect: () => setResult('Text export prepared locally'),
+            },
+          ]}
+        />
+        <p role="status" className="muted">
+          {result}
+        </p>
+      </div>
+    );
   },
 };

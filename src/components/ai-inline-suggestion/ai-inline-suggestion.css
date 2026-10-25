@@ -1,39 +1,39 @@
 .aegis-ai-inline {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  min-width: 0;
+  gap: var(--group-ai-space-gap-compact);
+  min-width: var(--group-ai-number-0);
 }
 .aegis-ai-inline-control {
   position: relative;
-  min-width: 0;
+  min-width: var(--group-ai-number-0);
 }
 .aegis-ai-inline-ghost {
   pointer-events: none;
   position: absolute;
-  inset: 1px calc(var(--space-3) + 1px);
+  inset: var(--group-ai-size-inset-micro-small) calc(var(--group-ai-space-inset-regular) + var(--group-ai-size-inset-micro-small));
   overflow: hidden;
   display: flex;
   align-items: center;
-  color: var(--color-text-tertiary);
+  color: var(--group-ai-color-content-tertiary);
   font: inherit;
 }
 .aegis-ai-inline-ghost > div {
   white-space: pre;
-  min-width: 0;
+  min-width: var(--group-ai-number-0);
 }
 .aegis-ai-inline-prefix {
   visibility: hidden;
 }
 .aegis-ai-inline[data-size='sm'] .aegis-ai-inline-ghost {
-  inset-inline: calc(var(--space-2) + 1px);
-  font-size: var(--text-sm);
+  inset-inline: calc(var(--group-ai-space-inset-inline-compact) + var(--group-ai-size-inset-inline-micro-small));
+  font-size: var(--group-ai-font-size-body);
 }
 .aegis-ai-inline[data-as='textarea'] .aegis-ai-inline-ghost {
-  inset: 1px;
+  inset: var(--group-ai-size-inset-micro-small);
   display: block;
-  padding: var(--space-3);
-  line-height: 1.5;
+  padding: var(--group-ai-space-padding-regular);
+  line-height: var(--group-ai-font-leading-body);
 }
 .aegis-ai-inline[data-as='textarea'] .aegis-ai-inline-ghost > div {
   white-space: pre-wrap;
@@ -43,25 +43,25 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  font-size: var(--text-xs);
+  gap: var(--group-ai-space-gap-snug) var(--group-ai-space-gap-compact);
+  font-size: var(--group-ai-font-size-label);
 }
 .aegis-ai-inline-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  color: var(--color-ai-fg);
+  gap: var(--group-ai-space-gap-snug);
+  color: var(--group-ai-color-ai-foreground);
 }
 .aegis-ai-inline-label svg {
-  color: var(--color-ai-fg);
+  color: var(--group-ai-color-ai-foreground);
 }
 .aegis-ai-inline-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--group-ai-space-gap-snug);
   margin-left: auto;
 }
 .aegis-ai-inline-hint {
-  flex-basis: 100%;
-  color: var(--color-text-tertiary);
+  flex-basis: var(--group-ai-size-flex-basis-full);
+  color: var(--group-ai-color-content-tertiary);
 }

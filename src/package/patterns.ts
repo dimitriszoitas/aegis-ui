@@ -4,7 +4,6 @@ export * from '../patterns/filter-bar';
 export * from '../patterns/filter-panel';
 export * from '../patterns/prompt-input';
 export * from '../patterns/wizard';
-export * from '../patterns/master-detail';
 export * from '../patterns/unsaved-changes-bar';
 export * from '../patterns/page-header';
 export * from '../patterns/notification-center';

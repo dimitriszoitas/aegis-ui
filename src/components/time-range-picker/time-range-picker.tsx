@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useState, useId } from 'react';
 import { DayPicker, type DateRange } from 'react-day-picker';
 import { Clock3, Check } from '@/components/icon';
@@ -59,7 +60,7 @@ export function TimeRangePicker({
     <Popover
       label={label}
       className="time-range-popover"
-      width={custom ? 480 : 216}
+      width={custom ? componentToken('time-picker-width') : componentToken('time-presets-width')}
       density="tight"
       align="end"
       footer={
@@ -93,7 +94,7 @@ export function TimeRangePicker({
           id={control.id}
           className="aegis-time-range-trigger"
           emphasis="ghost"
-          leadingIcon={<Clock3 size={15} />}
+          leadingIcon={<Clock3 size={componentToken('input.icon-inline')} />}
           disabled={control.disabled}
           aria-label={
             control['aria-labelledby'] ? undefined : `${label}: ${formatTimeRange(active)}`
@@ -111,7 +112,10 @@ export function TimeRangePicker({
     >
       <div className="time-range-content" data-custom={custom}>
         <div className="time-range-presets">
-          <p className="muted" style={{ fontSize: 'var(--text-xs)' }}>
+          <p
+            className="muted"
+            style={{ fontSize: 'var(--group-input-time-range-picker-font-size-label)' }}
+          >
             Relative range
           </p>
           {timePresets.map((p) => (
@@ -125,7 +129,7 @@ export function TimeRangePicker({
               }
               trailingIcon={
                 active.mode === 'relative' && active.preset === p.value ? (
-                  <Check size={14} />
+                  <Check size={componentToken('input.icon-sm')} />
                 ) : undefined
               }
               onClick={() => {
@@ -180,7 +184,10 @@ export function TimeRangePicker({
               <p
                 id={errorId}
                 role="status"
-                style={{ color: 'var(--color-destroy-fg)', fontSize: 'var(--text-xs)' }}
+                style={{
+                  color: 'var(--group-input-time-range-picker-color-danger-foreground)',
+                  fontSize: 'var(--group-input-time-range-picker-font-size-label)',
+                }}
               >
                 Choose a start and end date, with the end after the start.
               </p>

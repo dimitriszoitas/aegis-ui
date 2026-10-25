@@ -1,3 +1,4 @@
+import { componentToken } from '@/lib/component-design-tokens';
 import { useState, useEffect, useRef } from 'react';
 import { Copy, Check } from '@/components/icon';
 import { showNotification } from '@/components/notification';
@@ -42,7 +43,11 @@ export function CopyButton({
         }
       }}
     >
-      {copied ? <Check size={16} /> : <Copy size={16} />}
+      {copied ? (
+        <Check size={componentToken('trigger.icon-md')} />
+      ) : (
+        <Copy size={componentToken('trigger.icon-md')} />
+      )}
     </IconButton>
   );
 }
