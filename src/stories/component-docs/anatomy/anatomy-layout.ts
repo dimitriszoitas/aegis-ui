@@ -21,10 +21,14 @@ interface MarkerOptions {
   offset: number;
   radius: number;
   gap: number;
+  labelSize?: { width: number; height: number };
+  labelGap?: number;
+  reservedRects?: Rect[];
 }
 
 interface LabelOptions {
   marker: Point;
+  target?: Rect;
   size: { width: number; height: number };
   stage: Rect;
   obstacles: Rect[];
@@ -40,6 +44,11 @@ export interface AnatomyLabelPlacement extends Point {
 
 const right = (rect: Rect) => rect.x + rect.width;
 const bottom = (rect: Rect) => rect.y + rect.height;
+const containsRect = (outer: Rect, inner: Rect) =>
+  outer.x <= inner.x &&
+  outer.y <= inner.y &&
+  right(outer) >= right(inner) &&
+  bottom(outer) >= bottom(inner);
 const squaredDistance = (a: Point, b: Point) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
 const clamp = (value: number, min: number, max: number) =>
   min > max ? (min + max) / 2 : Math.max(min, Math.min(max, value));
@@ -102,20 +111,18 @@ export function placeAnatomyMarker({
   offset,
   radius,
   gap,
+  labelSize,
+  labelGap = gap,
+  reservedRects = [],
 }: MarkerOptions): Point {
   const clearance = Math.max(0, radius) + Math.max(0, gap);
   const separation = Math.max(0, radius) * 2 + Math.max(0, gap);
   const preferredOffset = Math.max(offset, clearance);
   const preferred = preferredMarker(target, anchor, preferredOffset);
-  const nearbyObstacles = obstacles.filter(
-    (rect) =>
-      !(
-        rect.x <= target.x &&
-        rect.y <= target.y &&
-        right(rect) >= right(target) &&
-        bottom(rect) >= bottom(target)
-      ),
-  );
+  const nearbyObstacles = [
+    ...obstacles.filter((rect) => !containsRect(rect, target)),
+    ...reservedRects,
+  ];
   const rectangles = [target, ...nearbyObstacles];
   const xs = uniqueClamped(
     [
@@ -161,8 +168,29 @@ export function placeAnatomyMarker({
     distance: squaredDistance(point, preferred),
     leader: squaredDistance(point, closestTargetPoint(point, target)),
   }));
-  const safe = scored.filter((candidate) => candidate.own === 0 && candidate.others === 0);
+  let safe = scored.filter((candidate) => candidate.own === 0 && candidate.others === 0);
   if (safe.length) {
+    if (labelSize) {
+      // Choose a stable resting position that already has room for its hover title.
+      // Reservations keep later circles clear; titles themselves can share space
+      // because only one is expanded at a time.
+      const withLabels = safe.map((candidate) => ({
+        ...candidate,
+        labelWidth:
+          placeAnatomyLabel({
+            marker: candidate.point,
+            target,
+            size: labelSize,
+            stage,
+            obstacles,
+            markers,
+            radius,
+            gap: labelGap,
+          })?.width ?? 0,
+      }));
+      const widest = Math.max(...withLabels.map((candidate) => candidate.labelWidth));
+      safe = withLabels.filter((candidate) => candidate.labelWidth === widest);
+    }
     // A diagonal outward anchor is still local, so allow its full diagonal length.
     const comfortable = safe.filter((candidate) => candidate.leader <= preferredOffset ** 2 * 2);
     if (comfortable.length) {
@@ -198,11 +226,13 @@ export function closestTargetPoint(marker: Point, target: Rect): Point {
 
 /**
  * Expand around the existing badge without moving its anchor or vertical position.
- * Rectangles containing that anchor are enclosing blank regions, not obstructions.
- * A shortened width lets the caller ellipsize; null keeps the original circle.
+ * Ignore enclosing ancestors of a supplied target, matching marker placement, but
+ * always protect that target. Legacy callers without a target ignore containers
+ * around the marker. A shortened width lets the caller ellipsize; null keeps the original circle.
  */
 export function placeAnatomyLabel({
   marker,
+  target,
   size,
   stage,
   obstacles,
@@ -218,35 +248,45 @@ export function placeAnatomyLabel({
   if (size.width < minimumWidth || size.height <= 0 || y < stage.y || labelBottom > bottom(stage))
     return null;
 
-  // At a fixed height, all blockers reduce to forbidden horizontal intervals.
+  // A pill is its horizontal centerline swept by a disc, not its bounding box.
+  // Inflating obstacles by that disc preserves valid clearance around corners.
+  const pillRadius = size.height / 2;
   const intervals: [number, number][] = [];
-  for (const rect of obstacles) {
-    if (
-      rect.width <= 0 ||
-      rect.height <= 0 ||
-      signedDistance(marker, rect) <= 0 ||
-      bottom(rect) + space <= y ||
-      labelBottom + space <= rect.y
-    )
-      continue;
-    intervals.push([rect.x - space, right(rect) + space]);
+  // A viewport-filling backdrop has no outside area; its empty background may host
+  // labels while the actual dialog/panel content remains protected below.
+  const rectangles = target
+    ? [
+        ...(containsRect(target, stage) ? [] : [target]),
+        ...obstacles.filter((rect) => !containsRect(rect, target)),
+      ]
+    : obstacles.filter((rect) => signedDistance(marker, rect) > 0);
+  for (const rect of rectangles) {
+    if (rect.width <= 0 || rect.height <= 0) continue;
+    const dy = Math.max(rect.y - marker.y, 0, marker.y - bottom(rect));
+    const clearance = pillRadius + space;
+    if (dy >= clearance) continue;
+    const dx = Math.sqrt(clearance ** 2 - dy ** 2);
+    intervals.push([rect.x - dx, right(rect) + dx]);
   }
   for (const other of markers) {
     if (other.x === marker.x && other.y === marker.y) continue;
-    const dy = Math.max(y - other.y, 0, other.y - labelBottom);
-    const clearance = badgeRadius + space;
+    const dy = Math.abs(marker.y - other.y);
+    const clearance = pillRadius + badgeRadius + space;
     if (dy >= clearance) continue;
     const dx = Math.sqrt(clearance ** 2 - dy ** 2);
     intervals.push([other.x - dx, other.x + dx]);
   }
 
-  let left = stage.x;
-  let rightEdge = right(stage);
+  // Locate the clear centerline interval containing the stationary badge.
+  let centerLeft = stage.x + pillRadius;
+  let centerRight = right(stage) - pillRadius;
   for (const [start, end] of intervals) {
-    if (end <= marker.x) left = Math.max(left, end);
-    else if (start >= marker.x) rightEdge = Math.min(rightEdge, start);
+    if (end <= marker.x) centerLeft = Math.max(centerLeft, end);
+    else if (start >= marker.x) centerRight = Math.min(centerRight, start);
     else return null;
   }
+  const left = centerLeft - pillRadius;
+  const rightEdge = centerRight + pillRadius;
   if (marker.x - badgeRadius < left || marker.x + badgeRadius > rightEdge) return null;
 
   const candidates = (

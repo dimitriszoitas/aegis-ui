@@ -34,14 +34,14 @@ function markerMetrics(stage: HTMLElement) {
   };
 }
 
-function visibleBounds(element: Element, scale: number): Rect | undefined {
+function visibleBounds(element: Element, scale: number, inset: number): Rect | undefined {
   const rect = element.getBoundingClientRect();
   const style = element.ownerDocument.defaultView?.getComputedStyle(element);
   if (!rect.width || !rect.height || style?.visibility === 'hidden' || style?.display === 'none')
     return;
   return {
     x: rect.left * scale,
-    y: rect.top * scale,
+    y: rect.top * scale + inset,
     width: rect.width * scale,
     height: rect.height * scale,
   };
@@ -63,6 +63,21 @@ function hasVisibleSurface(element: Element) {
   );
 }
 
+function measureTitles(stage: HTMLElement, parts: AnatomyPart[]) {
+  const measure = stage.ownerDocument.createElement('span');
+  measure.className = 'anatomy-marker-measure';
+  measure.setAttribute('aria-hidden', 'true');
+  stage.append(measure);
+  try {
+    return parts.map((part) => {
+      measure.textContent = part.name;
+      return Math.ceil(measure.getBoundingClientRect().width);
+    });
+  } finally {
+    measure.remove();
+  }
+}
+
 function measureParts(
   doc: Document,
   parts: AnatomyPart[],
@@ -70,11 +85,14 @@ function measureParts(
   height: number,
   scale: number,
   metrics: ReturnType<typeof markerMetrics>,
+  titleWidths: number[],
+  inset: number,
 ) {
   const measured: MeasuredPart[] = [];
+  const reservedRects: Rect[] = [];
   const targets = parts.flatMap((part, index) => {
     const bounds = Array.from(doc.querySelectorAll(part.selector))
-      .map((element) => visibleBounds(element, scale))
+      .map((element) => visibleBounds(element, scale, inset))
       .find(Boolean);
     return bounds ? [{ ...part, number: index + 1, bounds }] : [];
   });
@@ -82,7 +100,7 @@ function measureParts(
   const obstacles = [
     ...parts.flatMap((part) =>
       Array.from(doc.querySelectorAll(part.selector)).flatMap((element) => {
-        const bounds = visibleBounds(element, scale);
+        const bounds = visibleBounds(element, scale, inset);
         return bounds ? [bounds] : [];
       }),
     ),
@@ -90,7 +108,7 @@ function measureParts(
       (element) => {
         // Transparent fixture layout boxes are empty space, not component surfaces.
         if (!hasVisibleSurface(element)) return [];
-        const bounds = visibleBounds(element, scale);
+        const bounds = visibleBounds(element, scale, inset);
         return bounds ? [bounds] : [];
       },
     ),
@@ -98,6 +116,7 @@ function measureParts(
   for (const part of targets) {
     const { bounds } = part;
     const anchor = part.anchor ?? 'top';
+    const labelSize = { width: titleWidths[part.number - 1], height: metrics.radius * 2 };
     const point = placeAnatomyMarker({
       target: bounds,
       anchor,
@@ -109,8 +128,28 @@ function measureParts(
       },
       obstacles,
       markers: measured,
+      labelSize,
+      reservedRects,
       ...metrics,
     });
+    // Reserve each title's space for later badges. Titles may share that space,
+    // since only one is expanded at a time, but another badge must not block it.
+    const label = placeAnatomyLabel({
+      marker: point,
+      target: bounds,
+      size: labelSize,
+      stage: {
+        x: metrics.labelGap,
+        y: metrics.labelGap,
+        width: Math.max(0, width - 2 * metrics.labelGap),
+        height: Math.max(0, height - 2 * metrics.labelGap),
+      },
+      obstacles,
+      markers: measured,
+      radius: metrics.radius,
+      gap: metrics.labelGap,
+    });
+    if (label) reservedRects.push({ ...label, height: labelSize.height });
     const target = closestTargetPoint(point, bounds);
     measured.push({ ...part, ...point, targetX: target.x, targetY: target.y });
   }
@@ -154,6 +193,7 @@ function AnatomyMarker({
     const { radius, labelGap: gap } = markerMetrics(canvas);
     const next = placeAnatomyLabel({
       marker: part,
+      target: part.bounds,
       size: { width: Math.ceil(measure.current.getBoundingClientRect().width), height: radius * 2 },
       stage: {
         x: gap,
@@ -217,6 +257,7 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
   const descriptionId = useId();
   const [width, setWidth] = useState(900);
   const [height, setHeight] = useState(320);
+  const [inset, setInset] = useState(0);
   const [measurement, setMeasurement] = useState<{ parts: MeasuredPart[]; obstacles: Rect[] }>({
     parts: [],
     obstacles: [],
@@ -232,6 +273,7 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
   }));
   const viewportWidth = Math.max(720, width);
   const scale = width / viewportWidth;
+  const stageHeight = height * scale + inset * 2;
   const source = `iframe.html?id=documentation-anatomy-specimen--specimen&viewMode=story&args=componentId:${meta.id}&globals=theme:${presentation.theme};layoutTheme:${presentation.layout}`;
   useEffect(() => {
     const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
@@ -280,13 +322,29 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
         JSON.stringify(previous) === JSON.stringify(next) ? previous : next,
       );
       if (!stage.current) return;
+      const metrics = markerMetrics(stage.current);
+      // Badges keep their readable screen size when the specimen scales down.
+      // Retain matching space above and below instead of packing their labels
+      // into the scaled component's margins.
+      const nextInset =
+        scale < 1
+          ? Math.ceil(
+              Math.max(
+                metrics.radius * 2 + metrics.gap * 2 + metrics.labelGap,
+                (1 - scale) * metrics.offset * 3,
+              ),
+            )
+          : 0;
+      setInset(nextInset);
       const nextMeasurement = measureParts(
         doc,
         next.parts,
         width,
-        nextHeight * scale,
+        nextHeight * scale + nextInset * 2,
         scale,
-        markerMetrics(stage.current),
+        metrics,
+        measureTitles(stage.current, next.parts),
+        nextInset,
       );
       setMeasurement((previous) =>
         JSON.stringify(previous) === JSON.stringify(nextMeasurement) ? previous : nextMeasurement,
@@ -339,7 +397,7 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
           ref={stage}
           className="anatomy-stage"
           role="group"
-          style={{ height: height * scale }}
+          style={{ height: stageHeight }}
           aria-label={`${meta.name} annotated anatomy`}
         >
           <iframe
@@ -349,14 +407,9 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
             tabIndex={-1}
             aria-hidden="true"
             inert
-            style={{ width: viewportWidth, height, transform: `scale(${scale})` }}
+            style={{ width: viewportWidth, height, top: inset, transform: `scale(${scale})` }}
           />
-          <svg
-            className="anatomy-connectors"
-            aria-hidden="true"
-            width={width}
-            height={height * scale}
-          >
+          <svg className="anatomy-connectors" aria-hidden="true" width={width} height={stageHeight}>
             {selected && (
               <rect
                 className="anatomy-highlight"
@@ -385,7 +438,7 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
               parts={parts}
               obstacles={obstacles}
               width={width}
-              height={height * scale}
+              height={stageHeight}
               expanded={selected?.number === part.number}
               pinned={pinned === part.number}
               descriptionId={`${descriptionId}-${part.number}`}

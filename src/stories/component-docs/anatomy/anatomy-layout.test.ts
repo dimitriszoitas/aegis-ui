@@ -29,6 +29,27 @@ function distanceToRect(point: Point, rect: Rect) {
     Math.max(rect.y - point.y, 0, point.y - rect.y - rect.height),
   );
 }
+function capsuleClearance(rect: Rect, obstacle: Rect) {
+  const pillRadius = rect.height / 2;
+  const start = rect.x + pillRadius;
+  const end = rect.x + rect.width - pillRadius;
+  const y = rect.y + pillRadius;
+  return (
+    Math.hypot(
+      Math.max(obstacle.x - end, start - obstacle.x - obstacle.width, 0),
+      Math.max(obstacle.y - y, y - obstacle.y - obstacle.height, 0),
+    ) - pillRadius
+  );
+}
+function capsuleToMarkerClearance(rect: Rect, marker: Point) {
+  const pillRadius = rect.height / 2;
+  const closestX = Math.max(
+    rect.x + pillRadius,
+    Math.min(rect.x + rect.width - pillRadius, marker.x),
+  );
+  return Math.hypot(marker.x - closestX, marker.y - rect.y - pillRadius) - pillRadius;
+}
+
 function inside(point: Point, rect: Rect, inset = 0) {
   expect(point.x).toBeGreaterThanOrEqual(rect.x + inset);
   expect(point.y).toBeGreaterThanOrEqual(rect.y + inset);
@@ -174,6 +195,66 @@ describe('placeAnatomyMarker', () => {
     );
   });
 
+  it('moves a crowded resting badge to a nearby position with space for its full title', () => {
+    const obstacles = [
+      { x: 300, y: 246, width: 100, height: 28 },
+      { x: 500, y: 246, width: 100, height: 28 },
+    ];
+    const size = { width: 180, height: 28 };
+    const options = { target, stage, obstacles, markers: [], offset: 40, radius, gap };
+    const original = placeAnatomyMarker(options);
+    const marker = placeAnatomyMarker({ ...options, labelSize: size });
+    expect(original).toEqual({ x: 450, y: 260 });
+    expect(marker).not.toEqual(original);
+    const label = placeAnatomyLabel({ ...options, marker, size });
+    expect(label!.width).toBe(size.width);
+    const endpoint = closestTargetPoint(marker, target);
+    expect(Math.hypot(marker.x - endpoint.x, marker.y - endpoint.y)).toBeLessThanOrEqual(
+      40 * Math.SQRT2,
+    );
+    for (const obstacle of [target, ...obstacles]) {
+      expect(distanceToRect(marker, obstacle)).toBeGreaterThanOrEqual(radius + gap);
+      expect(capsuleClearance({ ...label!, height: size.height }, obstacle)).toBeGreaterThanOrEqual(
+        gap,
+      );
+    }
+  });
+
+  it('keeps later circles out of earlier title reservations', () => {
+    const reservation = { x: 360, y: 246, width: 180, height: 28 };
+    const marker = placeAnatomyMarker({
+      target,
+      stage,
+      obstacles: [],
+      markers: [],
+      offset: 40,
+      radius,
+      gap,
+      reservedRects: [reservation],
+      labelSize: { width: 180, height: 28 },
+    });
+    expect(distanceToRect(marker, reservation)).toBeGreaterThanOrEqual(radius + gap);
+    expect(distanceToRect(marker, target)).toBeGreaterThanOrEqual(radius + gap);
+  });
+
+  it('chooses the widest available title when the full requested width cannot fit', () => {
+    const narrowStage = { x: 0, y: 0, width: 200, height: 300 };
+    const part = { x: 30, y: 100, width: 140, height: 40 };
+    const size = { width: 300, height: 28 };
+    const options = {
+      target: part,
+      stage: narrowStage,
+      obstacles: [],
+      markers: [],
+      offset: 40,
+      radius,
+      gap,
+    };
+    const marker = placeAnatomyMarker({ ...options, labelSize: size });
+    const label = placeAnatomyLabel({ ...options, marker, size });
+    expect(label!.width).toBe(narrowStage.width);
+  });
+
   it('remains in a full-panel stage when no collision-free point exists', () => {
     const point = placeAnatomyMarker({
       target: stage,
@@ -279,6 +360,34 @@ describe('placeAnatomyLabel', () => {
     expect(placement!.x + placement!.width + gap).toBeLessThanOrEqual(component.x);
   });
 
+  it.each([
+    { marker: { x: 184, y: 84 }, direction: 'left' },
+    { marker: { x: 616, y: 84 }, direction: 'right' },
+    { marker: { x: 184, y: 516 }, direction: 'left' },
+    { marker: { x: 616, y: 516 }, direction: 'right' },
+  ])('expands beside a chart corner at $marker.x,$marker.y', ({ marker, direction }) => {
+    const chart = { x: 200, y: 100, width: 400, height: 400 };
+    const placement = placeAnatomyLabel({ ...options, marker, gap: 4, obstacles: [chart] });
+    expect(placement).not.toBeNull();
+    expect(placement!.direction).toBe(direction);
+    expect(placement!.width).toBe(size.width);
+    const rect = { ...placement!, height: size.height };
+    inside(marker, rect, radius);
+    inside(rect, stage);
+    inside({ x: rect.x + rect.width, y: rect.y + rect.height }, stage);
+    expect(capsuleClearance(rect, chart)).toBeGreaterThanOrEqual(4);
+  });
+
+  it('uses the rounded cap to preserve a full centered title beside a diagonal badge', () => {
+    const marker = { x: 450, y: 200 };
+    const other = { x: 550, y: 230 };
+    const placement = placeAnatomyLabel({ ...options, marker, markers: [other] });
+    expect(placement).toEqual({ x: 360, y: 186, width: 180, direction: 'both' });
+    expect(
+      capsuleToMarkerClearance({ ...placement!, height: size.height }, other),
+    ).toBeGreaterThanOrEqual(radius + gap);
+  });
+
   it('ignores blank enclosing ancestors but still avoids a sibling inside them', () => {
     const marker = { x: 450, y: 200 };
     const sibling = { x: 500, y: 180, width: 80, height: 40 };
@@ -292,14 +401,72 @@ describe('placeAnatomyLabel', () => {
     expect(withAncestor!.direction).toBe('left');
   });
 
+  it('ignores the same target ancestors as marker placement even when the marker is outside them', () => {
+    const part = { x: 220, y: 120, width: 120, height: 28 };
+    const chart = { x: 200, y: 100, width: 400, height: 400 };
+    const marker = { x: 184, y: 84 };
+    const withoutAncestor = placeAnatomyLabel({
+      ...options,
+      target: part,
+      marker,
+      obstacles: [part],
+    });
+    const withAncestor = placeAnatomyLabel({
+      ...options,
+      target: part,
+      marker,
+      obstacles: [part, chart, stage],
+    });
+    expect(withAncestor).toEqual(withoutAncestor);
+    expect(withAncestor!.width).toBe(size.width);
+    expect(withAncestor!.direction).toBe('both');
+    expect(
+      capsuleClearance({ ...withAncestor!, height: size.height }, part),
+    ).toBeGreaterThanOrEqual(gap);
+  });
+
+  it('protects its supplied target even when a fallback badge is inside it', () => {
+    const part = { x: 400, y: 180, width: 100, height: 40 };
+    expect(
+      placeAnatomyLabel({
+        ...options,
+        marker: { x: 450, y: 200 },
+        target: part,
+        obstacles: [stage, part],
+      }),
+    ).toBeNull();
+  });
+
+  it('allows a full-stage backdrop label while still protecting its dialog content', () => {
+    const dialog = { x: 500, y: 150, width: 200, height: 200 };
+    const marker = { x: 450, y: 200 };
+    const label = placeAnatomyLabel({
+      ...options,
+      marker,
+      target: stage,
+      obstacles: [stage, dialog],
+    });
+    expect(label).toEqual({ x: 284, y: 186, width: 180, direction: 'left' });
+    expect(capsuleClearance({ ...label!, height: size.height }, dialog)).toBeGreaterThanOrEqual(
+      gap,
+    );
+  });
+
+  it('protects a non-ancestor sibling containing the badge instead of treating it as blank space', () => {
+    const sibling = { x: 400, y: 180, width: 100, height: 40 };
+    expect(
+      placeAnatomyLabel({ ...options, marker: { x: 450, y: 200 }, target, obstacles: [sibling] }),
+    ).toBeNull();
+  });
+
   it('respects other marker discs and ignores its own repeated marker', () => {
     const marker = { x: 450, y: 200 };
     const other = { x: 550, y: 200 };
     const placement = placeAnatomyLabel({ ...options, marker, markers: [marker, other] });
     expect(placement!.direction).toBe('left');
-    expect(distanceToRect(other, { ...placement!, height: size.height })).toBeGreaterThanOrEqual(
-      radius + gap,
-    );
+    expect(
+      capsuleToMarkerClearance({ ...placement!, height: size.height }, other),
+    ).toBeGreaterThanOrEqual(radius + gap);
   });
 
   it('does not treat a vertically distant marker as a horizontal blocker', () => {
