@@ -1,6 +1,12 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { ComponentMetadata } from '../types';
 import type { AnatomyPart } from './types';
+import {
+  closestTargetPoint,
+  placeAnatomyLabel,
+  placeAnatomyMarker,
+  type Rect,
+} from './anatomy-layout';
 import './anatomy.css';
 
 interface MeasuredPart extends AnatomyPart {
@@ -18,74 +24,204 @@ interface SpecimenData {
   note?: string;
 }
 
+function markerMetrics(stage: HTMLElement) {
+  const style = getComputedStyle(stage);
+  return {
+    offset: parseFloat(style.getPropertyValue('--anatomy-marker-offset')),
+    radius: parseFloat(style.getPropertyValue('--anatomy-marker-size')) / 2,
+    gap: parseFloat(style.getPropertyValue('--anatomy-clearance')),
+    labelGap: parseFloat(style.getPropertyValue('--anatomy-label-clearance')),
+  };
+}
+
+function visibleBounds(element: Element, scale: number): Rect | undefined {
+  const rect = element.getBoundingClientRect();
+  const style = element.ownerDocument.defaultView?.getComputedStyle(element);
+  if (!rect.width || !rect.height || style?.visibility === 'hidden' || style?.display === 'none')
+    return;
+  return {
+    x: rect.left * scale,
+    y: rect.top * scale,
+    width: rect.width * scale,
+    height: rect.height * scale,
+  };
+}
+
+function hasVisibleSurface(element: Element) {
+  const style = element.ownerDocument.defaultView?.getComputedStyle(element);
+  if (!style) return false;
+  const transparent = (color: string) => color === 'transparent' || color === 'rgba(0, 0, 0, 0)';
+  return (
+    !transparent(style.backgroundColor) ||
+    style.backgroundImage !== 'none' ||
+    style.boxShadow !== 'none' ||
+    ['top', 'right', 'bottom', 'left'].some(
+      (side) =>
+        parseFloat(style.getPropertyValue(`border-${side}-width`)) > 0 &&
+        !transparent(style.getPropertyValue(`border-${side}-color`)),
+    )
+  );
+}
+
 function measureParts(
   doc: Document,
   parts: AnatomyPart[],
   width: number,
   height: number,
   scale: number,
+  metrics: ReturnType<typeof markerMetrics>,
 ) {
   const measured: MeasuredPart[] = [];
-  for (const [index, part] of parts.entries()) {
-    const element = Array.from(doc.querySelectorAll(part.selector)).find((node) => {
-      const rect = node.getBoundingClientRect();
-      const style = doc.defaultView?.getComputedStyle(node);
-      return (
-        rect.width > 0 &&
-        rect.height > 0 &&
-        style?.visibility !== 'hidden' &&
-        style?.display !== 'none'
-      );
-    });
-    if (!element) continue;
-    const rect = element.getBoundingClientRect();
-    const bounds = {
-      x: rect.left * scale,
-      y: rect.top * scale,
-      width: rect.width * scale,
-      height: rect.height * scale,
-    };
+  const targets = parts.flatMap((part, index) => {
+    const bounds = Array.from(doc.querySelectorAll(part.selector))
+      .map((element) => visibleBounds(element, scale))
+      .find(Boolean);
+    return bounds ? [{ ...part, number: index + 1, bounds }] : [];
+  });
+  // Include unannotated content in the actual specimens, as well as portaled parts.
+  const obstacles = [
+    ...parts.flatMap((part) =>
+      Array.from(doc.querySelectorAll(part.selector)).flatMap((element) => {
+        const bounds = visibleBounds(element, scale);
+        return bounds ? [bounds] : [];
+      }),
+    ),
+    ...Array.from(doc.querySelectorAll('.anatomy-fixture-content [data-anatomy] > *')).flatMap(
+      (element) => {
+        // Transparent fixture layout boxes are empty space, not component surfaces.
+        if (!hasVisibleSurface(element)) return [];
+        const bounds = visibleBounds(element, scale);
+        return bounds ? [bounds] : [];
+      },
+    ),
+  ];
+  for (const part of targets) {
+    const { bounds } = part;
     const anchor = part.anchor ?? 'top';
-    let targetX = bounds.x + bounds.width / 2;
-    let targetY = bounds.y + bounds.height / 2;
-    if (anchor.includes('left')) targetX = bounds.x;
-    if (anchor.includes('right')) targetX = bounds.x + bounds.width;
-    if (anchor.includes('top')) targetY = bounds.y;
-    if (anchor.includes('bottom')) targetY = bounds.y + bounds.height;
-    let x = targetX + (anchor.includes('left') ? -24 : anchor.includes('right') ? 24 : 0);
-    let y =
-      targetY +
-      (anchor.includes('bottom') ? 26 : anchor === 'left' || anchor === 'right' ? 0 : -26);
-    const clampX = (value: number) => Math.max(18, Math.min(width - 18, value));
-    const clampY = (value: number) => Math.max(18, Math.min(height - 18, value));
-    x = clampX(x);
-    y = clampY(y);
-    // Keep small, adjacent slots legible without covering a neighboring badge.
-    const baseX = x,
-      baseY = y;
-    for (
-      let attempt = 0;
-      measured.some((other) => Math.hypot(other.x - x, other.y - y) < 35) && attempt < 40;
-      attempt++
-    ) {
-      const ring = Math.floor(attempt / 8) + 1;
-      const angle = ((attempt % 8) * Math.PI) / 4;
-      x = clampX(baseX + Math.cos(angle) * ring * 36);
-      y = clampY(baseY + Math.sin(angle) * ring * 36);
-    }
-    measured.push({ ...part, number: index + 1, x, y, targetX, targetY, bounds });
+    const point = placeAnatomyMarker({
+      target: bounds,
+      anchor,
+      stage: {
+        x: metrics.gap,
+        y: metrics.gap,
+        width: Math.max(0, width - 2 * metrics.gap),
+        height: Math.max(0, height - 2 * metrics.gap),
+      },
+      obstacles,
+      markers: measured,
+      ...metrics,
+    });
+    const target = closestTargetPoint(point, bounds);
+    measured.push({ ...part, ...point, targetX: target.x, targetY: target.y });
   }
-  return measured;
+  return { parts: measured, obstacles };
+}
+
+function AnatomyMarker({
+  part,
+  parts,
+  obstacles,
+  width,
+  height,
+  expanded,
+  pinned,
+  descriptionId,
+  onShow,
+  onHide,
+  onToggle,
+}: {
+  part: MeasuredPart;
+  parts: MeasuredPart[];
+  obstacles: Rect[];
+  width: number;
+  height: number;
+  expanded: boolean;
+  pinned: boolean;
+  descriptionId: string;
+  onShow: () => void;
+  onHide: () => void;
+  onToggle: () => void;
+}) {
+  const measure = useRef<HTMLSpanElement>(null);
+  const position = useRef<HTMLSpanElement>(null);
+  const [label, setLabel] = useState<ReturnType<typeof placeAnatomyLabel>>(null);
+  useLayoutEffect(() => {
+    const canvas = position.current?.closest<HTMLElement>('.anatomy-stage');
+    if (!expanded || !canvas || !measure.current) {
+      setLabel(null);
+      return;
+    }
+    const { radius, labelGap: gap } = markerMetrics(canvas);
+    const next = placeAnatomyLabel({
+      marker: part,
+      size: { width: Math.ceil(measure.current.getBoundingClientRect().width), height: radius * 2 },
+      stage: {
+        x: gap,
+        y: gap,
+        width: Math.max(0, width - 2 * gap),
+        height: Math.max(0, height - 2 * gap),
+      },
+      obstacles,
+      markers: parts.filter(({ number }) => number !== part.number),
+      radius,
+      gap,
+    });
+    setLabel(next);
+  }, [expanded, part, parts, obstacles, width, height]);
+  const placement = expanded ? label : null;
+  return (
+    <span
+      ref={position}
+      className="anatomy-marker-position"
+      data-part={part.number}
+      data-active={expanded || undefined}
+      style={{ left: part.x, top: part.y }}
+    >
+      <button
+        type="button"
+        className="anatomy-marker"
+        data-part={part.number}
+        data-active={expanded || undefined}
+        data-expanded={!!placement || undefined}
+        data-expand-direction={placement?.direction}
+        style={placement ? { width: placement.width, left: placement.x - part.x } : undefined}
+        aria-label={`${part.number}. ${part.name}`}
+        aria-describedby={descriptionId}
+        aria-pressed={pinned}
+        onMouseEnter={onShow}
+        onMouseLeave={onHide}
+        onFocus={onShow}
+        onBlur={onHide}
+        onClick={onToggle}
+      >
+        <span className="anatomy-marker-number" aria-hidden="true">
+          {part.number}
+        </span>
+        <span className="anatomy-marker-title" aria-hidden="true">
+          {part.name}
+        </span>
+      </button>
+      <span ref={measure} className="anatomy-marker-measure" aria-hidden="true">
+        {part.name}
+      </span>
+    </span>
+  );
 }
 
 export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
+  const root = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLIFrameElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const tooltipId = useId();
+  const dismissedFocus = useRef<HTMLElement | null>(null);
+  const descriptionId = useId();
   const [width, setWidth] = useState(900);
   const [height, setHeight] = useState(320);
-  const [parts, setParts] = useState<MeasuredPart[]>([]);
+  const [measurement, setMeasurement] = useState<{ parts: MeasuredPart[]; obstacles: Rect[] }>({
+    parts: [],
+    obstacles: [],
+  });
+  const { parts, obstacles } = measurement;
   const [definition, setDefinition] = useState<SpecimenData>();
   const [active, setActive] = useState<number | null>(null);
   const [pinned, setPinned] = useState<number | null>(null);
@@ -119,7 +255,7 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
     };
   }, []);
   useEffect(() => {
-    setParts([]);
+    setMeasurement({ parts: [], obstacles: [] });
     setDefinition(undefined);
     setActive(null);
     setPinned(null);
@@ -143,9 +279,17 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
       setDefinition((previous) =>
         JSON.stringify(previous) === JSON.stringify(next) ? previous : next,
       );
-      const nextParts = measureParts(doc, next.parts, width, nextHeight * scale, scale);
-      setParts((previous) =>
-        JSON.stringify(previous) === JSON.stringify(nextParts) ? previous : nextParts,
+      if (!stage.current) return;
+      const nextMeasurement = measureParts(
+        doc,
+        next.parts,
+        width,
+        nextHeight * scale,
+        scale,
+        markerMetrics(stage.current),
+      );
+      setMeasurement((previous) =>
+        JSON.stringify(previous) === JSON.stringify(nextMeasurement) ? previous : nextMeasurement,
       );
       setError('');
     };
@@ -158,129 +302,138 @@ export function AnatomyDocumentation({ meta }: { meta: ComponentMetadata }) {
   const selected = parts.find((part) => part.number === (active ?? pinned));
   const showPart = (number: number) => {
     clearTimeout(hoverTimer.current);
+    dismissedFocus.current = null;
     setActive(number);
   };
   const hidePart = () => {
     clearTimeout(hoverTimer.current);
     hoverTimer.current = setTimeout(() => {
-      const focused = stage.current?.querySelector<HTMLElement>('.anatomy-marker:focus');
-      setActive(focused ? Number(focused.dataset.part) : null);
-    }, 150);
+      const focused = root.current?.querySelector<HTMLElement>(
+        '.anatomy-marker:focus, .anatomy-legend-trigger:focus',
+      );
+      setActive(
+        focused && focused !== dismissedFocus.current ? Number(focused.dataset.part) : null,
+      );
+    }, 100);
   };
   useEffect(() => () => clearTimeout(hoverTimer.current), []);
   const dismiss = (key: string) => {
     if (key === 'Escape') {
       clearTimeout(hoverTimer.current);
+      dismissedFocus.current =
+        root.current?.querySelector<HTMLElement>(
+          '.anatomy-marker:focus, .anatomy-legend-trigger:focus',
+        ) ?? null;
       setActive(null);
       setPinned(null);
     }
   };
   return (
-    <div className="anatomy-documentation" onKeyDown={(event) => dismiss(event.key)}>
+    <div ref={root} className="anatomy-documentation" onKeyDown={(event) => dismiss(event.key)}>
       <p>
-        Hover or focus a numbered badge to identify a part. Match its number to the description
-        below.
+        Hover or focus a number or description to highlight its part. Click to keep it highlighted;
+        press Escape to clear.
       </p>
-      <div
-        ref={stage}
-        className="anatomy-stage"
-        style={{ height: height * scale }}
-        aria-label={`${meta.name} annotated anatomy`}
-      >
-        <iframe
-          ref={frame}
-          title={`${meta.name} anatomy specimen`}
-          src={source}
-          tabIndex={-1}
-          aria-hidden="true"
-          inert
-          style={{ width: viewportWidth, height, transform: `scale(${scale})` }}
-        />
-        <svg
-          className="anatomy-connectors"
-          aria-hidden="true"
-          width={width}
-          height={height * scale}
+      <div className="anatomy-viewer">
+        <div
+          ref={stage}
+          className="anatomy-stage"
+          role="group"
+          style={{ height: height * scale }}
+          aria-label={`${meta.name} annotated anatomy`}
         >
-          {selected && (
-            <rect
-              className="anatomy-highlight"
-              x={selected.bounds.x - 3}
-              y={selected.bounds.y - 3}
-              width={selected.bounds.width + 6}
-              height={selected.bounds.height + 6}
-              rx="5"
-            />
-          )}
+          <iframe
+            ref={frame}
+            title={`${meta.name} anatomy specimen`}
+            src={source}
+            tabIndex={-1}
+            aria-hidden="true"
+            inert
+            style={{ width: viewportWidth, height, transform: `scale(${scale})` }}
+          />
+          <svg
+            className="anatomy-connectors"
+            aria-hidden="true"
+            width={width}
+            height={height * scale}
+          >
+            {selected && (
+              <rect
+                className="anatomy-highlight"
+                x={selected.bounds.x - 3}
+                y={selected.bounds.y - 3}
+                width={selected.bounds.width + 6}
+                height={selected.bounds.height + 6}
+                rx="5"
+              />
+            )}
+            {parts.map((part) => (
+              <line
+                key={part.number}
+                x1={part.x}
+                y1={part.y}
+                x2={part.targetX}
+                y2={part.targetY}
+                className={selected?.number === part.number ? 'is-active' : undefined}
+              />
+            ))}
+          </svg>
           {parts.map((part) => (
-            <line
+            <AnatomyMarker
               key={part.number}
-              x1={part.x}
-              y1={part.y}
-              x2={part.targetX}
-              y2={part.targetY}
-              className={selected?.number === part.number ? 'is-active' : undefined}
+              part={part}
+              parts={parts}
+              obstacles={obstacles}
+              width={width}
+              height={height * scale}
+              expanded={selected?.number === part.number}
+              pinned={pinned === part.number}
+              descriptionId={`${descriptionId}-${part.number}`}
+              onShow={() => showPart(part.number)}
+              onHide={hidePart}
+              onToggle={() => {
+                setPinned(pinned === part.number ? null : part.number);
+                setActive(null);
+              }}
             />
           ))}
-        </svg>
-        {parts.map((part) => (
-          <button
-            key={part.number}
-            type="button"
-            className="anatomy-marker"
-            data-part={part.number}
-            data-active={selected?.number === part.number || undefined}
-            style={{ left: part.x, top: part.y }}
-            aria-label={`${part.number}. ${part.name}`}
-            aria-describedby={selected?.number === part.number ? tooltipId : undefined}
-            aria-pressed={pinned === part.number}
-            onMouseEnter={() => showPart(part.number)}
-            onMouseLeave={hidePart}
-            onFocus={() => showPart(part.number)}
-            onBlur={hidePart}
-            onClick={() => {
-              setPinned(pinned === part.number ? null : part.number);
-              setActive(null);
-            }}
-          >
-            {part.number}
-          </button>
-        ))}
-        {selected && (
-          <div
-            role="tooltip"
-            id={tooltipId}
-            className="anatomy-tooltip"
-            onMouseEnter={() => showPart(selected.number)}
-            onMouseLeave={hidePart}
-            style={{
-              left: Math.max(12, Math.min(width - Math.min(280, width - 24) - 12, selected.x - 30)),
-              top: selected.y + 22,
-            }}
-          >
-            <strong>
-              {selected.number}. {selected.name}
-            </strong>
-            <span>{selected.description}</span>
-          </div>
-        )}
-        {!definition && (
-          <div className="anatomy-loading" role="status">
-            {error || 'Loading component anatomy…'}
-          </div>
-        )}
+          {!definition && (
+            <div className="anatomy-loading" role="status">
+              {error || 'Loading component anatomy…'}
+            </div>
+          )}
+        </div>
       </div>
       {definition?.note && <p className="anatomy-note">{definition.note}</p>}
       <ol className="anatomy-legend" aria-label={`${meta.name} parts`}>
         {definition?.parts.map((part, index) => (
           <li key={part.name} data-active={selected?.number === index + 1 || undefined}>
-            <span className="anatomy-legend-number" aria-hidden="true">
-              {index + 1}
-            </span>
-            <div>
-              <strong>{part.name}</strong>
-              <p>{part.description}</p>
-            </div>
+            <button
+              type="button"
+              className="anatomy-legend-trigger"
+              data-part={index + 1}
+              aria-label={`${index + 1}. ${part.name}`}
+              aria-describedby={`${descriptionId}-${index + 1}`}
+              aria-pressed={pinned === index + 1}
+              onMouseEnter={() => showPart(index + 1)}
+              onMouseLeave={hidePart}
+              onFocus={() => showPart(index + 1)}
+              onBlur={hidePart}
+              onClick={() => {
+                setPinned(pinned === index + 1 ? null : index + 1);
+                setActive(null);
+              }}
+            >
+              <span className="anatomy-legend-number" aria-hidden="true">
+                {index + 1}
+              </span>
+              <span>
+                <strong>{part.name}</strong>
+                <span className="anatomy-legend-description" id={`${descriptionId}-${index + 1}`}>
+                  {part.description}
+                </span>
+              </span>
+            </button>
           </li>
         ))}
       </ol>

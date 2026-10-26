@@ -121,6 +121,7 @@ function ContextMenuSpecimen() {
       >
         <div
           ref={target}
+          data-anatomy-part="context-target"
           style={{
             padding: 24,
             paddingInlineStart: 300,
@@ -363,7 +364,7 @@ export const surfaceAnatomy: AnatomyRegistry = {
       ),
       part(
         'Active tab',
-        '[data-anatomy="tabs"] [role="tab"][data-state="active"]',
+        '[data-anatomy="tabs"] [role="tab"][aria-selected="true"]',
         'Labels the visible panel and carries the selection indicator.',
       ),
       part(
@@ -378,12 +379,12 @@ export const surfaceAnatomy: AnatomyRegistry = {
       ),
       part(
         'Disabled tab',
-        '[data-anatomy="tabs"] [role="tab"][disabled]',
+        '[data-anatomy="tabs"] [role="tab"][aria-disabled="true"]',
         'Keeps an unavailable view visible without allowing activation.',
       ),
       part(
         'Content panel',
-        '[data-anatomy="tabs"] [role="tabpanel"][data-state="active"]',
+        '[data-anatomy="tabs"] [role="tabpanel"]:not([hidden])',
         'Contains the content associated with the selected tab.',
       ),
     ],
@@ -842,7 +843,7 @@ export const surfaceAnatomy: AnatomyRegistry = {
     parts: [
       part(
         'Context target',
-        '[data-anatomy="context"] [data-state]',
+        '[data-anatomy="context"] [data-anatomy-part="context-target"]',
         'The record surface that owns the contextual actions.',
       ),
       part(
@@ -867,7 +868,7 @@ export const surfaceAnatomy: AnatomyRegistry = {
       ),
       part(
         'Exclusive choice',
-        '.anatomy-context-menu [role="menuitemradio"][data-state="checked"]',
+        '.anatomy-context-menu [role="menuitemradio"][aria-checked="true"]',
         'Marks the selected value in a radio group.',
       ),
       part(

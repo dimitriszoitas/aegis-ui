@@ -610,7 +610,7 @@ export const controlAnatomy: AnatomyRegistry = {
         'right',
       ),
       part(
-        '[data-anatomy="checkbox"] [data-state="indeterminate"] .aegis-checkbox-mixed',
+        '[data-anatomy="checkbox"] [aria-checked="mixed"] .aegis-checkbox-mixed',
         'Mixed indicator',
         'Represents a partial selection and is announced as mixed.',
         'left',
