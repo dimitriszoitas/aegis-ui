@@ -1,10 +1,22 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vite';
+import remarkGfm from 'remark-gfm';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
   staticDirs: ['../public'],
-  addons: ['@storybook/addon-docs', '@storybook/addon-themes', '@storybook/addon-a11y'],
+  addons: [
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: { remarkPlugins: [remarkGfm] },
+        },
+      },
+    },
+    '@storybook/addon-themes',
+    '@storybook/addon-a11y',
+  ],
   framework: '@storybook/react-vite',
   core: { disableTelemetry: true },
   // Keep browsing, theme controls, live examples and opt-in inspection panels.

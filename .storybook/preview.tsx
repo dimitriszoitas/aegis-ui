@@ -1,7 +1,7 @@
 import { WithSpecimenArgs } from './specimen-args-bridge';
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByClassName, withThemeByDataAttribute } from '@storybook/addon-themes';
-import { AegisDocsContainer, WithDocsTheme } from './docs-container';
+import { AegisDocsContainer, AegisDocsTable, WithDocsTheme } from './docs-container';
 import { WithConsoleCanvas } from './console-canvas';
 import { defaultLayoutTheme, layoutThemeOptions } from '../src/lib/layout-theme';
 import '../src/styles/globals.css';
@@ -43,7 +43,7 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { expanded: true },
-    docs: { container: AegisDocsContainer },
+    docs: { container: AegisDocsContainer, components: { table: AegisDocsTable } },
     a11y: {
       test: 'error',
       manual: new URLSearchParams(window.location.search).has('aegisTest'),

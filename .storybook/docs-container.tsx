@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useState, type PropsWithChildren } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  type ComponentProps,
+  type PropsWithChildren,
+} from 'react';
 import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks';
 import type { Decorator } from '@storybook/react-vite';
 import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
@@ -21,6 +27,15 @@ import './docs-focus.css';
 
 const docsThemeAttribute = 'data-aegis-docs-theme';
 const docsLayoutAttribute = 'data-aegis-docs-layout-theme';
+
+/** Keep wide Markdown tables inside the reading canvas on narrow screens. */
+export function AegisDocsTable(props: ComponentProps<'table'>) {
+  return (
+    <div className="aegis-docs-table-wrap">
+      <table {...props} />
+    </div>
+  );
+}
 
 function parentDocsRoot(): HTMLElement | null {
   try {

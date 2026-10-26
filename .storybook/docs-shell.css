@@ -11,6 +11,10 @@
 .sbdocs-content .component-directory {
   max-width: 100%;
 }
+.sbdocs-content .aegis-docs-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 /* Component hubs use the same generous page width; their tables scroll independently. */
 .sbdocs-wrapper:has(.component-docs) {
