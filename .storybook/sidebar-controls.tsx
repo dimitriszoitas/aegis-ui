@@ -5,6 +5,7 @@ import { useGlobals, useStorybookApi, useStorybookState } from 'storybook/manage
 import { useTheme } from 'storybook/theming';
 import { version } from '../package.json';
 import { managerTheme } from './manager-theme';
+import { ManagerThemeSelect } from './theme-select';
 import { readHubNavigationUpdate } from '../src/stories/component-docs/hub-navigation';
 
 const mobileQuery = window.matchMedia('(max-width: 599px)');
@@ -230,21 +231,14 @@ export function SidebarControls({ children }: PropsWithChildren) {
         createPortal(
           <section className="aegis-manager-footer" aria-label="Appearance" style={colors}>
             {!collapsed && (
-              <label className="aegis-manager-theme-label">
-                Theme
-                <select
-                  aria-label="Theme"
-                  value={
-                    globals.layoutTheme === 'fundamental-floating'
-                      ? 'fundamental-floating'
-                      : 'fundamental'
-                  }
-                  onChange={(event) => updateGlobals({ layoutTheme: event.target.value })}
-                >
-                  <option value="fundamental">Fundamental</option>
-                  <option value="fundamental-floating">Fundamental Floating</option>
-                </select>
-              </label>
+              <ManagerThemeSelect
+                value={
+                  globals.layoutTheme === 'fundamental-floating'
+                    ? 'fundamental-floating'
+                    : 'fundamental'
+                }
+                onValueChange={(layoutTheme) => updateGlobals({ layoutTheme })}
+              />
             )}
             <div className="aegis-manager-color-mode">
               <span className="aegis-manager-mode-label">Dark mode</span>

@@ -143,7 +143,7 @@ html[data-aegis-manager-focus='keyboard'] .sidebar-container .search-field:focus
   font-size: 12px;
 }
 
-.aegis-manager-footer :is(select, button),
+.aegis-manager-footer button,
 .aegis-manager-sidebar-toggle,
 .aegis-manager-reopen {
   min-height: 32px;
@@ -156,9 +156,62 @@ html[data-aegis-manager-focus='keyboard'] .sidebar-container .search-field:focus
     sans-serif;
 }
 
-.aegis-manager-footer select {
+.aegis-manager-footer .aegis-manager-theme-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
   width: 100%;
-  padding: 5px 8px;
+  padding: 5px 12px;
+  text-align: left;
+  font-weight: 400;
+  box-shadow: none;
+}
+
+.aegis-manager-theme-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aegis-manager-theme-chevron,
+.aegis-manager-theme-check {
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.aegis-manager-theme-chevron {
+  color: var(--manager-footer-muted);
+}
+
+.aegis-manager-theme-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  font:
+    13px/1.4 Figtree,
+    sans-serif;
+}
+
+[role='option']:not([aria-selected='true']) .aegis-manager-theme-check {
+  visibility: hidden;
+}
+
+/* The manager Select portals its themed list outside the sidebar. Keep pointer
+   activation border-only there too, while preserving keyboard focus feedback. */
+html[data-aegis-manager-focus='pointer'] [role='option']:has(.aegis-manager-theme-option):focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.aegis-manager-footer .aegis-manager-theme-trigger:is(:focus, [aria-expanded='true']) {
+  border-color: var(--manager-footer-accent);
 }
 
 .aegis-manager-footer button,
@@ -167,26 +220,21 @@ html[data-aegis-manager-focus='keyboard'] .sidebar-container .search-field:focus
   cursor: pointer;
 }
 
-html[data-aegis-manager-focus='keyboard'] .aegis-manager-footer :is(select, button):focus-visible,
+html[data-aegis-manager-focus='keyboard'] .aegis-manager-footer button:focus-visible,
 html[data-aegis-manager-focus='keyboard'] .aegis-manager-sidebar-toggle:focus-visible,
 html[data-aegis-manager-focus='keyboard'] .aegis-manager-reopen:focus-visible {
   outline: 2px solid var(--manager-footer-accent);
   outline-offset: 2px;
 }
 
-/* Native selects can remain focus-visible after their OS popup closes. Use the
-   same input modality as search for every sidebar control, including native gear
-   and navigation buttons, without changing keyboard focus styles. */
+/* Use the same input modality as search for every sidebar control, including
+   native gear and navigation buttons, without changing keyboard focus styles. */
 html[data-aegis-manager-focus='pointer']
   .sidebar-container
   :is(button, select, input, a, [tabindex]):focus,
 html[data-aegis-manager-focus='pointer'] .aegis-manager-reopen:focus {
   outline: none !important;
   box-shadow: none !important;
-}
-
-html[data-aegis-manager-focus='pointer'] .aegis-manager-footer select:focus {
-  border-color: var(--manager-footer-muted);
 }
 
 .aegis-manager-color-mode {
